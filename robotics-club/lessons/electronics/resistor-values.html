@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "electronics/resistor-values";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Reading Resistor Values";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Reading Resistor Values</title>
+<style>
+  :root { --navy: #1B2B5E; --teal: #0D9488; --teal-light: #e6f7f5; --navy-light: #eef0f8; }
+  body { font-family: Calibri, Arial, sans-serif; color: #1a1a1a; max-width: 900px; margin: 0 auto; padding: 40px 30px 80px; line-height: 1.55; background: #fff; }
+  h1, h2, h3 { font-family: 'Bookman Old Style', Cambria, Georgia, serif; color: var(--navy); }
+  h1 { border-bottom: 4px solid var(--teal); padding-bottom: 12px; font-size: 30px; }
+  h2 { margin-top: 40px; border-left: 6px solid var(--teal); padding-left: 14px; font-size: 22px; }
+  .banner { background: var(--navy); color: white; padding: 6px 14px; display: inline-block; border-radius: 4px; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .objectives, .analogy, .note, .warning { background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0; }
+  .analogy { background: var(--teal-light); border-left: 5px solid var(--teal); }
+  .note { background: #fff8e6; border-left: 5px solid #d9a300; }
+  .warning { background: #fdeaea; border-left: 5px solid #c0392b; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 15px; }
+  th { background: var(--navy); color: white; }
+  code, pre { font-family: Consolas, 'Courier New', monospace; background: #0f1830; color: #e6f0ff; border-radius: 6px; }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline { background: #eef0f8; color: var(--navy); padding: 2px 6px; border-radius: 4px; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise { background: #fff8e6; border-left: 5px solid #d9a300; padding: 14px 20px; margin: 14px 0; border-radius: 6px; }
+  .footer-note { margin-top: 50px; font-size: 13px; color: #666; border-top: 1px solid #ddd; padding-top: 14px; }
+  svg { display: block; margin: 20px auto; }
+  .caption { text-align: center; font-size: 13px; color: #555; margin-top: -10px; }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/electronics-resistor-values.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Reading Resistor Values</h1>
+<p><strong>Section focus:</strong> Electronics Fundamentals — Lesson 2.2 &nbsp;|&nbsp; <strong>Duration:</strong> ~45 minutes</p>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain what resistance is and why circuits need it</li>
+    <li>Read a resistor's value from its coloured bands</li>
+    <li>Explain what the tolerance band tells you</li>
+    <li>Verify a resistor's value using a multimeter</li>
+  </ul>
+</div>
+
+<div class="analogy">
+  <strong>Real-world analogy:</strong> Resistance is like a narrow section in a garden hose — it doesn't stop the water (current) entirely, but it restricts how much flows through, protecting whatever is downstream from too strong a flow. A resistor is a component built specifically to add a known, controlled amount of that restriction to a circuit.
+</div>
+
+<h2>1. Why Resistors Matter</h2>
+<p>Many components — LEDs especially — can be damaged by too much current flowing through them. A resistor placed in series limits that current to a safe level. You've already used this in nearly every lesson so far without necessarily knowing exactly how its value was chosen — this lesson fills in that gap.</p>
+
+<h2>2. The Colour Band System</h2>
+<p>Most resistors are too small to print a number on clearly, so their value is encoded instead as a series of coloured bands. A standard 4-band resistor reads like this:</p>
+
+<svg viewBox="0 0 500 140" width="100%" height="140">
+  <rect x="40" y="50" width="380" height="40" rx="10" fill="#e8c88a" stroke="#a9895a" stroke-width="2"/>
+  <line x1="90" y1="45" x2="90" y2="95" stroke="#4a3728" stroke-width="10"/>
+  <line x1="150" y1="45" x2="150" y2="95" stroke="#e63946" stroke-width="10"/>
+  <line x1="210" y1="45" x2="210" y2="95" stroke="#333" stroke-width="10"/>
+  <line x1="330" y1="45" x2="330" y2="95" stroke="#d9a300" stroke-width="10"/>
+  <text x="90" y="115" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">1st digit</text>
+  <text x="150" y="115" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">2nd digit</text>
+  <text x="210" y="115" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">Multiplier</text>
+  <text x="330" y="115" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">Tolerance</text>
+</svg>
+<p class="caption">Figure 1: Four bands — two digits, a multiplier, and a tolerance — read left to right, starting from the band closest to one end.</p>
+
+<table>
+  <tr><th>Colour</th><th>Digit value</th><th>Multiplier</th></tr>
+  <tr><td>Black</td><td>0</td><td>&times;1</td></tr>
+  <tr><td>Brown</td><td>1</td><td>&times;10</td></tr>
+  <tr><td>Red</td><td>2</td><td>&times;100</td></tr>
+  <tr><td>Orange</td><td>3</td><td>&times;1,000</td></tr>
+  <tr><td>Yellow</td><td>4</td><td>&times;10,000</td></tr>
+  <tr><td>Green</td><td>5</td><td>&times;100,000</td></tr>
+  <tr><td>Blue</td><td>6</td><td>&times;1,000,000</td></tr>
+  <tr><td>Violet</td><td>7</td><td>&mdash;</td></tr>
+  <tr><td>Grey</td><td>8</td><td>&mdash;</td></tr>
+  <tr><td>White</td><td>9</td><td>&mdash;</td></tr>
+  <tr><td>Gold</td><td>&mdash;</td><td>&times;0.1</td></tr>
+  <tr><td>Silver</td><td>&mdash;</td><td>&times;0.01</td></tr>
+</table>
+
+<h2>3. Working Through the Example</h2>
+<p>The resistor in Figure 1 reads <strong>Brown, Red, Black, Gold</strong>:</p>
+<ul>
+  <li>Brown = 1 (first digit)</li>
+  <li>Red = 2 (second digit) → so far, "12"</li>
+  <li>Black = &times;1 (multiplier) → 12 &times; 1 = 12Ω</li>
+  <li>Gold = &plusmn;5% tolerance</li>
+</ul>
+<p>So this is a <strong>12Ω</strong> resistor, accurate to within 5% of that value. This is actually an unusually low value for the kind of circuits in this club — the 220Ω and 10kΩ resistors you've used constantly in earlier lessons follow exactly the same reading process, just with different colours.</p>
+
+<div class="note">
+  <strong>Working example: 220Ω.</strong> This common value reads Red, Red, Brown, Gold: Red=2, Red=2 → "22", Brown = &times;10 → 22 &times; 10 = 220Ω. Recognising this exact band sequence will save you time, since it's the resistor you'll reach for most often when protecting an LED.
+</div>
+
+<div class="warning">
+  <strong>Which end do you start reading from?</strong> The tolerance band (usually gold or silver) is typically spaced slightly apart from the others, near one end — that gap tells you which end to start reading from. If you're ever unsure, or the resistor is too small to tell confidently, a multimeter is the reliable fallback (see below) — reading it backwards gives a nonsense multiplier value that's usually obviously wrong once calculated.
+</div>
+
+<h2>4. Verifying with a Multimeter</h2>
+<p>If you have access to a multimeter:</p>
+<ol>
+  <li>Set it to resistance mode (usually marked with the Ω symbol)</li>
+  <li>Touch one probe to each leg of the resistor (orientation doesn't matter for resistance)</li>
+  <li>Read the displayed value and compare it to what you calculated from the colour bands</li>
+</ol>
+<p>This is good practice generally: trust your calculation, but verify it when the result matters and a meter is available.</p>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Find three different resistors from your kit and read their values from the colour bands alone.</li>
+    <li>If a multimeter is available, verify each of your three readings.</li>
+    <li>Work out what colour bands a 1kΩ resistor would have (hint: 1,000Ω).</li>
+    <li>Challenge: find the 220Ω and 10kΩ resistors specifically from your kit (used constantly in earlier Arduino lessons) and confirm you can identify their band sequence at a glance without recalculating each time.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ I can explain what each of the four colour bands represents</label>
+  <label>☐ I correctly read the value of at least three resistors from their bands</label>
+  <label>☐ I can identify a 220Ω and a 10kΩ resistor from their bands without a multimeter</label>
+  <label>☐ I understand what the tolerance percentage means</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Electronics Fundamentals &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "cpp/if-statements";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "If Statements and Conditions";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>If Statements and Conditions</title>
+<style>
+  :root {
+    --navy: #1B2B5E;
+    --teal: #0D9488;
+    --teal-light: #e6f7f5;
+    --navy-light: #eef0f8;
+  }
+  body {
+    font-family: Calibri, Arial, sans-serif;
+    color: #1a1a1a;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 30px 80px;
+    line-height: 1.55;
+    background: #fff;
+  }
+  h1, h2, h3 {
+    font-family: 'Bookman Old Style', Cambria, Georgia, serif;
+    color: var(--navy);
+  }
+  h1 { border-bottom: 4px solid var(--teal); padding-bottom: 12px; font-size: 30px; }
+  h2 { margin-top: 40px; border-left: 6px solid var(--teal); padding-left: 14px; font-size: 22px; }
+  .banner {
+    background: var(--navy); color: white; padding: 6px 14px; display: inline-block;
+    border-radius: 4px; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .objectives, .analogy, .note, .warning {
+    background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0;
+  }
+  .analogy { background: var(--teal-light); border-left: 5px solid var(--teal); }
+  .note { background: #fff8e6; border-left: 5px solid #d9a300; }
+  .warning { background: #fdeaea; border-left: 5px solid #c0392b; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 15px; }
+  th { background: var(--navy); color: white; }
+  code, pre {
+    font-family: Consolas, 'Courier New', monospace; background: #0f1830; color: #e6f0ff; border-radius: 6px;
+  }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline { background: #eef0f8; color: var(--navy); padding: 2px 6px; border-radius: 4px; }
+  .comment { color: #8fd6b4; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise {
+    background: #fff8e6; border-left: 5px solid #d9a300; padding: 14px 20px; margin: 14px 0; border-radius: 6px;
+  }
+  .footer-note { margin-top: 50px; font-size: 13px; color: #666; border-top: 1px solid #ddd; padding-top: 14px; }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/cpp-if-statements.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>If Statements and Conditions</h1>
+<p><strong>Section focus:</strong> C/C++ Fundamentals — Lesson 1.3 &nbsp;|&nbsp; <strong>Duration:</strong> ~45 minutes</p>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain why programs need to make decisions, not just run straight through</li>
+    <li>Write comparisons using C++'s comparison operators</li>
+    <li>Use <code class="inline">if</code>, <code class="inline">else if</code>, and <code class="inline">else</code> to control which code runs</li>
+    <li>Combine multiple conditions using <code class="inline">&amp;&amp;</code> and <code class="inline">||</code></li>
+  </ul>
+</div>
+
+<div class="analogy">
+  <strong>Real-world analogy:</strong> This is exactly the logic you already use crossing a road: <em>if</em> the light is green, walk; <em>otherwise</em>, wait. You don't need every possible instruction pre-planned — you just need a rule, and you apply it to whatever situation you're actually in. An if-statement is how a program applies a rule instead of blindly running the same fixed steps every time, regardless of the situation.
+</div>
+
+<h2>1. Why Programs Need Decisions</h2>
+<p>Every program you wrote in the last two lessons ran the exact same instructions every single time, regardless of anything. Real programs need to react differently depending on circumstances — a game needs to know if you've won, a thermostat needs to know if a room is too cold, and (soon) your Arduino will need to know if a sensor detected something. The <code class="inline">if</code> statement is how C++ expresses "do this, but only when a certain condition is true."</p>
+
+<h2>2. Your First If Statement</h2>
+<pre>#include &lt;iostream&gt;
+
+int main() {
+    int age = 13;
+
+    if (age &gt;= 13) {
+        std::cout &lt;&lt; "You're a teenager!" &lt;&lt; std::endl;
+    }
+
+    return 0;
+}</pre>
+<p>The condition inside the parentheses — <code class="inline">age &gt;= 13</code> — is evaluated as either <strong>true</strong> or <strong>false</strong>. If it's true, the code inside the curly braces runs. If it's false, that whole block is skipped entirely, as if it wasn't there.</p>
+
+<h2>3. Comparison Operators</h2>
+<table>
+  <tr><th>Operator</th><th>Meaning</th><th>Example</th></tr>
+  <tr><td><code class="inline">==</code></td><td>Equal to</td><td><code class="inline">age == 13</code></td></tr>
+  <tr><td><code class="inline">!=</code></td><td>Not equal to</td><td><code class="inline">age != 13</code></td></tr>
+  <tr><td><code class="inline">&gt;</code></td><td>Greater than</td><td><code class="inline">age &gt; 13</code></td></tr>
+  <tr><td><code class="inline">&lt;</code></td><td>Less than</td><td><code class="inline">age &lt; 13</code></td></tr>
+  <tr><td><code class="inline">&gt;=</code></td><td>Greater than or equal to</td><td><code class="inline">age &gt;= 13</code></td></tr>
+  <tr><td><code class="inline">&lt;=</code></td><td>Less than or equal to</td><td><code class="inline">age &lt;= 13</code></td></tr>
+</table>
+
+<div class="warning">
+  <strong>The most common beginner mistake in all of C++:</strong> writing <code class="inline">if (age = 13)</code> with a single <code class="inline">=</code> instead of <code class="inline">if (age == 13)</code> with two. A single <code class="inline">=</code> doesn't compare — it <em>assigns</em>, overwriting <code class="inline">age</code> with the value 13 and (confusingly) often still "succeeding." Always double-check you've used <code class="inline">==</code> when comparing values inside a condition.
+</div>
+
+<h2>4. Else and Else If</h2>
+<p>Real decisions usually have more than one possible outcome:</p>
+<pre>#include &lt;iostream&gt;
+
+int main() {
+    int score = 72;
+
+    if (score &gt;= 90) {
+        std::cout &lt;&lt; "Grade: A" &lt;&lt; std::endl;
+    } else if (score &gt;= 80) {
+        std::cout &lt;&lt; "Grade: B" &lt;&lt; std::endl;
+    } else if (score &gt;= 70) {
+        std::cout &lt;&lt; "Grade: C" &lt;&lt; std::endl;
+    } else {
+        std::cout &lt;&lt; "Grade: D or below" &lt;&lt; std::endl;
+    }
+
+    return 0;
+}</pre>
+<p>C++ checks each condition from top to bottom and runs the <strong>first</strong> block whose condition is true, then skips all the rest — even if a later condition would also have been true. <code class="inline">else</code> (with no condition of its own) catches anything that didn't match any of the above.</p>
+
+<h2>5. Combining Conditions</h2>
+<p>Sometimes a decision depends on more than one thing at once:</p>
+<table>
+  <tr><th>Operator</th><th>Meaning</th><th>Example</th></tr>
+  <tr><td><code class="inline">&amp;&amp;</code></td><td>AND — both sides must be true</td><td><code class="inline">age &gt;= 13 &amp;&amp; age &lt;= 19</code></td></tr>
+  <tr><td><code class="inline">||</code></td><td>OR — at least one side must be true</td><td><code class="inline">age == 12 || age == 13</code></td></tr>
+  <tr><td><code class="inline">!</code></td><td>NOT — flips true to false, or false to true</td><td><code class="inline">!isRaining</code></td></tr>
+</table>
+<pre>int age = 13;
+
+if (age &gt;= 13 &amp;&amp; age &lt;= 19) {
+    std::cout &lt;&lt; "You're a teenager!" &lt;&lt; std::endl;
+}</pre>
+
+<div class="note">
+  <strong>Looking ahead:</strong> once your Arduino is reading real sensors, this exact pattern is how you'll make decisions like "if the distance reading is less than 10cm, stop the motor" or "if both line sensors see a light surface, drive straight." The syntax you're practising now with plain numbers is identical to what you'll use with sensor readings later.
+</div>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Write a program that stores a temperature in an <code class="inline">int</code> variable and prints "Hot", "Warm", or "Cold" depending on its value, using <code class="inline">if</code>/<code class="inline">else if</code>/<code class="inline">else</code>.</li>
+    <li>Write a condition using <code class="inline">&amp;&amp;</code> that checks whether a number is between 1 and 100 (inclusive).</li>
+    <li>Deliberately write <code class="inline">if (score = 100)</code> with a single equals sign, run it, and see what happens. Does the program behave the way you'd expect, or does it reveal the bug from section 3?</li>
+    <li>Challenge: write a simple password checker — store a password in a <code class="inline">std::string</code>, ask nothing (just hardcode a guess), and print "Access granted" or "Access denied" by comparing the guess to the real password with <code class="inline">==</code>.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ I can write a condition using each comparison operator (==, !=, &gt;, &lt;, &gt;=, &lt;=)</label>
+  <label>☐ My grade-checking program using else if works correctly for several different scores</label>
+  <label>☐ I can explain the difference between <code class="inline">=</code> and <code class="inline">==</code></label>
+  <label>☐ I combined two conditions using <code class="inline">&amp;&amp;</code> or <code class="inline">||</code> successfully</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — C/C++ Fundamentals &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

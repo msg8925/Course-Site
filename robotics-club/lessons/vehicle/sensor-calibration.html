@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "vehicle/sensor-calibration";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Calibrating Sensors to the Competition Surface";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Calibrating Sensors to the Competition Surface</title>
+<style>
+  :root { --navy: #1B2B5E; --teal: #0D9488; --teal-light: #e6f7f5; --navy-light: #eef0f8; }
+  body { font-family: Calibri, Arial, sans-serif; color: #1a1a1a; max-width: 900px; margin: 0 auto; padding: 40px 30px 80px; line-height: 1.55; background: #fff; }
+  h1, h2, h3 { font-family: 'Bookman Old Style', Cambria, Georgia, serif; color: var(--navy); }
+  h1 { border-bottom: 4px solid var(--teal); padding-bottom: 12px; font-size: 30px; }
+  h2 { margin-top: 40px; border-left: 6px solid var(--teal); padding-left: 14px; font-size: 22px; }
+  .banner { background: var(--navy); color: white; padding: 6px 14px; display: inline-block; border-radius: 4px; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .objectives, .note, .warning { background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0; }
+  .note { background: #fff8e6; border-left: 5px solid #d9a300; }
+  .warning { background: #fdeaea; border-left: 5px solid #c0392b; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 15px; }
+  th { background: var(--navy); color: white; }
+  code, pre { font-family: Consolas, 'Courier New', monospace; background: #0f1830; color: #e6f0ff; border-radius: 6px; }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline { background: #eef0f8; color: var(--navy); padding: 2px 6px; border-radius: 4px; }
+  .comment { color: #8fd6b4; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise { background: #fff8e6; border-left: 5px solid #d9a300; padding: 14px 20px; margin: 14px 0; border-radius: 6px; }
+  .footer-note { margin-top: 50px; font-size: 13px; color: #666; border-top: 1px solid #ddd; padding-top: 14px; }
+  .ref-note { background: var(--teal-light); border-left: 5px solid var(--teal); border-radius: 8px; padding: 14px 20px; margin: 18px 0; font-size: 14px; }
+  .ref-note a { color: var(--teal); font-weight: bold; }
+  .step { margin: 26px 0; padding-left: 18px; border-left: 3px solid var(--navy-light); }
+  .step h3 { margin-bottom: 6px; }
+  .step-num {
+    display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px;
+    background: var(--teal); color: white; border-radius: 50%; font-weight: bold; margin-right: 10px; font-family: Arial, sans-serif;
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/vehicle-sensor-calibration.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Calibrating Sensors to the Competition Surface</h1>
+<p><strong>Section focus:</strong> Robotic Vehicle — Line Sensor Subsystem — Lesson 4.1.4 &nbsp;|&nbsp; <strong>Duration:</strong> ~45 minutes</p>
+
+<div class="ref-note">
+  <strong>Builds on:</strong> Lessons 4.1.2 (sensor array) and 4.1.3 (LCD readout). This lesson turns raw sensor numbers into a reliable per-sensor threshold.
+</div>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain why a single hardcoded threshold value is unreliable across multiple sensors</li>
+    <li>Record each sensor's light and dark readings on the actual competition surface</li>
+    <li>Calculate an individual threshold for each sensor</li>
+    <li>Store and use per-sensor thresholds in your program</li>
+  </ul>
+</div>
+
+<h2>1. Why One Shared Threshold Isn't Good Enough</h2>
+<p>It's tempting to pick a single number (say, 500) and use it for every sensor. In practice, small manufacturing differences between individual IR LEDs and phototransistors, slightly uneven mounting height, and even minor differences in ambient light across the sensor row all mean that each sensor's "light" and "dark" readings can genuinely differ from its neighbours'. A threshold that works perfectly for one sensor may misread another entirely.</p>
+
+<div class="warning">
+  <strong>The competition surface itself matters too.</strong> A threshold calibrated on a coffee table at home may not transfer reliably to the actual competition floor and tape, especially if lighting conditions differ (fluorescent lights, sunlight through windows, etc). Always calibrate on the same surface — or as close to it as possible — that you'll actually compete on.
+</div>
+
+<h2>2. Recording Light and Dark Values, Per Sensor</h2>
+
+<div class="step">
+  <h3><span class="step-num">1</span>Set up your test rig</h3>
+  <p>Using the LCD or Serial Monitor readout from Lesson 4.1.3, position the sensor array over the light-coloured surface (away from any tape) and record all 5 readings.</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">2</span>Record dark readings</h3>
+  <p>Move each sensor, one at a time, directly over the tape, and record its reading in that position.</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">3</span>Tabulate your results</h3>
+  <table>
+    <tr><th>Sensor</th><th>Light reading</th><th>Dark reading</th><th>Threshold (midpoint)</th></tr>
+    <tr><td>S1</td><td>e.g. 200</td><td>e.g. 800</td><td>(200+800)/2 = 500</td></tr>
+    <tr><td>S2</td><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td></tr>
+    <tr><td>S3</td><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td></tr>
+    <tr><td>S4</td><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td></tr>
+    <tr><td>S5</td><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td></tr>
+  </table>
+  <p>A simple, effective threshold for each sensor is the midpoint between its own light and dark readings — this naturally adapts to each sensor's individual behaviour rather than assuming they're identical.</p>
+</div>
+
+<h2>3. Storing Per-Sensor Thresholds in Code</h2>
+<pre>const int sensorPins[5] = {A0, A1, A2, A3, A4};
+int sensorReadings[5];
+
+<span class="comment">// Replace these with YOUR actual calculated midpoints</span>
+const int thresholds[5] = {500, 480, 510, 495, 505};
+
+bool isOnLine[5];  <span class="comment">// true if that sensor currently sees the dark tape</span>
+
+void setup() {
+    Serial.begin(9600);
+}
+
+void loop() {
+    for (int i = 0; i &lt; 5; i++) {
+        sensorReadings[i] = analogRead(sensorPins[i]);
+        isOnLine[i] = sensorReadings[i] &gt; thresholds[i];
+    }
+
+    for (int i = 0; i &lt; 5; i++) {
+        Serial.print(isOnLine[i]);
+        Serial.print(" ");
+    }
+    Serial.println();
+
+    delay(100);
+}</pre>
+<p>This program now reports a clean <code class="inline">true</code>/<code class="inline">false</code> per sensor, individually calibrated — exactly the information your line-following logic in Lesson 4.3.1 will actually need, rather than raw numbers requiring interpretation.</p>
+
+<div class="note">
+  <strong>Looking ahead:</strong> the <code class="inline">isOnLine[]</code> array built here is exactly what Lesson 4.3.1's decision logic will read from — this lesson's whole purpose is producing that clean, reliable array.
+</div>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Record real light and dark readings for every sensor on your actual test surface, and calculate each threshold.</li>
+    <li>Update your code with your real threshold values and confirm each sensor correctly reports true/false as you move it over the tape.</li>
+    <li>Test what happens if you recalibrate in a room with different lighting — do your thresholds still work well, or do they need adjusting?</li>
+    <li>Challenge: rather than hardcoding thresholds, write a short calibration routine that runs once at startup, asking you (via Serial or LCD prompts) to place the vehicle on light then dark surfaces, automatically recording the readings and calculating thresholds itself.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ I recorded real light and dark readings for every sensor on the actual competition surface</label>
+  <label>☐ My per-sensor thresholds are based on my own measurements, not copied example values</label>
+  <label>☐ My program correctly reports true/false per sensor as I move it over the tape</label>
+  <label>☐ I can explain why a single shared threshold is less reliable than per-sensor thresholds</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Robotic Vehicle &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "arduino/potentiometer-led";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Controlling an LED with a Potentiometer";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Controlling an LED with a Potentiometer</title>
+<style>
+  :root {
+    --navy: #1B2B5E;
+    --teal: #0D9488;
+    --teal-light: #e6f7f5;
+    --navy-light: #eef0f8;
+  }
+  body {
+    font-family: Calibri, Arial, sans-serif;
+    color: #1a1a1a;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 30px 80px;
+    line-height: 1.55;
+    background: #fff;
+  }
+  h1, h2, h3 {
+    font-family: 'Bookman Old Style', Cambria, Georgia, serif;
+    color: var(--navy);
+  }
+  h1 {
+    border-bottom: 4px solid var(--teal);
+    padding-bottom: 12px;
+    font-size: 30px;
+  }
+  h2 {
+    margin-top: 40px;
+    border-left: 6px solid var(--teal);
+    padding-left: 14px;
+    font-size: 22px;
+  }
+  .banner {
+    background: var(--navy);
+    color: white;
+    padding: 6px 14px;
+    display: inline-block;
+    border-radius: 4px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .objectives, .materials, .analogy, .troubleshoot, .extension, .warning, .note {
+    background: var(--navy-light);
+    border-radius: 8px;
+    padding: 16px 22px;
+    margin: 18px 0;
+  }
+  .analogy {
+    background: var(--teal-light);
+    border-left: 5px solid var(--teal);
+  }
+  .warning {
+    background: #fdeaea;
+    border-left: 5px solid #c0392b;
+  }
+  .note {
+    background: #fff8e6;
+    border-left: 5px solid #d9a300;
+  }
+  .step {
+    margin: 26px 0;
+    padding-left: 18px;
+    border-left: 3px solid var(--navy-light);
+  }
+  .step h3 {
+    margin-bottom: 6px;
+  }
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--teal);
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-right: 10px;
+    font-family: Arial, sans-serif;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 14px 0;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 15px;
+  }
+  th {
+    background: var(--navy);
+    color: white;
+  }
+  code, pre {
+    font-family: Consolas, 'Courier New', monospace;
+    background: #0f1830;
+    color: #e6f0ff;
+    border-radius: 6px;
+  }
+  pre {
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  code.inline {
+    background: #eef0f8;
+    color: var(--navy);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .comment { color: #8fd6b4; }
+  svg { display: block; margin: 20px auto; }
+  .caption { text-align: center; font-size: 13px; color: #555; margin-top: -10px; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise {
+    background: #fff8e6;
+    border-left: 5px solid #d9a300;
+    padding: 14px 20px;
+    margin: 14px 0;
+    border-radius: 6px;
+  }
+  .footer-note {
+    margin-top: 50px;
+    font-size: 13px;
+    color: #666;
+    border-top: 1px solid #ddd;
+    padding-top: 14px;
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/arduino-potentiometer-led.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Controlling an LED with a Potentiometer</h1>
+<p><strong>Session focus:</strong> Analog Input — reading a potentiometer to control an LED &nbsp;|&nbsp; <strong>Duration:</strong> ~60 minutes</p>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain how a potentiometer produces a variable voltage</li>
+    <li>Wire a potentiometer and LED to an Arduino on a breadboard</li>
+    <li>Read an analog value with <code class="inline">analogRead()</code> and understand its 0–1023 range</li>
+    <li>Convert that reading into a PWM value to smoothly control an LED's brightness</li>
+  </ul>
+</div>
+
+<div class="analogy">
+  <strong>Real-world analogy:</strong> A potentiometer is exactly like a dimmer switch on a wall light, or the volume knob on an old radio. Turning it doesn't switch anything fully on or off — it smoothly increases or decreases a value, letting the Arduino "hear" exactly how far round the knob has been turned.
+</div>
+
+<h2>1. What You Need</h2>
+<div class="materials">
+  <table>
+    <tr><th>Item</th><th>Quantity</th><th>Notes</th></tr>
+    <tr><td>Arduino Uno (or compatible)</td><td>1</td><td>Any Uno-compatible board works</td></tr>
+    <tr><td>Potentiometer (10kΩ)</td><td>1</td><td>Standard 3-pin rotary type</td></tr>
+    <tr><td>LED</td><td>1</td><td>Any standard 5mm LED</td></tr>
+    <tr><td>Resistor (220Ω)</td><td>1</td><td>Protects the LED from too much current</td></tr>
+    <tr><td>Breadboard</td><td>1</td><td>For building the circuit</td></tr>
+    <tr><td>Jumper wires</td><td>~6</td><td>Male-to-male</td></tr>
+    <tr><td>USB cable</td><td>1</td><td>To connect Arduino to computer and power the circuit</td></tr>
+  </table>
+</div>
+
+<h2>2. Understanding the Potentiometer</h2>
+<p>A potentiometer has three pins. The two outer pins connect across a fixed resistive strip; the middle pin (the "wiper") slides along that strip as you turn the knob, picking off a voltage somewhere between the two ends.</p>
+<table>
+  <tr><th>Pin</th><th>Function</th><th>Connects To</th></tr>
+  <tr><td>Outer pin 1</td><td>Fixed end of resistive track</td><td>Arduino 5V</td></tr>
+  <tr><td>Middle pin (wiper)</td><td>Variable voltage output</td><td>Arduino analog input (e.g. A0)</td></tr>
+  <tr><td>Outer pin 2</td><td>Fixed end of resistive track</td><td>Arduino GND</td></tr>
+</table>
+<p>With one end at 5V and the other at GND, the wiper outputs somewhere between 0V and 5V depending on the knob's position — this is exactly the kind of signal an Arduino's analog input pins are designed to read.</p>
+
+<div class="note">
+  <strong>Why an analog pin, not a digital one:</strong> Digital pins can only see HIGH or LOW — fully on or fully off. A potentiometer's whole purpose is to produce something in between, so it must connect to one of the Arduino's analog input pins (A0–A5), which can measure a range of voltages, not just two states.
+</div>
+
+<h2>3. Understanding the LED Circuit</h2>
+<p>The LED and its 220Ω resistor connect in series between a digital pin and GND. The resistor limits current through the LED so it doesn't burn out — this doesn't change with this lesson, but it's worth re-stating each time an LED appears in a circuit.</p>
+
+<svg viewBox="0 0 760 320" width="100%" height="320">
+  <!-- Arduino -->
+  <rect x="20" y="60" width="190" height="200" rx="10" fill="#1B2B5E"/>
+  <text x="115" y="45" text-anchor="middle" font-family="Arial" font-size="16" fill="#1B2B5E" font-weight="bold">Arduino Uno</text>
+
+  <circle cx="200" cy="100" r="6" fill="#ff5555"/>
+  <text x="214" y="104" font-family="Arial" font-size="12" fill="white">5V</text>
+  <circle cx="200" cy="130" r="6" fill="#66ccff"/>
+  <text x="214" y="134" font-family="Arial" font-size="12" fill="white">A0</text>
+  <circle cx="200" cy="160" r="6" fill="#ffcc00"/>
+  <text x="214" y="164" font-family="Arial" font-size="12" fill="white">Pin 9 (LED)</text>
+  <circle cx="200" cy="190" r="6" fill="#aaaaaa"/>
+  <text x="214" y="194" font-family="Arial" font-size="12" fill="white">GND</text>
+
+  <!-- Breadboard -->
+  <rect x="330" y="40" width="380" height="240" rx="6" fill="#eef0f8" stroke="#ccc" stroke-width="2"/>
+
+  <!-- Potentiometer -->
+  <circle cx="420" cy="110" r="30" fill="#0D9488"/>
+  <text x="420" y="70" text-anchor="middle" font-family="Arial" font-size="13" fill="#0D9488" font-weight="bold">Potentiometer</text>
+  <line x1="395" y1="90" x2="360" y2="70" stroke="#ff5555" stroke-width="3"/>
+  <line x1="420" y1="140" x2="420" y2="180" stroke="#66ccff" stroke-width="3"/>
+  <line x1="445" y1="90" x2="480" y2="70" stroke="#aaaaaa" stroke-width="3"/>
+
+  <!-- LED -->
+  <circle cx="600" cy="150" r="22" fill="#ffdd55" stroke="#d9a300" stroke-width="3"/>
+  <text x="600" y="115" text-anchor="middle" font-family="Arial" font-size="13" fill="#0D9488" font-weight="bold">LED</text>
+  <line x1="600" y1="172" x2="600" y2="210" stroke="#333" stroke-width="3"/>
+  <rect x="590" y="210" width="20" height="12" fill="#c46b00"/>
+  <text x="600" y="240" text-anchor="middle" font-family="Arial" font-size="11" fill="#333">220Ω resistor</text>
+
+  <!-- wires from Arduino to breadboard -->
+  <line x1="206" y1="100" x2="360" y2="70" stroke="#ff5555" stroke-width="3"/>
+  <line x1="206" y1="130" x2="420" y2="180" stroke="#66ccff" stroke-width="3"/>
+  <line x1="206" y1="160" x2="600" y2="128" stroke="#ffcc00" stroke-width="3"/>
+  <line x1="206" y1="190" x2="480" y2="70" stroke="#aaaaaa" stroke-width="3"/>
+  <line x1="206" y1="190" x2="600" y2="250" stroke="#aaaaaa" stroke-width="3"/>
+
+  <text x="115" y="285" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">Arduino (power + signals)</text>
+  <text x="520" y="300" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">Breadboard: potentiometer feeds A0, LED driven from Pin 9</text>
+</svg>
+<p class="caption">Figure 1: The potentiometer's wiper feeds a variable voltage into A0; the Arduino uses that reading to set the LED's brightness on Pin 9.</p>
+
+<h2>4. Step-by-Step Instructions</h2>
+
+<div class="step">
+  <h3><span class="step-num">1</span>Wire the potentiometer</h3>
+  <ul>
+    <li>One outer pin → Arduino 5V</li>
+    <li>Other outer pin → Arduino GND</li>
+    <li>Middle pin (wiper) → Arduino A0</li>
+  </ul>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">2</span>Wire the LED</h3>
+  <ul>
+    <li>LED's longer leg (anode) → 220Ω resistor → Arduino Pin 9</li>
+    <li>LED's shorter leg (cathode) → Arduino GND</li>
+  </ul>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">3</span>Write the program</h3>
+<pre><span class="comment">// Potentiometer-Controlled LED Brightness</span>
+const int potPin = A0;
+const int ledPin = 9;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  int potValue = analogRead(potPin);      <span class="comment">// reads 0 to 1023</span>
+  int brightness = map(potValue, 0, 1023, 0, 255); <span class="comment">// scale to 0-255 for PWM</span>
+
+  analogWrite(ledPin, brightness);
+
+  Serial.print("Pot: ");
+  Serial.print(potValue);
+  Serial.print("  Brightness: ");
+  Serial.println(brightness);
+
+  delay(50);
+}</pre>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">4</span>Upload and test</h3>
+  <p>Upload the code and turn the potentiometer's knob. The LED should smoothly dim and brighten as you turn it. Open the Serial Monitor (9600 baud) to see the raw and scaled values changing alongside the LED.</p>
+</div>
+
+<div class="note">
+  <strong>Why the <code class="inline">map()</code> function is needed:</strong> <code class="inline">analogRead()</code> gives a value from 0–1023 (the Arduino's analog-to-digital converter has more precision than we need here), but <code class="inline">analogWrite()</code> for PWM brightness only accepts 0–255. <code class="inline">map()</code> rescales one range onto the other automatically.
+</div>
+
+<div class="troubleshoot">
+  <h3 style="margin-top:0;">Troubleshooting</h3>
+  <ul>
+    <li><strong>LED doesn't light at all:</strong> check the LED's orientation — the longer leg (anode) must go toward the resistor/Pin 9 side, not GND.</li>
+    <li><strong>Turning the knob does nothing:</strong> check the wiper (middle pin) is connected to A0, not one of the outer pins.</li>
+    <li><strong>Serial Monitor shows numbers stuck at 0 or 1023:</strong> check both outer pins of the potentiometer are connected — one to 5V, one to GND — not both to the same rail.</li>
+    <li><strong>LED flickers instead of dimming smoothly:</strong> make sure Pin 9 is a PWM-capable pin (marked with a "~" symbol on most Arduino boards).</li>
+  </ul>
+</div>
+
+<h2>5. Why This Matters</h2>
+<p>This is the analog counterpart to everything you've done with digital HIGH/LOW signals so far — instead of a simple on/off input, you're now reading a continuous range and using it to drive a continuous output. The same pattern (read analog value → map it → apply it) will reappear whenever you use a sensor that reports a range of values rather than a simple digital signal.</p>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Reverse the mapped range with <code class="inline">map(potValue, 0, 1023, 255, 0)</code> so turning the knob one way now dims instead of brightens. What changed?</li>
+    <li>Add a second LED on a different PWM pin that gets <em>brighter</em> as the first one gets <em>dimmer</em>.</li>
+    <li>Challenge: instead of controlling brightness, use the mapped value to control the <em>blink speed</em> of the LED (map the potentiometer to a delay time between 50ms and 1000ms).</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ Potentiometer's outer pins go to 5V and GND, wiper to A0</label>
+  <label>☐ LED's longer leg is on the resistor/Pin 9 side</label>
+  <label>☐ Serial Monitor shows values changing smoothly as the knob turns</label>
+  <label>☐ I can explain why <code class="inline">map()</code> is needed between reading and writing</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Analog Input Unit &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "cpp/variables";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Variables and Data Types";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Variables and Data Types</title>
+<style>
+  :root {
+    --navy: #1B2B5E;
+    --teal: #0D9488;
+    --teal-light: #e6f7f5;
+    --navy-light: #eef0f8;
+  }
+  body {
+    font-family: Calibri, Arial, sans-serif;
+    color: #1a1a1a;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 30px 80px;
+    line-height: 1.55;
+    background: #fff;
+  }
+  h1, h2, h3 {
+    font-family: 'Bookman Old Style', Cambria, Georgia, serif;
+    color: var(--navy);
+  }
+  h1 { border-bottom: 4px solid var(--teal); padding-bottom: 12px; font-size: 30px; }
+  h2 { margin-top: 40px; border-left: 6px solid var(--teal); padding-left: 14px; font-size: 22px; }
+  .banner {
+    background: var(--navy); color: white; padding: 6px 14px; display: inline-block;
+    border-radius: 4px; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .objectives, .analogy, .note, .warning {
+    background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0;
+  }
+  .analogy { background: var(--teal-light); border-left: 5px solid var(--teal); }
+  .note { background: #fff8e6; border-left: 5px solid #d9a300; }
+  .warning { background: #fdeaea; border-left: 5px solid #c0392b; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 15px; }
+  th { background: var(--navy); color: white; }
+  code, pre {
+    font-family: Consolas, 'Courier New', monospace; background: #0f1830; color: #e6f0ff; border-radius: 6px;
+  }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline { background: #eef0f8; color: var(--navy); padding: 2px 6px; border-radius: 4px; }
+  .comment { color: #8fd6b4; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise {
+    background: #fff8e6; border-left: 5px solid #d9a300; padding: 14px 20px; margin: 14px 0; border-radius: 6px;
+  }
+  .footer-note { margin-top: 50px; font-size: 13px; color: #666; border-top: 1px solid #ddd; padding-top: 14px; }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/cpp-variables.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Variables and Data Types</h1>
+<p><strong>Section focus:</strong> C/C++ Fundamentals — Lesson 1.2 &nbsp;|&nbsp; <strong>Duration:</strong> ~45 minutes</p>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain what a variable is and why programs need them</li>
+    <li>Declare variables of the most common C++ data types</li>
+    <li>Explain why C++ needs to know a variable's type in advance</li>
+    <li>Read and change a variable's value while a program runs</li>
+  </ul>
+</div>
+
+<div class="analogy">
+  <strong>Real-world analogy:</strong> A variable is like a labelled box. The label (the variable's name) never changes, but what's inside the box can — you can open it, look at the contents, replace them, or use them elsewhere. Crucially, in C++, each box also has a fixed <em>size and shape</em> stamped on it before you ever put anything in — a box built for whole numbers can't suddenly hold a sentence of text.
+</div>
+
+<h2>1. Declaring Your First Variable</h2>
+<p>To create a variable in C++, you state its <strong>type</strong>, give it a <strong>name</strong>, and (usually) an initial <strong>value</strong>:</p>
+<pre>int age = 13;</pre>
+<p>This creates a box named <code class="inline">age</code>, built specifically to hold whole numbers, currently containing the value 13. Try it inside a full program:</p>
+<pre>#include &lt;iostream&gt;
+
+int main() {
+    int age = 13;
+    std::cout &lt;&lt; "Age is: " &lt;&lt; age &lt;&lt; std::endl;
+    return 0;
+}</pre>
+
+<h2>2. The Most Common Data Types</h2>
+<p>C++ has several built-in types, each suited to a different kind of data:</p>
+<table>
+  <tr><th>Type</th><th>Holds</th><th>Example</th></tr>
+  <tr><td><code class="inline">int</code></td><td>Whole numbers (positive or negative)</td><td><code class="inline">int score = 100;</code></td></tr>
+  <tr><td><code class="inline">float</code></td><td>Decimal numbers</td><td><code class="inline">float temperature = 36.6;</code></td></tr>
+  <tr><td><code class="inline">char</code></td><td>A single character</td><td><code class="inline">char grade = 'A';</code></td></tr>
+  <tr><td><code class="inline">bool</code></td><td>True or false only</td><td><code class="inline">bool isOn = true;</code></td></tr>
+  <tr><td><code class="inline">std::string</code></td><td>Text (a sequence of characters)</td><td><code class="inline">std::string name = "Maya";</code></td></tr>
+</table>
+
+<div class="note">
+  <strong>A small but important detail:</strong> a single character in <code class="inline">char</code> uses single quotes (<code class="inline">'A'</code>), while text in <code class="inline">std::string</code> uses double quotes (<code class="inline">"Maya"</code>). Mixing these up is a very common early mistake that produces a confusing error message.
+</div>
+
+<div class="warning">
+  <strong>Why does C++ need to know the type in advance?</strong> Under the hood, the computer reserves a specific-sized chunk of memory for each variable, and that size depends entirely on the type — an <code class="inline">int</code> and a <code class="inline">char</code> physically take up different amounts of space in memory. Because C++ decides this before the program even runs, it can catch a whole category of mistakes early (like accidentally treating text as a number) rather than crashing unpredictably later. This is different from some other languages (like Python) that decide a variable's type automatically as the program runs — neither approach is "better," but it's why C++ code looks the way it does.
+</div>
+
+<h2>3. Changing a Variable's Value</h2>
+<p>Unlike a mathematical constant, a variable's contents can change while the program runs — that's the entire point of the name "variable":</p>
+<pre>#include &lt;iostream&gt;
+
+int main() {
+    int score = 0;
+    std::cout &lt;&lt; "Starting score: " &lt;&lt; score &lt;&lt; std::endl;
+
+    score = 10;
+    std::cout &lt;&lt; "After scoring: " &lt;&lt; score &lt;&lt; std::endl;
+
+    score = score + 5;  <span class="comment">// take the current value and add 5</span>
+    std::cout &lt;&lt; "After bonus: " &lt;&lt; score &lt;&lt; std::endl;
+
+    return 0;
+}</pre>
+<p>That third line is worth pausing on: <code class="inline">score = score + 5;</code> looks like nonsense as a maths equation (nothing equals itself plus 5), but it's not maths — it's an instruction. It means "work out <code class="inline">score + 5</code> using the box's current contents, then put that new result back into the same box."</p>
+
+<h2>4. Naming Variables Well</h2>
+<p>C++ gives you freedom to name variables almost anything, but a few rules and habits matter:</p>
+<table>
+  <tr><th>Rule</th><th>Example</th></tr>
+  <tr><td>Must start with a letter or underscore, not a number</td><td><code class="inline">int 2ndPlace</code> is invalid; <code class="inline">int secondPlace</code> is fine</td></tr>
+  <tr><td>No spaces allowed</td><td><code class="inline">int high score</code> is invalid; <code class="inline">int highScore</code> is fine</td></tr>
+  <tr><td>Case-sensitive</td><td><code class="inline">score</code> and <code class="inline">Score</code> are treated as two completely different variables</td></tr>
+  <tr><td>Choose meaningful names (a habit, not a rule)</td><td><code class="inline">int x = 13;</code> works, but <code class="inline">int studentAge = 13;</code> is far easier for you — and others — to understand later</td></tr>
+</table>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Create variables for your name (<code class="inline">std::string</code>), your age (<code class="inline">int</code>), and your favourite letter grade (<code class="inline">char</code>), then print all three in one sentence using <code class="inline">std::cout</code>.</li>
+    <li>Create an <code class="inline">int</code> variable, print it, change its value, then print it again — confirm the value actually changed.</li>
+    <li>Try assigning text to an <code class="inline">int</code> variable (e.g. <code class="inline">int number = "hello";</code>) on purpose. Read the compiler error — what is it telling you?</li>
+    <li>Challenge: create two <code class="inline">int</code> variables representing two scores, and print their sum without creating a third variable to store it.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ I can declare a variable of each of the five types covered above</label>
+  <label>☐ I can explain, in my own words, why C++ needs a type specified in advance</label>
+  <label>☐ I successfully changed a variable's value after creating it</label>
+  <label>☐ I can explain the difference between single quotes and double quotes in C++</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — C/C++ Fundamentals &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

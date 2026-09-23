@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "cpp/loops";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Loops: for and while";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Loops: for and while</title>
+<style>
+  :root {
+    --navy: #1B2B5E;
+    --teal: #0D9488;
+    --teal-light: #e6f7f5;
+    --navy-light: #eef0f8;
+  }
+  body {
+    font-family: Calibri, Arial, sans-serif;
+    color: #1a1a1a;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 30px 80px;
+    line-height: 1.55;
+    background: #fff;
+  }
+  h1, h2, h3 {
+    font-family: 'Bookman Old Style', Cambria, Georgia, serif;
+    color: var(--navy);
+  }
+  h1 { border-bottom: 4px solid var(--teal); padding-bottom: 12px; font-size: 30px; }
+  h2 { margin-top: 40px; border-left: 6px solid var(--teal); padding-left: 14px; font-size: 22px; }
+  .banner {
+    background: var(--navy); color: white; padding: 6px 14px; display: inline-block;
+    border-radius: 4px; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .objectives, .analogy, .note, .warning {
+    background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0;
+  }
+  .analogy { background: var(--teal-light); border-left: 5px solid var(--teal); }
+  .note { background: #fff8e6; border-left: 5px solid #d9a300; }
+  .warning { background: #fdeaea; border-left: 5px solid #c0392b; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 15px; }
+  th { background: var(--navy); color: white; }
+  code, pre {
+    font-family: Consolas, 'Courier New', monospace; background: #0f1830; color: #e6f0ff; border-radius: 6px;
+  }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline { background: #eef0f8; color: var(--navy); padding: 2px 6px; border-radius: 4px; }
+  .comment { color: #8fd6b4; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise {
+    background: #fff8e6; border-left: 5px solid #d9a300; padding: 14px 20px; margin: 14px 0; border-radius: 6px;
+  }
+  .footer-note { margin-top: 50px; font-size: 13px; color: #666; border-top: 1px solid #ddd; padding-top: 14px; }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/cpp-loops.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Loops: for and while</h1>
+<p><strong>Section focus:</strong> C/C++ Fundamentals — Lesson 1.4 &nbsp;|&nbsp; <strong>Duration:</strong> ~45 minutes</p>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain why repeating code by copy-pasting is a problem worth solving</li>
+    <li>Write a <code class="inline">for</code> loop and explain its three parts</li>
+    <li>Write a <code class="inline">while</code> loop and know when to prefer it over a <code class="inline">for</code> loop</li>
+    <li>Recognise and avoid an infinite loop</li>
+  </ul>
+</div>
+
+<div class="analogy">
+  <strong>Real-world analogy:</strong> A loop is like a coach saying "run ten laps." The coach doesn't write out ten separate instructions ("run lap 1," "run lap 2," ...) — they give one instruction with a repeat count, and you keep going until the condition ("ten laps") is satisfied. A loop is a program's way of saying "keep doing this until I tell you to stop," instead of writing the same instruction over and over by hand.
+</div>
+
+<h2>1. The Problem Loops Solve</h2>
+<p>Imagine printing the numbers 1 to 5. Without loops, you'd have to write this:</p>
+<pre>std::cout &lt;&lt; 1 &lt;&lt; std::endl;
+std::cout &lt;&lt; 2 &lt;&lt; std::endl;
+std::cout &lt;&lt; 3 &lt;&lt; std::endl;
+std::cout &lt;&lt; 4 &lt;&lt; std::endl;
+std::cout &lt;&lt; 5 &lt;&lt; std::endl;</pre>
+<p>This works, but it doesn't scale — printing 1 to 1000 this way would take 1000 lines. Worse, if you needed to change what happens on each line, you'd have to edit every single one. Loops solve exactly this problem.</p>
+
+<h2>2. The For Loop</h2>
+<p>A <code class="inline">for</code> loop is the right tool when you know roughly how many times you want to repeat something:</p>
+<pre>#include &lt;iostream&gt;
+
+int main() {
+    for (int i = 1; i &lt;= 5; i++) {
+        std::cout &lt;&lt; i &lt;&lt; std::endl;
+    }
+    return 0;
+}</pre>
+<p>This prints 1 through 5 — five lines of output from three lines of code. A <code class="inline">for</code> loop has three parts, separated by semicolons, all sitting in the parentheses:</p>
+<table>
+  <tr><th>Part</th><th>Example</th><th>Meaning</th></tr>
+  <tr><td>Starting point</td><td><code class="inline">int i = 1</code></td><td>Runs once, right at the start — creates a counter variable</td></tr>
+  <tr><td>Condition</td><td><code class="inline">i &lt;= 5</code></td><td>Checked before every repeat — the loop continues only while this is true</td></tr>
+  <tr><td>Update</td><td><code class="inline">i++</code></td><td>Runs at the end of every repeat — <code class="inline">i++</code> means "add 1 to i"</td></tr>
+</table>
+
+<div class="note">
+  <strong>Why <code class="inline">i</code>?</strong> Single-letter names like <code class="inline">i</code> (short for "index") are a long-standing convention specifically for loop counters — it's one of the few places short names are considered good style rather than lazy, precisely because their role is so immediately obvious from context.
+</div>
+
+<h2>3. The While Loop</h2>
+<p>A <code class="inline">while</code> loop is the right tool when you don't know in advance how many repeats you'll need — you just know the condition that should keep it going:</p>
+<pre>#include &lt;iostream&gt;
+
+int main() {
+    int count = 1;
+
+    while (count &lt;= 5) {
+        std::cout &lt;&lt; count &lt;&lt; std::endl;
+        count = count + 1;
+    }
+
+    return 0;
+}</pre>
+<p>This produces identical output to the <code class="inline">for</code> loop above. The difference is really about intent: a <code class="inline">for</code> loop bundles "start, condition, update" neatly together, which makes counted repeats easy to read at a glance; a <code class="inline">while</code> loop just keeps checking a condition, which suits situations where the ending condition depends on something happening during the loop, not a fixed count.</p>
+
+<div class="warning">
+  <strong>The infinite loop:</strong> a <code class="inline">while</code> loop only stops when its condition becomes false. If you forget to update whatever the condition depends on (like forgetting <code class="inline">count = count + 1;</code> above), the condition never changes, and the loop runs forever — usually freezing your program. If your program ever seems to "hang" and never finish, an infinite loop is the first thing to suspect. Most online compilers have a stop or timeout button for exactly this situation.
+</div>
+
+<h2>4. Choosing Between For and While</h2>
+<table>
+  <tr><th>Use...</th><th>When...</th></tr>
+  <tr><td><code class="inline">for</code></td><td>You know how many times to repeat (a fixed count, or looping through a list of a known size)</td></tr>
+  <tr><td><code class="inline">while</code></td><td>You're repeating "until something happens," and you don't know in advance how long that will take</td></tr>
+</table>
+
+<div class="note">
+  <strong>Looking ahead:</strong> when your Arduino is running, its <code class="inline">loop()</code> function is itself an infinite loop by design — it repeats forever, for as long as the board has power, which is exactly what you want for a robot that needs to keep checking its sensors continuously. The <code class="inline">for</code> and <code class="inline">while</code> loops you're learning now will typically live <em>inside</em> that always-running <code class="inline">loop()</code>, handling specific repeated tasks such as reading several sensors in sequence.
+</div>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Write a <code class="inline">for</code> loop that prints the numbers 10 down to 1 (counting backward).</li>
+    <li>Write a <code class="inline">for</code> loop that prints only the even numbers between 1 and 20.</li>
+    <li>Write a <code class="inline">while</code> loop that keeps doubling a starting value of 1 until it exceeds 1000, printing each value along the way.</li>
+    <li>Challenge: combine loops with the if-statements from the last lesson — print every number from 1 to 30, but print "Fizz" instead of the number if it's divisible by 3.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ I can explain each of the three parts of a <code class="inline">for</code> loop</label>
+  <label>☐ I wrote a working <code class="inline">while</code> loop that terminates correctly</label>
+  <label>☐ I can explain what causes an infinite loop and how to avoid one</label>
+  <label>☐ I can explain, in my own words, when I'd choose <code class="inline">for</code> over <code class="inline">while</code></label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — C/C++ Fundamentals &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "electronics/led-circuit";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Building a Simple LED Circuit";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Building a Simple LED Circuit</title>
+<style>
+  :root { --navy: #1B2B5E; --teal: #0D9488; --teal-light: #e6f7f5; --navy-light: #eef0f8; }
+  body { font-family: Calibri, Arial, sans-serif; color: #1a1a1a; max-width: 900px; margin: 0 auto; padding: 40px 30px 80px; line-height: 1.55; background: #fff; }
+  h1, h2, h3 { font-family: 'Bookman Old Style', Cambria, Georgia, serif; color: var(--navy); }
+  h1 { border-bottom: 4px solid var(--teal); padding-bottom: 12px; font-size: 30px; }
+  h2 { margin-top: 40px; border-left: 6px solid var(--teal); padding-left: 14px; font-size: 22px; }
+  .banner { background: var(--navy); color: white; padding: 6px 14px; display: inline-block; border-radius: 4px; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .objectives, .analogy, .note, .warning { background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0; }
+  .analogy { background: var(--teal-light); border-left: 5px solid var(--teal); }
+  .note { background: #fff8e6; border-left: 5px solid #d9a300; }
+  .warning { background: #fdeaea; border-left: 5px solid #c0392b; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 15px; }
+  th { background: var(--navy); color: white; }
+  code, pre { font-family: Consolas, 'Courier New', monospace; background: #0f1830; color: #e6f0ff; border-radius: 6px; }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline { background: #eef0f8; color: var(--navy); padding: 2px 6px; border-radius: 4px; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise { background: #fff8e6; border-left: 5px solid #d9a300; padding: 14px 20px; margin: 14px 0; border-radius: 6px; }
+  .footer-note { margin-top: 50px; font-size: 13px; color: #666; border-top: 1px solid #ddd; padding-top: 14px; }
+  svg { display: block; margin: 20px auto; }
+  .caption { text-align: center; font-size: 13px; color: #555; margin-top: -10px; }
+  .step { margin: 26px 0; padding-left: 18px; border-left: 3px solid var(--navy-light); }
+  .step h3 { margin-bottom: 6px; }
+  .step-num {
+    display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px;
+    background: var(--teal); color: white; border-radius: 50%; font-weight: bold; margin-right: 10px; font-family: Arial, sans-serif;
+  }
+  .troubleshoot { background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0; }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/electronics-led-circuit.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Building a Simple LED Circuit</h1>
+<p><strong>Section focus:</strong> Electronics Fundamentals — Lesson 2.4 &nbsp;|&nbsp; <strong>Duration:</strong> ~45 minutes</p>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Identify an LED's two legs and explain why orientation matters</li>
+    <li>Explain why an LED needs a series resistor and roughly how to size one</li>
+    <li>Build a complete, working LED circuit on a breadboard from a battery, with no Arduino or code involved</li>
+    <li>Diagnose the most common reasons an LED circuit doesn't light up</li>
+  </ul>
+</div>
+
+<div class="analogy">
+  <strong>Real-world analogy:</strong> An LED is like a one-way turnstile for electricity — current can only flow through it in one direction. Push it the "wrong" way, and nothing happens at all, no matter how much power is available; this is completely normal and not a fault.
+</div>
+
+<h2>1. Identifying the LED's Legs</h2>
+<table>
+  <tr><th>Leg</th><th>Name</th><th>How to identify it</th></tr>
+  <tr><td>Longer leg</td><td>Anode (+)</td><td>Connects toward the positive supply</td></tr>
+  <tr><td>Shorter leg</td><td>Cathode (&minus;)</td><td>Connects toward ground; also usually has a small flat edge on that side of the LED's plastic dome</td></tr>
+</table>
+
+<div class="warning">
+  <strong>If both legs have been trimmed to the same length</strong> (common in kits or after reuse), look instead for the flat edge on the dome, or check for a slightly larger internal metal piece visible through the plastic on the cathode side. If truly unsure, a multimeter's diode-test mode will light the LED briefly to reveal its orientation.
+</div>
+
+<h2>2. Why the Series Resistor Is Necessary</h2>
+<p>An LED has almost no natural resistance of its own — connected directly across a power source with nothing else in the circuit, it will draw far more current than it's rated for, and fail almost immediately, sometimes with a visible flash or crack. A resistor placed in series limits current to a safe level, exactly as covered in Lesson 2.2.</p>
+
+<div class="note">
+  <strong>Roughly sizing a resistor:</strong> a common, simple approach for a standard LED on a 5V supply is a 220Ω–330Ω resistor — this is why you've seen 220Ω used repeatedly across earlier lessons. A more precise calculation exists (based on the LED's exact forward voltage and desired current), but 220Ω is a safe, standard default for the components in this club.
+</div>
+
+<h2>3. Step-by-Step: Building the Circuit</h2>
+
+<div class="step">
+  <h3><span class="step-num">1</span>Identify your components</h3>
+  <p>One LED, one 220Ω resistor, a breadboard, and a 5V power source (a battery pack works fine — no Arduino needed for this lesson).</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">2</span>Place the LED</h3>
+  <p>Push the LED into the breadboard's main grid so its two legs sit in two separate columns.</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">3</span>Add the resistor</h3>
+  <p>Connect the resistor in series with the LED's anode (longer leg) — one end in the same column as the anode, the other end running toward your positive power connection.</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">4</span>Complete the circuit</h3>
+  <p>Connect the LED's cathode (shorter leg) to your power source's ground/negative terminal.</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">5</span>Connect power and test</h3>
+  <p>Connect your power source. The LED should light immediately — there's no code or delay involved, since this is a purely electrical circuit.</p>
+</div>
+
+<div class="troubleshoot">
+  <h3 style="margin-top:0;">Troubleshooting</h3>
+  <ul>
+    <li><strong>Nothing lights up:</strong> the most common cause by far is the LED being backwards — try flipping it around.</li>
+    <li><strong>Still nothing:</strong> check the resistor and LED are actually in the same column as intended (see the breadboard lesson) rather than one row or column off.</li>
+    <li><strong>LED is extremely dim:</strong> check your power source is actually delivering close to 5V, and that connections are solid.</li>
+    <li><strong>LED flashed briefly then died:</strong> this usually means the resistor was missing or wired incorrectly, allowing too much current through — unfortunately, this typically destroys the LED, so try a fresh one with the resistor properly in place.</li>
+  </ul>
+</div>
+
+<h2>4. Why This Matters</h2>
+<p>This exact circuit — LED, series resistor, power, ground — is the electrical foundation underneath every LED-based Arduino lesson you've done or will do, including the RGB LED and 7-segment display lessons. The only thing Arduino adds on top is replacing the fixed battery connection with a pin the code can turn on, off, or dim — the LED and resistor themselves work identically either way.</p>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Build the circuit exactly as described and confirm it lights up.</li>
+    <li>Deliberately reverse the LED and confirm it stays dark — then flip it back.</li>
+    <li>Swap the 220Ω resistor for a much larger one (e.g. 10kΩ) and observe the difference in brightness.</li>
+    <li>Challenge: build two LED circuits side by side, sharing the same power source, and predict (using Lesson 2.3) whether you've wired them in series or parallel based on how they behave if you remove one LED.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ I correctly identified the LED's anode and cathode</label>
+  <label>☐ My circuit lit the LED successfully with a battery, no Arduino involved</label>
+  <label>☐ I intentionally reversed the LED and observed it not lighting</label>
+  <label>☐ I can explain why the resistor is necessary, not optional</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Electronics Fundamentals &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

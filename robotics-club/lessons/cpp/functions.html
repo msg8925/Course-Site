@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "cpp/functions";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Functions";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Functions</title>
+<style>
+  :root {
+    --navy: #1B2B5E;
+    --teal: #0D9488;
+    --teal-light: #e6f7f5;
+    --navy-light: #eef0f8;
+  }
+  body {
+    font-family: Calibri, Arial, sans-serif;
+    color: #1a1a1a;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 30px 80px;
+    line-height: 1.55;
+    background: #fff;
+  }
+  h1, h2, h3 {
+    font-family: 'Bookman Old Style', Cambria, Georgia, serif;
+    color: var(--navy);
+  }
+  h1 { border-bottom: 4px solid var(--teal); padding-bottom: 12px; font-size: 30px; }
+  h2 { margin-top: 40px; border-left: 6px solid var(--teal); padding-left: 14px; font-size: 22px; }
+  .banner {
+    background: var(--navy); color: white; padding: 6px 14px; display: inline-block;
+    border-radius: 4px; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .objectives, .analogy, .note, .warning {
+    background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0;
+  }
+  .analogy { background: var(--teal-light); border-left: 5px solid var(--teal); }
+  .note { background: #fff8e6; border-left: 5px solid #d9a300; }
+  .warning { background: #fdeaea; border-left: 5px solid #c0392b; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 15px; }
+  th { background: var(--navy); color: white; }
+  code, pre {
+    font-family: Consolas, 'Courier New', monospace; background: #0f1830; color: #e6f0ff; border-radius: 6px;
+  }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline { background: #eef0f8; color: var(--navy); padding: 2px 6px; border-radius: 4px; }
+  .comment { color: #8fd6b4; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise {
+    background: #fff8e6; border-left: 5px solid #d9a300; padding: 14px 20px; margin: 14px 0; border-radius: 6px;
+  }
+  .footer-note { margin-top: 50px; font-size: 13px; color: #666; border-top: 1px solid #ddd; padding-top: 14px; }
+  .step { margin: 26px 0; padding-left: 18px; border-left: 3px solid var(--navy-light); }
+  .step h3 { margin-bottom: 6px; }
+  .step-num {
+    display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px;
+    background: var(--teal); color: white; border-radius: 50%; font-weight: bold; margin-right: 10px; font-family: Arial, sans-serif;
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/cpp-functions.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Functions</h1>
+<p><strong>Section focus:</strong> C/C++ Fundamentals — Lesson 1.6 &nbsp;|&nbsp; <strong>Duration:</strong> ~45 minutes</p>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain what a function is and why breaking code into functions is useful</li>
+    <li>Write a function that accepts inputs (parameters) and gives back an output (a return value)</li>
+    <li>Call the same function multiple times with different inputs</li>
+    <li>Explain the difference between a function that returns a value and one that doesn't</li>
+  </ul>
+</div>
+
+<div class="analogy">
+  <strong>Real-world analogy:</strong> A function is like a recipe card for one specific task — say, "make a cup of tea." Once that card exists, you don't re-explain the whole process every time you want tea; you just say "make tea" and hand over what varies (how many sugars). The recipe card is written once and reused as many times as needed, with different details each time if necessary.
+</div>
+
+<h2>1. The Problem Functions Solve</h2>
+<p>Imagine you need to square a number (multiply it by itself) in several different places in your program. Without functions, you'd repeat the same calculation everywhere you needed it. If you ever wanted to change <em>how</em> squaring worked, you'd need to find and update every copy. A function lets you write that logic <strong>once</strong>, give it a name, and reuse it anywhere.</p>
+
+<h2>2. Your First Function</h2>
+<pre>#include &lt;iostream&gt;
+
+int square(int number) {
+    return number * number;
+}
+
+int main() {
+    std::cout &lt;&lt; square(4) &lt;&lt; std::endl;
+    std::cout &lt;&lt; square(7) &lt;&lt; std::endl;
+    return 0;
+}</pre>
+<p>This prints <code class="inline">16</code> then <code class="inline">49</code>. Notice <code class="inline">square</code> is written once, above <code class="inline">main()</code>, but called (used) twice inside it, each time with a different input.</p>
+
+<h2>3. Breaking Down a Function's Parts</h2>
+<pre>int square(int number) {
+    return number * number;
+}</pre>
+<table>
+  <tr><th>Part</th><th>Example</th><th>Meaning</th></tr>
+  <tr><td>Return type</td><td><code class="inline">int</code> (before the name)</td><td>The type of value this function will hand back. Use <code class="inline">void</code> if it doesn't return anything.</td></tr>
+  <tr><td>Name</td><td><code class="inline">square</code></td><td>What you'll call the function by — same naming rules as variables.</td></tr>
+  <tr><td>Parameters</td><td><code class="inline">(int number)</code></td><td>The inputs the function needs to do its job — variables that only exist inside the function.</td></tr>
+  <tr><td>Return statement</td><td><code class="inline">return number * number;</code></td><td>Sends a value back to wherever the function was called from, and immediately ends the function.</td></tr>
+</table>
+
+<h2>4. Functions That Don't Return Anything</h2>
+<p>Not every function needs to hand back a value — sometimes you just want it to <em>do</em> something, like printing a message:</p>
+<pre>#include &lt;iostream&gt;
+
+void greet(std::string name) {
+    std::cout &lt;&lt; "Hello, " &lt;&lt; name &lt;&lt; "!" &lt;&lt; std::endl;
+}
+
+int main() {
+    greet("Maya");
+    greet("Arun");
+    return 0;
+}</pre>
+<p><code class="inline">void</code> as the return type means "this function doesn't send anything back" — it simply does its job (printing, in this case) and finishes.</p>
+
+<h2>5. Multiple Parameters</h2>
+<p>Functions can accept more than one input, separated by commas:</p>
+<pre>#include &lt;iostream&gt;
+
+int add(int a, int b) {
+    return a + b;
+}
+
+int main() {
+    int result = add(5, 3);
+    std::cout &lt;&lt; "5 + 3 = " &lt;&lt; result &lt;&lt; std::endl;
+    return 0;
+}</pre>
+
+<div class="note">
+  <strong>Why bother capturing the result in a variable?</strong> <code class="inline">int result = add(5, 3);</code> runs <code class="inline">add(5, 3)</code>, gets back <code class="inline">8</code>, and stores it in <code class="inline">result</code> so it can be used later — printed, compared, or passed into another function. You could also skip the variable and write <code class="inline">std::cout &lt;&lt; add(5, 3);</code> directly if you only need the value once.
+</div>
+
+<h2>6. Why This Matters for Arduino</h2>
+<p>You've actually been using functions since your very first program — <code class="inline">main()</code> is a function. On the Arduino, you'll soon meet two special functions, <code class="inline">setup()</code> and <code class="inline">loop()</code>, that follow exactly the same rules you've just learned; the Arduino environment simply calls them automatically rather than you calling them yourself. Writing your own functions (like <code class="inline">readLeftSensor()</code> or <code class="inline">stopMotors()</code>) will make your vehicle's code dramatically easier to read compared to one giant block of instructions.</p>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Write a function <code class="inline">isEven(int number)</code> that returns <code class="inline">true</code> if a number is even and <code class="inline">false</code> if it's odd (hint: look up the <code class="inline">%</code> modulo operator, which gives the remainder of a division).</li>
+    <li>Write a <code class="inline">void</code> function called <code class="inline">printLine()</code> that prints a row of 20 dashes, and call it a few times in <code class="inline">main()</code> to separate other output visually.</li>
+    <li>Write a function <code class="inline">int max(int a, int b)</code> that returns whichever of the two numbers is larger, using an if-statement from Lesson 1.3.</li>
+    <li>Challenge: write a function that takes an array and its size as parameters (e.g. <code class="inline">int sumArray(int arr[], int size)</code>) and returns the total of all its values, reusing your loop knowledge from Lesson 1.4.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ I can identify the four parts of a function definition (return type, name, parameters, body)</label>
+  <label>☐ I wrote a function that returns a value and used that value afterward</label>
+  <label>☐ I wrote a <code class="inline">void</code> function and can explain when <code class="inline">void</code> is appropriate</label>
+  <label>☐ I called the same function multiple times with different inputs</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — C/C++ Fundamentals &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

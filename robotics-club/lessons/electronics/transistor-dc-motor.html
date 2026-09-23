@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "electronics/transistor-dc-motor";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Driving a DC Motor with a Single Transistor";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Driving a DC Motor with a Single Transistor</title>
+<style>
+  :root {
+    --navy: #1B2B5E;
+    --teal: #0D9488;
+    --teal-light: #e6f7f5;
+    --navy-light: #eef0f8;
+  }
+  body {
+    font-family: Calibri, Arial, sans-serif;
+    color: #1a1a1a;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 30px 80px;
+    line-height: 1.55;
+    background: #fff;
+  }
+  h1, h2, h3 {
+    font-family: 'Bookman Old Style', Cambria, Georgia, serif;
+    color: var(--navy);
+  }
+  h1 {
+    border-bottom: 4px solid var(--teal);
+    padding-bottom: 12px;
+    font-size: 30px;
+  }
+  h2 {
+    margin-top: 40px;
+    border-left: 6px solid var(--teal);
+    padding-left: 14px;
+    font-size: 22px;
+  }
+  .banner {
+    background: var(--navy);
+    color: white;
+    padding: 6px 14px;
+    display: inline-block;
+    border-radius: 4px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .objectives, .materials, .analogy, .troubleshoot, .extension, .warning, .note {
+    background: var(--navy-light);
+    border-radius: 8px;
+    padding: 16px 22px;
+    margin: 18px 0;
+  }
+  .analogy {
+    background: var(--teal-light);
+    border-left: 5px solid var(--teal);
+  }
+  .warning {
+    background: #fdeaea;
+    border-left: 5px solid #c0392b;
+  }
+  .note {
+    background: #fff8e6;
+    border-left: 5px solid #d9a300;
+  }
+  .step {
+    margin: 26px 0;
+    padding-left: 18px;
+    border-left: 3px solid var(--navy-light);
+  }
+  .step h3 {
+    margin-bottom: 6px;
+  }
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--teal);
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-right: 10px;
+    font-family: Arial, sans-serif;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 14px 0;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 15px;
+  }
+  th {
+    background: var(--navy);
+    color: white;
+  }
+  code, pre {
+    font-family: Consolas, 'Courier New', monospace;
+    background: #0f1830;
+    color: #e6f0ff;
+    border-radius: 6px;
+  }
+  pre {
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  code.inline {
+    background: #eef0f8;
+    color: var(--navy);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .comment { color: #8fd6b4; }
+  svg { display: block; margin: 20px auto; }
+  .caption { text-align: center; font-size: 13px; color: #555; margin-top: -10px; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise {
+    background: #fff8e6;
+    border-left: 5px solid #d9a300;
+    padding: 14px 20px;
+    margin: 14px 0;
+    border-radius: 6px;
+  }
+  .footer-note {
+    margin-top: 50px;
+    font-size: 13px;
+    color: #666;
+    border-top: 1px solid #ddd;
+    padding-top: 14px;
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/electronics-transistor-dc-motor.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Driving a DC Motor with a Single Transistor</h1>
+<p><strong>Session focus:</strong> Motors — building your own simple motor driver &nbsp;|&nbsp; <strong>Duration:</strong> ~60 minutes</p>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain how a transistor can act as a switch controlled by a tiny signal</li>
+    <li>Wire a transistor to switch a DC motor on, off, and at variable speed</li>
+    <li>Explain why a flyback diode is essential, not optional</li>
+    <li>Identify what this circuit can't do compared to a dedicated driver chip like the L298N</li>
+  </ul>
+</div>
+
+<div class="analogy">
+  <strong>Real-world analogy:</strong> A transistor here works like a foot-operated valve on a garden hose — a very light press with your foot (the small signal from the Arduino) controls a much larger flow of water (the motor's current) without your foot ever touching the water directly. This is exactly what the L298N does internally too — it's essentially a box containing several transistor-like switches. Building this circuit yourself shows you what's inside that "black box."
+</div>
+
+<div class="warning">
+  <strong>Important limitation before you start:</strong> this circuit can turn the motor on, off, and control its speed — but it <strong>cannot reverse direction</strong>. Reversing direction requires an H-bridge arrangement (four switches, not one), which is what the L298N provides. If your project needs the motor to run both forward and backward, use the L298N lesson instead — this circuit is for when one direction is enough, or for understanding the underlying principle.
+</div>
+
+<h2>1. What You Need</h2>
+<div class="materials">
+  <table>
+    <tr><th>Item</th><th>Quantity</th><th>Notes</th></tr>
+    <tr><td>Arduino Uno (or compatible)</td><td>1</td><td>Any Uno-compatible board works</td></tr>
+    <tr><td>Small DC motor</td><td>1</td><td>Same type used in the L298N lesson</td></tr>
+    <tr><td>NPN transistor (e.g. 2N2222, TIP120, or similar)</td><td>1</td><td>Check its rated current comfortably exceeds the motor's stall current</td></tr>
+    <tr><td>Diode (e.g. 1N4001/1N4007)</td><td>1</td><td>The flyback/protection diode — not optional</td></tr>
+    <tr><td>Resistor (~1kΩ)</td><td>1</td><td>Limits current into the transistor's base</td></tr>
+    <tr><td>External battery pack</td><td>1</td><td>Powers the motor — do NOT use the Arduino's own 5V for this</td></tr>
+    <tr><td>Breadboard and jumper wires</td><td>—</td><td>For building the circuit</td></tr>
+  </table>
+</div>
+
+<h2>2. Understanding the Transistor's Three Legs</h2>
+<p>A basic NPN transistor has three legs, each with a distinct job:</p>
+<table>
+  <tr><th>Leg</th><th>Function</th><th>Connects To</th></tr>
+  <tr><td>Base</td><td>The small "control" signal input</td><td>Arduino PWM pin, via the 1kΩ resistor</td></tr>
+  <tr><td>Collector</td><td>Where the larger current flows in from</td><td>Motor's negative terminal</td></tr>
+  <tr><td>Emitter</td><td>Where the larger current flows out to</td><td>GND (shared between Arduino and battery pack)</td></tr>
+</table>
+<p>A small current flowing into the base allows a much larger current to flow from collector to emitter — this amplification is exactly what lets a 40mA-capable Arduino pin control a motor that might draw several hundred milliamps.</p>
+
+<div class="note">
+  <strong>Checking your transistor's pinout:</strong> Base/Collector/Emitter order varies between transistor models and packages — it is <strong>not</strong> universal. Look up the datasheet for your exact component (search its printed part number, e.g. "2N2222 pinout" or "TIP120 pinout") before wiring, rather than assuming.
+</div>
+
+<h2>3. Why the Flyback Diode Is Essential</h2>
+<div class="warning">
+  <strong>Never skip this component.</strong> A motor's internal coil resists sudden changes in current. The instant you switch the transistor off, the coil fights back by producing a brief, sharp voltage spike — often far higher than your supply voltage — as it releases stored energy. Without a diode to safely redirect that spike, it can flow back into the transistor (and potentially the Arduino) and damage it, sometimes immediately, sometimes through gradual wear that causes mysterious failures weeks later. The diode, wired backwards across the motor's terminals, gives that spike a safe path to dissipate instead.
+</div>
+
+<svg viewBox="0 0 700 340" width="100%" height="340">
+  <!-- Arduino -->
+  <rect x="20" y="60" width="170" height="180" rx="10" fill="#1B2B5E"/>
+  <text x="105" y="45" text-anchor="middle" font-family="Arial" font-size="15" fill="#1B2B5E" font-weight="bold">Arduino Uno</text>
+  <circle cx="190" cy="110" r="6" fill="#ffcc00"/>
+  <text x="204" y="114" font-family="Arial" font-size="12" fill="white">Pin 9 (PWM)</text>
+  <circle cx="190" cy="200" r="6" fill="#aaaaaa"/>
+  <text x="204" y="204" font-family="Arial" font-size="12" fill="white">GND</text>
+
+  <!-- Resistor -->
+  <rect x="280" y="98" width="40" height="16" rx="3" fill="#c46b00"/>
+  <text x="300" y="90" text-anchor="middle" font-family="Arial" font-size="11" fill="#333">1k&#937;</text>
+  <line x1="196" y1="110" x2="280" y2="106" stroke="#e6a800" stroke-width="3"/>
+
+  <!-- Transistor -->
+  <rect x="350" y="150" width="60" height="80" rx="6" fill="#333"/>
+  <text x="380" y="140" text-anchor="middle" font-family="Arial" font-size="13" fill="#0D9488" font-weight="bold">Transistor</text>
+  <text x="380" y="245" text-anchor="middle" font-family="Arial" font-size="10" fill="#333">B  C  E</text>
+  <line x1="320" y1="106" x2="365" y2="150" stroke="#e6a800" stroke-width="3"/>
+
+  <!-- Motor -->
+  <circle cx="500" cy="90" r="36" fill="#3355aa"/>
+  <text x="500" y="35" text-anchor="middle" font-family="Arial" font-size="13" fill="#1B2B5E" font-weight="bold">DC Motor</text>
+
+  <!-- Diode across motor -->
+  <line x1="470" y1="130" x2="530" y2="130" stroke="#333" stroke-width="2"/>
+  <polygon points="490,130 505,122 505,138" fill="#333"/>
+  <text x="500" y="148" text-anchor="middle" font-family="Arial" font-size="10" fill="#333">flyback diode</text>
+
+  <!-- Battery -->
+  <rect x="560" y="180" width="80" height="30" rx="4" fill="#c0392b"/>
+  <text x="600" y="200" text-anchor="middle" font-family="Arial" font-size="12" fill="white">Battery +</text>
+
+  <!-- wires -->
+  <line x1="500" y1="126" x2="500" y2="150" stroke="#333" stroke-width="2"/>
+  <line x1="500" y1="150" x2="380" y2="150" stroke="#333" stroke-width="2"/>
+  <line x1="600" y1="180" x2="500" y2="126" stroke="#c0392b" stroke-width="2"/>
+  <line x1="380" y1="230" x2="380" y2="270" stroke="#aaaaaa" stroke-width="2"/>
+  <line x1="380" y1="270" x2="190" y2="200" stroke="#aaaaaa" stroke-width="2"/>
+  <line x1="380" y1="270" x2="600" y2="240" stroke="#aaaaaa" stroke-width="2"/>
+  <line x1="600" y1="240" x2="600" y2="210" stroke="#aaaaaa" stroke-width="2"/>
+
+  <text x="500" y="290" text-anchor="middle" font-family="Arial" font-size="11" fill="#333">Battery GND, transistor emitter, and Arduino GND all share one common ground</text>
+</svg>
+<p class="caption">Figure 1: Arduino PWM pin drives the base; the transistor switches motor current from the battery; the diode protects against voltage spikes.</p>
+
+<h2>4. Step-by-Step Instructions</h2>
+
+<div class="step">
+  <h3><span class="step-num">1</span>Wire the transistor's control side</h3>
+  <ul>
+    <li>Arduino Pin 9 → 1kΩ resistor → transistor's base</li>
+  </ul>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">2</span>Wire the motor and power side</h3>
+  <ul>
+    <li>Battery pack positive → motor's positive terminal</li>
+    <li>Motor's negative terminal → transistor's collector</li>
+    <li>Transistor's emitter → GND</li>
+    <li>Diode connected across the motor's two terminals, oriented so it points from the transistor-side terminal toward the battery-side terminal (opposite to normal current flow) — check the diode's band matches this orientation</li>
+  </ul>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">3</span>Connect a common ground</h3>
+  <p>The battery pack's negative terminal, the transistor's emitter, and the Arduino's GND pin must all be connected together. Without this shared reference point, the Arduino's control signal has no consistent "zero" to measure against, and the circuit won't behave predictably.</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">4</span>Write the program</h3>
+<pre><span class="comment">// Single-Transistor DC Motor Control</span>
+const int motorPin = 9;
+
+void setup() {
+  pinMode(motorPin, OUTPUT);
+}
+
+void loop() {
+  analogWrite(motorPin, 255);  <span class="comment">// full speed</span>
+  delay(2000);
+
+  analogWrite(motorPin, 130);  <span class="comment">// half speed</span>
+  delay(2000);
+
+  analogWrite(motorPin, 0);    <span class="comment">// off</span>
+  delay(2000);
+}</pre>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">5</span>Power on and test</h3>
+  <p>Upload the code, then connect the battery pack. The motor should run at full speed, then slow down, then stop, repeating in a loop. Notice this uses the same <code class="inline">analogWrite()</code> approach as the L298N's ENA pin — the underlying principle of PWM speed control hasn't changed, only what's doing the switching.</p>
+</div>
+
+<div class="troubleshoot">
+  <h3 style="margin-top:0;">Troubleshooting</h3>
+  <ul>
+    <li><strong>Motor doesn't run at all:</strong> double-check the transistor's base/collector/emitter pinout against its actual datasheet — an easy mix-up between models.</li>
+    <li><strong>Motor runs but Arduino resets or behaves strangely:</strong> check the common ground connection between battery, transistor, and Arduino.</li>
+    <li><strong>Transistor gets noticeably hot:</strong> confirm it's rated for more current than the motor draws when starting (stall current is much higher than running current).</li>
+    <li><strong>Motor runs at full speed regardless of PWM value:</strong> check Pin 9 is genuinely PWM-capable and that you're using <code class="inline">analogWrite()</code>, not <code class="inline">digitalWrite()</code>.</li>
+  </ul>
+</div>
+
+<h2>5. What This Circuit Can and Can't Do</h2>
+<table>
+  <tr><th></th><th>Single transistor (this lesson)</th><th>L298N driver</th></tr>
+  <tr><td>On / off control</td><td>Yes</td><td>Yes</td></tr>
+  <tr><td>Speed control (PWM)</td><td>Yes</td><td>Yes</td></tr>
+  <tr><td>Direction reversal</td><td>No</td><td>Yes</td></tr>
+  <tr><td>Components needed</td><td>Transistor, diode, resistor</td><td>One integrated module</td></tr>
+  <tr><td>What's actually inside</td><td>You built it from scratch</td><td>Multiple transistor-like switches arranged as an H-bridge</td></tr>
+</table>
+
+<h2>6. Why This Matters</h2>
+<p>Every motor driver chip you'll ever use — the L298N included — is fundamentally built from circuits like this one, just packaged neatly and arranged so groups of transistors can reverse current direction (an H-bridge). Understanding this simple version means the "black box" driver chip is no longer a mystery — it's just several of these switching circuits working together.</p>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Replace the fixed delay sequence with a potentiometer (from the earlier analog input lesson) controlling motor speed in real time.</li>
+    <li>Research what an H-bridge is and sketch (on paper) how four transistors could be arranged to reverse a motor's direction.</li>
+    <li>Challenge: compare the maximum speed and smoothness of this circuit against the L298N from the earlier lesson, using the same motor and battery pack. Are they noticeably different?</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ Transistor pinout was checked against its actual datasheet, not assumed</label>
+  <label>☐ Flyback diode is correctly oriented across the motor terminals</label>
+  <label>☐ Battery GND, transistor emitter, and Arduino GND are all connected together</label>
+  <label>☐ Motor responds to different <code class="inline">analogWrite()</code> values</label>
+  <label>☐ I can explain why this circuit can't reverse the motor's direction</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Motors Unit &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

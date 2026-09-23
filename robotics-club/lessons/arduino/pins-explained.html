@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "arduino/pins-explained";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Input and Output Pins Explained";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Input and Output Pins Explained</title>
+<style>
+  :root { --navy: #1B2B5E; --teal: #0D9488; --teal-light: #e6f7f5; --navy-light: #eef0f8; }
+  body { font-family: Calibri, Arial, sans-serif; color: #1a1a1a; max-width: 900px; margin: 0 auto; padding: 40px 30px 80px; line-height: 1.55; background: #fff; }
+  h1, h2, h3 { font-family: 'Bookman Old Style', Cambria, Georgia, serif; color: var(--navy); }
+  h1 { border-bottom: 4px solid var(--teal); padding-bottom: 12px; font-size: 30px; }
+  h2 { margin-top: 40px; border-left: 6px solid var(--teal); padding-left: 14px; font-size: 22px; }
+  .banner { background: var(--navy); color: white; padding: 6px 14px; display: inline-block; border-radius: 4px; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .objectives, .analogy, .note, .warning { background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0; }
+  .analogy { background: var(--teal-light); border-left: 5px solid var(--teal); }
+  .note { background: #fff8e6; border-left: 5px solid #d9a300; }
+  .warning { background: #fdeaea; border-left: 5px solid #c0392b; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 15px; }
+  th { background: var(--navy); color: white; }
+  code, pre { font-family: Consolas, 'Courier New', monospace; background: #0f1830; color: #e6f0ff; border-radius: 6px; }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline { background: #eef0f8; color: var(--navy); padding: 2px 6px; border-radius: 4px; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise { background: #fff8e6; border-left: 5px solid #d9a300; padding: 14px 20px; margin: 14px 0; border-radius: 6px; }
+  .footer-note { margin-top: 50px; font-size: 13px; color: #666; border-top: 1px solid #ddd; padding-top: 14px; }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/arduino-pins-explained.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Input and Output Pins Explained</h1>
+<p><strong>Section focus:</strong> Arduino Programming — Lesson 3.2 &nbsp;|&nbsp; <strong>Duration:</strong> ~40 minutes</p>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain the difference between a digital and an analog pin</li>
+    <li>Explain what <code class="inline">pinMode()</code> does and why it's necessary</li>
+    <li>Use <code class="inline">digitalWrite()</code> and <code class="inline">digitalRead()</code> correctly</li>
+    <li>Identify which of your Arduino's pins can do what, just by reading the board</li>
+  </ul>
+</div>
+
+<div class="analogy">
+  <strong>Real-world analogy:</strong> Think of each Arduino pin as a single wall socket that can be configured two different ways: either as a power outlet (an <strong>output</strong>, sending voltage out to something like an LED), or as a doorbell button (an <strong>input</strong>, watching for a signal coming in from something like a switch). The same physical pin can do either job — you just have to tell the Arduino which job you want, before you can use it.
+</div>
+
+<h2>1. Digital vs Analog Pins</h2>
+<table>
+  <tr><th>Type</th><th>What it senses/produces</th><th>Labelled on the board as</th></tr>
+  <tr><td>Digital</td><td>Only two states: HIGH (5V) or LOW (0V)</td><td>Numbered pins (0, 1, 2, 3...)</td></tr>
+  <tr><td>Analog input</td><td>A range of voltage, read as a number from 0–1023</td><td>Pins labelled A0–A5</td></tr>
+</table>
+<p>You've already used analog pins in Lesson 3.9 (Potentiometer) with <code class="inline">analogRead()</code>. This lesson focuses on the digital pins, which you'll use far more often overall.</p>
+
+<div class="note">
+  <strong>What about analog output?</strong> Some digital pins, marked with a "~" symbol next to their number, can also simulate an analog-like output using <code class="inline">analogWrite()</code> — this is PWM, which you've already used for LED brightness and motor speed. It's technically still a digital pin rapidly switching on and off, not true analog voltage — worth knowing, though the practical usage is what matters most for now.
+</div>
+
+<h2>2. Setting a Pin's Mode</h2>
+<p>Before using any digital pin, you must tell the Arduino whether it will be an input or an output, using <code class="inline">pinMode()</code> inside <code class="inline">setup()</code>:</p>
+<pre>void setup() {
+    pinMode(7, OUTPUT);  <span class="comment">// pin 7 will send signals out</span>
+    pinMode(8, INPUT);   <span class="comment">// pin 8 will read signals in</span>
+}</pre>
+
+<div class="warning">
+  <strong>Skipping <code class="inline">pinMode()</code> is a common source of confusing bugs.</strong> Arduino pins default to INPUT mode if never set, which means a pin you intended as an output may simply not work as expected until you explicitly configure it. Always set every pin's mode in <code class="inline">setup()</code> before using it elsewhere in your code.
+</div>
+
+<h2>3. Writing to an Output Pin</h2>
+<pre>void setup() {
+    pinMode(7, OUTPUT);
+}
+
+void loop() {
+    digitalWrite(7, HIGH);  <span class="comment">// pin 7 outputs 5V</span>
+    delay(1000);
+    digitalWrite(7, LOW);   <span class="comment">// pin 7 outputs 0V</span>
+    delay(1000);
+}</pre>
+<p>This is the exact same pattern you'll use in the very next lesson to blink an LED — <code class="inline">digitalWrite()</code> simply sets a pin HIGH or LOW, and whatever is connected to that pin (an LED, a relay, a motor driver's input) responds accordingly.</p>
+
+<h2>4. Reading From an Input Pin</h2>
+<pre>void setup() {
+    pinMode(8, INPUT);
+    Serial.begin(9600);
+}
+
+void loop() {
+    int buttonState = digitalRead(8);
+    Serial.println(buttonState);
+    delay(200);
+}</pre>
+<p><code class="inline">digitalRead()</code> returns either <code class="inline">HIGH</code> (1) or <code class="inline">LOW</code> (0), depending on the voltage currently present on that pin. Lesson 3.5 puts this into practice with a real physical button.</p>
+
+<div class="note">
+  <strong>Serial Monitor:</strong> <code class="inline">Serial.begin(9600)</code> and <code class="inline">Serial.println()</code>, used above, let your Arduino send text back to your computer, viewable via Tools &gt; Serial Monitor in the IDE. This is one of the most useful debugging tools you have — printing a sensor's raw value is often the fastest way to understand what's actually happening in a circuit.
+</div>
+
+<h2>5. Reading Your Board's Pin Labels</h2>
+<p>Every pin's capability is printed directly on the Arduino board itself, next to the pin headers — numbers for digital pins (often with a "~" beside PWM-capable ones), and "A0"–"A5" for analog input pins. Learning to read your specific board, rather than memorising a diagram, is a skill worth building early — different Arduino models have different pin counts and layouts.</p>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Look at your physical Arduino board and identify which pins are marked with a "~" (PWM-capable).</li>
+    <li>Write a program that sets pin 7 HIGH, waits one second, then LOW — without any component connected yet, just to confirm it uploads and runs without errors.</li>
+    <li>Add <code class="inline">Serial.begin(9600)</code> and print a message each time the pin changes state, so you can watch it happen in the Serial Monitor.</li>
+    <li>Challenge: research what <code class="inline">INPUT_PULLUP</code> does as an alternative to <code class="inline">INPUT</code> — you'll meet it properly in Lesson 3.5.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ I can explain the difference between a digital pin and an analog input pin</label>
+  <label>☐ I can explain why <code class="inline">pinMode()</code> must be set before using a pin</label>
+  <label>☐ I wrote and uploaded a program using <code class="inline">digitalWrite()</code></label>
+  <label>☐ I identified the PWM-capable pins on my own physical board</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Arduino Programming &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

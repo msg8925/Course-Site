@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "arduino/switch-interfacing";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Interfacing a Switch";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Interfacing a Switch</title>
+<style>
+  :root { --navy: #1B2B5E; --teal: #0D9488; --teal-light: #e6f7f5; --navy-light: #eef0f8; }
+  body { font-family: Calibri, Arial, sans-serif; color: #1a1a1a; max-width: 900px; margin: 0 auto; padding: 40px 30px 80px; line-height: 1.55; background: #fff; }
+  h1, h2, h3 { font-family: 'Bookman Old Style', Cambria, Georgia, serif; color: var(--navy); }
+  h1 { border-bottom: 4px solid var(--teal); padding-bottom: 12px; font-size: 30px; }
+  h2 { margin-top: 40px; border-left: 6px solid var(--teal); padding-left: 14px; font-size: 22px; }
+  .banner { background: var(--navy); color: white; padding: 6px 14px; display: inline-block; border-radius: 4px; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .objectives, .analogy, .note, .warning { background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0; }
+  .analogy { background: var(--teal-light); border-left: 5px solid var(--teal); }
+  .note { background: #fff8e6; border-left: 5px solid #d9a300; }
+  .warning { background: #fdeaea; border-left: 5px solid #c0392b; }
+  .troubleshoot { background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 15px; }
+  th { background: var(--navy); color: white; }
+  code, pre { font-family: Consolas, 'Courier New', monospace; background: #0f1830; color: #e6f0ff; border-radius: 6px; }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline { background: #eef0f8; color: var(--navy); padding: 2px 6px; border-radius: 4px; }
+  .comment { color: #8fd6b4; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise { background: #fff8e6; border-left: 5px solid #d9a300; padding: 14px 20px; margin: 14px 0; border-radius: 6px; }
+  .footer-note { margin-top: 50px; font-size: 13px; color: #666; border-top: 1px solid #ddd; padding-top: 14px; }
+  .step { margin: 26px 0; padding-left: 18px; border-left: 3px solid var(--navy-light); }
+  .step h3 { margin-bottom: 6px; }
+  .step-num {
+    display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px;
+    background: var(--teal); color: white; border-radius: 50%; font-weight: bold; margin-right: 10px; font-family: Arial, sans-serif;
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/arduino-switch-interfacing.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Interfacing a Switch</h1>
+<p><strong>Section focus:</strong> Arduino Programming — Lesson 3.5 &nbsp;|&nbsp; <strong>Duration:</strong> ~45 minutes</p>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Wire a push button as a digital input</li>
+    <li>Explain what a "floating" pin is and why it causes unreliable readings</li>
+    <li>Use <code class="inline">INPUT_PULLUP</code> to solve that problem without an extra resistor</li>
+    <li>Use a button to control an LED, combining input and output in one program</li>
+  </ul>
+</div>
+
+<div class="analogy">
+  <strong>Real-world analogy:</strong> A floating input pin is like asking someone a yes/no question over a bad phone line that keeps cutting out — without a clear signal either way, they might guess "yes" one moment and "no" the next, essentially at random. A pull-up resistor is like fixing that connection so there's always a clear, definite answer unless the button is actively pressed to change it.
+</div>
+
+<h2>1. The Problem: A Floating Pin</h2>
+<p>You might expect a digital input to simply read LOW when a button isn't pressed. In reality, if a pin is left completely disconnected (floating) when the button is open, it can pick up tiny amounts of electrical noise from its surroundings and report HIGH or LOW essentially at random. A button needs to guarantee a definite, known state when it's <em>not</em> pressed, not just when it is.</p>
+
+<h2>2. The Solution: Pull-Up or Pull-Down Resistors</h2>
+<p>A pull-up resistor connects the pin to 5V through a large resistor by default, guaranteeing it reads HIGH when the button isn't pressed, and pulls it LOW only when the button actively connects it to GND. A pull-down resistor does the reverse. Both solve the same floating-pin problem — which one you use often comes down to available components and personal wiring preference.</p>
+
+<div class="note">
+  <strong>The easier option: <code class="inline">INPUT_PULLUP</code>.</strong> Rather than wiring a separate physical pull-up resistor, the Arduino has one built in in that you can enable in software:
+  <pre>pinMode(8, INPUT_PULLUP);</pre>
+  With this, the pin reads HIGH by default, and LOW when the button is pressed and connects it to GND — the logic is "backwards" from what many people expect at first (pressed = LOW), which is worth remembering when writing your if-statements.
+</div>
+
+<h2>3. Step-by-Step: Button-Controlled LED</h2>
+
+<div class="step">
+  <h3><span class="step-num">1</span>Wire the button</h3>
+  <ul>
+    <li>One side of the button → Arduino Pin 8</li>
+    <li>The same side of the button → Arduino GND (through the button, when pressed)</li>
+  </ul>
+  <p>With <code class="inline">INPUT_PULLUP</code> enabled in code, no external resistor is needed — just the button itself, bridging Pin 8 to GND when pressed.</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">2</span>Wire the LED</h3>
+  <p>Exactly as in Lesson 3.4: LED's anode → 220Ω resistor → Pin 7; cathode → GND.</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">3</span>Write the program</h3>
+<pre>const int buttonPin = 8;
+const int ledPin = 7;
+
+void setup() {
+    pinMode(buttonPin, INPUT_PULLUP);
+    pinMode(ledPin, OUTPUT);
+}
+
+void loop() {
+    int buttonState = digitalRead(buttonPin);
+
+    if (buttonState == LOW) {  <span class="comment">// LOW means pressed, with INPUT_PULLUP</span>
+        digitalWrite(ledPin, HIGH);
+    } else {
+        digitalWrite(ledPin, LOW);
+    }
+}</pre>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">4</span>Upload and test</h3>
+  <p>Upload the code. The LED should light only while the button is actively held down, and turn off the instant it's released.</p>
+</div>
+
+<div class="troubleshoot">
+  <h3 style="margin-top:0;">Troubleshooting</h3>
+  <ul>
+    <li><strong>LED is on all the time, button does nothing:</strong> double check the if-statement's logic — with <code class="inline">INPUT_PULLUP</code>, pressed means LOW, not HIGH.</li>
+    <li><strong>Reading seems random/flickery:</strong> confirm <code class="inline">INPUT_PULLUP</code> is actually being used, not plain <code class="inline">INPUT</code> with nothing else wired.</li>
+    <li><strong>Nothing happens at all:</strong> check the button is actually bridging the pin to GND when pressed, using a multimeter's continuity mode if unsure.</li>
+  </ul>
+</div>
+
+<div class="note">
+  <strong>Looking ahead:</strong> this exact input-reading pattern reappears constantly — a line sensor on your vehicle isn't a simple button, but reading it, checking its state, and reacting with an if-statement follows precisely this same shape. A start/stop button for your finished vehicle (mentioned back in the parts list conversation) would also use exactly this circuit.
+</div>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Reverse the logic so the LED is normally on, and turns off only while the button is held.</li>
+    <li>Add a second button and LED pair on different pins, independent of the first.</li>
+    <li>Challenge: make a single button toggle the LED's state (on stays on after release, until pressed again) rather than only lighting while held — this requires storing whether the LED is currently on in a variable, and changing it only on the moment the button is first pressed, not while held.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ I can explain what a floating pin is and why it's a problem</label>
+  <label>☐ I can explain how <code class="inline">INPUT_PULLUP</code> solves that problem</label>
+  <label>☐ My button correctly controls the LED, only while held</label>
+  <label>☐ I can explain why "pressed" reads as LOW, not HIGH, in this setup</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Arduino Programming &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

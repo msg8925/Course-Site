@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "arduino/installing-ide";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Installing the Arduino IDE";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Installing the Arduino IDE</title>
+<style>
+  :root { --navy: #1B2B5E; --teal: #0D9488; --teal-light: #e6f7f5; --navy-light: #eef0f8; }
+  body { font-family: Calibri, Arial, sans-serif; color: #1a1a1a; max-width: 900px; margin: 0 auto; padding: 40px 30px 80px; line-height: 1.55; background: #fff; }
+  h1, h2, h3 { font-family: 'Bookman Old Style', Cambria, Georgia, serif; color: var(--navy); }
+  h1 { border-bottom: 4px solid var(--teal); padding-bottom: 12px; font-size: 30px; }
+  h2 { margin-top: 40px; border-left: 6px solid var(--teal); padding-left: 14px; font-size: 22px; }
+  .banner { background: var(--navy); color: white; padding: 6px 14px; display: inline-block; border-radius: 4px; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .objectives, .note, .warning { background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0; }
+  .note { background: #fff8e6; border-left: 5px solid #d9a300; }
+  .warning { background: #fdeaea; border-left: 5px solid #c0392b; }
+  .troubleshoot { background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 15px; }
+  th { background: var(--navy); color: white; }
+  code, pre { font-family: Consolas, 'Courier New', monospace; background: #0f1830; color: #e6f0ff; border-radius: 6px; }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline { background: #eef0f8; color: var(--navy); padding: 2px 6px; border-radius: 4px; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .footer-note { margin-top: 50px; font-size: 13px; color: #666; border-top: 1px solid #ddd; padding-top: 14px; }
+  .step { margin: 26px 0; padding-left: 18px; border-left: 3px solid var(--navy-light); }
+  .step h3 { margin-bottom: 6px; }
+  .step-num {
+    display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px;
+    background: var(--teal); color: white; border-radius: 50%; font-weight: bold; margin-right: 10px; font-family: Arial, sans-serif;
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/arduino-installing-ide.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Installing the Arduino IDE</h1>
+<p><strong>Section focus:</strong> Arduino Programming — Lesson 3.1 &nbsp;|&nbsp; <strong>Duration:</strong> ~30 minutes</p>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain what the Arduino IDE is and what it lets you do</li>
+    <li>Install the IDE on your own computer</li>
+    <li>Connect your Arduino board and confirm the computer recognises it</li>
+    <li>Select the correct board and port so you're ready to upload code</li>
+  </ul>
+</div>
+
+<h2>1. What Is the Arduino IDE?</h2>
+<p>IDE stands for Integrated Development Environment — a program that lets you write code, check it for errors, and send (upload) it to your Arduino board, all in one place. Everything you've written so far in Sections 1 and 2 lived in an online compiler or on paper; from this lesson onward, your code will run on real hardware sitting in front of you.</p>
+
+<div class="step">
+  <h3><span class="step-num">1</span>Download the IDE</h3>
+  <p>Go to the official Arduino software page (search "Arduino IDE download" to find the current official link) and download the installer for your operating system (Windows, macOS, or Linux). Always download from the official Arduino website rather than a third-party mirror.</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">2</span>Install it</h3>
+  <p>Run the downloaded installer and follow its prompts, accepting the default options unless you have a specific reason not to. This may include installing USB drivers needed for your computer to recognise the Arduino board — accept these if prompted.</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">3</span>Connect your Arduino</h3>
+  <p>Plug your Arduino Uno into your computer using a USB cable. You should notice a small light on the board itself turn on, indicating it's receiving power.</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">4</span>Open the IDE and select your board</h3>
+  <p>Open the Arduino IDE. Under the <strong>Tools</strong> menu, find <strong>Board</strong> and select "Arduino Uno" (or whichever board you're using).</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">5</span>Select the correct port</h3>
+  <p>Still under <strong>Tools</strong>, find <strong>Port</strong> and select the one corresponding to your Arduino — it's often labelled with "Arduino" or "USB Serial" alongside a port number or name. If several ports are listed and you're unsure which one, try unplugging the Arduino, noting which port disappears from the list, then plugging it back in.</p>
+</div>
+
+<div class="troubleshoot">
+  <h3 style="margin-top:0;">Troubleshooting</h3>
+  <ul>
+    <li><strong>No port appears at all:</strong> try a different USB cable — some cables only carry power, not data, and won't work for programming.</li>
+    <li><strong>Board isn't recognised:</strong> check whether your operating system needed a separate driver installation, and re-run the IDE installer if unsure.</li>
+    <li><strong>Everything looks right, but upload still fails:</strong> double check both the Board and Port selections match your actual hardware — a mismatch here is the most common cause.</li>
+  </ul>
+</div>
+
+<div class="note">
+  <strong>Looking ahead:</strong> once your board and port are correctly selected, you're ready for Lesson 3.3, where you'll write and upload your very first real Arduino program. Lesson 3.2 first covers what the board's pins actually are, so the code you write afterward makes sense rather than being copied blindly.
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ The Arduino IDE is installed and opens without errors</label>
+  <label>☐ My Arduino board is connected and its power light is on</label>
+  <label>☐ The correct board is selected under Tools &gt; Board</label>
+  <label>☐ The correct port is selected under Tools &gt; Port</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Arduino Programming &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

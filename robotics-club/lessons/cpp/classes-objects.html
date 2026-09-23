@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "cpp/classes-objects";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Classes and Objects";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Classes and Objects</title>
+<style>
+  :root {
+    --navy: #1B2B5E;
+    --teal: #0D9488;
+    --teal-light: #e6f7f5;
+    --navy-light: #eef0f8;
+  }
+  body {
+    font-family: Calibri, Arial, sans-serif;
+    color: #1a1a1a;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 30px 80px;
+    line-height: 1.55;
+    background: #fff;
+  }
+  h1, h2, h3 {
+    font-family: 'Bookman Old Style', Cambria, Georgia, serif;
+    color: var(--navy);
+  }
+  h1 { border-bottom: 4px solid var(--teal); padding-bottom: 12px; font-size: 30px; }
+  h2 { margin-top: 40px; border-left: 6px solid var(--teal); padding-left: 14px; font-size: 22px; }
+  .banner {
+    background: var(--navy); color: white; padding: 6px 14px; display: inline-block;
+    border-radius: 4px; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .objectives, .analogy, .note, .warning {
+    background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0;
+  }
+  .analogy { background: var(--teal-light); border-left: 5px solid var(--teal); }
+  .note { background: #fff8e6; border-left: 5px solid #d9a300; }
+  .warning { background: #fdeaea; border-left: 5px solid #c0392b; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 15px; }
+  th { background: var(--navy); color: white; }
+  code, pre {
+    font-family: Consolas, 'Courier New', monospace; background: #0f1830; color: #e6f0ff; border-radius: 6px;
+  }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline { background: #eef0f8; color: var(--navy); padding: 2px 6px; border-radius: 4px; }
+  .comment { color: #8fd6b4; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise {
+    background: #fff8e6; border-left: 5px solid #d9a300; padding: 14px 20px; margin: 14px 0; border-radius: 6px;
+  }
+  .footer-note { margin-top: 50px; font-size: 13px; color: #666; border-top: 1px solid #ddd; padding-top: 14px; }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/cpp-classes-objects.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Classes and Objects</h1>
+<p><strong>Section focus:</strong> C/C++ Fundamentals — Lesson 1.7 &nbsp;|&nbsp; <strong>Duration:</strong> ~45 minutes</p>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain the difference between a class and an object</li>
+    <li>Write a simple class with member variables and member functions</li>
+    <li>Create multiple objects from the same class, each with its own independent data</li>
+    <li>Recognise this same pattern already in use, in a library you'll soon meet on the Arduino</li>
+  </ul>
+</div>
+
+<div class="analogy">
+  <strong>Real-world analogy:</strong> A class is like a blueprint for a house — it describes what every house of that design will have (bedrooms, doors, a kitchen) without being an actual house itself. An object is an actual house built from that blueprint. You can build many houses from one blueprint, and each one is separate — painting one house blue doesn't affect the others, even though they all started from the same plan.
+</div>
+
+<h2>1. Why Bundle Data and Functions Together?</h2>
+<p>So far, your variables and functions have lived separately — a function like <code class="inline">square(int number)</code> takes in data, but doesn't "belong" to any particular piece of data. Sometimes it makes more sense to bundle related data and the functions that act on it into a single unit. Think of a robot's motor: it has data (its current speed, its direction) and behaviours (turn on, turn off, change speed) that all clearly belong together. A <strong>class</strong> is how C++ expresses that bundling.</p>
+
+<h2>2. Defining a Class</h2>
+<pre>#include &lt;iostream&gt;
+
+class Motor {
+public:
+    int speed;
+
+    void turnOn() {
+        speed = 100;
+        std::cout &lt;&lt; "Motor running at speed " &lt;&lt; speed &lt;&lt; std::endl;
+    }
+
+    void turnOff() {
+        speed = 0;
+        std::cout &lt;&lt; "Motor stopped" &lt;&lt; std::endl;
+    }
+};
+
+int main() {
+    Motor leftMotor;
+    leftMotor.turnOn();
+    leftMotor.turnOff();
+    return 0;
+}</pre>
+<p>Here, <code class="inline">Motor</code> is the class (the blueprint), and <code class="inline">leftMotor</code> is an object (an actual instance built from it). <code class="inline">speed</code> is a <strong>member variable</strong> — data that belongs to each Motor object. <code class="inline">turnOn()</code> and <code class="inline">turnOff()</code> are <strong>member functions</strong> — behaviours each Motor object can perform. Notice the dot (<code class="inline">leftMotor.turnOn()</code>) — this is how you tell C++ "call this function, on this specific object."</p>
+
+<div class="note">
+  <strong>What does <code class="inline">public:</code> mean?</strong> It marks everything below it as accessible from outside the class — i.e. from your <code class="inline">main()</code> function. There's a more restrictive alternative (<code class="inline">private:</code>) used in larger programs to hide internal details, but for these early lessons, <code class="inline">public:</code> is all you need.
+</div>
+
+<h2>3. Multiple Objects, Independent Data</h2>
+<p>This is the real payoff of classes — you can create as many objects as you like from one class, and each keeps its own separate data:</p>
+<pre>#include &lt;iostream&gt;
+
+class Motor {
+public:
+    int speed;
+
+    void turnOn() {
+        speed = 100;
+    }
+
+    void turnOff() {
+        speed = 0;
+    }
+};
+
+int main() {
+    Motor leftMotor;
+    Motor rightMotor;
+
+    leftMotor.turnOn();
+    <span class="comment">// rightMotor hasn't been turned on yet</span>
+
+    std::cout &lt;&lt; "Left speed: " &lt;&lt; leftMotor.speed &lt;&lt; std::endl;
+    std::cout &lt;&lt; "Right speed: " &lt;&lt; rightMotor.speed &lt;&lt; std::endl;
+
+    return 0;
+}</pre>
+<p>This prints <code class="inline">Left speed: 100</code> and <code class="inline">Right speed: 0</code> — turning on <code class="inline">leftMotor</code> had no effect on <code class="inline">rightMotor</code>, even though they were built from the exact same blueprint. This is exactly the situation your line-following vehicle will be in: two motors, one class, two independent objects.</p>
+
+<h2>4. Adding Parameters to Member Functions</h2>
+<p>Member functions can take parameters, just like the standalone functions from the last lesson:</p>
+<pre>class Motor {
+public:
+    int speed;
+
+    void setSpeed(int newSpeed) {
+        speed = newSpeed;
+        std::cout &lt;&lt; "Speed set to " &lt;&lt; speed &lt;&lt; std::endl;
+    }
+};
+
+int main() {
+    Motor leftMotor;
+    leftMotor.setSpeed(75);
+    return 0;
+}</pre>
+
+<div class="note">
+  <strong>Looking ahead:</strong> you're about to meet this exact pattern on the Arduino itself. The <code class="inline">Servo</code> library from the servo motor lesson, and the <code class="inline">Stepper</code> library from the stepper motor lesson, are both classes — that's why their code looks like <code class="inline">myServo.attach(9);</code> or <code class="inline">myServo.write(90);</code>. You were already using objects and member functions in those lessons; now you know the name for what was happening, and you have the tools to write your own.
+</div>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Add a member function <code class="inline">reverse()</code> to the <code class="inline">Motor</code> class that sets <code class="inline">speed</code> to a negative version of its current value (hint: <code class="inline">speed = -speed;</code>).</li>
+    <li>Create a class called <code class="inline">Light</code> with a member variable <code class="inline">bool isOn</code> and member functions <code class="inline">turnOn()</code> and <code class="inline">turnOff()</code> that set it appropriately.</li>
+    <li>Create three separate <code class="inline">Motor</code> objects, set each to a different speed using <code class="inline">setSpeed()</code>, and print all three speeds to confirm they're independent.</li>
+    <li>Challenge: add a member function <code class="inline">printStatus()</code> to your <code class="inline">Motor</code> class that prints whether the motor is currently stopped, running forward, or running in reverse, based on the sign of <code class="inline">speed</code> (using if-statements from Lesson 1.3).</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ I can explain the difference between a class and an object in my own words</label>
+  <label>☐ I created a class with at least one member variable and two member functions</label>
+  <label>☐ I created multiple objects from the same class and confirmed their data is independent</label>
+  <label>☐ I can point to an example of a class/object I've already used in an earlier Arduino lesson</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — C/C++ Fundamentals &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "arduino/servo";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Controlling a Servo Motor with Arduino";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Controlling a Servo Motor with Arduino</title>
+<style>
+  :root {
+    --navy: #1B2B5E;
+    --teal: #0D9488;
+    --teal-light: #e6f7f5;
+    --navy-light: #eef0f8;
+  }
+  body {
+    font-family: Calibri, Arial, sans-serif;
+    color: #1a1a1a;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 30px 80px;
+    line-height: 1.55;
+    background: #fff;
+  }
+  h1, h2, h3 {
+    font-family: 'Bookman Old Style', Cambria, Georgia, serif;
+    color: var(--navy);
+  }
+  h1 {
+    border-bottom: 4px solid var(--teal);
+    padding-bottom: 12px;
+    font-size: 30px;
+  }
+  h2 {
+    margin-top: 40px;
+    border-left: 6px solid var(--teal);
+    padding-left: 14px;
+    font-size: 22px;
+  }
+  .banner {
+    background: var(--navy);
+    color: white;
+    padding: 6px 14px;
+    display: inline-block;
+    border-radius: 4px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .objectives, .materials, .analogy, .troubleshoot, .extension {
+    background: var(--navy-light);
+    border-radius: 8px;
+    padding: 16px 22px;
+    margin: 18px 0;
+  }
+  .analogy {
+    background: var(--teal-light);
+    border-left: 5px solid var(--teal);
+  }
+  .step {
+    margin: 26px 0;
+    padding-left: 18px;
+    border-left: 3px solid var(--navy-light);
+  }
+  .step h3 {
+    margin-bottom: 6px;
+  }
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--teal);
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-right: 10px;
+    font-family: Arial, sans-serif;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 14px 0;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 15px;
+  }
+  th {
+    background: var(--navy);
+    color: white;
+  }
+  code, pre {
+    font-family: Consolas, 'Courier New', monospace;
+    background: #0f1830;
+    color: #e6f0ff;
+    border-radius: 6px;
+  }
+  pre {
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  code.inline {
+    background: #eef0f8;
+    color: var(--navy);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .comment { color: #8fd6b4; }
+  .wiring-table td.pin-arduino { font-weight: bold; color: var(--navy); }
+  .wiring-table td.pin-servo { font-weight: bold; color: var(--teal); }
+  svg { display: block; margin: 20px auto; }
+  .caption { text-align: center; font-size: 13px; color: #555; margin-top: -10px; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise {
+    background: #fff8e6;
+    border-left: 5px solid #d9a300;
+    padding: 14px 20px;
+    margin: 14px 0;
+    border-radius: 6px;
+  }
+  .footer-note {
+    margin-top: 50px;
+    font-size: 13px;
+    color: #666;
+    border-top: 1px solid #ddd;
+    padding-top: 14px;
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/arduino-servo.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Controlling a Servo Motor with Arduino</h1>
+<p><strong>Session focus:</strong> Motors — micro servo (SG90) &nbsp;|&nbsp; <strong>Duration:</strong> ~60 minutes</p>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain what a servo motor is and how it differs from a normal DC motor</li>
+    <li>Correctly wire an SG90 micro servo to an Arduino</li>
+    <li>Write and upload a program that moves the servo to specific angles</li>
+    <li>Predict and test what happens when you change angle values in code</li>
+  </ul>
+</div>
+
+<div class="analogy">
+  <strong>Real-world analogy:</strong> Think of the servo like a clock hand controlled by a tiny, very obedient hand. You don't tell it "spin forever" like a fan motor — you tell it exactly <em>where to point</em> (an angle between 0° and 180°), and it moves there and holds position, just like a clock hand pointing at a specific number.
+</div>
+
+<h2>1. What You Need</h2>
+<div class="materials">
+  <table>
+    <tr><th>Item</th><th>Quantity</th><th>Notes</th></tr>
+    <tr><td>Arduino Uno (or compatible)</td><td>1</td><td>Any Uno-compatible board works</td></tr>
+    <tr><td>Micro servo motor (SG90)</td><td>1</td><td>3-wire type: orange/yellow, red, brown</td></tr>
+    <tr><td>USB cable</td><td>1</td><td>To connect Arduino to computer</td></tr>
+    <tr><td>Jumper wires (male-to-male)</td><td>3</td><td>To connect servo to Arduino</td></tr>
+    <tr><td>Computer with Arduino IDE installed</td><td>1</td><td>Or Wokwi simulator if hardware unavailable</td></tr>
+  </table>
+</div>
+
+<h2>2. Understanding the SG90 Servo</h2>
+<p>The SG90 has three wires, and getting them right is the single most important part of this lesson:</p>
+<table class="wiring-table">
+  <tr><th>Wire Colour</th><th>Function</th><th>Connects To</th></tr>
+  <tr><td>Brown / Black</td><td>Ground (GND)</td><td>Arduino GND</td></tr>
+  <tr><td>Red</td><td>Power (+5V)</td><td>Arduino 5V</td></tr>
+  <tr><td>Orange / Yellow</td><td>Signal (PWM)</td><td>Arduino digital pin (e.g. Pin 9)</td></tr>
+</table>
+
+<svg viewBox="0 0 700 300" width="100%" height="300">
+  <!-- Arduino board -->
+  <rect x="40" y="60" width="220" height="180" rx="10" fill="#1B2B5E"/>
+  <text x="150" y="45" text-anchor="middle" font-family="Arial" font-size="16" fill="#1B2B5E" font-weight="bold">Arduino Uno</text>
+  <rect x="55" y="75" width="190" height="40" rx="4" fill="#ffffff" opacity="0.15"/>
+  <text x="150" y="100" text-anchor="middle" font-family="Arial" font-size="12" fill="white">USB / Power</text>
+
+  <!-- Pin labels on Arduino -->
+  <circle cx="230" cy="150" r="6" fill="#ffcc00"/>
+  <text x="245" y="154" font-family="Arial" font-size="13" fill="white">Pin 9 (Signal)</text>
+
+  <circle cx="230" cy="180" r="6" fill="#ff5555"/>
+  <text x="245" y="184" font-family="Arial" font-size="13" fill="white">5V (Power)</text>
+
+  <circle cx="230" cy="210" r="6" fill="#aaaaaa"/>
+  <text x="245" y="214" font-family="Arial" font-size="13" fill="white">GND (Ground)</text>
+
+  <!-- Wires -->
+  <line x1="236" y1="150" x2="480" y2="110" stroke="#e6a800" stroke-width="3"/>
+  <line x1="236" y1="180" x2="480" y2="150" stroke="#d92626" stroke-width="3"/>
+  <line x1="236" y1="210" x2="480" y2="190" stroke="#666666" stroke-width="3"/>
+
+  <!-- Servo -->
+  <rect x="480" y="90" width="110" height="140" rx="8" fill="#0D9488"/>
+  <text x="535" y="80" text-anchor="middle" font-family="Arial" font-size="16" fill="#0D9488" font-weight="bold">SG90 Servo</text>
+  <rect x="500" y="60" width="70" height="30" rx="4" fill="#0D9488"/>
+  <circle cx="535" cy="60" r="14" fill="#0f6f66"/>
+  <rect x="470" y="105" width="10" height="14" fill="#e6a800"/>
+  <rect x="470" y="145" width="10" height="14" fill="#d92626"/>
+  <rect x="470" y="185" width="10" height="14" fill="#666666"/>
+
+  <text x="150" y="270" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">Arduino</text>
+  <text x="535" y="270" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">Servo (signal / power / ground)</text>
+</svg>
+<p class="caption">Figure 1: Wiring the SG90 servo to an Arduino Uno — signal to Pin 9, power to 5V, ground to GND.</p>
+
+<h2>3. Step-by-Step Instructions</h2>
+
+<div class="step">
+  <h3><span class="step-num">1</span>Wire the servo</h3>
+  <p>With the Arduino <strong>unplugged</strong>, connect the three servo wires using jumper wires:</p>
+  <ul>
+    <li>Orange/yellow wire → Digital Pin 9</li>
+    <li>Red wire → 5V</li>
+    <li>Brown/black wire → GND</li>
+  </ul>
+  <p>Double-check the order before powering on — a reversed connection won't usually damage the servo, but it also won't work.</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">2</span>Open the Arduino IDE</h3>
+  <p>Plug the Arduino into your computer with the USB cable. Open the Arduino IDE, and under <strong>Tools</strong>, check that the correct board and port are selected.</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">3</span>Write the program</h3>
+  <p>Type (or copy) the following code into a new sketch:</p>
+<pre><span class="comment">// Servo Sweep Example</span>
+#include &lt;Servo.h&gt;
+
+Servo myServo;      <span class="comment">// create a servo object</span>
+
+void setup() {
+  myServo.attach(9); <span class="comment">// attach servo signal wire to pin 9</span>
+}
+
+void loop() {
+  myServo.write(0);   <span class="comment">// move to 0 degrees</span>
+  delay(1000);         <span class="comment">// wait 1 second</span>
+
+  myServo.write(90);  <span class="comment">// move to 90 degrees</span>
+  delay(1000);
+
+  myServo.write(180); <span class="comment">// move to 180 degrees</span>
+  delay(1000);
+}</pre>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">4</span>Upload and test</h3>
+  <p>Click <strong>Upload</strong>. Watch the servo — it should rotate smoothly to 0°, then 90°, then 180°, pausing for a second at each position, then repeat.</p>
+</div>
+
+<div class="troubleshoot">
+  <h3 style="margin-top:0;">Troubleshooting</h3>
+  <ul>
+    <li><strong>Servo doesn't move at all:</strong> check the signal wire is on the pin number written in <code class="inline">attach()</code>, and that GND is properly connected.</li>
+    <li><strong>Servo jitters or twitches constantly:</strong> this usually means a weak or shared power connection — try powering the servo from an external 5V source for larger projects (not needed for a single SG90 on USB power).</li>
+    <li><strong>Upload fails:</strong> check the correct board and port are selected under <strong>Tools</strong>.</li>
+  </ul>
+</div>
+
+<h2>4. Why This Matters</h2>
+<p>Servos are how robots point, grip, and steer. In our line-following vehicle project, a servo (or similar motor control) will later be responsible for tasks like steering direction or a mechanical arm — this exercise is the foundation for that.</p>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Change the delay time from <code class="inline">1000</code> to <code class="inline">200</code>. What happens to the servo's movement?</li>
+    <li>Add a new line to move the servo to 45 degrees, before it returns to 0.</li>
+    <li>Challenge: use <code class="inline">for</code> loop logic to make the servo sweep smoothly from 0° to 180°, one degree at a time, instead of jumping between three fixed angles.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ Servo is wired correctly (signal / power / ground)</label>
+  <label>☐ Code uploads without errors</label>
+  <label>☐ Servo moves to all three test angles</label>
+  <label>☐ I changed at least one value in the code and observed the effect</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Motors Unit &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

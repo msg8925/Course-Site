@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "vehicle/lcd-sensor-readout";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Live Sensor Readout on an LCD";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Live Sensor Readout on an LCD</title>
+<style>
+  :root { --navy: #1B2B5E; --teal: #0D9488; --teal-light: #e6f7f5; --navy-light: #eef0f8; }
+  body { font-family: Calibri, Arial, sans-serif; color: #1a1a1a; max-width: 900px; margin: 0 auto; padding: 40px 30px 80px; line-height: 1.55; background: #fff; }
+  h1, h2, h3 { font-family: 'Bookman Old Style', Cambria, Georgia, serif; color: var(--navy); }
+  h1 { border-bottom: 4px solid var(--teal); padding-bottom: 12px; font-size: 30px; }
+  h2 { margin-top: 40px; border-left: 6px solid var(--teal); padding-left: 14px; font-size: 22px; }
+  .banner { background: var(--navy); color: white; padding: 6px 14px; display: inline-block; border-radius: 4px; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .objectives, .note, .warning { background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0; }
+  .note { background: #fff8e6; border-left: 5px solid #d9a300; }
+  .warning { background: #fdeaea; border-left: 5px solid #c0392b; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 15px; }
+  th { background: var(--navy); color: white; }
+  code, pre { font-family: Consolas, 'Courier New', monospace; background: #0f1830; color: #e6f0ff; border-radius: 6px; }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline { background: #eef0f8; color: var(--navy); padding: 2px 6px; border-radius: 4px; }
+  .comment { color: #8fd6b4; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise { background: #fff8e6; border-left: 5px solid #d9a300; padding: 14px 20px; margin: 14px 0; border-radius: 6px; }
+  .footer-note { margin-top: 50px; font-size: 13px; color: #666; border-top: 1px solid #ddd; padding-top: 14px; }
+  .ref-note { background: var(--teal-light); border-left: 5px solid var(--teal); border-radius: 8px; padding: 14px 20px; margin: 18px 0; font-size: 14px; }
+  .ref-note a { color: var(--teal); font-weight: bold; }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/vehicle-lcd-sensor-readout.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Live Sensor Readout on an LCD</h1>
+<p><strong>Section focus:</strong> Robotic Vehicle — Line Sensor Subsystem — Lesson 4.1.3 &nbsp;|&nbsp; <strong>Duration:</strong> ~35 minutes</p>
+
+<div class="ref-note">
+  <strong>Builds on:</strong> <a href="../arduino/lcd1602.html">3.7 LCD1602 Displays</a> and Lesson 4.1.2's sensor array. This is a small, practical combination lesson, not new theory.
+</div>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain why an on-board display is more convenient than a laptop for field calibration</li>
+    <li>Display multiple live sensor values on a 16&times;2 LCD at once</li>
+    <li>Update the display fast enough to be useful, without flickering</li>
+  </ul>
+</div>
+
+<h2>1. Why Bother With an LCD Here?</h2>
+<p>The Serial Monitor from Lesson 4.1.2 works perfectly well — but it requires your Arduino to stay tethered to a laptop. Once you're testing on an actual section of tape on the floor, possibly walking the vehicle around by hand, constantly checking a laptop screen is impractical. A small onboard LCD lets you glance directly at the vehicle itself and immediately see what its sensors are detecting, which is exactly what you need during the calibration process in Lesson 4.1.4.</p>
+
+<h2>2. Displaying Multiple Values on a 16&times;2 Screen</h2>
+<p>A 16&times;2 LCD has limited space —16 characters per row, 2 rows total. With 5 sensors, that's roughly 3 characters per sensor if you want them all visible in one row, which is tight but workable for small numbers, or you can split them across both rows.</p>
+<pre>#include &lt;LiquidCrystal.h&gt;
+
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);  <span class="comment">// pins from Lesson 3.7</span>
+
+const int sensorPins[5] = {A0, A1, A2, A3, A4};
+int sensorReadings[5];
+
+void setup() {
+    lcd.begin(16, 2);
+    for (int i = 0; i &lt; 5; i++) {
+        pinMode(sensorPins[i], INPUT);
+    }
+}
+
+void loop() {
+    for (int i = 0; i &lt; 5; i++) {
+        sensorReadings[i] = analogRead(sensorPins[i]);
+    }
+
+    lcd.setCursor(0, 0);
+    lcd.print(sensorReadings[0]);
+    lcd.print(" ");
+    lcd.print(sensorReadings[1]);
+    lcd.print(" ");
+    lcd.print(sensorReadings[2]);
+
+    lcd.setCursor(0, 1);
+    lcd.print(sensorReadings[3]);
+    lcd.print(" ");
+    lcd.print(sensorReadings[4]);
+    lcd.print("    ");  <span class="comment">// clears leftover digits, as in Lesson 3.7</span>
+
+    delay(150);
+}</pre>
+
+<div class="warning">
+  <strong>Don't update the LCD too fast.</strong> Refreshing many times per second can cause visible flicker and doesn't give you time to actually read the numbers. A short <code class="inline">delay()</code> (100&ndash;200ms) between updates, as shown above, keeps the display both stable and responsive enough to be useful.
+</div>
+
+<div class="note">
+  <strong>A cleaner alternative using a loop:</strong> the repeated <code class="inline">lcd.print()</code> calls above could themselves be written as a loop over the <code class="inline">sensorReadings</code> array, similar to Lesson 4.1.2's Serial printout — a good exercise in recognising the same pattern reappearing in a new context.
+</div>
+
+<h2>3. Using This During Testing</h2>
+<p>With this running, you can now walk the sensor array over a real piece of tape on the floor, watching the numbers change directly on the vehicle, with no laptop required. This is exactly the setup you'll use in the very next lesson to determine real threshold values from your actual competition surface.</p>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Get all 5 sensor readings displaying correctly across both LCD rows.</li>
+    <li>Rewrite the repeated <code class="inline">lcd.print()</code> calls as a <code class="inline">for</code> loop over the sensor array.</li>
+    <li>Slide the array over tape by hand and confirm the LCD updates smoothly, without flickering or lag.</li>
+    <li>Challenge: instead of showing raw numbers, display just "L" or "D" (light/dark) per sensor, using a threshold guess — you'll refine this properly in the next lesson.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ All 5 sensor readings display correctly on the LCD</label>
+  <label>☐ The display updates smoothly without flickering</label>
+  <label>☐ I can explain why an onboard display is more practical than a laptop for this testing stage</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Robotic Vehicle &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

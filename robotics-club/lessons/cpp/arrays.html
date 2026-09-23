@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "cpp/arrays";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Arrays";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Arrays</title>
+<style>
+  :root {
+    --navy: #1B2B5E;
+    --teal: #0D9488;
+    --teal-light: #e6f7f5;
+    --navy-light: #eef0f8;
+  }
+  body {
+    font-family: Calibri, Arial, sans-serif;
+    color: #1a1a1a;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 30px 80px;
+    line-height: 1.55;
+    background: #fff;
+  }
+  h1, h2, h3 {
+    font-family: 'Bookman Old Style', Cambria, Georgia, serif;
+    color: var(--navy);
+  }
+  h1 { border-bottom: 4px solid var(--teal); padding-bottom: 12px; font-size: 30px; }
+  h2 { margin-top: 40px; border-left: 6px solid var(--teal); padding-left: 14px; font-size: 22px; }
+  .banner {
+    background: var(--navy); color: white; padding: 6px 14px; display: inline-block;
+    border-radius: 4px; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .objectives, .analogy, .note, .warning {
+    background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0;
+  }
+  .analogy { background: var(--teal-light); border-left: 5px solid var(--teal); }
+  .note { background: #fff8e6; border-left: 5px solid #d9a300; }
+  .warning { background: #fdeaea; border-left: 5px solid #c0392b; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 15px; }
+  th { background: var(--navy); color: white; }
+  code, pre {
+    font-family: Consolas, 'Courier New', monospace; background: #0f1830; color: #e6f0ff; border-radius: 6px;
+  }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline { background: #eef0f8; color: var(--navy); padding: 2px 6px; border-radius: 4px; }
+  .comment { color: #8fd6b4; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise {
+    background: #fff8e6; border-left: 5px solid #d9a300; padding: 14px 20px; margin: 14px 0; border-radius: 6px;
+  }
+  .footer-note { margin-top: 50px; font-size: 13px; color: #666; border-top: 1px solid #ddd; padding-top: 14px; }
+  .box-row { display: flex; gap: 4px; margin: 16px 0; font-family: Consolas, monospace; }
+  .box-cell {
+    border: 2px solid var(--navy); border-radius: 4px; width: 50px; height: 50px;
+    display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--navy); font-weight: bold;
+    position: relative; background: var(--teal-light);
+  }
+  .box-index {
+    position: absolute; bottom: -22px; font-size: 12px; color: #666; font-weight: normal;
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/cpp-arrays.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Arrays</h1>
+<p><strong>Section focus:</strong> C/C++ Fundamentals — Lesson 1.5 &nbsp;|&nbsp; <strong>Duration:</strong> ~45 minutes</p>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain what an array is and why it's more useful than many separate variables</li>
+    <li>Declare an array, and read or change values inside it</li>
+    <li>Explain why arrays are indexed starting at 0, not 1</li>
+    <li>Use a <code class="inline">for</code> loop to process every item in an array</li>
+  </ul>
+</div>
+
+<div class="analogy">
+  <strong>Real-world analogy:</strong> An array is like a row of numbered lockers, all bolted together in a line. Each locker holds one item, every locker is the same size, and you find any item instantly if you know its locker number — no need to search through every locker one by one. The "locker number" in code is called an <strong>index</strong>.
+</div>
+
+<h2>1. The Problem Arrays Solve</h2>
+<p>Imagine storing five test scores. Without arrays, you might write:</p>
+<pre>int score1 = 85;
+int score2 = 92;
+int score3 = 78;
+int score4 = 90;
+int score5 = 88;</pre>
+<p>This works for five scores, but what about fifty? Or what if you wanted to find the average — you'd need to write out every single variable name by hand in the calculation. An array stores a whole collection of values of the <em>same type</em> under a single name.</p>
+
+<h2>2. Declaring an Array</h2>
+<pre>int scores[5] = {85, 92, 78, 90, 88};</pre>
+<p>This creates one array named <code class="inline">scores</code>, holding five <code class="inline">int</code> values. Picture it as five connected lockers:</p>
+
+<div class="box-row">
+  <div class="box-cell">85<span class="box-index">0</span></div>
+  <div class="box-cell">92<span class="box-index">1</span></div>
+  <div class="box-cell">78<span class="box-index">2</span></div>
+  <div class="box-cell">90<span class="box-index">3</span></div>
+  <div class="box-cell">88<span class="box-index">4</span></div>
+</div>
+<p style="margin-top:30px;">The numbers underneath are each value's <strong>index</strong> — its position in the array.</p>
+
+<div class="warning">
+  <strong>Arrays count from 0, not 1.</strong> This trips up almost everyone at first. The first item is at index <code class="inline">0</code>, not <code class="inline">1</code> — so in the array above, <code class="inline">scores[0]</code> is 85, and the <em>last</em> item, 88, is at index <code class="inline">4</code>, not 5. For an array of size 5, valid indexes are always <code class="inline">0</code> through <code class="inline">size - 1</code>. Trying to access <code class="inline">scores[5]</code> is a classic bug — that locker doesn't exist, and C++ often won't stop you from asking for it, leading to unpredictable behaviour rather than a clear error.
+</div>
+
+<h2>3. Reading and Changing Values</h2>
+<pre>#include &lt;iostream&gt;
+
+int main() {
+    int scores[5] = {85, 92, 78, 90, 88};
+
+    std::cout &lt;&lt; "First score: " &lt;&lt; scores[0] &lt;&lt; std::endl;
+    std::cout &lt;&lt; "Third score: " &lt;&lt; scores[2] &lt;&lt; std::endl;
+
+    scores[2] = 100;  <span class="comment">// change the third score</span>
+    std::cout &lt;&lt; "Updated third score: " &lt;&lt; scores[2] &lt;&lt; std::endl;
+
+    return 0;
+}</pre>
+
+<h2>4. Looping Through an Array</h2>
+<p>Arrays and <code class="inline">for</code> loops from the last lesson are a natural pair — instead of writing out five separate <code class="inline">std::cout</code> lines, a loop can visit every locker automatically:</p>
+<pre>#include &lt;iostream&gt;
+
+int main() {
+    int scores[5] = {85, 92, 78, 90, 88};
+
+    for (int i = 0; i &lt; 5; i++) {
+        std::cout &lt;&lt; "Score " &lt;&lt; i &lt;&lt; ": " &lt;&lt; scores[i] &lt;&lt; std::endl;
+    }
+
+    return 0;
+}</pre>
+<p>Notice the loop's condition is <code class="inline">i &lt; 5</code>, not <code class="inline">i &lt;= 5</code> — this is exactly the "counting from 0" rule from above. With 5 items at indexes 0–4, the loop needs to stop <em>before</em> reaching index 5.</p>
+
+<h2>5. A Practical Example: Finding the Total and Average</h2>
+<pre>#include &lt;iostream&gt;
+
+int main() {
+    int scores[5] = {85, 92, 78, 90, 88};
+    int total = 0;
+
+    for (int i = 0; i &lt; 5; i++) {
+        total = total + scores[i];
+    }
+
+    float average = total / 5.0;  <span class="comment">// 5.0, not 5, to get a decimal result</span>
+
+    std::cout &lt;&lt; "Total: " &lt;&lt; total &lt;&lt; std::endl;
+    std::cout &lt;&lt; "Average: " &lt;&lt; average &lt;&lt; std::endl;
+
+    return 0;
+}</pre>
+
+<div class="note">
+  <strong>Looking ahead:</strong> once you're wiring up multiple sensors on the line-following vehicle, an array is the natural way to store several sensor readings at once (e.g. <code class="inline">int sensorReadings[5];</code> for five line sensors), and a <code class="inline">for</code> loop is how you'll read all of them in a few lines instead of five nearly-identical ones.
+</div>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Create an array of 6 of your own choosing (favourite numbers, ages of family members, anything) and print every value using a <code class="inline">for</code> loop.</li>
+    <li>Write a loop that finds and prints the <em>largest</em> value in an array of your choosing.</li>
+    <li>Deliberately access one index past the end of an array (e.g. <code class="inline">scores[5]</code> on a 5-item array) and print it. What happens? Is it a clear error, or something stranger?</li>
+    <li>Challenge: write a loop that counts how many values in an array are above a certain threshold (e.g. how many scores are 90 or above), combining what you learned about if-statements with arrays.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ I can declare an array and read/change individual values by index</label>
+  <label>☐ I can explain why the first index is 0, not 1</label>
+  <label>☐ I used a <code class="inline">for</code> loop to process every item in an array</label>
+  <label>☐ My total/average program produces the correct result</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — C/C++ Fundamentals &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

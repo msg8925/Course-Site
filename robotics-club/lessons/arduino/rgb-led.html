@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "arduino/rgb-led";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Controlling an RGB LED with Arduino";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Controlling an RGB LED with Arduino</title>
+<style>
+  :root {
+    --navy: #1B2B5E;
+    --teal: #0D9488;
+    --teal-light: #e6f7f5;
+    --navy-light: #eef0f8;
+  }
+  body {
+    font-family: Calibri, Arial, sans-serif;
+    color: #1a1a1a;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 30px 80px;
+    line-height: 1.55;
+    background: #fff;
+  }
+  h1, h2, h3 {
+    font-family: 'Bookman Old Style', Cambria, Georgia, serif;
+    color: var(--navy);
+  }
+  h1 {
+    border-bottom: 4px solid var(--teal);
+    padding-bottom: 12px;
+    font-size: 30px;
+  }
+  h2 {
+    margin-top: 40px;
+    border-left: 6px solid var(--teal);
+    padding-left: 14px;
+    font-size: 22px;
+  }
+  .banner {
+    background: var(--navy);
+    color: white;
+    padding: 6px 14px;
+    display: inline-block;
+    border-radius: 4px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .objectives, .materials, .analogy, .troubleshoot, .extension, .warning, .note {
+    background: var(--navy-light);
+    border-radius: 8px;
+    padding: 16px 22px;
+    margin: 18px 0;
+  }
+  .analogy {
+    background: var(--teal-light);
+    border-left: 5px solid var(--teal);
+  }
+  .warning {
+    background: #fdeaea;
+    border-left: 5px solid #c0392b;
+  }
+  .note {
+    background: #fff8e6;
+    border-left: 5px solid #d9a300;
+  }
+  .step {
+    margin: 26px 0;
+    padding-left: 18px;
+    border-left: 3px solid var(--navy-light);
+  }
+  .step h3 {
+    margin-bottom: 6px;
+  }
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--teal);
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-right: 10px;
+    font-family: Arial, sans-serif;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 14px 0;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 15px;
+  }
+  th {
+    background: var(--navy);
+    color: white;
+  }
+  code, pre {
+    font-family: Consolas, 'Courier New', monospace;
+    background: #0f1830;
+    color: #e6f0ff;
+    border-radius: 6px;
+  }
+  pre {
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  code.inline {
+    background: #eef0f8;
+    color: var(--navy);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .comment { color: #8fd6b4; }
+  svg { display: block; margin: 20px auto; }
+  .caption { text-align: center; font-size: 13px; color: #555; margin-top: -10px; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise {
+    background: #fff8e6;
+    border-left: 5px solid #d9a300;
+    padding: 14px 20px;
+    margin: 14px 0;
+    border-radius: 6px;
+  }
+  .footer-note {
+    margin-top: 50px;
+    font-size: 13px;
+    color: #666;
+    border-top: 1px solid #ddd;
+    padding-top: 14px;
+  }
+  .swatch {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    margin-right: 6px;
+    vertical-align: middle;
+    border: 1px solid #999;
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/arduino-rgb-led.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Controlling an RGB LED with Arduino</h1>
+<p><strong>Session focus:</strong> Digital Output — mixing colour with an RGB LED module &nbsp;|&nbsp; <strong>Duration:</strong> ~60 minutes</p>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain how three separate LEDs in one package can produce any colour</li>
+    <li>Identify whether your module is common-cathode or common-anode, and why it matters</li>
+    <li>Wire the module to an Arduino using three PWM pins</li>
+    <li>Write code that mixes red, green, and blue to produce custom colours</li>
+  </ul>
+</div>
+
+<div class="analogy">
+  <strong>Real-world analogy:</strong> Think of painting with three overlapping torches — one red, one green, one blue — all shone onto the same spot on a wall. Where they overlap, the colours blend: full red and green together makes yellow, all three at full brightness makes white, and dimming one torch shifts the blend. An RGB LED does exactly this in miniature, with three tiny LED chips in a single package.
+</div>
+
+<h2>1. What You Need</h2>
+<div class="materials">
+  <table>
+    <tr><th>Item</th><th>Quantity</th><th>Notes</th></tr>
+    <tr><td>Arduino Uno (or compatible)</td><td>1</td><td>Any Uno-compatible board works</td></tr>
+    <tr><td>RGB LED module (SMD 5050)</td><td>1</td><td>Small breakout board with 4 pins: R, G, B, and a common pin</td></tr>
+    <tr><td>Jumper wires</td><td>4</td><td>Male-to-male or male-to-female depending on your headers</td></tr>
+    <tr><td>USB cable</td><td>1</td><td>To connect Arduino to computer</td></tr>
+  </table>
+</div>
+
+<h2>2. Understanding the Module — Common Cathode vs Common Anode</h2>
+<p>An RGB LED is really three separate LEDs sharing one package, so it has four pins instead of two: one for each colour, and one shared "common" pin. Which type you have changes how you wire and code it:</p>
+<table>
+  <tr><th>Type</th><th>Common pin connects to</th><th>To light a colour...</th></tr>
+  <tr><td>Common cathode</td><td>GND</td><td>Set that colour's pin HIGH (or a positive PWM value)</td></tr>
+  <tr><td>Common anode</td><td>5V</td><td>Set that colour's pin LOW (or an <em>inverted</em> PWM value)</td></tr>
+</table>
+
+<div class="note">
+  <strong>How to tell which one you have:</strong> Most breakout boards like the SMD 5050 module print it on the board, or it's stated on the packaging/listing you bought it from. If unlabelled, you can test it: connect the common pin to GND through a resistor, briefly touch each colour pin to 5V — if the LEDs light up, it's common cathode. If nothing lights up that way, try connecting the common pin to 5V instead and touching each colour pin to GND; if that lights it, it's common anode. This lesson assumes <strong>common cathode</strong>, the more frequently supplied type — if yours is common anode, the wiring is identical but every <code class="inline">analogWrite()</code> value in the code needs to be inverted (subtract it from 255).
+</div>
+
+<svg viewBox="0 0 700 300" width="100%" height="300">
+  <!-- Arduino -->
+  <rect x="20" y="60" width="190" height="200" rx="10" fill="#1B2B5E"/>
+  <text x="115" y="45" text-anchor="middle" font-family="Arial" font-size="16" fill="#1B2B5E" font-weight="bold">Arduino Uno</text>
+
+  <circle cx="200" cy="100" r="6" fill="#e63946"/>
+  <text x="214" y="104" font-family="Arial" font-size="12" fill="white">Pin 9 (Red)</text>
+  <circle cx="200" cy="140" r="6" fill="#2a9d8f"/>
+  <text x="214" y="144" font-family="Arial" font-size="12" fill="white">Pin 10 (Green)</text>
+  <circle cx="200" cy="180" r="6" fill="#457b9d"/>
+  <text x="214" y="184" font-family="Arial" font-size="12" fill="white">Pin 11 (Blue)</text>
+  <circle cx="200" cy="220" r="6" fill="#aaaaaa"/>
+  <text x="214" y="224" font-family="Arial" font-size="12" fill="white">GND (common)</text>
+
+  <!-- RGB module -->
+  <rect x="500" y="90" width="140" height="130" rx="8" fill="#333"/>
+  <circle cx="570" cy="140" r="26" fill="#eee"/>
+  <text x="570" y="75" text-anchor="middle" font-family="Arial" font-size="15" fill="#0D9488" font-weight="bold">RGB LED Module</text>
+  <text x="570" y="235" text-anchor="middle" font-family="Arial" font-size="11" fill="#333">R  G  B  COM</text>
+
+  <!-- wires -->
+  <line x1="206" y1="100" x2="530" y2="110" stroke="#e63946" stroke-width="3"/>
+  <line x1="206" y1="140" x2="560" y2="115" stroke="#2a9d8f" stroke-width="3"/>
+  <line x1="206" y1="180" x2="580" y2="115" stroke="#457b9d" stroke-width="3"/>
+  <line x1="206" y1="220" x2="610" y2="110" stroke="#aaaaaa" stroke-width="3"/>
+
+  <text x="115" y="285" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">Arduino (three PWM pins + GND)</text>
+</svg>
+<p class="caption">Figure 1: Three PWM-capable pins each control one colour channel; the common pin ties to GND (common cathode).</p>
+
+<h2>3. Step-by-Step Instructions</h2>
+
+<div class="step">
+  <h3><span class="step-num">1</span>Wire the module</h3>
+  <ul>
+    <li>Red pin → Arduino Pin 9</li>
+    <li>Green pin → Arduino Pin 10</li>
+    <li>Blue pin → Arduino Pin 11</li>
+    <li>Common pin → Arduino GND (common cathode)</li>
+  </ul>
+  <p>All three signal pins must be PWM-capable (marked with a "~" on the board silkscreen) since brightness mixing depends on it.</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">2</span>Write the program</h3>
+<pre><span class="comment">// RGB LED — Basic Colour Mixing</span>
+const int redPin = 9;
+const int greenPin = 10;
+const int bluePin = 11;
+
+void setup() {
+  pinMode(redPin, OUTPUT);
+  pinMode(greenPin, OUTPUT);
+  pinMode(bluePin, OUTPUT);
+}
+
+void setColor(int r, int g, int b) {
+  analogWrite(redPin, r);
+  analogWrite(greenPin, g);
+  analogWrite(bluePin, b);
+}
+
+void loop() {
+  setColor(255, 0, 0);    <span class="comment">// red</span>
+  delay(1000);
+
+  setColor(0, 255, 0);    <span class="comment">// green</span>
+  delay(1000);
+
+  setColor(0, 0, 255);    <span class="comment">// blue</span>
+  delay(1000);
+
+  setColor(255, 255, 0);  <span class="comment">// yellow (red + green)</span>
+  delay(1000);
+
+  setColor(255, 255, 255); <span class="comment">// white (all three)</span>
+  delay(1000);
+
+  setColor(0, 0, 0);       <span class="comment">// off</span>
+  delay(1000);
+}</pre>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">3</span>Upload and test</h3>
+  <p>Upload the code and watch the module cycle through red, green, blue, yellow, white, and off. If the colours look wrong or nothing lights up, see troubleshooting below before assuming the code is at fault.</p>
+</div>
+
+<div class="warning">
+  <strong>If every colour looks inverted (dim when it should be bright, or lit when it should be off):</strong> you likely have a common-<em>anode</em> module rather than common-cathode. Either rewire the common pin to 5V and invert every value in code (<code class="inline">255 - value</code>), or check your supplier's listing to confirm which type you actually have.
+</div>
+
+<div class="troubleshoot">
+  <h3 style="margin-top:0;">Troubleshooting</h3>
+  <ul>
+    <li><strong>Only one or two colours ever appear:</strong> check each colour pin is on a genuinely PWM-capable pin (marked "~"), not a regular digital pin.</li>
+    <li><strong>Colours look muddy or don't match the code:</strong> double check R, G, B pins aren't swapped from what's written in the sketch.</li>
+    <li><strong>Nothing lights up at all:</strong> confirm the common pin is wired to GND (or 5V, if common anode) and that connection is solid.</li>
+    <li><strong>Colours are dim compared to expected:</strong> some modules include built-in resistors, others don't — if yours doesn't and colours seem unusually bright or hot to the touch, add a 220Ω resistor in series with each colour line.</li>
+  </ul>
+</div>
+
+<h2>4. Making Custom Colours</h2>
+<p>Because each channel accepts any value from 0–255, you're not limited to the six "pure" combinations above — you can mix any colour a screen can display:</p>
+<pre><span class="comment">// A few custom colours to try</span>
+setColor(255, 105, 180);  <span class="comment">// pink</span>
+setColor(255, 140, 0);    <span class="comment">// orange</span>
+setColor(75, 0, 130);     <span class="comment">// indigo</span>
+</pre>
+<p>Any online "RGB colour picker" will give you R, G, B numbers for a colour you have in mind — try picking a colour, finding its RGB values, and reproducing it on the module.</p>
+
+<h2>5. Why This Matters</h2>
+<p>This is the same additive colour-mixing principle used in every screen you look at — TVs, phone displays, and computer monitors are all just grids of tiny red, green, and blue lights at different brightnesses. In robotics, RGB LEDs are commonly used as status indicators — for example, a vehicle that glows green when working correctly, amber when something needs attention, and red when it detects a fault or obstacle.</p>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Write a smooth fade from red to green to blue and back, changing one value at a time instead of jumping between fixed colours.</li>
+    <li>Look up the RGB values for your favourite colour and reproduce it on the module.</li>
+    <li>Challenge: combine this with the HC-SR04 lesson — turn the LED green when an object is far away, amber when it's medium distance, and red when it's very close.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ I identified whether my module is common-cathode or common-anode</label>
+  <label>☐ All three colour pins are on PWM-capable ("~") pins</label>
+  <label>☐ The code cycles through red, green, blue, yellow, and white correctly</label>
+  <label>☐ I mixed at least one custom colour of my own choosing</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Digital Output Unit &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

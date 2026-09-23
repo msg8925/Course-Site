@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "vehicle/rgb-status-indicator";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "RGB Status Indicator";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>RGB Status Indicator</title>
+<style>
+  :root { --navy: #1B2B5E; --teal: #0D9488; --teal-light: #e6f7f5; --navy-light: #eef0f8; }
+  body { font-family: Calibri, Arial, sans-serif; color: #1a1a1a; max-width: 900px; margin: 0 auto; padding: 40px 30px 80px; line-height: 1.55; background: #fff; }
+  h1, h2, h3 { font-family: 'Bookman Old Style', Cambria, Georgia, serif; color: var(--navy); }
+  h1 { border-bottom: 4px solid var(--teal); padding-bottom: 12px; font-size: 30px; }
+  h2 { margin-top: 40px; border-left: 6px solid var(--teal); padding-left: 14px; font-size: 22px; }
+  .banner { background: var(--navy); color: white; padding: 6px 14px; display: inline-block; border-radius: 4px; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .objectives, .note, .warning { background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0; }
+  .note { background: #fff8e6; border-left: 5px solid #d9a300; }
+  .warning { background: #fdeaea; border-left: 5px solid #c0392b; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 15px; }
+  th { background: var(--navy); color: white; }
+  code, pre { font-family: Consolas, 'Courier New', monospace; background: #0f1830; color: #e6f0ff; border-radius: 6px; }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline { background: #eef0f8; color: var(--navy); padding: 2px 6px; border-radius: 4px; }
+  .comment { color: #8fd6b4; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise { background: #fff8e6; border-left: 5px solid #d9a300; padding: 14px 20px; margin: 14px 0; border-radius: 6px; }
+  .footer-note { margin-top: 50px; font-size: 13px; color: #666; border-top: 1px solid #ddd; padding-top: 14px; }
+  .ref-note { background: var(--teal-light); border-left: 5px solid var(--teal); border-radius: 8px; padding: 14px 20px; margin: 18px 0; font-size: 14px; }
+  .ref-note a { color: var(--teal); font-weight: bold; }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/vehicle-rgb-status-indicator.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>RGB Status Indicator</h1>
+<p><strong>Section focus:</strong> Robotic Vehicle — Control &amp; Decision Logic — Lesson 4.3.2 &nbsp;|&nbsp; <strong>Duration:</strong> ~30 minutes</p>
+
+<div class="ref-note">
+  <strong>Builds on:</strong> <a href="../arduino/rgb-led.html">3.8 Controlling an RGB LED</a> and Lesson 4.3.1's line-following logic. This is a small addition, not a new subsystem.
+</div>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain why a status light is genuinely useful, not just decorative</li>
+    <li>Add an RGB status colour to each branch of your existing line-following logic</li>
+    <li>Use the indicator to diagnose behaviour without needing a laptop nearby</li>
+  </ul>
+</div>
+
+<h2>1. Why Bother With a Status Light?</h2>
+<p>Once your vehicle is untethered and moving around on the floor, you lose the Serial Monitor as a debugging tool — you can't easily see what decision the code is making at any given moment just by watching the wheels. A simple colour code lets you glance at the vehicle and immediately know what it currently "believes" is happening, which is enormously useful both while developing this logic and later during competition troubleshooting.</p>
+
+<h2>2. Choosing a Colour Code</h2>
+<table>
+  <tr><th>Situation</th><th>Colour</th></tr>
+  <tr><td>Driving straight (on line)</td><td>Green</td></tr>
+  <tr><td>Correcting left or right</td><td>Amber (mix of red + green)</td></tr>
+  <tr><td>Both sensors dark — stopped/lost</td><td>Red</td></tr>
+</table>
+
+<h2>3. Adding It to Your Existing Logic</h2>
+<pre>const int redPin = 6, greenPin = 7, bluePin = 5;  <span class="comment">// from Lesson 3.8, adjust to your actual wiring</span>
+
+void setColor(int r, int g, int b) {
+    analogWrite(redPin, r);
+    analogWrite(greenPin, g);
+    analogWrite(bluePin, b);
+}
+
+void loop() {
+    for (int i = 0; i &lt; 5; i++) {
+        sensorReadings[i] = analogRead(sensorPins[i]);
+        isOnLine[i] = sensorReadings[i] &gt; thresholds[i];
+    }
+
+    bool left  = isOnLine[1];
+    bool right = isOnLine[3];
+
+    if (!left &amp;&amp; !right) {
+        forward(180);
+        setColor(0, 255, 0);        <span class="comment">// green: on line</span>
+    } else if (left &amp;&amp; !right) {
+        turnLeft(180);
+        setColor(255, 165, 0);      <span class="comment">// amber: correcting</span>
+    } else if (!left &amp;&amp; right) {
+        turnRight(180);
+        setColor(255, 165, 0);      <span class="comment">// amber: correcting</span>
+    } else {
+        stopMotors();
+        setColor(255, 0, 0);        <span class="comment">// red: lost / stopped</span>
+    }
+}</pre>
+
+<div class="note">
+  <strong>Notice the pattern:</strong> every branch of the if-statement now does two things — call a movement function, and set a status colour. This is a common and useful habit: whenever your code makes a decision, consider whether reporting that decision visually would help you (or a judge, during competition) understand what the vehicle is doing.
+</div>
+
+<h2>4. Using This While Debugging</h2>
+<p>With this running, you can now watch the LED as the vehicle moves along the tape and see, in real time, whether its decisions match what you'd expect given the line's actual shape — flickering rapidly between green and amber on a straight section, for example, might indicate overly sensitive thresholds from Lesson 4.1.4 worth revisiting.</p>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Get the three-colour status system working alongside your existing line-following logic.</li>
+    <li>Watch the LED while the vehicle runs a straight section, then a curved section — does the colour pattern match what you'd predict?</li>
+    <li>Add a distinct colour (e.g. blue) for a brief moment when the vehicle first powers on, before any sensor readings have been taken, to confirm startup.</li>
+    <li>Challenge: make the amber colour's exact shade reflect how sharply the vehicle is correcting, using more sensor detail than just two booleans — this previews the idea behind Lesson 4.3.3.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ The status LED shows green while driving straight</label>
+  <label>☐ The status LED shows amber while correcting left or right</label>
+  <label>☐ The status LED shows red when both sensors are dark</label>
+  <label>☐ I can explain why this is useful beyond just "looking nice"</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Robotic Vehicle &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "electronics/servo-basics";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Servo Motors — How They Work";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Servo Motors — How They Work</title>
+<style>
+  :root { --navy: #1B2B5E; --teal: #0D9488; --teal-light: #e6f7f5; --navy-light: #eef0f8; }
+  body { font-family: Calibri, Arial, sans-serif; color: #1a1a1a; max-width: 900px; margin: 0 auto; padding: 40px 30px 80px; line-height: 1.55; background: #fff; }
+  h1, h2, h3 { font-family: 'Bookman Old Style', Cambria, Georgia, serif; color: var(--navy); }
+  h1 { border-bottom: 4px solid var(--teal); padding-bottom: 12px; font-size: 30px; }
+  h2 { margin-top: 40px; border-left: 6px solid var(--teal); padding-left: 14px; font-size: 22px; }
+  .banner { background: var(--navy); color: white; padding: 6px 14px; display: inline-block; border-radius: 4px; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .objectives, .analogy, .note, .warning { background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0; }
+  .analogy { background: var(--teal-light); border-left: 5px solid var(--teal); }
+  .note { background: #fff8e6; border-left: 5px solid #d9a300; }
+  .warning { background: #fdeaea; border-left: 5px solid #c0392b; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 15px; }
+  th { background: var(--navy); color: white; }
+  code, pre { font-family: Consolas, 'Courier New', monospace; background: #0f1830; color: #e6f0ff; border-radius: 6px; }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline { background: #eef0f8; color: var(--navy); padding: 2px 6px; border-radius: 4px; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise { background: #fff8e6; border-left: 5px solid #d9a300; padding: 14px 20px; margin: 14px 0; border-radius: 6px; }
+  .footer-note { margin-top: 50px; font-size: 13px; color: #666; border-top: 1px solid #ddd; padding-top: 14px; }
+  svg { display: block; margin: 20px auto; }
+  .caption { text-align: center; font-size: 13px; color: #555; margin-top: -10px; }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/electronics-servo-basics.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Servo Motors — How They Work</h1>
+<p><strong>Section focus:</strong> Electronics Fundamentals — Lesson 2.10 &nbsp;|&nbsp; <strong>Duration:</strong> ~40 minutes</p>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain what's actually inside a servo motor, beyond "a motor that goes to an angle"</li>
+    <li>Explain what a feedback loop is and why a servo needs one</li>
+    <li>Explain how a pulse signal's timing tells the servo which angle to hold</li>
+    <li>Explain why a servo can hold its position under load, unlike a plain DC motor</li>
+  </ul>
+</div>
+
+<div class="analogy">
+  <strong>Real-world analogy:</strong> A servo is like someone holding a heavy door open at a specific angle you asked for — say, "hold it open exactly halfway." They don't just push once and walk away; they continuously check the door's current position and keep adjusting their push, correcting immediately if wind (or anything else) nudges the door away from where you wanted it. That constant checking-and-correcting is the core idea behind a servo.
+</div>
+
+<h2>1. What's Actually Inside a Servo</h2>
+<p>A servo isn't a special standalone type of motor — it's a small, complete system built around one: a regular DC motor, a set of reduction gears (to trade speed for turning force), and critically, a small sensor (usually a potentiometer) that continuously reports the current angle of the output shaft back to a tiny built-in control circuit.</p>
+
+<svg viewBox="0 0 560 200" width="100%" height="200">
+  <rect x="20" y="70" width="100" height="60" rx="6" fill="#1B2B5E"/>
+  <text x="70" y="60" text-anchor="middle" font-family="Arial" font-size="12" fill="#1B2B5E" font-weight="bold">DC Motor</text>
+  <rect x="150" y="70" width="100" height="60" rx="6" fill="#0D9488"/>
+  <text x="200" y="60" text-anchor="middle" font-family="Arial" font-size="12" fill="#0D9488" font-weight="bold">Gears</text>
+  <rect x="280" y="70" width="100" height="60" rx="6" fill="#333"/>
+  <text x="330" y="60" text-anchor="middle" font-family="Arial" font-size="12" fill="#333" font-weight="bold">Output Shaft</text>
+  <rect x="150" y="150" width="100" height="40" rx="6" fill="#c46b00"/>
+  <text x="200" y="145" text-anchor="middle" font-family="Arial" font-size="12" fill="#c46b00" font-weight="bold">Potentiometer</text>
+
+  <line x1="120" y1="100" x2="150" y2="100" stroke="#333" stroke-width="3"/>
+  <line x1="250" y1="100" x2="280" y2="100" stroke="#333" stroke-width="3"/>
+  <line x1="330" y1="130" x2="200" y2="150" stroke="#c46b00" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="450" y="130" text-anchor="middle" font-family="Arial" font-size="11" fill="#c46b00">reports actual angle</text>
+</svg>
+<p class="caption">Figure 1: The potentiometer is mechanically linked to the output shaft, always reporting its real current angle.</p>
+
+<h2>2. The Feedback Loop</h2>
+<p>This is the concept that makes a servo behave so differently from a plain DC motor. A <strong>feedback loop</strong> means the system continuously compares where it currently is against where it's supposed to be, and corrects the difference:</p>
+<ol>
+  <li>You (or your code) request a target angle</li>
+  <li>The internal potentiometer reports the shaft's actual current angle</li>
+  <li>The servo's built-in circuit compares the two</li>
+  <li>If they don't match, the motor drives in whichever direction closes the gap</li>
+  <li>This repeats continuously, many times per second, even while holding still</li>
+</ol>
+<p>This is why gently pushing a powered servo's arm away from its commanded position meets active resistance — it's not that the motor is simply "strong," it's that the feedback loop is actively detecting the error and fighting to correct it, continuously.</p>
+
+<div class="note">
+  <strong>Contrast with the DC motor from Lesson 2.7:</strong> a plain DC motor has no idea what angle it's at and makes no attempt to correct anything — it just spins in response to voltage. A servo's entire design exists specifically to add position-awareness and self-correction on top of an otherwise ordinary small motor.
+</div>
+
+<h2>3. How the Angle Is Actually Communicated</h2>
+<p>A servo receives its target angle as a repeating electrical pulse, roughly 50 times per second — but what matters isn't the pulse's presence, it's precisely how <em>long</em> each pulse lasts:</p>
+<table>
+  <tr><th>Pulse width</th><th>Commanded angle (typical)</th></tr>
+  <tr><td>~1.0ms</td><td>0°</td></tr>
+  <tr><td>~1.5ms</td><td>90° (centre)</td></tr>
+  <tr><td>~2.0ms</td><td>180°</td></tr>
+</table>
+<p>This timing-based signalling is called PWM (pulse-width modulation) — the same general technique you've already used for LED brightness and motor speed via <code class="inline">analogWrite()</code>, just interpreted completely differently here: as a target position rather than a proportion of "on" time.</p>
+
+<div class="warning">
+  <strong>This is why the Servo library exists.</strong> Generating precisely-timed pulses by hand, continuously, while your code does other things too, would be genuinely difficult to get right. The <code class="inline">Servo</code> library from Lesson 3.12 handles this exact timing for you — calling <code class="inline">myServo.write(90)</code> is really just telling the library "please go generate the ~1.5ms pulse repeatedly, on my behalf."
+</div>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Explain in your own words why a servo can push back if you try to manually move its arm while powered, referencing the feedback loop.</li>
+    <li>Sketch what you'd expect the pulse width to be for a servo commanded to 45°, interpolating between the 0° and 90° values in the table.</li>
+    <li>Predict what would happen if a servo's potentiometer (its feedback sensor) failed completely — would the servo likely overshoot, undershoot, or behave unpredictably? Explain your reasoning.</li>
+    <li>Challenge: research the difference between this kind of standard "positional" servo and a "continuous rotation" servo, and explain what's different about how each interprets the same pulse-width signal.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ I can name the three main internal parts of a servo (motor, gears, feedback sensor)</label>
+  <label>☐ I can explain what a feedback loop is, using the servo as an example</label>
+  <label>☐ I can explain how pulse width relates to commanded angle</label>
+  <label>☐ I can explain why a servo resists being manually pushed away from its target angle</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Electronics Fundamentals &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "vehicle/multi-sensor-array";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Building a Multi-Sensor Array";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Building a Multi-Sensor Array</title>
+<style>
+  :root { --navy: #1B2B5E; --teal: #0D9488; --teal-light: #e6f7f5; --navy-light: #eef0f8; }
+  body { font-family: Calibri, Arial, sans-serif; color: #1a1a1a; max-width: 900px; margin: 0 auto; padding: 40px 30px 80px; line-height: 1.55; background: #fff; }
+  h1, h2, h3 { font-family: 'Bookman Old Style', Cambria, Georgia, serif; color: var(--navy); }
+  h1 { border-bottom: 4px solid var(--teal); padding-bottom: 12px; font-size: 30px; }
+  h2 { margin-top: 40px; border-left: 6px solid var(--teal); padding-left: 14px; font-size: 22px; }
+  .banner { background: var(--navy); color: white; padding: 6px 14px; display: inline-block; border-radius: 4px; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .objectives, .note, .warning { background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0; }
+  .note { background: #fff8e6; border-left: 5px solid #d9a300; }
+  .warning { background: #fdeaea; border-left: 5px solid #c0392b; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 15px; }
+  th { background: var(--navy); color: white; }
+  code, pre { font-family: Consolas, 'Courier New', monospace; background: #0f1830; color: #e6f0ff; border-radius: 6px; }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline { background: #eef0f8; color: var(--navy); padding: 2px 6px; border-radius: 4px; }
+  .comment { color: #8fd6b4; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise { background: #fff8e6; border-left: 5px solid #d9a300; padding: 14px 20px; margin: 14px 0; border-radius: 6px; }
+  .footer-note { margin-top: 50px; font-size: 13px; color: #666; border-top: 1px solid #ddd; padding-top: 14px; }
+  .ref-note { background: var(--teal-light); border-left: 5px solid var(--teal); border-radius: 8px; padding: 14px 20px; margin: 18px 0; font-size: 14px; }
+  .ref-note a { color: var(--teal); font-weight: bold; }
+  svg { display: block; margin: 20px auto; }
+  .caption { text-align: center; font-size: 13px; color: #555; margin-top: -10px; }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/vehicle-multi-sensor-array.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Building a Multi-Sensor Array</h1>
+<p><strong>Section focus:</strong> Robotic Vehicle — Line Sensor Subsystem — Lesson 4.1.2 &nbsp;|&nbsp; <strong>Duration:</strong> ~50 minutes</p>
+
+<div class="ref-note">
+  <strong>Builds on:</strong> <a href="../arduino/ir-transmitter-receiver.html">3.13 Infrared Transmitters and Receivers</a> (the sensor circuit), <a href="../cpp/arrays.html">1.5 Arrays</a>, and <a href="../cpp/loops.html">1.4 Loops</a>. This lesson combines all three rather than re-explaining any of them.
+</div>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Wire several IR reflectance sensors to separate analog pins</li>
+    <li>Store all their pin numbers and readings in arrays</li>
+    <li>Read every sensor in a single loop, rather than repeating code per sensor</li>
+    <li>Print all sensor readings at once for inspection</li>
+  </ul>
+</div>
+
+<h2>1. Choosing How Many Sensors, and the Spacing</h2>
+<p>Three sensors is a reasonable minimum for genuine steering decisions (left, centre, right); five gives finer detail for the proportional steering in Lesson 4.3.3. Space them evenly in a row, mounted facing down, with spacing narrow enough that the outer sensors sit just beyond the tape's width when centred — the exact spacing depends on your chassis and tape width, and is worth testing physically before committing to a permanent mount.</p>
+
+<svg viewBox="0 0 500 160" width="100%" height="160">
+  <rect x="150" y="120" width="200" height="14" fill="#333"/>
+  <text x="250" y="150" text-anchor="middle" font-family="Arial" font-size="11" fill="#333">tape (dark line on light floor)</text>
+  <circle cx="120" cy="60" r="14" fill="#0D9488"/><text x="120" y="40" text-anchor="middle" font-family="Arial" font-size="11">S1</text>
+  <circle cx="185" cy="60" r="14" fill="#0D9488"/><text x="185" y="40" text-anchor="middle" font-family="Arial" font-size="11">S2</text>
+  <circle cx="250" cy="60" r="14" fill="#0D9488"/><text x="250" y="40" text-anchor="middle" font-family="Arial" font-size="11">S3</text>
+  <circle cx="315" cy="60" r="14" fill="#0D9488"/><text x="315" y="40" text-anchor="middle" font-family="Arial" font-size="11">S4</text>
+  <circle cx="380" cy="60" r="14" fill="#0D9488"/><text x="380" y="40" text-anchor="middle" font-family="Arial" font-size="11">S5</text>
+  <line x1="250" y1="74" x2="250" y2="120" stroke="#0D9488" stroke-width="1" stroke-dasharray="3,3"/>
+</svg>
+<p class="caption">Figure 1: Five sensors in a row — S3 centred on the tape means "on course."</p>
+
+<h2>2. Wiring Multiple Sensors</h2>
+<p>Each sensor is wired exactly as in Lesson 3.13 — its own IR LED with a series resistor, its own phototransistor voltage divider — but each sensor's output goes to a <em>different</em> analog pin:</p>
+<table>
+  <tr><th>Sensor</th><th>Analog Pin</th></tr>
+  <tr><td>S1 (far left)</td><td>A0</td></tr>
+  <tr><td>S2</td><td>A1</td></tr>
+  <tr><td>S3 (centre)</td><td>A2</td></tr>
+  <tr><td>S4</td><td>A3</td></tr>
+  <tr><td>S5 (far right)</td><td>A4</td></tr>
+</table>
+<p>All sensors share the same 5V and GND connections — only the signal output of each needs its own dedicated pin.</p>
+
+<h2>3. Reading All Sensors With an Array and a Loop</h2>
+<p>Rather than writing five nearly-identical <code class="inline">analogRead()</code> lines, store the pin numbers in an array and loop through them — exactly the pattern from Lesson 1.5:</p>
+<pre>const int sensorPins[5] = {A0, A1, A2, A3, A4};
+int sensorReadings[5];
+
+void setup() {
+    Serial.begin(9600);
+}
+
+void loop() {
+    for (int i = 0; i &lt; 5; i++) {
+        sensorReadings[i] = analogRead(sensorPins[i]);
+    }
+
+    for (int i = 0; i &lt; 5; i++) {
+        Serial.print(sensorReadings[i]);
+        Serial.print("\t");  <span class="comment">// tab-separated, easier to read in columns</span>
+    }
+    Serial.println();
+
+    delay(100);
+}</pre>
+<p>Notice this is only a few lines longer than reading a <em>single</em> sensor — that's the entire benefit of arrays and loops from Section 1, now paying off directly.</p>
+
+<div class="note">
+  <strong>Why <code class="inline">const int sensorPins[5]</code> instead of five separate variables?</strong> Beyond just saving typing, it means the loop's logic (read every sensor, print every sensor) is written once and automatically applies correctly no matter how many sensors are in the array — change the array to 3 or 7 sensors, and only the array declaration needs to change, not the loop itself.
+</div>
+
+<h2>4. Testing the Full Array</h2>
+<p>Upload the code above and open the Serial Monitor. Slowly slide the sensor array across a strip of tape by hand, and watch all five columns of numbers at once — you should see the values dip (or spike, depending on your wiring direction) one at a time as the tape passes under each sensor in turn.</p>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Build and wire at least 3 sensors (5 if your kit and chassis allow it) and confirm all read independently in the Serial Monitor.</li>
+    <li>Slide the array over the tape by hand and confirm each sensor's reading changes as it passes over the dark line.</li>
+    <li>Add a sixth column to your printout showing which sensor currently has the <em>lowest</em> (or highest, depending on wiring) reading — hint: this needs a variable tracking the "best so far" as you loop, similar to the "find the largest value" exercise from Lesson 1.5.</li>
+    <li>Challenge: modify the array size constant to be stored in one place (e.g. <code class="inline">const int NUM_SENSORS = 5;</code>) and use it everywhere a "5" currently appears, so the whole program can be resized by changing one line.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ All sensors are wired to separate analog pins and share power/ground</label>
+  <label>☐ My program reads all sensors using a loop, not repeated individual lines</label>
+  <label>☐ The Serial Monitor shows all readings changing correctly as I move the array over tape</label>
+  <label>☐ I can explain why storing pin numbers in an array makes the code easier to change later</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Robotic Vehicle &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

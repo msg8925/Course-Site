@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "electronics/dc-motor-basics";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "How a DC Motor Works";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>How a DC Motor Works</title>
+<style>
+  :root { --navy: #1B2B5E; --teal: #0D9488; --teal-light: #e6f7f5; --navy-light: #eef0f8; }
+  body { font-family: Calibri, Arial, sans-serif; color: #1a1a1a; max-width: 900px; margin: 0 auto; padding: 40px 30px 80px; line-height: 1.55; background: #fff; }
+  h1, h2, h3 { font-family: 'Bookman Old Style', Cambria, Georgia, serif; color: var(--navy); }
+  h1 { border-bottom: 4px solid var(--teal); padding-bottom: 12px; font-size: 30px; }
+  h2 { margin-top: 40px; border-left: 6px solid var(--teal); padding-left: 14px; font-size: 22px; }
+  .banner { background: var(--navy); color: white; padding: 6px 14px; display: inline-block; border-radius: 4px; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .objectives, .analogy, .note, .warning { background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0; }
+  .analogy { background: var(--teal-light); border-left: 5px solid var(--teal); }
+  .note { background: #fff8e6; border-left: 5px solid #d9a300; }
+  .warning { background: #fdeaea; border-left: 5px solid #c0392b; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 15px; }
+  th { background: var(--navy); color: white; }
+  code, pre { font-family: Consolas, 'Courier New', monospace; background: #0f1830; color: #e6f0ff; border-radius: 6px; }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline { background: #eef0f8; color: var(--navy); padding: 2px 6px; border-radius: 4px; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise { background: #fff8e6; border-left: 5px solid #d9a300; padding: 14px 20px; margin: 14px 0; border-radius: 6px; }
+  .footer-note { margin-top: 50px; font-size: 13px; color: #666; border-top: 1px solid #ddd; padding-top: 14px; }
+  svg { display: block; margin: 20px auto; }
+  .caption { text-align: center; font-size: 13px; color: #555; margin-top: -10px; }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/electronics-dc-motor-basics.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>How a DC Motor Works</h1>
+<p><strong>Section focus:</strong> Electronics Fundamentals — Lesson 2.7 &nbsp;|&nbsp; <strong>Duration:</strong> ~40 minutes</p>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain, at a basic level, how electricity becomes rotation inside a DC motor</li>
+    <li>Explain why a spinning motor generates its own voltage, and why that matters</li>
+    <li>Explain why a motor draws far more current when starting than when running</li>
+    <li>Connect this understanding to why motors need special handling compared to LEDs</li>
+  </ul>
+</div>
+
+<div class="analogy">
+  <strong>Real-world analogy:</strong> A DC motor works like a playground merry-go-round with a hidden magnetic "push" instead of a person shoving it. As it spins, magnets and electromagnets inside constantly push against each other in a way that keeps the rotation going in one direction, for as long as power is supplied.
+</div>
+
+<h2>1. The Basic Idea: Electricity to Rotation</h2>
+<p>Inside a simple DC motor are two key parts: fixed permanent magnets (the outer casing) and a spinning coil of wire (the rotor) sitting between them. When current flows through the coil, it becomes an electromagnet — and the interaction between this temporary magnet and the permanent ones around it produces a turning force. A clever mechanical switch inside the motor (the commutator) keeps flipping the coil's magnetic direction at just the right moment as it spins, so the turning force keeps pushing the same way round instead of settling into a fixed position.</p>
+
+<svg viewBox="0 0 500 220" width="100%" height="220">
+  <circle cx="250" cy="110" r="70" fill="none" stroke="#333" stroke-width="3"/>
+  <text x="250" y="45" text-anchor="middle" font-family="Arial" font-size="13" fill="#333">Permanent magnet casing</text>
+  <rect x="220" y="80" width="60" height="60" rx="6" fill="#0D9488"/>
+  <text x="250" y="200" text-anchor="middle" font-family="Arial" font-size="13" fill="#0D9488" font-weight="bold">Spinning coil (rotor)</text>
+</svg>
+<p class="caption">Figure 1: A coil inside a fixed magnetic field, constantly pushed by the interaction between the two.</p>
+
+<h2>2. Why Spinning Generates Its Own Voltage</h2>
+<p>Here's a detail that surprises most people: a spinning motor doesn't just consume electricity — it also generates a small voltage of its own, working against the very current driving it. This effect (called back-EMF) increases as the motor spins faster, and naturally limits its top speed and running current once it's up to speed.</p>
+
+<div class="note">
+  <strong>Why this matters practically:</strong> when a motor first starts from a standstill, it isn't spinning yet, so this opposing voltage hasn't built up — meaning a motor draws its <strong>highest</strong> current in the first instant of starting (called stall or starting current), often several times higher than its steady running current. This is exactly why a transistor or driver chip needs to be rated well above a motor's "normal" running current — the everyday load isn't the worst case.
+</div>
+
+<h2>3. What Happens the Instant Power Is Removed</h2>
+<p>A spinning motor's coil is still generating that back-EMF voltage even after power is cut, and briefly continues releasing stored energy as the coil's magnetic field collapses. This produces a sharp voltage spike at the exact moment a motor is switched off — which is precisely the danger the flyback diode from the transistor lesson protects against. Understanding <em>why</em> that spike happens (rather than just being told to add a diode) is the payoff of this lesson.</p>
+
+<h2>4. Motors vs LEDs: Why the Difference Matters</h2>
+<table>
+  <tr><th></th><th>LED</th><th>DC Motor</th></tr>
+  <tr><td>Current needed</td><td>Small, fairly constant</td><td>Large, and much higher when starting</td></tr>
+  <tr><td>Generates its own voltage?</td><td>No</td><td>Yes (back-EMF while spinning)</td></tr>
+  <tr><td>Danger when switched off?</td><td>None</td><td>Voltage spike — needs a flyback diode</td></tr>
+  <tr><td>Needs a series resistor?</td><td>Yes, always</td><td>No — needs current-handling components (transistor/driver) instead</td></tr>
+</table>
+
+<div class="note">
+  <strong>Looking ahead:</strong> everything in this lesson directly explains decisions you'll make in the next one, Driving a DC Motor with a Transistor — why the transistor must be rated for more than the motor's "normal" current, and why the flyback diode isn't an optional extra.
+</div>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Research (or ask) what your kit's small DC motor's stall current rating is, and compare it to its typical running current.</li>
+    <li>If you have access to a multimeter that can measure current, connect it in series with a spinning motor briefly at start-up versus once it's running steadily, and compare the readings (take care to stay within the meter's rated current limit).</li>
+    <li>Explain in your own words why a motor that's been mechanically jammed (unable to spin) is at its most dangerous electrically, using what you now know about back-EMF.</li>
+    <li>Challenge: research what a commutator is and sketch a simple diagram showing how it might flip current direction as a coil rotates.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ I can explain, roughly, how a spinning coil and magnets combine to produce rotation</label>
+  <label>☐ I can explain what back-EMF is and why it limits a motor's speed</label>
+  <label>☐ I can explain why starting current is higher than running current</label>
+  <label>☐ I can connect this lesson to why a flyback diode is necessary</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Electronics Fundamentals &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

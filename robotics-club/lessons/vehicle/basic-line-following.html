@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "vehicle/basic-line-following";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Basic Line-Following Logic";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Basic Line-Following Logic</title>
+<style>
+  :root { --navy: #1B2B5E; --teal: #0D9488; --teal-light: #e6f7f5; --navy-light: #eef0f8; }
+  body { font-family: Calibri, Arial, sans-serif; color: #1a1a1a; max-width: 900px; margin: 0 auto; padding: 40px 30px 80px; line-height: 1.55; background: #fff; }
+  h1, h2, h3 { font-family: 'Bookman Old Style', Cambria, Georgia, serif; color: var(--navy); }
+  h1 { border-bottom: 4px solid var(--teal); padding-bottom: 12px; font-size: 30px; }
+  h2 { margin-top: 40px; border-left: 6px solid var(--teal); padding-left: 14px; font-size: 22px; }
+  .banner { background: var(--navy); color: white; padding: 6px 14px; display: inline-block; border-radius: 4px; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .objectives, .note, .warning { background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0; }
+  .note { background: #fff8e6; border-left: 5px solid #d9a300; }
+  .warning { background: #fdeaea; border-left: 5px solid #c0392b; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 15px; }
+  th { background: var(--navy); color: white; }
+  code, pre { font-family: Consolas, 'Courier New', monospace; background: #0f1830; color: #e6f0ff; border-radius: 6px; }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline { background: #eef0f8; color: var(--navy); padding: 2px 6px; border-radius: 4px; }
+  .comment { color: #8fd6b4; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise { background: #fff8e6; border-left: 5px solid #d9a300; padding: 14px 20px; margin: 14px 0; border-radius: 6px; }
+  .footer-note { margin-top: 50px; font-size: 13px; color: #666; border-top: 1px solid #ddd; padding-top: 14px; }
+  .ref-note { background: var(--teal-light); border-left: 5px solid var(--teal); border-radius: 8px; padding: 14px 20px; margin: 18px 0; font-size: 14px; }
+  .ref-note a { color: var(--teal); font-weight: bold; }
+  svg { display: block; margin: 20px auto; }
+  .caption { text-align: center; font-size: 13px; color: #555; margin-top: -10px; }
+  .troubleshoot { background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0; }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/vehicle-basic-line-following.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Basic Line-Following Logic</h1>
+<p><strong>Section focus:</strong> Robotic Vehicle — Control &amp; Decision Logic — Lesson 4.3.1 &nbsp;|&nbsp; <strong>Duration:</strong> ~50 minutes</p>
+
+<div class="ref-note">
+  <strong>Builds on:</strong> <a href="../vehicle/sensor-calibration.html">4.1.4 Sensor Calibration</a> (the <code class="inline">isOnLine[]</code> array) and <a href="../vehicle/movement-functions.html">4.2.2 Basic Movement Functions</a>. This lesson is where those two previously separate subsystems finally connect — nothing new to wire.
+</div>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain "bang-bang" control: reacting to a sensor state with a fixed, fully-committed response</li>
+    <li>Write decision logic that reads sensor state and calls the correct movement function</li>
+    <li>Get the vehicle successfully following a straight and gently curved line</li>
+    <li>Identify the specific weaknesses of this simple approach, motivating Lesson 4.3.3</li>
+  </ul>
+</div>
+
+<h2>1. The Simplest Possible Strategy: Two Sensors, Bang-Bang Control</h2>
+<p>Using just two sensors (left and right, straddling the tape), the entire steering decision can be reduced to a small number of cases:</p>
+<table>
+  <tr><th>Left sensor</th><th>Right sensor</th><th>Meaning</th><th>Action</th></tr>
+  <tr><td>Light</td><td>Light</td><td>Both sensors are over the floor — line is centred between them</td><td>Drive straight</td></tr>
+  <tr><td>Dark</td><td>Light</td><td>Line has drifted under the left sensor</td><td>Turn left to correct</td></tr>
+  <tr><td>Light</td><td>Dark</td><td>Line has drifted under the right sensor</td><td>Turn right to correct</td></tr>
+  <tr><td>Dark</td><td>Dark</td><td>Both sensors see dark — likely an intersection, or the line is lost</td><td>Stop (handle separately for now)</td></tr>
+</table>
+<p>This is called <strong>bang-bang control</strong> because each decision is all-or-nothing — there's no "turn a little bit," only "turn" or "don't."</p>
+
+<h2>2. Writing the Decision Logic</h2>
+<pre><span class="comment">// Assumes isOnLine[] and sensorPins[] from Lesson 4.1.4,
+// and forward(), stopMotors(), turnLeft(), turnRight() from Lesson 4.2.2</span>
+
+void loop() {
+    for (int i = 0; i &lt; 5; i++) {
+        sensorReadings[i] = analogRead(sensorPins[i]);
+        isOnLine[i] = sensorReadings[i] &gt; thresholds[i];
+    }
+
+    bool left  = isOnLine[1];  <span class="comment">// using sensors S2 and S4 as "left" and "right" for a 5-sensor array</span>
+    bool right = isOnLine[3];
+
+    if (!left &amp;&amp; !right) {
+        forward(180);
+    } else if (left &amp;&amp; !right) {
+        turnLeft(180);
+    } else if (!left &amp;&amp; right) {
+        turnRight(180);
+    } else {
+        stopMotors();  <span class="comment">// both dark — revisit this case later</span>
+    }
+}</pre>
+
+<div class="note">
+  <strong>Why use S2 and S4 rather than S1 and S5?</strong> With a 5-sensor array, the two sensors just either side of centre typically give a more responsive, less twitchy correction than the outermost pair, which only react once the vehicle has drifted quite far off course. Experiment with which pair of sensors gives you the smoothest test results on your actual chassis.
+</div>
+
+<h2>3. Testing on an Actual Line</h2>
+<p>Place the vehicle on a straight section of tape, sensors straddling it, and power it on. It should creep forward, correcting left or right as it drifts, in a visibly "zig-zagging" fashion rather than perfectly smoothly — this is entirely expected for bang-bang control and not a bug.</p>
+
+<div class="troubleshoot">
+  <h3 style="margin-top:0;">Troubleshooting</h3>
+  <ul>
+    <li><strong>Vehicle immediately spins in place and never goes anywhere:</strong> check your <code class="inline">turnLeft()</code>/<code class="inline">turnRight()</code> functions from Lesson 4.2.2 aren't accidentally using full reverse — they should only slow/stop one side, not spin.</li>
+    <li><strong>Vehicle overcorrects wildly, swinging far off the line each time:</strong> try lowering the turn speed relative to the forward speed.</li>
+    <li><strong>Vehicle loses the line on any curve sharper than very gentle:</strong> this is an inherent limitation of two-sensor bang-bang control — Lesson 4.3.3 addresses this directly using more sensors.</li>
+  </ul>
+</div>
+
+<h2>4. The Weaknesses Worth Naming</h2>
+<p>Get this working, but don't stop here expecting perfection — bang-bang control has real, inherent limits:</p>
+<ul>
+  <li><strong>Zig-zag motion</strong> instead of a smooth path, since every correction is full-strength regardless of how far off-centre the vehicle actually is</li>
+  <li><strong>Poor performance on sharp curves</strong>, since only two sensors are used and there's no sense of "how far" off course the vehicle is, only "which side"</li>
+  <li><strong>No graceful handling</strong> of intersections, gaps in the tape, or sharp branches — the "both dark" case is currently just a blunt stop</li>
+</ul>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Get the vehicle successfully following a straight line using the code above.</li>
+    <li>Test it on a gentle curve and observe the zig-zag behaviour directly.</li>
+    <li>Try a sharper curve and note exactly where and how it fails.</li>
+    <li>Challenge: extend the logic to use all 5 sensors with more specific cases (e.g. "only the centre sensor is dark" vs "centre and one side are both dark") before moving to Lesson 4.3.3's more systematic approach.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ My vehicle successfully follows a straight line</label>
+  <label>☐ My vehicle follows a gentle curve, even if imperfectly</label>
+  <label>☐ I can explain what "bang-bang control" means in my own words</label>
+  <label>☐ I can name at least two specific weaknesses of this approach</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Robotic Vehicle &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

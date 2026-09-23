@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "vehicle/ir-refresher";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "IR Reflectance Sensing Refresher";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>IR Reflectance Sensing Refresher</title>
+<style>
+  :root { --navy: #1B2B5E; --teal: #0D9488; --teal-light: #e6f7f5; --navy-light: #eef0f8; }
+  body { font-family: Calibri, Arial, sans-serif; color: #1a1a1a; max-width: 900px; margin: 0 auto; padding: 40px 30px 80px; line-height: 1.55; background: #fff; }
+  h1, h2, h3 { font-family: 'Bookman Old Style', Cambria, Georgia, serif; color: var(--navy); }
+  h1 { border-bottom: 4px solid var(--teal); padding-bottom: 12px; font-size: 30px; }
+  h2 { margin-top: 40px; border-left: 6px solid var(--teal); padding-left: 14px; font-size: 22px; }
+  .banner { background: var(--navy); color: white; padding: 6px 14px; display: inline-block; border-radius: 4px; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .objectives, .note, .warning { background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0; }
+  .note { background: #fff8e6; border-left: 5px solid #d9a300; }
+  .warning { background: #fdeaea; border-left: 5px solid #c0392b; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 15px; }
+  th { background: var(--navy); color: white; }
+  code, pre { font-family: Consolas, 'Courier New', monospace; background: #0f1830; color: #e6f0ff; border-radius: 6px; }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline { background: #eef0f8; color: var(--navy); padding: 2px 6px; border-radius: 4px; }
+  .comment { color: #8fd6b4; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise { background: #fff8e6; border-left: 5px solid #d9a300; padding: 14px 20px; margin: 14px 0; border-radius: 6px; }
+  .footer-note { margin-top: 50px; font-size: 13px; color: #666; border-top: 1px solid #ddd; padding-top: 14px; }
+  .ref-note { background: var(--teal-light); border-left: 5px solid var(--teal); border-radius: 8px; padding: 14px 20px; margin: 18px 0; font-size: 14px; }
+  .ref-note a { color: var(--teal); font-weight: bold; }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/vehicle-ir-refresher.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>IR Reflectance Sensing Refresher</h1>
+<p><strong>Section focus:</strong> Robotic Vehicle — Line Sensor Subsystem — Lesson 4.1.1 &nbsp;|&nbsp; <strong>Duration:</strong> ~20 minutes</p>
+
+<div class="ref-note">
+  <strong>Prerequisite:</strong> this lesson assumes you've completed <a href="../arduino/ir-transmitter-receiver.html">3.13 Infrared Transmitters and Receivers</a>. It won't re-explain how the IR emitter/receiver pair or voltage divider works — only what changes when moving from a single test sensor to a vehicle subsystem.
+</div>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Recall the single-sensor circuit and code from Lesson 3.13</li>
+    <li>Identify what needs to change to use this sensor as part of a vehicle, not a standalone test</li>
+    <li>Explain why one sensor alone isn't enough to follow a line</li>
+  </ul>
+</div>
+
+<h2>1. What You Already Know</h2>
+<p>From Lesson 3.13, you should already be able to:</p>
+<ul>
+  <li>Wire an IR emitter LED and a phototransistor/photodiode receiver as a voltage divider</li>
+  <li>Read the receiver's output with <code class="inline">analogRead()</code></li>
+  <li>Distinguish light and dark surfaces by comparing the reading to a threshold value</li>
+</ul>
+<p>Everything electrically stays exactly the same in the vehicle build. What changes is scale and purpose: instead of one sensor tested by hand over different surfaces, you'll mount several sensors in a row, facing down, permanently positioned to straddle the tape line.</p>
+
+<h2>2. Why One Sensor Isn't Enough</h2>
+<p>A single downward-facing sensor can only tell you "light" or "dark" at one specific point. Imagine a vehicle with just one central sensor: as long as it's positioned exactly over a light surface, you know the tape isn't directly underneath it — but you have no idea whether the tape has drifted to the left or to the right. Steering correctly requires knowing <em>which direction</em> to correct toward, and that requires comparing readings from more than one position at once.</p>
+
+<div class="note">
+  <strong>Looking ahead:</strong> Lesson 4.1.2 covers wiring and reading multiple sensors side by side, using exactly the array and loop techniques from Lessons 1.4 and 1.5 — reading five sensors will look like a small, natural extension of the single-sensor code you already have, not a rewrite.
+</div>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Without looking back at Lesson 3.13, try to redraw the IR sensor's voltage-divider circuit from memory, then check it against the original.</li>
+    <li>Without looking back, try to rewrite the basic <code class="inline">analogRead()</code> and threshold-comparison code from memory.</li>
+    <li>Sketch (on paper) what you think a 3-sensor arrangement might look like mounted on the front of a small vehicle, straddling a line of tape.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ I can wire the IR sensor voltage divider without referring back to notes</label>
+  <label>☐ I can write the basic analogRead/threshold code without referring back to notes</label>
+  <label>☐ I can explain, in my own words, why a single sensor can't support real steering decisions</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Robotic Vehicle &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

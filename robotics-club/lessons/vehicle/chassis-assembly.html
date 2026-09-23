@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "vehicle/chassis-assembly";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Chassis Assembly and Parts List";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Chassis Assembly and Parts List</title>
+<style>
+  :root { --navy: #1B2B5E; --teal: #0D9488; --teal-light: #e6f7f5; --navy-light: #eef0f8; }
+  body { font-family: Calibri, Arial, sans-serif; color: #1a1a1a; max-width: 900px; margin: 0 auto; padding: 40px 30px 80px; line-height: 1.55; background: #fff; }
+  h1, h2, h3 { font-family: 'Bookman Old Style', Cambria, Georgia, serif; color: var(--navy); }
+  h1 { border-bottom: 4px solid var(--teal); padding-bottom: 12px; font-size: 30px; }
+  h2 { margin-top: 40px; border-left: 6px solid var(--teal); padding-left: 14px; font-size: 22px; }
+  .banner { background: var(--navy); color: white; padding: 6px 14px; display: inline-block; border-radius: 4px; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .objectives, .note, .warning { background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0; }
+  .note { background: #fff8e6; border-left: 5px solid #d9a300; }
+  .warning { background: #fdeaea; border-left: 5px solid #c0392b; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 15px; }
+  th { background: var(--navy); color: white; }
+  code, pre { font-family: Consolas, 'Courier New', monospace; background: #0f1830; color: #e6f0ff; border-radius: 6px; }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline { background: #eef0f8; color: var(--navy); padding: 2px 6px; border-radius: 4px; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise { background: #fff8e6; border-left: 5px solid #d9a300; padding: 14px 20px; margin: 14px 0; border-radius: 6px; }
+  .footer-note { margin-top: 50px; font-size: 13px; color: #666; border-top: 1px solid #ddd; padding-top: 14px; }
+  .ref-note { background: var(--teal-light); border-left: 5px solid var(--teal); border-radius: 8px; padding: 14px 20px; margin: 18px 0; font-size: 14px; }
+  .ref-note a { color: var(--teal); font-weight: bold; }
+  .step { margin: 26px 0; padding-left: 18px; border-left: 3px solid var(--navy-light); }
+  .step h3 { margin-bottom: 6px; }
+  .step-num {
+    display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px;
+    background: var(--teal); color: white; border-radius: 50%; font-weight: bold; margin-right: 10px; font-family: Arial, sans-serif;
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/vehicle-chassis-assembly.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Chassis Assembly and Parts List</h1>
+<p><strong>Section focus:</strong> Robotic Vehicle — Assembly &amp; Competition Prep — Lesson 4.4.1 &nbsp;|&nbsp; <strong>Duration:</strong> ~50 minutes</p>
+
+<div class="ref-note">
+  <strong>Builds on:</strong> every earlier Section 4 lesson. By this point, all subsystems (sensors, motors, decision logic) have been tested individually — this lesson is about combining them into one physical vehicle.
+</div>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Identify every part needed for a complete 2-wheel line-following vehicle</li>
+    <li>Assemble the chassis, motors, and sensor array into one physical unit</li>
+    <li>Route and secure wiring so it survives movement without disconnecting</li>
+    <li>Position the sensor array and power sources sensibly on the finished chassis</li>
+  </ul>
+</div>
+
+<h2>1. Full Parts List</h2>
+<table>
+  <tr><th>Component</th><th>Quantity</th><th>Source</th></tr>
+  <tr><td>Arduino Uno R3</td><td>1</td><td>Club kit</td></tr>
+  <tr><td>3V DC motor</td><td>2</td><td>Club kit (check you have two — some kits include only one)</td></tr>
+  <tr><td>L298N motor driver</td><td>1</td><td>Club kit</td></tr>
+  <tr><td>IR emitter/receiver pairs</td><td>3&ndash;5</td><td>Club kit — check quantity against your chosen sensor count</td></tr>
+  <tr><td>RGB LED module</td><td>1 (optional)</td><td>Club kit</td></tr>
+  <tr><td>LCD1602</td><td>1 (optional, for testing)</td><td>Club kit</td></tr>
+  <tr><td>6xAA battery holder</td><td>1</td><td>Club kit</td></tr>
+  <tr><td>Resistors, jumper wires, breadboard</td><td>as needed</td><td>Club kit</td></tr>
+  <tr><td>2WD chassis kit (plate, 2 wheels, caster)</td><td>1</td><td>Source separately — search "2WD smart car chassis kit"</td></tr>
+  <tr><td>Standoffs/screws/cable ties</td><td>as needed</td><td>Source separately</td></tr>
+  <tr><td>Separate USB power bank (optional)</td><td>1</td><td>For powering the Arduino once untethered from a laptop</td></tr>
+</table>
+
+<div class="warning">
+  <strong>Check quantities before you start.</strong> Individual component kits are often bought as one shared classroom set — confirm your specific group actually has two DC motors, and enough IR sensor pairs for your chosen array size, before assembly day. Running short partway through is far more disruptive than checking in advance.
+</div>
+
+<h2>2. Assembly Order</h2>
+
+<div class="step">
+  <h3><span class="step-num">1</span>Mount the motors and wheels</h3>
+  <p>Attach both DC motors to the chassis plate according to your chassis kit's instructions, then attach the wheels. Confirm both wheels spin freely by hand before adding any electronics.</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">2</span>Attach the caster wheel</h3>
+  <p>Mount the caster (or ball caster) at the opposite end from the main drive wheels, providing the third point of contact for balance.</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">3</span>Mount the sensor array</h3>
+  <p>Position your IR sensor array (Lesson 4.1.2) at the front of the chassis, facing down, at the height determined during calibration (Lesson 4.1.4). Secure it firmly — a sensor array that shifts position after calibration will need recalibrating.</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">4</span>Mount the Arduino, driver, and battery pack</h3>
+  <p>Position these toward the rear/centre of the chassis for balance, keeping the motor battery pack and driver wiring separate from the Arduino's own power where possible, consistent with Lesson 3.11's power isolation principle.</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">5</span>Wire everything together</h3>
+  <p>Connect the sensor array, motor driver, and any optional modules (RGB LED, LCD) to the Arduino, following your tested wiring from the individual subsystem lessons. Double-check every connection against your working breadboard version before assuming the assembled version will behave identically.</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">6</span>Secure and route wiring</h3>
+  <p>Use cable ties or tape to keep wires away from the wheels and caster, where they could snag or be pulled loose during movement. A wire that worked fine sitting still on a desk can easily disconnect once the vehicle is actually driving around.</p>
+</div>
+
+<div class="note">
+  <strong>Test after every step, not just at the end.</strong> If something stops working partway through assembly, you'll have a far easier time finding the cause if you tested the previous step first, rather than discovering a problem only once everything is fully assembled.
+</div>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Confirm you have every item on the parts list before starting assembly.</li>
+    <li>Assemble the chassis and motors, and confirm both wheels spin freely.</li>
+    <li>Mount and wire the sensor array, and re-run a quick sensor test (Lesson 4.1.2's code) before moving on.</li>
+    <li>Challenge: once fully assembled, re-run your full calibration process (Lesson 4.1.4) from scratch — mounting height and angle may have changed slightly from your test-bench setup, and thresholds should reflect the vehicle's actual final configuration.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ All parts from the list are accounted for before starting</label>
+  <label>☐ Both wheels spin freely once mounted</label>
+  <label>☐ The sensor array is securely mounted at a fixed, repeatable height</label>
+  <label>☐ All wiring is routed away from moving parts and secured</label>
+  <label>☐ I recalibrated sensors on the fully-assembled vehicle, not just the test-bench version</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Robotic Vehicle &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

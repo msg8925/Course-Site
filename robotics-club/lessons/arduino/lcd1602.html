@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "arduino/lcd1602";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Interfacing the 1602A LCD Display with Arduino";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Interfacing the 1602A LCD Display with Arduino</title>
+<style>
+  :root {
+    --navy: #1B2B5E;
+    --teal: #0D9488;
+    --teal-light: #e6f7f5;
+    --navy-light: #eef0f8;
+  }
+  body {
+    font-family: Calibri, Arial, sans-serif;
+    color: #1a1a1a;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 30px 80px;
+    line-height: 1.55;
+    background: #fff;
+  }
+  h1, h2, h3 {
+    font-family: 'Bookman Old Style', Cambria, Georgia, serif;
+    color: var(--navy);
+  }
+  h1 {
+    border-bottom: 4px solid var(--teal);
+    padding-bottom: 12px;
+    font-size: 30px;
+  }
+  h2 {
+    margin-top: 40px;
+    border-left: 6px solid var(--teal);
+    padding-left: 14px;
+    font-size: 22px;
+  }
+  .banner {
+    background: var(--navy);
+    color: white;
+    padding: 6px 14px;
+    display: inline-block;
+    border-radius: 4px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .objectives, .materials, .analogy, .troubleshoot, .extension, .warning, .note {
+    background: var(--navy-light);
+    border-radius: 8px;
+    padding: 16px 22px;
+    margin: 18px 0;
+  }
+  .analogy {
+    background: var(--teal-light);
+    border-left: 5px solid var(--teal);
+  }
+  .warning {
+    background: #fdeaea;
+    border-left: 5px solid #c0392b;
+  }
+  .note {
+    background: #fff8e6;
+    border-left: 5px solid #d9a300;
+  }
+  .step {
+    margin: 26px 0;
+    padding-left: 18px;
+    border-left: 3px solid var(--navy-light);
+  }
+  .step h3 {
+    margin-bottom: 6px;
+  }
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--teal);
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-right: 10px;
+    font-family: Arial, sans-serif;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 14px 0;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 15px;
+  }
+  th {
+    background: var(--navy);
+    color: white;
+  }
+  code, pre {
+    font-family: Consolas, 'Courier New', monospace;
+    background: #0f1830;
+    color: #e6f0ff;
+    border-radius: 6px;
+  }
+  pre {
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  code.inline {
+    background: #eef0f8;
+    color: var(--navy);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .comment { color: #8fd6b4; }
+  svg { display: block; margin: 20px auto; }
+  .caption { text-align: center; font-size: 13px; color: #555; margin-top: -10px; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise {
+    background: #fff8e6;
+    border-left: 5px solid #d9a300;
+    padding: 14px 20px;
+    margin: 14px 0;
+    border-radius: 6px;
+  }
+  .footer-note {
+    margin-top: 50px;
+    font-size: 13px;
+    color: #666;
+    border-top: 1px solid #ddd;
+    padding-top: 14px;
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/arduino-lcd1602.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Interfacing the 1602A LCD Display with Arduino</h1>
+<p><strong>Session focus:</strong> Digital Output — character LCD display &nbsp;|&nbsp; <strong>Duration:</strong> ~60 minutes</p>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain what the 1602A display can and can't do</li>
+    <li>Wire the display to an Arduino, including setting up contrast</li>
+    <li>Write a program that prints text to specific positions on the screen</li>
+    <li>Display a live changing value (not just fixed text) on the screen</li>
+  </ul>
+</div>
+
+<div class="analogy">
+  <strong>Real-world analogy:</strong> Think of the 1602A like an old digital alarm clock display, but for letters instead of just numbers — it has 2 rows of 16 character "boxes" each, and every box can show one letter, number, or symbol at a time. Unlike your phone screen, it can't draw pictures or use different fonts — only the fixed grid of characters it was built for.
+</div>
+
+<h2>1. What You Need</h2>
+<div class="materials">
+  <table>
+    <tr><th>Item</th><th>Quantity</th><th>Notes</th></tr>
+    <tr><td>Arduino Uno (or compatible)</td><td>1</td><td>Any Uno-compatible board works</td></tr>
+    <tr><td>1602A LCD display</td><td>1</td><td>16 characters × 2 rows, 16-pin header</td></tr>
+    <tr><td>Potentiometer (10kΩ)</td><td>1</td><td>For adjusting screen contrast — without this the screen often shows blank or solid blocks</td></tr>
+    <tr><td>Breadboard</td><td>1</td><td>Makes wiring 16 pins manageable</td></tr>
+    <tr><td>Jumper wires</td><td>~10</td><td>Male-to-male</td></tr>
+    <tr><td>USB cable</td><td>1</td><td>To connect Arduino to computer</td></tr>
+  </table>
+</div>
+
+<div class="note">
+  <strong>If your display has a small blue "backpack" module soldered to the back with only 4 pins (GND, VCC, SDA, SCL):</strong> that's an I2C adapter, and it simplifies this whole lesson considerably — you'd only need 4 wires and the <code class="inline">LiquidCrystal_I2C</code> library instead. This lesson covers the standard 16-pin version; ask your teacher if you have the I2C version and need the adapted wiring.
+</div>
+
+<h2>2. Understanding the 1602A's Pins</h2>
+<p>The display has 16 pins, but for basic text output we only need to actually connect 10 of them:</p>
+<table>
+  <tr><th>Pin</th><th>Function</th><th>Connects To</th></tr>
+  <tr><td>VSS</td><td>Ground</td><td>Arduino GND</td></tr>
+  <tr><td>VDD</td><td>Power</td><td>Arduino 5V</td></tr>
+  <tr><td>V0</td><td>Contrast control</td><td>Potentiometer wiper (middle pin)</td></tr>
+  <tr><td>RS</td><td>Register Select</td><td>Arduino Pin 12</td></tr>
+  <tr><td>RW</td><td>Read/Write</td><td>Arduino GND (we only ever write, so this is tied to ground)</td></tr>
+  <tr><td>E</td><td>Enable</td><td>Arduino Pin 11</td></tr>
+  <tr><td>D4–D7</td><td>Data lines</td><td>Arduino Pins 5, 4, 3, 2</td></tr>
+  <tr><td>BLA / BLK</td><td>Backlight power (anode / cathode)</td><td>5V / GND (through a resistor on BLA if not built in)</td></tr>
+</table>
+<p>Pins D0–D3 are left unconnected — we're using "4-bit mode," which needs only 4 data lines instead of 8, and is what the standard Arduino library expects.</p>
+
+<svg viewBox="0 0 760 320" width="100%" height="320">
+  <!-- LCD -->
+  <rect x="40" y="40" width="280" height="120" rx="6" fill="#0D9488"/>
+  <rect x="55" y="55" width="250" height="90" rx="3" fill="#0f1830"/>
+  <text x="180" y="90" text-anchor="middle" font-family="Consolas, monospace" font-size="14" fill="#8fd6b4">HELLO CLUB!</text>
+  <text x="180" y="115" text-anchor="middle" font-family="Consolas, monospace" font-size="14" fill="#8fd6b4">16x2 LCD</text>
+  <text x="180" y="25" text-anchor="middle" font-family="Arial" font-size="15" fill="#0D9488" font-weight="bold">1602A Display</text>
+
+  <!-- Potentiometer -->
+  <circle cx="90" cy="210" r="26" fill="#1B2B5E"/>
+  <text x="90" y="215" text-anchor="middle" font-family="Arial" font-size="11" fill="white">POT</text>
+  <line x1="90" y1="184" x2="180" y2="160" stroke="#d9a300" stroke-width="3"/>
+  <text x="135" y="165" text-anchor="middle" font-family="Arial" font-size="10" fill="#333">V0</text>
+
+  <!-- Arduino -->
+  <rect x="460" y="60" width="220" height="200" rx="10" fill="#1B2B5E"/>
+  <text x="570" y="45" text-anchor="middle" font-family="Arial" font-size="16" fill="#1B2B5E" font-weight="bold">Arduino Uno</text>
+  <text x="570" y="95" text-anchor="middle" font-family="Arial" font-size="11" fill="white">Pin 12 → RS</text>
+  <text x="570" y="120" text-anchor="middle" font-family="Arial" font-size="11" fill="white">Pin 11 → E</text>
+  <text x="570" y="145" text-anchor="middle" font-family="Arial" font-size="11" fill="white">Pins 5,4,3,2 → D4-D7</text>
+  <text x="570" y="170" text-anchor="middle" font-family="Arial" font-size="11" fill="white">5V / GND → VDD / VSS</text>
+  <text x="570" y="195" text-anchor="middle" font-family="Arial" font-size="11" fill="white">GND → RW</text>
+
+  <line x1="320" y1="100" x2="460" y2="95" stroke="#e6a800" stroke-width="2"/>
+  <line x1="320" y1="115" x2="460" y2="120" stroke="#66ccff" stroke-width="2"/>
+  <line x1="320" y1="130" x2="460" y2="145" stroke="#c46bd6" stroke-width="2"/>
+
+  <text x="180" y="290" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">1602A + contrast potentiometer</text>
+  <text x="570" y="285" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">Arduino (RS, E, D4-D7, power)</text>
+</svg>
+<p class="caption">Figure 1: The potentiometer sets contrast via V0; RS, E, and D4–D7 carry the actual character data.</p>
+
+<h2>3. Step-by-Step Instructions</h2>
+
+<div class="step">
+  <h3><span class="step-num">1</span>Wire the potentiometer for contrast</h3>
+  <p>Connect the potentiometer's two outer pins to 5V and GND, and its middle pin (the wiper) to the LCD's V0 pin. You'll adjust this after powering on.</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">2</span>Wire the LCD to the Arduino</h3>
+  <ul>
+    <li>VSS → GND, VDD → 5V</li>
+    <li>RW → GND</li>
+    <li>RS → Pin 12</li>
+    <li>E → Pin 11</li>
+    <li>D4, D5, D6, D7 → Pins 5, 4, 3, 2</li>
+    <li>Backlight BLA → 5V (through a resistor if not built in), BLK → GND</li>
+  </ul>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">3</span>Write the program</h3>
+  <p>The <code class="inline">LiquidCrystal</code> library comes built into the Arduino IDE — no need to install anything extra.</p>
+<pre><span class="comment">// 1602A LCD Example</span>
+#include &lt;LiquidCrystal.h&gt;
+
+<span class="comment">// LiquidCrystal(RS, E, D4, D5, D6, D7)</span>
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
+void setup() {
+  lcd.begin(16, 2);          <span class="comment">// 16 columns, 2 rows</span>
+  lcd.print("Hello, Club!");  <span class="comment">// prints starting at top-left</span>
+}
+
+void loop() {
+  <span class="comment">// nothing needed here for static text</span>
+}</pre>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">4</span>Upload and adjust contrast</h3>
+  <p>Upload the code, then slowly turn the potentiometer. Somewhere in its range, "Hello, Club!" should appear clearly on the top row. If you see a row of solid black blocks, or nothing at all, keep adjusting — that's a contrast issue, not a wiring fault.</p>
+</div>
+
+<div class="troubleshoot">
+  <h3 style="margin-top:0;">Troubleshooting</h3>
+  <ul>
+    <li><strong>Screen shows solid black rectangles on one row:</strong> almost always the contrast potentiometer — turn it slowly through its full range.</li>
+    <li><strong>Screen is blank, backlight is off:</strong> check power (VDD/VSS) and backlight (BLA/BLK) connections.</li>
+    <li><strong>Screen is blank, backlight is on:</strong> check RS, E, and the four data pins match the numbers in <code class="inline">LiquidCrystal lcd(...)</code>.</li>
+    <li><strong>Garbled or wrong characters:</strong> double-check D4–D7 are wired in the same order as written in the code (5, 4, 3, 2).</li>
+  </ul>
+</div>
+
+<h2>4. Positioning Text and Showing Live Data</h2>
+<p>Most real uses need more than one fixed message — you'll want to control exactly where text appears, and update it based on changing data:</p>
+<pre>#include &lt;LiquidCrystal.h&gt;
+
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+int count = 0;
+
+void setup() {
+  lcd.begin(16, 2);
+  lcd.setCursor(0, 0);       <span class="comment">// column 0, row 0 (top-left)</span>
+  lcd.print("Count:");
+}
+
+void loop() {
+  lcd.setCursor(0, 1);       <span class="comment">// column 0, row 1 (bottom row)</span>
+  lcd.print(count);
+  lcd.print("   ");          <span class="comment">// clears leftover digits from previous number</span>
+  count++;
+  delay(500);
+}</pre>
+<p>Note the trailing spaces after <code class="inline">lcd.print(count)</code> — without them, a shrinking number (e.g. going from 100 back down to 9) leaves old digits behind, since the LCD doesn't clear characters on its own.</p>
+
+<h2>5. Why This Matters</h2>
+<p>A display like this gives your circuit a way to communicate back to you without needing the Serial Monitor and a USB cable — essential once a project is untethered from a computer. In the vehicle build, this is exactly the kind of component you might use to show a live sensor reading, a status message, or a countdown during the competition.</p>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Print your name on the top row and "Robotics Club" on the bottom row.</li>
+    <li>Make the count example count down from 10 to 0 instead of counting up forever.</li>
+    <li>Challenge: combine this with the HC-SR04 lesson — display the live distance reading on the LCD instead of (or as well as) the Serial Monitor.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ Potentiometer is wired and text is visible after adjusting it</label>
+  <label>☐ RS, E, and D4–D7 match the pin numbers in the code</label>
+  <label>☐ I can print text to a specific row and column using <code class="inline">setCursor()</code></label>
+  <label>☐ I displayed a changing value, not just fixed text</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Digital Output Unit &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

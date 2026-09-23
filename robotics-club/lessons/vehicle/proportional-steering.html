@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "vehicle/proportional-steering";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Smoother Steering with Multiple Sensors";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Smoother Steering with Multiple Sensors</title>
+<style>
+  :root { --navy: #1B2B5E; --teal: #0D9488; --teal-light: #e6f7f5; --navy-light: #eef0f8; }
+  body { font-family: Calibri, Arial, sans-serif; color: #1a1a1a; max-width: 900px; margin: 0 auto; padding: 40px 30px 80px; line-height: 1.55; background: #fff; }
+  h1, h2, h3 { font-family: 'Bookman Old Style', Cambria, Georgia, serif; color: var(--navy); }
+  h1 { border-bottom: 4px solid var(--teal); padding-bottom: 12px; font-size: 30px; }
+  h2 { margin-top: 40px; border-left: 6px solid var(--teal); padding-left: 14px; font-size: 22px; }
+  .banner { background: var(--navy); color: white; padding: 6px 14px; display: inline-block; border-radius: 4px; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .objectives, .note, .warning { background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0; }
+  .note { background: #fff8e6; border-left: 5px solid #d9a300; }
+  .warning { background: #fdeaea; border-left: 5px solid #c0392b; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 15px; }
+  th { background: var(--navy); color: white; }
+  code, pre { font-family: Consolas, 'Courier New', monospace; background: #0f1830; color: #e6f0ff; border-radius: 6px; }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline { background: #eef0f8; color: var(--navy); padding: 2px 6px; border-radius: 4px; }
+  .comment { color: #8fd6b4; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise { background: #fff8e6; border-left: 5px solid #d9a300; padding: 14px 20px; margin: 14px 0; border-radius: 6px; }
+  .footer-note { margin-top: 50px; font-size: 13px; color: #666; border-top: 1px solid #ddd; padding-top: 14px; }
+  .ref-note { background: var(--teal-light); border-left: 5px solid var(--teal); border-radius: 8px; padding: 14px 20px; margin: 18px 0; font-size: 14px; }
+  .ref-note a { color: var(--teal); font-weight: bold; }
+  svg { display: block; margin: 20px auto; }
+  .caption { text-align: center; font-size: 13px; color: #555; margin-top: -10px; }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/vehicle-proportional-steering.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Smoother Steering with Multiple Sensors</h1>
+<p><strong>Section focus:</strong> Robotic Vehicle — Control &amp; Decision Logic — Lesson 4.3.3 &nbsp;|&nbsp; <strong>Duration:</strong> ~55 minutes</p>
+
+<div class="ref-note">
+  <strong>Builds on:</strong> Lesson 4.3.1's bang-bang logic — this lesson directly addresses the weaknesses named at the end of that lesson, using all 5 sensors instead of 2.
+</div>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain what "proportional control" means, and why it reduces zig-zagging</li>
+    <li>Calculate a single "error" value representing how far off-centre the line currently is</li>
+    <li>Convert that error into individually adjusted left/right motor speeds</li>
+    <li>Tune a steering strength constant to balance responsiveness against stability</li>
+  </ul>
+</div>
+
+<h2>1. The Core Idea: Proportional Correction</h2>
+<p>Bang-bang control from Lesson 4.3.1 only knows "on course" or "off course, which side" — it has no sense of <em>how far</em> off course the vehicle is, so it always corrects with the same full-strength turn regardless. Proportional control fixes this by calculating a single number representing both direction and severity of the error, then scaling the correction to match — a small drift gets a gentle nudge, a large drift gets a stronger correction.</p>
+
+<h2>2. Assigning Weights to Each Sensor</h2>
+<p>With 5 sensors, assign each a position weight, with the centre sensor at 0 and outer sensors increasingly negative (left) or positive (right):</p>
+<svg viewBox="0 0 500 120" width="100%" height="120">
+  <circle cx="80" cy="50" r="18" fill="#0D9488"/><text x="80" y="55" text-anchor="middle" font-family="Arial" font-size="13" fill="white">-2</text>
+  <circle cx="190" cy="50" r="18" fill="#0D9488"/><text x="190" y="55" text-anchor="middle" font-family="Arial" font-size="13" fill="white">-1</text>
+  <circle cx="300" cy="50" r="18" fill="#0D9488"/><text x="300" y="55" text-anchor="middle" font-family="Arial" font-size="13" fill="white">0</text>
+  <circle cx="410" cy="50" r="18" fill="#0D9488"/><text x="410" y="55" text-anchor="middle" font-family="Arial" font-size="13" fill="white">+1</text>
+  <circle cx="470" cy="50" r="18" fill="#0D9488"/><text x="470" y="55" text-anchor="middle" font-family="Arial" font-size="13" fill="white">+2</text>
+  <text x="275" y="100" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">S1 &nbsp;&nbsp;&nbsp; S2 &nbsp;&nbsp;&nbsp; S3 (centre) &nbsp;&nbsp;&nbsp; S4 &nbsp;&nbsp;&nbsp; S5</text>
+</svg>
+<p class="caption">Figure 1: Position weights — negative for left sensors, positive for right, zero at centre.</p>
+
+<h2>3. Calculating the Error</h2>
+<pre>const int weights[5] = {-2, -1, 0, 1, 2};
+
+int calculateError() {
+    int error = 0;
+    for (int i = 0; i &lt; 5; i++) {
+        if (isOnLine[i]) {
+            error += weights[i];
+        }
+    }
+    return error;
+}</pre>
+<p>If only the centre sensor (S3, weight 0) sees the line, error is 0 — perfectly centred. If S4 (weight +1) also sees it, error becomes +1 — a small rightward drift. If the line has moved further, so that only S5 (weight +2) sees it, error becomes +2 — a larger rightward drift. Negative error values mean the line has drifted left.</p>
+
+<h2>4. Turning Error Into Motor Speeds</h2>
+<pre>const int baseSpeed = 180;
+const int turnStrength = 40;  <span class="comment">// how strongly to react per unit of error — tune this</span>
+
+void loop() {
+    for (int i = 0; i &lt; 5; i++) {
+        sensorReadings[i] = analogRead(sensorPins[i]);
+        isOnLine[i] = sensorReadings[i] &gt; thresholds[i];
+    }
+
+    int error = calculateError();
+
+    int leftSpeed  = baseSpeed + (error * turnStrength);
+    int rightSpeed = baseSpeed - (error * turnStrength);
+
+    leftSpeed  = constrain(leftSpeed, 0, 255);
+    rightSpeed = constrain(rightSpeed, 0, 255);
+
+    driveMotors(leftSpeed, rightSpeed);  <span class="comment">// a new function — see below</span>
+}</pre>
+<p>A positive error (line drifted right) increases the left wheel's speed and decreases the right wheel's — exactly the correction needed to steer back right. <code class="inline">constrain()</code> is a built-in Arduino function that clamps a value between a minimum and maximum, preventing speeds from going negative or above 255.</p>
+
+<div class="note">
+  <strong>A new movement function is needed:</strong> Lesson 4.2.2's <code class="inline">forward()</code> assumed both wheels move at the same speed, which no longer fits. Add a more general function:
+  <pre>void driveMotors(int leftSpeed, int rightSpeed) {
+    digitalWrite(leftIN1, HIGH);
+    digitalWrite(leftIN2, LOW);
+    analogWrite(leftENA, leftSpeed);
+
+    digitalWrite(rightIN3, HIGH);
+    digitalWrite(rightIN4, LOW);
+    analogWrite(rightENB, rightSpeed);
+}</pre>
+</div>
+
+<h2>5. Tuning <code class="inline">turnStrength</code></h2>
+<table>
+  <tr><th>Symptom</th><th>Likely cause</th><th>Try</th></tr>
+  <tr><td>Vehicle barely reacts to drift, drives off the tape on curves</td><td><code class="inline">turnStrength</code> too low</td><td>Increase it</td></tr>
+  <tr><td>Vehicle overshoots and oscillates wildly, worse than bang-bang</td><td><code class="inline">turnStrength</code> too high</td><td>Decrease it</td></tr>
+  <tr><td>Vehicle handles gentle curves well, still loses sharp ones</td><td>Not necessarily a tuning issue — very sharp corners may need a different strategy entirely (e.g. temporarily reverting to bang-bang when error is at its maximum)</td><td>Note this as a known limitation for now</td></tr>
+</table>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Get the proportional steering code running and compare its behaviour directly against Lesson 4.3.1's bang-bang version on the same piece of tape.</li>
+    <li>Systematically try three different <code class="inline">turnStrength</code> values and record which gives the smoothest run.</li>
+    <li>Test on a curve sharper than your bang-bang version could handle — does proportional control cope better?</li>
+    <li>Challenge: integrate the RGB status indicator from Lesson 4.3.2 into this version, using error magnitude to control how far toward red the colour shifts, rather than a fixed three-colour system.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ I can explain what proportional control means and why it reduces zig-zagging</label>
+  <label>☐ My error calculation correctly reflects direction and severity of line drift</label>
+  <label>☐ I tuned <code class="inline">turnStrength</code> and found a value that runs smoothly on my test track</label>
+  <label>☐ I compared this directly against bang-bang control and can describe the difference</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Robotic Vehicle &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

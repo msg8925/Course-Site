@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Site Admin</title>
+<script src="courses-config.js"></script>
+<style>
+  :root { --navy: #1B2B5E; --teal: #0D9488; --teal-light: #e6f7f5; --navy-light: #eef0f8; --danger: #c0392b; }
+  * { box-sizing: border-box; }
+  body { font-family: Calibri, Arial, sans-serif; color: #1a1a1a; margin: 0; background: #fbfbfa; }
+  header { background: var(--navy); color: white; padding: 26px 24px; border-bottom: 6px solid var(--teal); }
+  header h1 { font-family: 'Bookman Old Style', Cambria, Georgia, serif; margin: 0 0 6px; font-size: 24px; }
+  header p { margin: 0; color: #cfd7ee; font-size: 14px; max-width: 780px; }
+  main { max-width: 980px; margin: 0 auto; padding: 30px 24px 140px; }
+
+  .instructions {
+    background: #fff8e6; border-left: 5px solid #d9a300; border-radius: 8px;
+    padding: 16px 22px; margin-bottom: 30px; font-size: 14px; line-height: 1.6;
+  }
+  .instructions ol { margin: 8px 0 0; padding-left: 20px; }
+  .instructions code { background: #fff; padding: 1px 5px; border-radius: 4px; }
+
+  h2.panel-title {
+    font-family: 'Bookman Old Style', Cambria, Georgia, serif;
+    color: var(--navy);
+    font-size: 22px;
+    border-left: 6px solid var(--teal);
+    padding-left: 14px;
+    margin: 44px 0 16px;
+  }
+  h2.panel-title:first-of-type { margin-top: 0; }
+
+  .btn { border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-family: Calibri, Arial, sans-serif; }
+  .btn-primary { background: var(--navy); color: white; padding: 10px 18px; font-size: 14px; }
+  .btn-primary:hover { background: #24316b; }
+  .btn-teal { background: var(--teal); color: white; padding: 8px 14px; font-size: 13px; }
+  .btn-teal:hover { background: #0b7b71; }
+  .btn-ghost { background: white; border: 1px solid #ccc; color: #444; padding: 6px 12px; font-size: 12.5px; }
+  .btn-ghost:hover { background: #f2f2f2; }
+  .btn-danger { background: #fdeaea; border: 1px solid var(--danger); color: var(--danger); padding: 6px 12px; font-size: 12.5px; }
+  .btn-danger:hover { background: #fbd5d5; }
+  .btn-small { padding: 3px 8px; font-size: 11.5px; border-radius: 6px; }
+
+  .top-actions { display: flex; justify-content: flex-end; margin-bottom: 14px; gap: 8px; }
+
+  /* ---- Course cards (Manage Courses panel) ---- */
+  .course-card {
+    background: white; border: 1px solid #e2e2e2; border-radius: 10px;
+    padding: 16px 20px; margin-bottom: 14px;
+  }
+  .course-card-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start; }
+  .field-group { display: flex; flex-direction: column; gap: 3px; }
+  .field-group label { font-size: 11px; color: #888; font-weight: bold; text-transform: uppercase; letter-spacing: 0.3px; }
+  input[type=text], textarea, select {
+    font-family: Calibri, Arial, sans-serif; font-size: 14px; padding: 7px 10px;
+    border: 1px solid #ccc; border-radius: 6px; width: 100%;
+  }
+  textarea { resize: vertical; min-height: 38px; }
+  .course-title-input { flex: 2; min-width: 220px; font-weight: bold; color: var(--navy); }
+  .course-path-input { flex: 1; min-width: 140px; font-family: Consolas, monospace; font-size: 12.5px; }
+  .course-status-input { max-width: 140px; }
+  .course-desc-input { width: 100%; margin-top: 8px; }
+  .course-btn-row { display: flex; gap: 6px; margin-left: auto; }
+
+  /* ---- Course content editor (reused section/lesson CRUD) ---- */
+  .course-picker-row { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+  .course-picker-row select { max-width: 380px; }
+  .load-status { font-size: 13px; color: #666; }
+
+  .section-card { background: white; border: 1px solid #e2e2e2; border-radius: 10px; padding: 20px; margin-bottom: 26px; }
+  .section-card-head { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; flex-wrap: wrap; }
+  .section-title-input { font-size: 17px; font-weight: bold; color: var(--navy); min-width: 260px; flex: 2; }
+  .section-id-input { max-width: 140px; flex: 0.5; }
+  .section-desc-input { width: 100%; margin-top: 8px; }
+  .section-btn-row { display: flex; gap: 6px; margin-left: auto; }
+
+  .subsection-block { border-top: 1px dashed #ddd; margin-top: 16px; padding-top: 14px; }
+  .subsection-head { display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; }
+  .subsection-title-input { flex: 2; min-width: 200px; font-weight: bold; }
+  .subsection-desc-input { flex: 3; min-width: 220px; }
+  .subsection-btn-row { display: flex; gap: 6px; margin-left: auto; }
+
+  ul.lesson-edit-list { list-style: none; margin: 12px 0 8px; padding: 0; }
+  ul.lesson-edit-list li { display: flex; align-items: flex-start; gap: 8px; padding: 8px 0; border-bottom: 1px solid #f0f0f0; flex-wrap: wrap; }
+  ul.lesson-edit-list li:last-child { border-bottom: none; }
+  .lesson-label-input { max-width: 70px; }
+  .lesson-title-input { flex: 2; min-width: 200px; }
+  .lesson-key-input { flex: 1.5; min-width: 200px; font-family: Consolas, monospace; font-size: 12.5px; }
+  .lesson-btn-row { display: flex; gap: 4px; align-items: center; }
+
+  .switch { position: relative; display: inline-block; width: 38px; height: 20px; flex-shrink: 0; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider { position: absolute; cursor: pointer; inset: 0; background-color: #ccc; transition: .2s; border-radius: 20px; }
+  .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .2s; border-radius: 50%; }
+  input:checked + .slider { background-color: var(--teal); }
+  input:checked + .slider:before { transform: translateX(18px); }
+
+  .add-lesson-row { margin-top: 8px; }
+
+  .generate-bar {
+    position: sticky; bottom: 0; background: white; border-top: 2px solid var(--teal);
+    padding: 14px 24px; display: flex; align-items: center; justify-content: center;
+    gap: 12px; box-shadow: 0 -4px 14px rgba(0,0,0,0.06); flex-wrap: wrap;
+  }
+  .generate-bar .status-msg { font-size: 13px; color: #666; width: 100%; text-align: center; }
+  .generate-bar.courses-bar { position: static; box-shadow: none; border-top: none; padding: 6px 0 0; justify-content: flex-start; }
+
+  details.preview { margin-top: 16px; }
+  details.preview summary { cursor: pointer; font-size: 13px; color: var(--teal); font-weight: bold; }
+  textarea.output-box { width: 100%; height: 200px; font-family: Consolas, monospace; font-size: 12px; margin-top: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; }
+
+  .empty-course-msg { color: #888; font-size: 14px; padding: 20px; background: white; border: 1px dashed #ccc; border-radius: 10px; text-align: center; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Site Admin</h1>
+  <p>One admin page for every course site. Manage the top-level course directory, or pick a course below to edit its sections, lessons, and lock states.</p>
+</header>
+
+<main>
+  <div class="instructions">
+    <strong>How this works — read before your first use:</strong> this site has no backend yet, so everything below only changes what <em>you</em> see in this browser tab.
+    <ol>
+      <li>Make your edits (course list, or a specific course's lessons).</li>
+      <li>Click the relevant <strong>"Generate updated file(s)"</strong> button.</li>
+      <li>Download the file(s) it produces.</li>
+      <li>Upload each one to your web host, replacing the existing copy in the matching location — <code>courses-config.js</code> goes at the site root; a course's <code>site-structure.js</code>/<code>lessons-config.js</code> go inside that course's own folder (e.g. <code>y9-computing/lessons-config.js</code>).</li>
+    </ol>
+    <strong>Important:</strong> adding a course or a lesson here only adds it to a listing — it does <strong>not</strong> create the actual folder/files. A brand-new course needs its skeleton built (same as robotics-club/y7-computing/etc.) and a brand-new lesson's <strong>resources</strong> (the files/links listed when a lesson is expanded) need their actual HTML pages written before their file paths will work. Leave a lesson locked until every resource inside it actually exists, or students will hit a broken link when they expand and click it.
+  </div>
+
+  <!-- ================= MANAGE COURSES ================= -->
+  <h2 class="panel-title">Manage Courses</h2>
+
+  <div class="top-actions">
+    <button class="btn btn-primary" onclick="addCourse()">+ Add Course</button>
+  </div>
+
+  <div id="coursesContainer"></div>
+
+  <div class="generate-bar courses-bar">
+    <button class="btn btn-primary" onclick="generateCoursesFile()">Generate updated courses-config.js</button>
+    <button class="btn btn-teal" onclick="downloadCoursesFile()">Download courses-config.js</button>
+    <span class="status-msg" id="coursesStatusMsg" style="width:auto;"></span>
+  </div>
+  <details class="preview">
+    <summary>Preview courses-config.js</summary>
+    <textarea class="output-box" id="coursesOutput" readonly></textarea>
+  </details>
+
+  <!-- ================= EDIT COURSE CONTENT ================= -->
+  <h2 class="panel-title">Edit a Course's Sections &amp; Lessons</h2>
+
+  <div class="course-picker-row">
+    <div class="field-group" style="flex:1;">
+      <label>Select a course to edit</label>
+      <select id="coursePicker" onchange="onCourseSelected(this.value)">
+        <option value="">— choose a course —</option>
+      </select>
+    </div>
+    <span class="load-status" id="loadStatus"></span>
+  </div>
+
+  <div id="courseEditorContainer"></div>
+
+  <div class="generate-bar" id="contentGenerateBar" style="display:none;">
+    <button class="btn btn-primary" onclick="generateContentFiles()">Generate updated files</button>
+    <button class="btn btn-teal" onclick="downloadContentFile('structure')">Download site-structure.js</button>
+    <button class="btn btn-teal" onclick="downloadContentFile('config')">Download lessons-config.js</button>
+    <span class="status-msg" id="contentStatusMsg"></span>
+  </div>
+  <details class="preview" id="contentPreview" style="display:none;">
+    <summary>Preview generated file contents</summary>
+    <div>site-structure.js</div>
+    <textarea class="output-box" id="structureOutput" readonly></textarea>
+    <div>lessons-config.js</div>
+    <textarea class="output-box" id="configOutput" readonly></textarea>
+  </details>
+</main>
+
+<script>
+/* =========================================================
+   PART 1 — MANAGE COURSES (courses-config.js)
+   ========================================================= */
+var courses = JSON.parse(JSON.stringify(window.COURSES_CONFIG || []));
+
+function slugify(text) {
+  return (text || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'untitled';
+}
+function ensureUniquePath(path, existing) {
+  var base = path, n = 2;
+  while (existing.indexOf(path) !== -1) { path = base + '-' + n; n++; }
+  return path;
+}
+
+function addCourse() {
+  var title = "New Course";
+  var existingPaths = courses.map(function(c){ return c.path; });
+  var slug = ensureUniquePath(slugify(title), existingPaths.map(function(p){ return p.replace(/\/$/, ''); }));
+  courses.push({ id: slug, title: title, description: "", path: slug + '/', status: "active" });
+  renderCourses();
+}
+function deleteCourse(i) {
+  if (!confirm('Remove "' + courses[i].title + '" from the course directory? (Its folder and files are not deleted.)')) return;
+  courses.splice(i, 1);
+  renderCourses();
+  refreshCoursePickerOptions();
+}
+function moveCourse(i, dir) {
+  var target = i + dir;
+  if (target < 0 || target >= courses.length) return;
+  var tmp = courses[i]; courses[i] = courses[target]; courses[target] = tmp;
+  renderCourses();
+}
+function updateCourseField(i, field, value) {
+  if (field === 'path') {
+    value = slugify(value) + '/';
+  }
+  courses[i][field] = value;
+  if (field === 'path' || field === 'title') refreshCoursePickerOptions();
+}
+
+function renderCourses() {
+  var container = document.getElementById('coursesContainer');
+  container.innerHTML = '';
+  courses.forEach(function(course, i) {
+    var card = document.createElement('div');
+    card.className = 'course-card';
+
+    var row = document.createElement('div');
+    row.className = 'course-card-row';
+    row.appendChild(labeledInput('Course Title', course.title, function(v){ updateCourseField(i, 'title', v); }, 'course-title-input'));
+    row.appendChild(labeledInput('Folder Path', course.path, function(v){ updateCourseField(i, 'path', v); }, 'course-path-input'));
+
+    var statusWrap = document.createElement('div');
+    statusWrap.className = 'field-group course-status-input';
+    var statusLabel = document.createElement('label');
+    statusLabel.textContent = 'Status';
+    var statusSelect = document.createElement('select');
+    ['active', 'coming-soon'].forEach(function(val) {
+      var opt = document.createElement('option');
+      opt.value = val;
+      opt.textContent = val === 'active' ? 'Active' : 'Coming Soon';
+      if (course.status === val) opt.selected = true;
+      statusSelect.appendChild(opt);
+    });
+    statusSelect.onchange = function(){ updateCourseField(i, 'status', this.value); };
+    statusWrap.appendChild(statusLabel);
+    statusWrap.appendChild(statusSelect);
+    row.appendChild(statusWrap);
+
+    var btnRow = document.createElement('div');
+    btnRow.className = 'course-btn-row';
+    btnRow.appendChild(smallBtn('↑', 'btn-ghost', function(){ moveCourse(i, -1); }));
+    btnRow.appendChild(smallBtn('↓', 'btn-ghost', function(){ moveCourse(i, 1); }));
+    btnRow.appendChild(smallBtn('Delete Course', 'btn-danger', function(){ deleteCourse(i); }));
+    row.appendChild(btnRow);
+    card.appendChild(row);
+
+    var descWrap = document.createElement('div');
+    descWrap.className = 'field-group course-desc-input';
+    var descLabel = document.createElement('label');
+    descLabel.textContent = 'Description (shown on the course directory homepage)';
+    var descArea = document.createElement('textarea');
+    descArea.value = course.description || '';
+    descArea.oninput = function(){ updateCourseField(i, 'description', this.value); };
+    descWrap.appendChild(descLabel);
+    descWrap.appendChild(descArea);
+    card.appendChild(descWrap);
+
+    container.appendChild(card);
+  });
+}
+
+function buildCoursesText() {
+  var lines = [
+    "// Meritton British International School — Course Site Directory",
+    "//",
+    "// This file lists every course \"branch\" shown on the top-level homepage.",
+    "// Edit it via admin-7f3q2k9x.html, or by hand.",
+    "",
+    "window.COURSES_CONFIG = " + JSON.stringify(courses, null, 2) + ";",
+    ""
+  ];
+  return lines.join("\n");
+}
+
+var generatedCourses = '';
+function generateCoursesFile() {
+  generatedCourses = buildCoursesText();
+  document.getElementById('coursesOutput').value = generatedCourses;
+  document.getElementById('coursesStatusMsg').textContent = 'Generated — review below, then download.';
+}
+function downloadCoursesFile() {
+  if (!generatedCourses) generateCoursesFile();
+  triggerDownload(generatedCourses, 'courses-config.js');
+  document.getElementById('coursesStatusMsg').textContent = 'Downloaded courses-config.js — upload it to your site root.';
+}
+
+function labeledInput(labelText, value, onChange, extraClass) {
+  var wrap = document.createElement('div');
+  wrap.className = 'field-group' + (extraClass ? ' ' + extraClass : '');
+  var label = document.createElement('label');
+  label.textContent = labelText;
+  var input = document.createElement('input');
+  input.type = 'text';
+  input.value = value;
+  input.oninput = function(){ onChange(this.value); };
+  wrap.appendChild(label);
+  wrap.appendChild(input);
+  return wrap;
+}
+function smallBtn(text, cls, onClick) {
+  var btn = document.createElement('button');
+  btn.className = 'btn btn-small ' + cls;
+  btn.textContent = text;
+  btn.onclick = onClick;
+  return btn;
+}
+function triggerDownload(content, filename) {
+  var blob = new Blob([content], { type: 'text/javascript' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* =========================================================
+   PART 2 — EDIT A COURSE'S CONTENT (site-structure.js + lessons-config.js)
+   ========================================================= */
+var currentCoursePath = null;
+var structure = [];
+var statusMap = {};
+
+function refreshCoursePickerOptions() {
+  var picker = document.getElementById('coursePicker');
+  var currentVal = picker.value;
+  picker.innerHTML = '<option value="">— choose a course —</option>';
+  courses.forEach(function(c) {
+    var opt = document.createElement('option');
+    opt.value = c.path;
+    opt.textContent = c.title;
+    picker.appendChild(opt);
+  });
+  if (courses.some(function(c){ return c.path === currentVal; })) {
+    picker.value = currentVal;
+  }
+}
+
+function loadScript(src, onSuccess, onFail) {
+  var s = document.createElement('script');
+  s.src = src + '?_=' + Date.now();
+  s.onload = onSuccess;
+  s.onerror = onFail;
+  document.body.appendChild(s);
+}
+
+function onCourseSelected(path) {
+  document.getElementById('courseEditorContainer').innerHTML = '';
+  document.getElementById('contentGenerateBar').style.display = 'none';
+  document.getElementById('contentPreview').style.display = 'none';
+  if (!path) { document.getElementById('loadStatus').textContent = ''; return; }
+
+  currentCoursePath = path;
+  document.getElementById('loadStatus').textContent = 'Loading ' + path + ' …';
+
+  window.SITE_STRUCTURE = undefined;
+  window.LESSON_STATUS = undefined;
+
+  loadScript(path + 'site-structure.js', function() {
+    loadScript(path + 'lessons-config.js', function() {
+      structure = JSON.parse(JSON.stringify((window.SITE_STRUCTURE && window.SITE_STRUCTURE.sections) || []));
+      statusMap = Object.assign({}, window.LESSON_STATUS || {});
+      document.getElementById('loadStatus').textContent = 'Loaded ' + path + ' — ' + structure.length + ' section(s).';
+      document.getElementById('contentGenerateBar').style.display = 'flex';
+      document.getElementById('contentPreview').style.display = 'block';
+      renderCourseEditor();
+    }, function() {
+      document.getElementById('loadStatus').textContent = 'Could not load lessons-config.js for ' + path + ' — does the folder exist yet?';
+    });
+  }, function() {
+    document.getElementById('loadStatus').textContent = 'Could not load site-structure.js for ' + path + ' — does the folder exist yet?';
+  });
+}
+
+function addSection() {
+  var title = "New Section";
+  var existingIds = structure.map(function(s){ return s.id; });
+  var id = ensureUniquePath(slugify(title), existingIds);
+  structure.push({ id: id, number: String(structure.length + 1), title: title, description: "", subsections: [ { title: null, description: null, lessons: [] } ] });
+  renderCourseEditor();
+}
+function deleteSection(si) {
+  if (!confirm('Remove this whole section, including all its lessons from this course\'s homepage listing?')) return;
+  structure.splice(si, 1);
+  renderCourseEditor();
+}
+function moveSection(si, dir) {
+  var target = si + dir;
+  if (target < 0 || target >= structure.length) return;
+  var tmp = structure[si]; structure[si] = structure[target]; structure[target] = tmp;
+  renderCourseEditor();
+}
+function addSubsection(si) {
+  structure[si].subsections.push({ title: "New Subsection", description: null, lessons: [] });
+  renderCourseEditor();
+}
+function deleteSubsection(si, subi) {
+  if (!confirm('Remove this subsection and all lessons inside it?')) return;
+  structure[si].subsections.splice(subi, 1);
+  renderCourseEditor();
+}
+function moveSubsection(si, subi, dir) {
+  var subs = structure[si].subsections;
+  var target = subi + dir;
+  if (target < 0 || target >= subs.length) return;
+  var tmp = subs[subi]; subs[subi] = subs[target]; subs[target] = tmp;
+  renderCourseEditor();
+}
+function addLesson(si, subi) {
+  var section = structure[si];
+  var title = "New Lesson";
+  var allKeys = [];
+  structure.forEach(function(s){ s.subsections.forEach(function(sub){ sub.lessons.forEach(function(l){ allKeys.push(l.key); }); }); });
+  var key = ensureUniquePath(section.id + '/' + slugify(title), allKeys);
+  section.subsections[subi].lessons.push({ key: key, label: "", title: title, resources: [] });
+  statusMap[key] = 'locked';
+  renderCourseEditor();
+}
+function deleteLesson(si, subi, li) {
+  var lesson = structure[si].subsections[subi].lessons[li];
+  if (!confirm('Remove "' + lesson.title + '" from this course\'s homepage listing?')) return;
+  structure[si].subsections[subi].lessons.splice(li, 1);
+  delete statusMap[lesson.key];
+  renderCourseEditor();
+}
+function moveLesson(si, subi, li, dir) {
+  var lessons = structure[si].subsections[subi].lessons;
+  var target = li + dir;
+  if (target < 0 || target >= lessons.length) return;
+  var tmp = lessons[li]; lessons[li] = lessons[target]; lessons[target] = tmp;
+  renderCourseEditor();
+}
+
+// ---- Resources (files/links inside a lesson) ----
+function addResource(si, subi, li) {
+  var lesson = structure[si].subsections[subi].lessons[li];
+  if (!lesson.resources) lesson.resources = [];
+  lesson.resources.push({ title: "New Resource", href: "" });
+  renderCourseEditor();
+}
+function deleteResource(si, subi, li, ri) {
+  var lesson = structure[si].subsections[subi].lessons[li];
+  if (!confirm('Remove "' + lesson.resources[ri].title + '" from this lesson? (The file itself, if any, is not deleted.)')) return;
+  lesson.resources.splice(ri, 1);
+  renderCourseEditor();
+}
+function moveResource(si, subi, li, ri, dir) {
+  var resources = structure[si].subsections[subi].lessons[li].resources;
+  var target = ri + dir;
+  if (target < 0 || target >= resources.length) return;
+  var tmp = resources[ri]; resources[ri] = resources[target]; resources[target] = tmp;
+  renderCourseEditor();
+}
+function updateResourceField(si, subi, li, ri, field, value) {
+  structure[si].subsections[subi].lessons[li].resources[ri][field] = value;
+}
+function renderResourcesBlock(si, subi, li, lesson) {
+  var wrap = document.createElement('div');
+  wrap.style.width = '100%';
+  wrap.style.marginTop = '8px';
+  wrap.style.paddingLeft = '18px';
+  wrap.style.borderLeft = '3px solid #eee';
+
+  var label = document.createElement('div');
+  label.style.fontSize = '11px';
+  label.style.color = '#888';
+  label.style.fontWeight = 'bold';
+  label.style.textTransform = 'uppercase';
+  label.style.letterSpacing = '0.3px';
+  label.style.marginBottom = '4px';
+  label.textContent = 'Resources (files/links shown when this lesson is expanded)';
+  wrap.appendChild(label);
+
+  var resources = lesson.resources || [];
+  if (resources.length === 0) {
+    var emptyMsg = document.createElement('div');
+    emptyMsg.style.fontSize = '13px';
+    emptyMsg.style.color = '#999';
+    emptyMsg.style.fontStyle = 'italic';
+    emptyMsg.style.margin = '4px 0 8px';
+    emptyMsg.textContent = 'No resources yet — students will see "No content added yet." when they expand this lesson.';
+    wrap.appendChild(emptyMsg);
+  }
+
+  resources.forEach(function(res, ri) {
+    var row = document.createElement('div');
+    row.style.display = 'flex';
+    row.style.gap = '8px';
+    row.style.alignItems = 'flex-end';
+    row.style.flexWrap = 'wrap';
+    row.style.marginBottom = '6px';
+
+    var titleField = labeledInput('Resource Title', res.title, function(v){ updateResourceField(si, subi, li, ri, 'title', v); });
+    titleField.style.flex = '1.5';
+    titleField.style.minWidth = '180px';
+    row.appendChild(titleField);
+
+    var hrefField = labeledInput('File Path (relative to course root, e.g. lessons/topic/file.html)', res.href, function(v){ updateResourceField(si, subi, li, ri, 'href', v); });
+    hrefField.style.flex = '2';
+    hrefField.style.minWidth = '260px';
+    hrefField.querySelector('input').style.fontFamily = 'Consolas, monospace';
+    hrefField.querySelector('input').style.fontSize = '12.5px';
+    row.appendChild(hrefField);
+
+    var btnRow = document.createElement('div');
+    btnRow.style.display = 'flex';
+    btnRow.style.gap = '4px';
+    btnRow.appendChild(smallBtn('↑', 'btn-ghost', function(){ moveResource(si, subi, li, ri, -1); }));
+    btnRow.appendChild(smallBtn('↓', 'btn-ghost', function(){ moveResource(si, subi, li, ri, 1); }));
+    btnRow.appendChild(smallBtn('Remove', 'btn-danger', function(){ deleteResource(si, subi, li, ri); }));
+    row.appendChild(btnRow);
+
+    wrap.appendChild(row);
+  });
+
+  var addBtn = smallBtn('+ Add Resource', 'btn-teal', function(){ addResource(si, subi, li); });
+  addBtn.style.marginTop = '4px';
+  wrap.appendChild(addBtn);
+
+  return wrap;
+}
+
+function updateSectionField(si, field, value) { structure[si][field] = value; }
+function updateSubsectionField(si, subi, field, value) { structure[si].subsections[subi][field] = value || null; }
+function updateLessonField(si, subi, li, field, value) {
+  var lesson = structure[si].subsections[subi].lessons[li];
+  if (field === 'key') {
+    var oldKey = lesson.key, newKey = value.trim();
+    if (newKey && newKey !== oldKey) {
+      var wasLocked = statusMap[oldKey];
+      delete statusMap[oldKey];
+      statusMap[newKey] = wasLocked || 'locked';
+      lesson.key = newKey;
+    }
+  } else {
+    lesson[field] = value;
+  }
+}
+function toggleLock(key, checked) { statusMap[key] = checked ? 'unlocked' : 'locked'; }
+
+function renderCourseEditor() {
+  var container = document.getElementById('courseEditorContainer');
+  container.innerHTML = '';
+
+  if (structure.length === 0) {
+    var empty = document.createElement('div');
+    empty.className = 'empty-course-msg';
+    empty.textContent = 'This course has no sections yet.';
+    container.appendChild(empty);
+  }
+
+  structure.forEach(function(section, si) {
+    var card = document.createElement('div');
+    card.className = 'section-card';
+
+    var head = document.createElement('div');
+    head.className = 'section-card-head';
+    head.appendChild(labeledInput('Section Title', section.title, function(v){ updateSectionField(si, 'title', v); }, 'section-title-input'));
+    head.appendChild(labeledInput('Section ID (slug)', section.id, function(v){ updateSectionField(si, 'id', slugify(v)); }, 'section-id-input'));
+    head.appendChild(labeledInput('Number', section.number, function(v){ updateSectionField(si, 'number', v); }, 'section-id-input'));
+
+    var btnRow = document.createElement('div');
+    btnRow.className = 'section-btn-row';
+    btnRow.appendChild(smallBtn('↑', 'btn-ghost', function(){ moveSection(si, -1); }));
+    btnRow.appendChild(smallBtn('↓', 'btn-ghost', function(){ moveSection(si, 1); }));
+    btnRow.appendChild(smallBtn('Delete Section', 'btn-danger', function(){ deleteSection(si); }));
+    head.appendChild(btnRow);
+    card.appendChild(head);
+
+    var descField = document.createElement('div');
+    descField.className = 'field-group section-desc-input';
+    var descLabel = document.createElement('label');
+    descLabel.textContent = 'Section Description';
+    var descArea = document.createElement('textarea');
+    descArea.value = section.description || '';
+    descArea.oninput = function(){ updateSectionField(si, 'description', this.value); };
+    descField.appendChild(descLabel);
+    descField.appendChild(descArea);
+    card.appendChild(descField);
+
+    section.subsections.forEach(function(sub, subi) {
+      var subBlock = document.createElement('div');
+      subBlock.className = 'subsection-block';
+
+      var subHead = document.createElement('div');
+      subHead.className = 'subsection-head';
+      subHead.appendChild(labeledInput('Subsection Title (blank = no heading)', sub.title || '', function(v){ updateSubsectionField(si, subi, 'title', v); }, 'subsection-title-input'));
+      subHead.appendChild(labeledInput('Subsection Description (optional)', sub.description || '', function(v){ updateSubsectionField(si, subi, 'description', v); }, 'subsection-desc-input'));
+
+      var subBtnRow = document.createElement('div');
+      subBtnRow.className = 'subsection-btn-row';
+      subBtnRow.appendChild(smallBtn('↑', 'btn-ghost', function(){ moveSubsection(si, subi, -1); }));
+      subBtnRow.appendChild(smallBtn('↓', 'btn-ghost', function(){ moveSubsection(si, subi, 1); }));
+      subBtnRow.appendChild(smallBtn('Delete Subsection', 'btn-danger', function(){ deleteSubsection(si, subi); }));
+      subHead.appendChild(subBtnRow);
+      subBlock.appendChild(subHead);
+
+      var ul = document.createElement('ul');
+      ul.className = 'lesson-edit-list';
+
+      sub.lessons.forEach(function(lesson, li) {
+        var item = document.createElement('li');
+        item.style.flexDirection = 'column';
+        item.style.alignItems = 'stretch';
+
+        var topRow = document.createElement('div');
+        topRow.style.display = 'flex';
+        topRow.style.flexWrap = 'wrap';
+        topRow.style.gap = '8px';
+        topRow.style.width = '100%';
+
+        topRow.appendChild(labeledInput('Label', lesson.label, function(v){ updateLessonField(si, subi, li, 'label', v); }, 'lesson-label-input'));
+        topRow.appendChild(labeledInput('Lesson Title', lesson.title, function(v){ updateLessonField(si, subi, li, 'title', v); }, 'lesson-title-input'));
+        topRow.appendChild(labeledInput('Key (controls lock status)', lesson.key, function(v){ updateLessonField(si, subi, li, 'key', v); }, 'lesson-key-input'));
+
+        var lockWrap = document.createElement('div');
+        lockWrap.className = 'field-group';
+        var lockLabel = document.createElement('label');
+        lockLabel.textContent = 'Unlocked?';
+        var switchLabel = document.createElement('label');
+        switchLabel.className = 'switch';
+        var input = document.createElement('input');
+        input.type = 'checkbox';
+        input.checked = statusMap[lesson.key] === 'unlocked';
+        input.onchange = function(){ toggleLock(lesson.key, this.checked); };
+        var slider = document.createElement('span');
+        slider.className = 'slider';
+        switchLabel.appendChild(input);
+        switchLabel.appendChild(slider);
+        lockWrap.appendChild(lockLabel);
+        lockWrap.appendChild(switchLabel);
+        topRow.appendChild(lockWrap);
+
+        var lessonBtnRow = document.createElement('div');
+        lessonBtnRow.className = 'lesson-btn-row';
+        lessonBtnRow.appendChild(smallBtn('↑', 'btn-ghost', function(){ moveLesson(si, subi, li, -1); }));
+        lessonBtnRow.appendChild(smallBtn('↓', 'btn-ghost', function(){ moveLesson(si, subi, li, 1); }));
+        lessonBtnRow.appendChild(smallBtn('Delete Lesson', 'btn-danger', function(){ deleteLesson(si, subi, li); }));
+        topRow.appendChild(lessonBtnRow);
+
+        item.appendChild(topRow);
+        item.appendChild(renderResourcesBlock(si, subi, li, lesson));
+
+        ul.appendChild(item);
+      });
+
+      subBlock.appendChild(ul);
+      var addLessonRow = document.createElement('div');
+      addLessonRow.className = 'add-lesson-row';
+      addLessonRow.appendChild(smallBtn('+ Add Lesson', 'btn-teal', function(){ addLesson(si, subi); }));
+      subBlock.appendChild(addLessonRow);
+
+      card.appendChild(subBlock);
+    });
+
+    var addSubRow = document.createElement('div');
+    addSubRow.style.marginTop = '14px';
+    addSubRow.appendChild(smallBtn('+ Add Subsection', 'btn-ghost', function(){ addSubsection(si); }));
+    card.appendChild(addSubRow);
+
+    container.appendChild(card);
+  });
+
+  var addSectionRow = document.createElement('div');
+  addSectionRow.style.marginBottom = '20px';
+  addSectionRow.appendChild(smallBtn('+ Add Section', 'btn-primary btn', function(){ addSection(); }));
+  container.insertBefore(addSectionRow, container.firstChild);
+}
+
+var generatedStructure = '', generatedConfig = '';
+
+function buildStructureText() {
+  var courseTitle = (courses.find(function(c){ return c.path === currentCoursePath; }) || {}).title || currentCoursePath;
+  var lines = [
+    "// " + courseTitle + " — Site Structure",
+    "//",
+    "// This file defines every section, subsection, and lesson shown on this",
+    "// course's homepage. Edit it via the central admin page.",
+    "",
+    "window.SITE_STRUCTURE = " + JSON.stringify({ sections: structure }, null, 2) + ";",
+    ""
+  ];
+  return lines.join("\n");
+}
+function buildConfigText() {
+  var courseTitle = (courses.find(function(c){ return c.path === currentCoursePath; }) || {}).title || currentCoursePath;
+  var allKeys = [];
+  structure.forEach(function(s){ s.subsections.forEach(function(sub){ sub.lessons.forEach(function(l){ allKeys.push(l.key); }); }); });
+  var lines = [
+    "// " + courseTitle + " — Lesson Lock Configuration",
+    "//",
+    "// This file controls which lessons students can access. Edit it via the",
+    "// central admin page.",
+    "//",
+    "// Valid values: \"unlocked\" or \"locked\"",
+    "",
+    "window.LESSON_STATUS = {"
+  ];
+  allKeys.forEach(function(key, i) {
+    var val = statusMap[key] === 'unlocked' ? 'unlocked' : 'locked';
+    lines.push('  "' + key + '": "' + val + '"' + (i < allKeys.length - 1 ? ',' : ''));
+  });
+  lines.push("};");
+  lines.push("");
+  return lines.join("\n");
+}
+function generateContentFiles() {
+  if (!currentCoursePath) { alert('Select a course first.'); return; }
+  generatedStructure = buildStructureText();
+  generatedConfig = buildConfigText();
+  document.getElementById('structureOutput').value = generatedStructure;
+  document.getElementById('configOutput').value = generatedConfig;
+  document.getElementById('contentStatusMsg').textContent = 'Generated — review below, then download both files.';
+}
+function downloadContentFile(which) {
+  if (!currentCoursePath) { alert('Select a course first.'); return; }
+  if (!generatedStructure || !generatedConfig) generateContentFiles();
+  var content = which === 'structure' ? generatedStructure : generatedConfig;
+  var filename = which === 'structure' ? 'site-structure.js' : 'lessons-config.js';
+  triggerDownload(content, filename);
+  document.getElementById('contentStatusMsg').textContent = 'Downloaded ' + filename + ' — upload it into ' + currentCoursePath + ', replacing the old copy.';
+}
+
+renderCourses();
+refreshCoursePickerOptions();
+</script>
+
+</body>
+</html>

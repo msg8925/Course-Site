@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "strand-a/t1-binary-arithmetic";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Binary Arithmetic: Practice Questions";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Binary Arithmetic: Practice Questions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E;
+    --navy-deep:#101a3a;
+    --teal:#0D9488;
+    --teal-light:#e6f5f3;
+    --amber:#a8560c;
+    --amber-light:#fbeee0;
+    --red:#a4342a;
+    --red-light:#fbeae8;
+    --bg:#f5f6fa;
+    --panel:#ffffff;
+    --panel-alt:#eef1f8;
+    --border:#dde1ee;
+    --text:#1c2340;
+    --muted:#5b6472;
+    --serif:'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --sans:'Source Sans 3','Segoe UI',Arial,sans-serif;
+    --mono:'JetBrains Mono','Fira Code',Consolas,monospace;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--teal);}
+  a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible{
+    outline:3px solid var(--teal);
+    outline-offset:2px;
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+
+  header.page-head{
+    background:var(--navy);
+    color:#fff;
+    padding:2.4rem 1.5rem 2.1rem;
+  }
+  .head-inner{max-width:920px; margin:0 auto;}
+  .head-inner p.eyebrow{margin:0 0 0.6rem; color:#9fb0e0; font-size:0.98rem;}
+  .head-inner h1{
+    font-family:var(--serif);
+    font-weight:700;
+    font-size:clamp(1.8rem, 4vw, 2.5rem);
+    margin:0 0 0.7rem;
+    line-height:1.15;
+  }
+  .head-inner p.lede{margin:0; max-width:65ch; color:#dbe2f5; font-size:1.08rem;}
+
+  .progress-bar-wrap{
+    max-width:920px;
+    margin:1.3rem auto 0;
+    background:#20295a;
+    border-radius:999px;
+    height:10px;
+    overflow:hidden;
+  }
+  .progress-bar-fill{
+    height:100%;
+    background:var(--teal);
+    width:0%;
+  }
+  .progress-caption{
+    max-width:920px;
+    margin:0.6rem auto 0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    color:#c3cdea;
+    font-size:0.88rem;
+  }
+  .progress-caption button{
+    background:none;
+    border:none;
+    color:#c3cdea;
+    text-decoration:underline;
+    cursor:pointer;
+    font-size:0.85rem;
+    padding:0;
+    font-family:var(--sans);
+  }
+
+  .layout{
+    max-width:1120px;
+    margin:0 auto;
+    padding:2.4rem 1.5rem 5rem;
+    display:flex;
+    gap:2.8rem;
+    align-items:flex-start;
+  }
+  nav.toc{flex:0 0 230px; position:sticky; top:1.5rem; font-size:0.95rem;}
+  nav.toc h2{font-family:var(--serif); font-size:1rem; font-weight:600; margin:0 0 0.8rem; color:var(--navy);}
+  nav.toc ol{list-style:none; margin:0; padding:0; border-left:2px solid var(--border);}
+  nav.toc a{
+    display:block;
+    padding:0.4rem 0 0.4rem 0.9rem;
+    margin-left:-2px;
+    border-left:2px solid transparent;
+    color:var(--muted);
+    text-decoration:none;
+  }
+  nav.toc a:hover{color:var(--navy);}
+  details.toc-mobile{display:none;}
+
+  main.article{flex:1 1 auto; min-width:0; max-width:760px;}
+  main.article section{margin-bottom:3rem; scroll-margin-top:1.4rem;}
+  .section-kicker{font-family:var(--mono); font-size:0.82rem; color:var(--teal); margin:0 0 0.35rem;}
+  main.article h2{
+    font-family:var(--serif);
+    font-weight:700;
+    font-size:1.5rem;
+    color:var(--navy);
+    margin:0 0 0.5rem;
+    line-height:1.25;
+  }
+  main.article > section > p.section-intro{
+    color:var(--muted);
+    margin:0 0 1.2rem;
+    max-width:65ch;
+  }
+
+  /* ---------- Question cards ---------- */
+  .qcard{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:1.3rem 1.4rem 1.4rem;
+    margin-bottom:1.1rem;
+  }
+  .qcard-head{
+    display:flex;
+    align-items:flex-start;
+    gap:0.7rem;
+    margin-bottom:0.7rem;
+  }
+  .qnum{
+    flex:0 0 auto;
+    width:2rem;
+    height:2rem;
+    border-radius:50%;
+    background:var(--panel-alt);
+    color:var(--navy);
+    font-weight:700;
+    font-family:var(--sans);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:0.92rem;
+    transition:background 0.15s, color 0.15s;
+  }
+  .qnum.done{background:var(--teal); color:#fff;}
+  .qprompt{flex:1; margin:0; padding-top:0.15rem;}
+  .qprompt .binline{
+    display:inline-block;
+    font-family:var(--mono);
+    background:var(--panel-alt);
+    padding:0.15rem 0.5rem;
+    border-radius:5px;
+    margin:0.15rem 0.15rem 0.15rem 0;
+  }
+  .check-row{
+    display:flex;
+    gap:0.6rem;
+    align-items:center;
+    margin:0.8rem 0 0.3rem;
+    flex-wrap:wrap;
+  }
+  .answer-input{
+    font-family:var(--mono);
+    font-size:0.98rem;
+    padding:0.55rem 0.75rem;
+    border-radius:7px;
+    border:1.5px solid var(--border);
+    min-width:200px;
+    flex:0 1 260px;
+  }
+  .check-btn{
+    font-family:var(--sans);
+    font-weight:600;
+    font-size:0.9rem;
+    padding:0.55rem 1.1rem;
+    border-radius:7px;
+    border:none;
+    background:var(--navy);
+    color:#fff;
+    cursor:pointer;
+  }
+  .check-btn:hover{background:var(--navy-deep);}
+  .feedback{
+    font-size:0.92rem;
+    font-weight:600;
+    padding:0.3rem 0;
+  }
+  .feedback.correct{color:var(--teal);}
+  .feedback.incorrect{color:var(--red);}
+
+  details.solution{
+    margin-top:0.7rem;
+    border-top:1px dashed var(--border);
+    padding-top:0.6rem;
+  }
+  details.solution summary{
+    cursor:pointer;
+    font-weight:600;
+    color:var(--navy);
+    font-size:0.92rem;
+  }
+  .solution-body{
+    margin-top:0.8rem;
+    font-size:0.94rem;
+  }
+  .solution-body p{margin:0 0 0.6rem;}
+  .solution-body p:last-child{margin-bottom:0;}
+
+  /* bit tables reused from explainer, compact version */
+  .bittable{font-family:var(--mono); font-size:0.92rem; margin:0.7rem 0;}
+  .bitrow{display:flex; gap:2px;}
+  .bitrow .rowlabel{
+    flex:0 0 84px;
+    color:var(--muted);
+    font-family:var(--sans);
+    font-size:0.78rem;
+    display:flex;
+    align-items:center;
+  }
+  .bitrow .cell{flex:1 1 0; text-align:center; padding:0.22rem 0; min-width:1.4em;}
+  .bitrow.weights .cell{color:var(--muted); font-size:0.7rem;}
+  .bitrow.carry .cell{color:var(--teal); font-size:0.8rem; min-height:1.3em;}
+  .bitrow.result .cell{color:#fff; background:var(--navy); border-radius:4px; font-weight:700;}
+  .bitrow + .bitrow{margin-top:1px;}
+
+  .working-steps{
+    font-family:var(--mono);
+    font-size:0.86rem;
+    background:var(--panel-alt);
+    border-radius:7px;
+    padding:0.8rem 0.9rem;
+    line-height:1.85;
+    white-space:pre-wrap;
+    margin:0.6rem 0;
+  }
+
+  textarea.longanswer{
+    width:100%;
+    min-height:110px;
+    font-family:var(--sans);
+    font-size:0.95rem;
+    padding:0.6rem 0.75rem;
+    border-radius:7px;
+    border:1.5px solid var(--border);
+    margin:0.6rem 0 0.2rem;
+    resize:vertical;
+  }
+
+  .next-step{
+    margin-top:2rem;
+    padding:1.6rem;
+    background:var(--panel-alt);
+    border-radius:var(--radius);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:1rem;
+    flex-wrap:wrap;
+  }
+  .next-step p{margin:0; color:var(--muted);}
+  .next-step a.button{
+    background:var(--navy);
+    color:#fff;
+    text-decoration:none;
+    padding:0.7rem 1.3rem;
+    border-radius:8px;
+    font-weight:600;
+    white-space:nowrap;
+  }
+  .next-step a.button:hover{background:var(--navy-deep);}
+
+  @media (max-width:900px){
+    .layout{flex-direction:column; gap:1.2rem;}
+    nav.toc{display:none;}
+    details.toc-mobile{
+      display:block;
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:0.2rem 1rem;
+      width:100%;
+    }
+    details.toc-mobile summary{
+      padding:0.9rem 0;
+      font-weight:600;
+      color:var(--navy);
+      cursor:pointer;
+      font-family:var(--serif);
+    }
+    details.toc-mobile ol{list-style:none; margin:0; padding:0 0 0.8rem;}
+    details.toc-mobile a{display:block; padding:0.4rem 0; color:var(--muted); text-decoration:none;}
+    main.article{max-width:none;}
+    .answer-input{flex:1 1 auto;}
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/strand-a-t1-binary-arithmetic-practice.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+<header class="page-head">
+  <div class="head-inner">
+    <p class="eyebrow">Year 12 AS Computer Science (9618) &middot; Topic 1.1, Data Representation</p>
+    <h1>Binary Arithmetic: Practice Questions</h1>
+    <p class="lede">15 questions covering addition, overflow, and two's complement. Type an answer to check it instantly, or open the full worked solution any time.</p>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill"></div></div>
+  <div class="progress-caption">
+    <span id="progress-text">0 of 14 checkable questions correct</span>
+    <button type="button" id="reset-progress">Reset progress</button>
+  </div>
+</header>
+
+<div class="layout">
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2>Sections</h2>
+    <ol>
+      <li><a href="#secA">Binary addition</a></li>
+      <li><a href="#secB">Overflow detection</a></li>
+      <li><a href="#secC">Two's complement</a></li>
+      <li><a href="#secD">Subtracting by adding</a></li>
+      <li><a href="#secE">Signed overflow</a></li>
+      <li><a href="#secF">Exam-style</a></li>
+    </ol>
+  </nav>
+
+  <details class="toc-mobile">
+    <summary>Sections</summary>
+    <ol>
+      <li><a href="#secA">Binary addition</a></li>
+      <li><a href="#secB">Overflow detection</a></li>
+      <li><a href="#secC">Two's complement</a></li>
+      <li><a href="#secD">Subtracting by adding</a></li>
+      <li><a href="#secE">Signed overflow</a></li>
+      <li><a href="#secF">Exam-style</a></li>
+    </ol>
+  </details>
+
+  <main class="article">
+
+    <section id="secA">
+      <p class="section-kicker">A</p>
+      <h2>Binary addition</h2>
+      <p class="section-intro">Add each pair of 8-bit numbers. Give your answer as 8 binary digits (e.g. 01001101).</p>
+
+      <div class="qcard" data-qid="a1">
+        <div class="qcard-head"><div class="qnum">1</div>
+          <p class="qprompt">Add <span class="binline">01001101</span> + <span class="binline">00100110</span></p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="8-bit answer">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="bittable" data-ex="a1"></div>
+            <p>77 + 38 = 115. No carry falls out of bit 7, so this fits comfortably within 8 bits.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="a2">
+        <div class="qcard-head"><div class="qnum">2</div>
+          <p class="qprompt">Add <span class="binline">11001100</span> + <span class="binline">00110011</span></p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="8-bit answer">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="bittable" data-ex="a2"></div>
+            <p>204 + 51 = 255 &mdash; the maximum value an unsigned 8-bit number can hold. No overflow, but there's no room left over either.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="a3">
+        <div class="qcard-head"><div class="qnum">3</div>
+          <p class="qprompt">Add <span class="binline">10101010</span> + <span class="binline">01010111</span></p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="8-bit answer">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="bittable" data-ex="a3"></div>
+            <p>170 + 87 = 257. That needs 9 bits, so the stored 8-bit result is <strong>00000001</strong> with a carry-out of 1 &mdash; unsigned overflow has occurred.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="a4">
+        <div class="qcard-head"><div class="qnum">4</div>
+          <p class="qprompt">Add <span class="binline">11111111</span> + <span class="binline">11111111</span></p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="8-bit answer">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="bittable" data-ex="a4"></div>
+            <p>255 + 255 = 510. The 8-bit result is <strong>11111110</strong> (254) with a carry-out of 1 &mdash; another unsigned overflow.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secB">
+      <p class="section-kicker">B</p>
+      <h2>Overflow detection</h2>
+      <p class="section-intro">For each addition, decide whether <strong>unsigned</strong> overflow occurs. Answer "yes" or "no".</p>
+
+      <div class="qcard" data-qid="b1">
+        <div class="qcard-head"><div class="qnum">5</div>
+          <p class="qprompt">Does unsigned overflow occur? <span class="binline">01100100</span> + <span class="binline">00100000</span></p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="yes or no" style="min-width:120px; flex-basis:120px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="bittable" data-ex="b1"></div>
+            <p><strong>No.</strong> 100 + 32 = 132, which fits well within the 0&ndash;255 range. There's no carry out of bit 7.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="b2">
+        <div class="qcard-head"><div class="qnum">6</div>
+          <p class="qprompt">Does unsigned overflow occur? <span class="binline">10000000</span> + <span class="binline">10000000</span></p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="yes or no" style="min-width:120px; flex-basis:120px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="bittable" data-ex="b2"></div>
+            <p><strong>Yes.</strong> 128 + 128 = 256, which needs 9 bits. The stored result wraps to 00000000 with a carry-out of 1.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secC">
+      <p class="section-kicker">C</p>
+      <h2>Two's complement conversion</h2>
+      <p class="section-intro">Convert between decimal and 8-bit two's complement.</p>
+
+      <div class="qcard" data-qid="c1">
+        <div class="qcard-head"><div class="qnum">7</div>
+          <p class="qprompt">Convert &minus;45 to 8-bit two's complement.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="8-bit answer">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="bittable" data-ex="c1"></div>
+            <p>Write +45 as 00101101, invert every bit to get 11010010, then add 1: <strong>11010011</strong>.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="c2">
+        <div class="qcard-head"><div class="qnum">8</div>
+          <p class="qprompt">Convert the 8-bit two's complement value <span class="binline">11110000</span> to decimal.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="decimal answer" style="min-width:140px; flex-basis:140px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <p>The sign bit is 1, so this is negative. Using the weights &minus;128, 64, 32, 16, 8, 4, 2, 1:</p>
+            <div class="working-steps">&minus;128 + 64 + 32 + 16 = &minus;16</div>
+            <p>Answer: <strong>&minus;16</strong></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="c3">
+        <div class="qcard-head"><div class="qnum">9</div>
+          <p class="qprompt">Convert the 8-bit two's complement value <span class="binline">01111011</span> to decimal.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="decimal answer" style="min-width:140px; flex-basis:140px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <p>The sign bit is 0, so this is positive and reads like an ordinary unsigned number:</p>
+            <div class="working-steps">64 + 32 + 16 + 8 + 2 + 1 = 123</div>
+            <p>Answer: <strong>123</strong></p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secD">
+      <p class="section-kicker">D</p>
+      <h2>Subtracting by adding</h2>
+      <p class="section-intro">Use two's complement addition to perform each subtraction. Give the 8-bit binary result.</p>
+
+      <div class="qcard" data-qid="d1">
+        <div class="qcard-head"><div class="qnum">10</div>
+          <p class="qprompt">Compute 60 &minus; 25 using two's complement addition.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="8-bit answer">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <p>First find the two's complement of 25 (i.e. &minus;25):</p>
+            <div class="bittable" data-ex="d1tc"></div>
+            <p>Now add 60 to &minus;25:</p>
+            <div class="bittable" data-ex="d1sum"></div>
+            <p>Result: <strong>00100011</strong> = 35. The carry out of bit 7 is discarded, as expected in signed arithmetic.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="d2">
+        <div class="qcard-head"><div class="qnum">11</div>
+          <p class="qprompt">Compute 45 + (&minus;30) using two's complement addition.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="8-bit answer">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <p>First find the two's complement of 30 (i.e. &minus;30):</p>
+            <div class="bittable" data-ex="d2tc"></div>
+            <p>Now add 45 to &minus;30:</p>
+            <div class="bittable" data-ex="d2sum"></div>
+            <p>Result: <strong>00001111</strong> = 15.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="d3">
+        <div class="qcard-head"><div class="qnum">12</div>
+          <p class="qprompt">Compute 15 &minus; 40 using two's complement addition.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="8-bit answer">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <p>First find the two's complement of 40 (i.e. &minus;40):</p>
+            <div class="bittable" data-ex="d3tc"></div>
+            <p>Now add 15 to &minus;40:</p>
+            <div class="bittable" data-ex="d3sum"></div>
+            <p>Result: <strong>11100111</strong>, which decodes as &minus;25. That makes sense &mdash; 15 &minus; 40 = &minus;25.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secE">
+      <p class="section-kicker">E</p>
+      <h2>Signed overflow</h2>
+      <p class="section-intro">For each addition, decide whether <strong>signed</strong> overflow occurs. Answer "yes" or "no".</p>
+
+      <div class="qcard" data-qid="e1">
+        <div class="qcard-head"><div class="qnum">13</div>
+          <p class="qprompt">Does signed overflow occur? <span class="binline">01111111</span> + <span class="binline">00000001</span></p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="yes or no" style="min-width:120px; flex-basis:120px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="bittable" data-ex="e1"></div>
+            <p><strong>Yes.</strong> 127 + 1 should be 128, but both operands are positive (sign bit 0) while the result's sign bit is 1 (reading as &minus;128). Same-sign inputs, opposite-sign result &mdash; that's the overflow rule.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="e2">
+        <div class="qcard-head"><div class="qnum">14</div>
+          <p class="qprompt">Does signed overflow occur? <span class="binline">10000001</span> + <span class="binline">11111111</span></p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="yes or no" style="min-width:120px; flex-basis:120px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="bittable" data-ex="e2"></div>
+            <p><strong>No.</strong> This one is a trap: there IS a carry out of bit 7 here, which would flag unsigned overflow. But we're interpreting these as signed numbers: &minus;127 + (&minus;1) = &minus;128, and &minus;128 is a perfectly valid signed 8-bit value. Both operands are negative and the result is negative too &mdash; same sign in, same sign out, so there's no signed overflow. Carry-out and signed overflow really are independent checks.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secF">
+      <p class="section-kicker">F</p>
+      <h2>Exam-style question</h2>
+      <p class="section-intro">A longer, multi-part question. Write your full answer, then compare it with the model answer.</p>
+
+      <div class="qcard" data-qid="f1">
+        <div class="qcard-head"><div class="qnum">15</div>
+          <p class="qprompt">
+            A student adds two pairs of 8-bit two's complement numbers:<br>
+            <strong>Pair 1:</strong> <span class="binline">01010101</span> + <span class="binline">00101010</span><br>
+            <strong>Pair 2:</strong> <span class="binline">11010101</span> + <span class="binline">10101010</span><br><br>
+            For each pair: (a) state the signed decimal value of each operand, (b) compute the 8-bit binary result, and (c) state whether signed overflow occurs, justifying your answer using the overflow rule.
+          </p>
+        </div>
+        <textarea class="longanswer" placeholder="Write your full answer here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body">
+            <p><strong>Pair 1:</strong> 01010101 = 85, 00101010 = 42 (both positive).</p>
+            <div class="bittable" data-ex="f1a"></div>
+            <p>Result: 01111111 = 127. Both operands were positive and the result is positive &mdash; same sign preserved, so <strong>no overflow</strong>. (85 + 42 = 127, which is exactly the largest positive signed value, but still in range.)</p>
+            <p style="margin-top:1rem;"><strong>Pair 2:</strong> 11010101 = &minus;43, 10101010 = &minus;86 (both negative).</p>
+            <div class="bittable" data-ex="f1b"></div>
+            <p>Result: 01111111 = +127. Both operands were negative, but the result is positive &mdash; sign has flipped, so <strong>signed overflow has occurred</strong>. This matches expectation: &minus;43 + (&minus;86) = &minus;129, which falls outside the representable range of &minus;128 to +127.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <div class="next-step">
+      <p>Want to revisit the explanations first?</p>
+      <a class="button" href="binary-arithmetic-explainer.html">Back to the explainer</a>
+    </div>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- shared bit helpers (same logic as explainer page) ---------- */
+  const WEIGHTS = [128,64,32,16,8,4,2,1];
+
+  function bitsFromInt(n, bitLen){
+    const bits = [];
+    for(let i=bitLen-1;i>=0;i--){ bits.push((n>>i)&1); }
+    return bits;
+  }
+  function addBitsArrays(a,b){
+    const n = a.length;
+    const sum = new Array(n).fill(0);
+    const carryIn = new Array(n).fill(0);
+    let carry = 0;
+    for(let i=n-1;i>=0;i--){
+      carryIn[i] = carry;
+      const total = a[i]+b[i]+carry;
+      sum[i] = total % 2;
+      carry = total >= 2 ? 1 : 0;
+    }
+    return { sum, carryIn, carryOut: carry };
+  }
+  function twosComplementOf(n, bitLen){
+    const posBits = bitsFromInt(n, bitLen);
+    const inverted = posBits.map(b => b===1?0:1);
+    let carry = 1;
+    const result = new Array(bitLen).fill(0);
+    for(let i=bitLen-1;i>=0;i--){
+      const total = inverted[i]+carry;
+      result[i] = total % 2;
+      carry = total>=2 ? 1:0;
+    }
+    return { posBits, inverted, result };
+  }
+  function makeLabelCell(text){
+    const l = document.createElement("span");
+    l.className = "rowlabel";
+    l.textContent = text;
+    return l;
+  }
+  function renderBitTable(container, cfg){
+    container.innerHTML = "";
+    if(cfg.showWeights !== false){
+      const wrow = document.createElement("div");
+      wrow.className = "bitrow weights";
+      wrow.appendChild(makeLabelCell(""));
+      WEIGHTS.forEach(w=>{
+        const c = document.createElement("span");
+        c.className = "cell";
+        c.textContent = w;
+        wrow.appendChild(c);
+      });
+      container.appendChild(wrow);
+    }
+    if(cfg.carryIn){
+      const crow = document.createElement("div");
+      crow.className = "bitrow carry";
+      crow.appendChild(makeLabelCell("carry"));
+      cfg.carryIn.forEach((c,idx)=>{
+        const cell = document.createElement("span");
+        cell.className = "cell";
+        cell.textContent = (idx===0 && cfg.carryOutLabel) ? cfg.carryOutLabel : (c ? "1" : "");
+        crow.appendChild(cell);
+      });
+      container.appendChild(crow);
+    }
+    cfg.rows.forEach(r=>{
+      const row = document.createElement("div");
+      row.className = "bitrow " + (r.cls||"operand");
+      row.appendChild(makeLabelCell(r.label));
+      r.bits.forEach(b=>{
+        const cell = document.createElement("span");
+        cell.className = "cell";
+        cell.textContent = b;
+        row.appendChild(cell);
+      });
+      container.appendChild(row);
+    });
+  }
+
+  /* ---------- build all static worked-solution tables ---------- */
+  function buildAdditionExample(sel, aVal, bVal){
+    const el = document.querySelector(sel);
+    if(!el) return;
+    const a = bitsFromInt(aVal,8), b = bitsFromInt(bVal,8);
+    const r = addBitsArrays(a,b);
+    renderBitTable(el, {
+      carryIn: r.carryIn,
+      carryOutLabel: r.carryOut ? "1" : "",
+      rows:[
+        {label:String(aVal), bits:a},
+        {label:"+ "+bVal, bits:b},
+        {label:"result", bits:r.sum, cls:"result"}
+      ]
+    });
+  }
+  buildAdditionExample('[data-ex="a1"]', 77, 38);
+  buildAdditionExample('[data-ex="a2"]', 204, 51);
+  buildAdditionExample('[data-ex="a3"]', 170, 87);
+  buildAdditionExample('[data-ex="a4"]', 255, 255);
+  buildAdditionExample('[data-ex="b1"]', 100, 32);
+  buildAdditionExample('[data-ex="b2"]', 128, 128);
+  buildAdditionExample('[data-ex="e1"]', 127, 1);
+
+  (function(){
+    const el = document.querySelector('[data-ex="e2"]');
+    const a = bitsFromInt(129,8); // -127 stored pattern
+    const b = bitsFromInt(255,8); // -1 stored pattern
+    const r = addBitsArrays(a,b);
+    renderBitTable(el, {
+      carryIn: r.carryIn,
+      carryOutLabel: r.carryOut ? "1" : "",
+      rows:[
+        {label:"\u221227", bits:a},
+        {label:"+ (\u22121)", bits:b},
+        {label:"result", bits:r.sum, cls:"result"}
+      ]
+    });
+  })();
+
+  function buildTcExample(sel, n){
+    const el = document.querySelector(sel);
+    if(!el) return;
+    const tc = twosComplementOf(n,8);
+    renderBitTable(el, {
+      rows:[
+        {label:"+"+n, bits:tc.posBits},
+        {label:"invert", bits:tc.inverted},
+        {label:"+1", bits:tc.result, cls:"result"}
+      ]
+    });
+  }
+  buildTcExample('[data-ex="c1"]', 45);
+  buildTcExample('[data-ex="d1tc"]', 25);
+  buildTcExample('[data-ex="d2tc"]', 30);
+  buildTcExample('[data-ex="d3tc"]', 40);
+
+  function buildSubExample(sel, aVal, negOf){
+    const el = document.querySelector(sel);
+    if(!el) return;
+    const a = bitsFromInt(aVal,8);
+    const tc = twosComplementOf(negOf,8);
+    const r = addBitsArrays(a, tc.result);
+    renderBitTable(el, {
+      carryIn: r.carryIn,
+      carryOutLabel: r.carryOut ? "1 (discard)" : "",
+      rows:[
+        {label:String(aVal), bits:a},
+        {label:"+ (\u2212"+negOf+")", bits:tc.result},
+        {label:"result", bits:r.sum, cls:"result"}
+      ]
+    });
+  }
+  buildSubExample('[data-ex="d1sum"]', 60, 25);
+  buildSubExample('[data-ex="d2sum"]', 45, 30);
+  buildSubExample('[data-ex="d3sum"]', 15, 40);
+
+  buildAdditionExample('[data-ex="f1a"]', 85, 42);
+  (function(){
+    const el = document.querySelector('[data-ex="f1b"]');
+    const a = bitsFromInt(213,8); // -43
+    const b = bitsFromInt(170,8); // -86
+    const r = addBitsArrays(a,b);
+    renderBitTable(el, {
+      carryIn: r.carryIn,
+      carryOutLabel: r.carryOut ? "1" : "",
+      rows:[
+        {label:"\u221243", bits:a},
+        {label:"+ (\u221286)", bits:b},
+        {label:"result", bits:r.sum, cls:"result"}
+      ]
+    });
+  })();
+
+  /* ---------- answer key + checking ---------- */
+  const ANSWERS = {
+    a1: {type:"binary", value:"01110011"},
+    a2: {type:"binary", value:"11111111"},
+    a3: {type:"binary", value:"00000001"},
+    a4: {type:"binary", value:"11111110"},
+    b1: {type:"yesno", value:"no"},
+    b2: {type:"yesno", value:"yes"},
+    c1: {type:"binary", value:"11010011"},
+    c2: {type:"decimal", value:-16},
+    c3: {type:"decimal", value:123},
+    d1: {type:"binary", value:"00100011"},
+    d2: {type:"binary", value:"00001111"},
+    d3: {type:"binary", value:"11100111"},
+    e1: {type:"yesno", value:"yes"},
+    e2: {type:"yesno", value:"no"}
+  };
+
+  const STORAGE_KEY = "binaryArithmeticProgress_v1";
+  function loadProgress(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    }catch(e){ return {}; }
+  }
+  function saveProgress(p){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); }catch(e){}
+  }
+  let progress = loadProgress();
+
+  function normalizeBinary(str){
+    let s = str.replace(/\s+/g,"").replace(/^0b/i,"");
+    if(!/^[01]+$/.test(s)) return null;
+    while(s.length < 8) s = "0" + s;
+    return s;
+  }
+  function normalizeDecimal(str){
+    const s = str.trim().replace(/\s+/g,"");
+    if(!/^-?\d+$/.test(s)) return null;
+    return parseInt(s,10);
+  }
+  function normalizeYesNo(str){
+    const s = str.trim().toLowerCase();
+    if(["y","yes","true"].includes(s)) return "yes";
+    if(["n","no","false"].includes(s)) return "no";
+    return null;
+  }
+
+  function updateProgressUI(){
+    const total = Object.keys(ANSWERS).length;
+    const done = Object.keys(progress).filter(k=>progress[k]===true && ANSWERS[k]).length;
+    document.getElementById("progress-text").textContent = done + " of " + total + " checkable questions correct";
+    document.getElementById("progress-fill").style.width = Math.round((done/total)*100) + "%";
+    Object.keys(ANSWERS).forEach(qid=>{
+      const numEl = document.querySelector('.qcard[data-qid="'+qid+'"] .qnum');
+      if(numEl){ numEl.classList.toggle("done", progress[qid]===true); }
+    });
+  }
+
+  function wireQuestion(qid){
+    const card = document.querySelector('.qcard[data-qid="'+qid+'"]');
+    if(!card) return;
+    const input = card.querySelector(".answer-input");
+    const btn = card.querySelector(".check-btn");
+    const feedback = card.querySelector(".feedback");
+    const answer = ANSWERS[qid];
+    if(!input || !btn || !answer) return;
+
+    function doCheck(){
+      const raw = input.value;
+      let given = null;
+      if(answer.type === "binary") given = normalizeBinary(raw);
+      else if(answer.type === "decimal") given = normalizeDecimal(raw);
+      else if(answer.type === "yesno") given = normalizeYesNo(raw);
+
+      if(given === null){
+        feedback.textContent = "Check the format of your answer.";
+        feedback.className = "feedback incorrect";
+        return;
+      }
+      const isCorrect = given === answer.value;
+      if(isCorrect){
+        feedback.textContent = "Correct.";
+        feedback.className = "feedback correct";
+        progress[qid] = true;
+      } else {
+        feedback.textContent = "Not quite \u2014 try again, or open the full working below.";
+        feedback.className = "feedback incorrect";
+      }
+      saveProgress(progress);
+      updateProgressUI();
+    }
+    btn.addEventListener("click", doCheck);
+    input.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ e.preventDefault(); doCheck(); } });
+  }
+  Object.keys(ANSWERS).forEach(wireQuestion);
+
+  document.getElementById("reset-progress").addEventListener("click", ()=>{
+    progress = {};
+    saveProgress(progress);
+    updateProgressUI();
+    document.querySelectorAll(".feedback").forEach(f=>{ f.textContent=""; f.className="feedback"; });
+    document.querySelectorAll(".answer-input").forEach(i=>{ i.value=""; });
+  });
+
+  updateProgressUI();
+
+})();
+</script>
+</body>
+</html>

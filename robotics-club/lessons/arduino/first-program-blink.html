@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "arduino/first-program-blink";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Your First Program: Blinking the Built-In LED";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Your First Program: Blinking the Built-In LED</title>
+<style>
+  :root { --navy: #1B2B5E; --teal: #0D9488; --teal-light: #e6f7f5; --navy-light: #eef0f8; }
+  body { font-family: Calibri, Arial, sans-serif; color: #1a1a1a; max-width: 900px; margin: 0 auto; padding: 40px 30px 80px; line-height: 1.55; background: #fff; }
+  h1, h2, h3 { font-family: 'Bookman Old Style', Cambria, Georgia, serif; color: var(--navy); }
+  h1 { border-bottom: 4px solid var(--teal); padding-bottom: 12px; font-size: 30px; }
+  h2 { margin-top: 40px; border-left: 6px solid var(--teal); padding-left: 14px; font-size: 22px; }
+  .banner { background: var(--navy); color: white; padding: 6px 14px; display: inline-block; border-radius: 4px; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .objectives, .analogy, .note, .warning { background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0; }
+  .analogy { background: var(--teal-light); border-left: 5px solid var(--teal); }
+  .note { background: #fff8e6; border-left: 5px solid #d9a300; }
+  .warning { background: #fdeaea; border-left: 5px solid #c0392b; }
+  .troubleshoot { background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 15px; }
+  th { background: var(--navy); color: white; }
+  code, pre { font-family: Consolas, 'Courier New', monospace; background: #0f1830; color: #e6f0ff; border-radius: 6px; }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline { background: #eef0f8; color: var(--navy); padding: 2px 6px; border-radius: 4px; }
+  .comment { color: #8fd6b4; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise { background: #fff8e6; border-left: 5px solid #d9a300; padding: 14px 20px; margin: 14px 0; border-radius: 6px; }
+  .footer-note { margin-top: 50px; font-size: 13px; color: #666; border-top: 1px solid #ddd; padding-top: 14px; }
+  .step { margin: 26px 0; padding-left: 18px; border-left: 3px solid var(--navy-light); }
+  .step h3 { margin-bottom: 6px; }
+  .step-num {
+    display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px;
+    background: var(--teal); color: white; border-radius: 50%; font-weight: bold; margin-right: 10px; font-family: Arial, sans-serif;
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/arduino-first-program-blink.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Your First Program: Blinking the Built-In LED</h1>
+<p><strong>Section focus:</strong> Arduino Programming — Lesson 3.3 &nbsp;|&nbsp; <strong>Duration:</strong> ~40 minutes</p>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain the roles of <code class="inline">setup()</code> and <code class="inline">loop()</code> in every Arduino program</li>
+    <li>Write, upload, and run a complete program on real hardware</li>
+    <li>Locate and use the Arduino's built-in LED without any extra wiring</li>
+    <li>Change timing in a program and observe the effect on real hardware</li>
+  </ul>
+</div>
+
+<h2>1. Two Special Functions: setup() and loop()</h2>
+<p>Every Arduino program (called a "sketch") is built around two functions the board calls automatically — you never call them yourself:</p>
+<table>
+  <tr><th>Function</th><th>Runs...</th><th>Typical use</th></tr>
+  <tr><td><code class="inline">setup()</code></td><td>Exactly once, when the board first powers on or resets</td><td><code class="inline">pinMode()</code> calls, <code class="inline">Serial.begin()</code>, one-time setup</td></tr>
+  <tr><td><code class="inline">loop()</code></td><td>Repeatedly, forever, for as long as the board has power</td><td>Everything your program actually keeps doing</td></tr>
+</table>
+
+<div class="note">
+  <strong>Connecting back to Lesson 1.4:</strong> <code class="inline">loop()</code> is, quite literally, an infinite loop — exactly the concept you learned in C++, just built directly into how the Arduino environment runs your code, rather than something you write yourself with <code class="inline">while</code> or <code class="inline">for</code>.
+</div>
+
+<h2>2. The Built-In LED</h2>
+<p>Every Arduino Uno has a small LED soldered directly onto the board itself, connected internally to a specific pin — almost always labelled "L" on the board and connected to digital pin 13. This means you can write and test your very first real program without wiring anything at all.</p>
+
+<h2>3. Step-by-Step: Blink</h2>
+
+<div class="step">
+  <h3><span class="step-num">1</span>Open a new sketch</h3>
+  <p>In the Arduino IDE, start a new blank sketch (File &gt; New).</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">2</span>Write the code</h3>
+<pre>void setup() {
+    pinMode(13, OUTPUT);
+}
+
+void loop() {
+    digitalWrite(13, HIGH);  <span class="comment">// LED on</span>
+    delay(1000);             <span class="comment">// wait 1 second</span>
+    digitalWrite(13, LOW);   <span class="comment">// LED off</span>
+    delay(1000);             <span class="comment">// wait 1 second</span>
+}</pre>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">3</span>Upload it</h3>
+  <p>Click the Upload button (the right-pointing arrow) in the IDE. Watch the small status area at the bottom — it will show "Compiling," then "Uploading," then "Done uploading" if everything succeeds.</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">4</span>Watch it run</h3>
+  <p>The built-in LED (labelled "L") should now be blinking on and off, once per second, and will keep doing so indefinitely — even if you disconnect from your computer and power the board from a battery instead, since the program is now stored permanently on the board until you upload something else.</p>
+</div>
+
+<div class="troubleshoot">
+  <h3 style="margin-top:0;">Troubleshooting</h3>
+  <ul>
+    <li><strong>Upload fails with an error:</strong> double check the Board and Port are correctly selected under Tools, as covered in Lesson 3.1.</li>
+    <li><strong>Code uploads but nothing blinks:</strong> confirm your specific board's built-in LED is genuinely on pin 13 — nearly all Uno-compatible boards are, but it's worth a quick check if using an unusual variant.</li>
+    <li><strong>LED is on solidly, not blinking:</strong> check for a missing semicolon or misplaced bracket — reread your code carefully against the example above.</li>
+  </ul>
+</div>
+
+<h2>4. Why This Program Matters</h2>
+<p>This tiny program already demonstrates the complete pattern you'll use for the rest of the course: <code class="inline">setup()</code> configures a pin once, and <code class="inline">loop()</code> repeatedly acts on it. Every future lesson — controlling an external LED, reading a sensor, driving a motor — follows exactly this same shape, just with different pins and logic inside <code class="inline">loop()</code>.</p>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Change both <code class="inline">delay(1000)</code> values to <code class="inline">delay(200)</code> and re-upload — confirm the blink speed changes.</li>
+    <li>Make the LED blink with an uneven rhythm — on for 1 second, off for only 200 milliseconds.</li>
+    <li>Add a <code class="inline">Serial.println()</code> inside <code class="inline">loop()</code> that prints "LED on" and "LED off" at the matching moments, and watch it in the Serial Monitor alongside the physical blinking.</li>
+    <li>Challenge: using a <code class="inline">for</code> loop from Lesson 1.4, make the LED blink rapidly 5 times in a row, then pause for 2 seconds, then repeat.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ I can explain what <code class="inline">setup()</code> and <code class="inline">loop()</code> each do</label>
+  <label>☐ I successfully uploaded a program to real hardware for the first time</label>
+  <label>☐ I changed the timing and confirmed the physical LED's behaviour changed to match</label>
+  <label>☐ I can explain why the program keeps running even without a computer connected</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Arduino Programming &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

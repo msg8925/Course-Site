@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "arduino/7-segment-display";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Interfacing a 7-Segment Display with Arduino";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Interfacing a 7-Segment Display with Arduino</title>
+<style>
+  :root {
+    --navy: #1B2B5E;
+    --teal: #0D9488;
+    --teal-light: #e6f7f5;
+    --navy-light: #eef0f8;
+  }
+  body {
+    font-family: Calibri, Arial, sans-serif;
+    color: #1a1a1a;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 30px 80px;
+    line-height: 1.55;
+    background: #fff;
+  }
+  h1, h2, h3 {
+    font-family: 'Bookman Old Style', Cambria, Georgia, serif;
+    color: var(--navy);
+  }
+  h1 {
+    border-bottom: 4px solid var(--teal);
+    padding-bottom: 12px;
+    font-size: 30px;
+  }
+  h2 {
+    margin-top: 40px;
+    border-left: 6px solid var(--teal);
+    padding-left: 14px;
+    font-size: 22px;
+  }
+  .banner {
+    background: var(--navy);
+    color: white;
+    padding: 6px 14px;
+    display: inline-block;
+    border-radius: 4px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .objectives, .materials, .analogy, .troubleshoot, .extension, .warning, .note {
+    background: var(--navy-light);
+    border-radius: 8px;
+    padding: 16px 22px;
+    margin: 18px 0;
+  }
+  .analogy {
+    background: var(--teal-light);
+    border-left: 5px solid var(--teal);
+  }
+  .warning {
+    background: #fdeaea;
+    border-left: 5px solid #c0392b;
+  }
+  .note {
+    background: #fff8e6;
+    border-left: 5px solid #d9a300;
+  }
+  .step {
+    margin: 26px 0;
+    padding-left: 18px;
+    border-left: 3px solid var(--navy-light);
+  }
+  .step h3 {
+    margin-bottom: 6px;
+  }
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--teal);
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-right: 10px;
+    font-family: Arial, sans-serif;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 14px 0;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 15px;
+  }
+  th {
+    background: var(--navy);
+    color: white;
+  }
+  code, pre {
+    font-family: Consolas, 'Courier New', monospace;
+    background: #0f1830;
+    color: #e6f0ff;
+    border-radius: 6px;
+  }
+  pre {
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  code.inline {
+    background: #eef0f8;
+    color: var(--navy);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .comment { color: #8fd6b4; }
+  svg { display: block; margin: 20px auto; }
+  .caption { text-align: center; font-size: 13px; color: #555; margin-top: -10px; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise {
+    background: #fff8e6;
+    border-left: 5px solid #d9a300;
+    padding: 14px 20px;
+    margin: 14px 0;
+    border-radius: 6px;
+  }
+  .footer-note {
+    margin-top: 50px;
+    font-size: 13px;
+    color: #666;
+    border-top: 1px solid #ddd;
+    padding-top: 14px;
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/arduino-7-segment-display.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Interfacing a 7-Segment Display with Arduino</h1>
+<p><strong>Session focus:</strong> Digital Output — displaying digits 0–9 &nbsp;|&nbsp; <strong>Duration:</strong> ~60 minutes</p>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain how a single digit is built from seven individually-controlled LED segments</li>
+    <li>Identify whether your display is common-cathode or common-anode</li>
+    <li>Wire the display to an Arduino using current-limiting resistors</li>
+    <li>Write code that lights specific segments to display any digit 0–9</li>
+  </ul>
+</div>
+
+<div class="analogy">
+  <strong>Real-world analogy:</strong> Think of the classic digital alarm clock or microwave display — this is exactly that component. Each digit is made of seven small LED bars arranged in a figure-8 pattern (plus sometimes a decimal point), and turning different bars on or off in combination spells out each number, the same way flicking light switches in a pattern could spell out shapes on a wall of bulbs.
+</div>
+
+<h2>1. What You Need</h2>
+<div class="materials">
+  <table>
+    <tr><th>Item</th><th>Quantity</th><th>Notes</th></tr>
+    <tr><td>Arduino Uno (or compatible)</td><td>1</td><td>Any Uno-compatible board works</td></tr>
+    <tr><td>Single-digit 7-segment display</td><td>1</td><td>10 pins: 8 segment/dot pins + 2 common pins (tied together internally)</td></tr>
+    <tr><td>Resistors (220Ω)</td><td>8</td><td>One per segment, including the decimal point</td></tr>
+    <tr><td>Breadboard</td><td>1</td><td>For building the circuit</td></tr>
+    <tr><td>Jumper wires</td><td>~9</td><td>Male-to-male</td></tr>
+    <tr><td>USB cable</td><td>1</td><td>To connect Arduino to computer</td></tr>
+  </table>
+</div>
+
+<h2>2. Understanding the Segments</h2>
+<p>Each of the seven bars has a standard letter name, always labelled the same way regardless of manufacturer:</p>
+
+<svg viewBox="0 0 260 340" width="220" height="290">
+  <text x="130" y="20" text-anchor="middle" font-family="Arial" font-size="14" fill="#1B2B5E" font-weight="bold">Segment Layout</text>
+  <!-- a top -->
+  <rect x="60" y="35" width="100" height="16" rx="5" fill="#0D9488"/>
+  <text x="115" y="30" font-family="Arial" font-size="13" fill="#1B2B5E">a</text>
+  <!-- f top-left -->
+  <rect x="45" y="55" width="16" height="90" rx="5" fill="#0D9488"/>
+  <text x="30" y="100" font-family="Arial" font-size="13" fill="#1B2B5E">f</text>
+  <!-- b top-right -->
+  <rect x="164" y="55" width="16" height="90" rx="5" fill="#0D9488"/>
+  <text x="190" y="100" font-family="Arial" font-size="13" fill="#1B2B5E">b</text>
+  <!-- g middle -->
+  <rect x="60" y="152" width="100" height="16" rx="5" fill="#0D9488"/>
+  <text x="115" y="148" font-family="Arial" font-size="13" fill="#1B2B5E">g</text>
+  <!-- e bottom-left -->
+  <rect x="45" y="172" width="16" height="90" rx="5" fill="#0D9488"/>
+  <text x="30" y="220" font-family="Arial" font-size="13" fill="#1B2B5E">e</text>
+  <!-- c bottom-right -->
+  <rect x="164" y="172" width="16" height="90" rx="5" fill="#0D9488"/>
+  <text x="190" y="220" font-family="Arial" font-size="13" fill="#1B2B5E">c</text>
+  <!-- d bottom -->
+  <rect x="60" y="269" width="100" height="16" rx="5" fill="#0D9488"/>
+  <text x="115" y="305" font-family="Arial" font-size="13" fill="#1B2B5E">d</text>
+  <!-- dp -->
+  <circle cx="195" cy="278" r="8" fill="#0D9488"/>
+  <text x="210" y="283" font-family="Arial" font-size="13" fill="#1B2B5E">dp</text>
+</svg>
+
+<table>
+  <tr><th>Pin</th><th>Function</th><th>Connects To</th></tr>
+  <tr><td>a, b, c, d, e, f, g</td><td>The seven segments</td><td>Arduino digital pins, each via a 220Ω resistor</td></tr>
+  <tr><td>dp</td><td>Decimal point</td><td>Arduino digital pin, via a 220Ω resistor (optional to wire up)</td></tr>
+  <tr><td>Common pin(s)</td><td>Shared connection for all segments</td><td>GND (common cathode) or 5V (common anode)</td></tr>
+</table>
+
+<div class="note">
+  <strong>Common cathode vs common anode:</strong> exactly the same distinction as the RGB LED lesson. Common cathode means the shared pin goes to GND and segments light up when their pin is set HIGH. Common anode means the shared pin goes to 5V and segments light up when their pin is set LOW instead. Check your display's datasheet or test it with a single segment and resistor before wiring the whole thing — this lesson assumes common cathode.
+</div>
+
+<h2>3. Wiring the Display</h2>
+<p>Every segment needs its own current-limiting resistor, since each one is really just a small LED:</p>
+<pre>Segment a → 220&#8486; resistor → Arduino Pin 2
+Segment b → 220&#8486; resistor → Arduino Pin 3
+Segment c → 220&#8486; resistor → Arduino Pin 4
+Segment d → 220&#8486; resistor → Arduino Pin 5
+Segment e → 220&#8486; resistor → Arduino Pin 6
+Segment f → 220&#8486; resistor → Arduino Pin 7
+Segment g → 220&#8486; resistor → Arduino Pin 8
+Common pin(s) → Arduino GND (common cathode)</pre>
+
+<h2>4. Step-by-Step Instructions</h2>
+
+<div class="step">
+  <h3><span class="step-num">1</span>Identify your display's pinout</h3>
+  <p>7-segment displays don't have a universal pin arrangement across the physical package — check the datasheet for your specific display (search its printed part number) to know which physical pin is segment "a," which is "b," and so on, and which pins are the common connections.</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">2</span>Wire the segments</h3>
+  <p>Connect each of the seven segment pins through its own 220Ω resistor to a separate Arduino digital pin, as listed above. Connect the common pin(s) to GND.</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">3</span>Write the program</h3>
+<pre><span class="comment">// 7-Segment Display — Show the Digit 3</span>
+const int a = 2, b = 3, c = 4, d = 5, e = 6, f = 7, g = 8;
+
+void setup() {
+  int segments[] = {a, b, c, d, e, f, g};
+  for (int i = 0; i &lt; 7; i++) {
+    pinMode(segments[i], OUTPUT);
+  }
+
+  <span class="comment">// Segments needed to display "3": a, b, c, d, g</span>
+  digitalWrite(a, HIGH);
+  digitalWrite(b, HIGH);
+  digitalWrite(c, HIGH);
+  digitalWrite(d, HIGH);
+  digitalWrite(e, LOW);
+  digitalWrite(f, LOW);
+  digitalWrite(g, HIGH);
+}
+
+void loop() {
+  <span class="comment">// nothing needed here for a static digit</span>
+}</pre>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">4</span>Upload and test</h3>
+  <p>Upload the code — you should see a "3" appear. If segments look wrong or nothing lights up, check the troubleshooting section before assuming your code is at fault.</p>
+</div>
+
+<div class="warning">
+  <strong>If the digit looks like its "photographic negative" (everything that should be off is on, and vice versa):</strong> you likely have a common-anode display, not common-cathode. Wire the common pin to 5V instead of GND, and swap every <code class="inline">HIGH</code>/<code class="inline">LOW</code> in your code.
+</div>
+
+<div class="troubleshoot">
+  <h3 style="margin-top:0;">Troubleshooting</h3>
+  <ul>
+    <li><strong>Wrong segments light up:</strong> almost always a pinout mix-up — re-check the datasheet against your physical wiring, one segment at a time if needed.</li>
+    <li><strong>Only some segments are dim or don't light:</strong> check each resistor value and connection individually — a single loose resistor is a common cause.</li>
+    <li><strong>Nothing lights up at all:</strong> confirm the common pin(s) are connected, and to the correct rail (GND vs 5V) for your display type.</li>
+    <li><strong>Display flickers:</strong> check for a loose breadboard connection rather than a code issue, since this is a static (non-multiplexed) circuit.</li>
+  </ul>
+</div>
+
+<h2>5. Displaying Every Digit</h2>
+<p>Rather than repeating seven <code class="inline">digitalWrite()</code> lines for every digit, a cleaner approach uses a lookup table — a 2D array where each row lists which segments should be on for that digit:</p>
+<pre><span class="comment">// 7-Segment Display — Cycle Through 0-9</span>
+const int segPins[] = {2, 3, 4, 5, 6, 7, 8}; <span class="comment">// a,b,c,d,e,f,g</span>
+
+<span class="comment">// Each row: which segments (a-g) are ON for that digit</span>
+const bool digits[10][7] = {
+  {1,1,1,1,1,1,0}, <span class="comment">// 0</span>
+  {0,1,1,0,0,0,0}, <span class="comment">// 1</span>
+  {1,1,0,1,1,0,1}, <span class="comment">// 2</span>
+  {1,1,1,1,0,0,1}, <span class="comment">// 3</span>
+  {0,1,1,0,0,1,1}, <span class="comment">// 4</span>
+  {1,0,1,1,0,1,1}, <span class="comment">// 5</span>
+  {1,0,1,1,1,1,1}, <span class="comment">// 6</span>
+  {1,1,1,0,0,0,0}, <span class="comment">// 7</span>
+  {1,1,1,1,1,1,1}, <span class="comment">// 8</span>
+  {1,1,1,1,0,1,1}  <span class="comment">// 9</span>
+};
+
+void setup() {
+  for (int i = 0; i &lt; 7; i++) {
+    pinMode(segPins[i], OUTPUT);
+  }
+}
+
+void showDigit(int number) {
+  for (int i = 0; i &lt; 7; i++) {
+    digitalWrite(segPins[i], digits[number][i]);
+  }
+}
+
+void loop() {
+  for (int n = 0; n &lt;= 9; n++) {
+    showDigit(n);
+    delay(1000);
+  }
+}</pre>
+
+<h2>6. Why This Matters</h2>
+<p>This lookup-table pattern — mapping each "state" (a digit) to a fixed set of outputs — is a technique that reappears constantly in physical computing, not just for displays. The 8×8 LED matrix and the LCD in your kit both use variations on the same underlying idea: what you want to show is separated from the code logic controlling it, which makes the program far easier to extend.</p>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Wire up the decimal point and make it blink independently of the digit shown.</li>
+    <li>Modify <code class="inline">showDigit()</code> so it counts down from 9 to 0 instead of up.</li>
+    <li>Challenge: combine this with the potentiometer lesson — display a digit 0–9 that changes live as you turn the knob, using <code class="inline">map()</code> to scale the 0–1023 reading down to 0–9.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ I identified whether my display is common-cathode or common-anode</label>
+  <label>☐ Every segment has its own 220Ω resistor</label>
+  <label>☐ The static "3" example displays correctly</label>
+  <label>☐ The 0-9 cycling program using the lookup table works correctly</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Digital Output Unit &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

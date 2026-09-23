@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "vehicle/movement-functions";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Basic Movement Functions";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Basic Movement Functions</title>
+<style>
+  :root { --navy: #1B2B5E; --teal: #0D9488; --teal-light: #e6f7f5; --navy-light: #eef0f8; }
+  body { font-family: Calibri, Arial, sans-serif; color: #1a1a1a; max-width: 900px; margin: 0 auto; padding: 40px 30px 80px; line-height: 1.55; background: #fff; }
+  h1, h2, h3 { font-family: 'Bookman Old Style', Cambria, Georgia, serif; color: var(--navy); }
+  h1 { border-bottom: 4px solid var(--teal); padding-bottom: 12px; font-size: 30px; }
+  h2 { margin-top: 40px; border-left: 6px solid var(--teal); padding-left: 14px; font-size: 22px; }
+  .banner { background: var(--navy); color: white; padding: 6px 14px; display: inline-block; border-radius: 4px; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .objectives, .note, .warning { background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0; }
+  .note { background: #fff8e6; border-left: 5px solid #d9a300; }
+  .warning { background: #fdeaea; border-left: 5px solid #c0392b; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 15px; }
+  th { background: var(--navy); color: white; }
+  code, pre { font-family: Consolas, 'Courier New', monospace; background: #0f1830; color: #e6f0ff; border-radius: 6px; }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline { background: #eef0f8; color: var(--navy); padding: 2px 6px; border-radius: 4px; }
+  .comment { color: #8fd6b4; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise { background: #fff8e6; border-left: 5px solid #d9a300; padding: 14px 20px; margin: 14px 0; border-radius: 6px; }
+  .footer-note { margin-top: 50px; font-size: 13px; color: #666; border-top: 1px solid #ddd; padding-top: 14px; }
+  .ref-note { background: var(--teal-light); border-left: 5px solid var(--teal); border-radius: 8px; padding: 14px 20px; margin: 18px 0; font-size: 14px; }
+  .ref-note a { color: var(--teal); font-weight: bold; }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/vehicle-movement-functions.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Basic Movement Functions</h1>
+<p><strong>Section focus:</strong> Robotic Vehicle — Drive &amp; Motor Subsystem — Lesson 4.2.2 &nbsp;|&nbsp; <strong>Duration:</strong> ~40 minutes</p>
+
+<div class="ref-note">
+  <strong>Builds on:</strong> Lesson 4.2.1's wiring, and <a href="../cpp/functions.html">1.6 Functions</a>. This lesson doesn't introduce new hardware — it reorganises the code you already have into a form that's actually usable in the rest of the build.
+</div>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain why repeating raw motor-pin code everywhere becomes unmanageable</li>
+    <li>Write named functions — <code class="inline">forward()</code>, <code class="inline">stop()</code>, <code class="inline">turnLeft()</code>, <code class="inline">turnRight()</code> — that wrap the low-level pin control</li>
+    <li>Call these functions to build a short sequence of movements</li>
+  </ul>
+</div>
+
+<h2>1. The Problem With Lesson 4.2.1's Code</h2>
+<p>Directly writing <code class="inline">digitalWrite()</code> and <code class="inline">analogWrite()</code> calls every time you want the vehicle to move is exactly the kind of repetition Lesson 1.6 warned about. Worse, once your line-following logic (Lesson 4.3.1) needs to make dozens of small steering decisions per second, reading a wall of raw pin-control code will make that logic far harder to follow than it needs to be.</p>
+
+<h2>2. Wrapping Motor Control in Functions</h2>
+<pre>const int leftIN1 = 8, leftIN2 = 9, leftENA = 10;
+const int rightIN3 = 11, rightIN4 = 12, rightENB = 13;
+
+void setup() {
+    pinMode(leftIN1, OUTPUT);
+    pinMode(leftIN2, OUTPUT);
+    pinMode(leftENA, OUTPUT);
+    pinMode(rightIN3, OUTPUT);
+    pinMode(rightIN4, OUTPUT);
+    pinMode(rightENB, OUTPUT);
+}
+
+void forward(int speed) {
+    digitalWrite(leftIN1, HIGH);
+    digitalWrite(leftIN2, LOW);
+    analogWrite(leftENA, speed);
+
+    digitalWrite(rightIN3, HIGH);
+    digitalWrite(rightIN4, LOW);
+    analogWrite(rightENB, speed);
+}
+
+void stopMotors() {
+    analogWrite(leftENA, 0);
+    analogWrite(rightENB, 0);
+}
+
+void turnLeft(int speed) {
+    analogWrite(leftENA, 0);       <span class="comment">// left wheel stops</span>
+    digitalWrite(rightIN3, HIGH);
+    digitalWrite(rightIN4, LOW);
+    analogWrite(rightENB, speed);  <span class="comment">// right wheel drives</span>
+}
+
+void turnRight(int speed) {
+    digitalWrite(leftIN1, HIGH);
+    digitalWrite(leftIN2, LOW);
+    analogWrite(leftENA, speed);   <span class="comment">// left wheel drives</span>
+    analogWrite(rightENB, 0);      <span class="comment">// right wheel stops</span>
+}
+
+void loop() {
+    forward(200);
+    delay(1000);
+    turnLeft(200);
+    delay(500);
+    forward(200);
+    delay(1000);
+    stopMotors();
+    delay(2000);
+}</pre>
+
+<div class="note">
+  <strong>Why <code class="inline">stopMotors()</code> and not <code class="inline">stop()</code>?</strong> <code class="inline">stop</code> happens to already be used elsewhere in some Arduino libraries, so giving your function a slightly more specific name avoids a naming clash. This is a small but genuinely useful habit — descriptive, specific function names cause fewer surprises as a program grows.
+</div>
+
+<h2>3. Why This Matters Going Forward</h2>
+<p>Compare reading <code class="inline">forward(200); turnLeft(200);</code> against reading the raw pin-toggling code from Lesson 4.2.1 — the function-based version reads almost like plain English, describing <em>what</em> the vehicle should do without burying that intent in <em>how</em> it's electrically achieved. This is exactly the payoff Lesson 1.6 promised, and it's about to matter a great deal: Lesson 4.3.1's line-following logic will call these exact functions based on sensor readings, and would be far harder to write and debug directly against raw pins.</p>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Get all four functions (<code class="inline">forward</code>, <code class="inline">stopMotors</code>, <code class="inline">turnLeft</code>, <code class="inline">turnRight</code>) working and confirm each produces the expected physical movement.</li>
+    <li>Write a short "dance" sequence in <code class="inline">loop()</code> using only these functions — forward, turn, forward, stop, repeat.</li>
+    <li>Add a <code class="inline">reverse(int speed)</code> function, following the same pattern as <code class="inline">forward()</code> but with both motors' direction pins swapped.</li>
+    <li>Challenge: add a <code class="inline">spinLeft(int speed)</code> function that rotates the vehicle on the spot (left wheel reverse, right wheel forward), distinct from the curving <code class="inline">turnLeft()</code> which only stops one wheel.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ All four movement functions work correctly when called</label>
+  <label>☐ My <code class="inline">loop()</code> reads clearly, describing movements rather than raw pin operations</label>
+  <label>☐ I added a working <code class="inline">reverse()</code> function of my own</label>
+  <label>☐ I can explain why wrapping motor control in functions will matter once sensor logic is added</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Robotic Vehicle &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

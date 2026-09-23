@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "cpp/structure-flow";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Program Structure and Flow";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Program Structure and Flow</title>
+<style>
+  :root {
+    --navy: #1B2B5E;
+    --teal: #0D9488;
+    --teal-light: #e6f7f5;
+    --navy-light: #eef0f8;
+  }
+  body {
+    font-family: Calibri, Arial, sans-serif;
+    color: #1a1a1a;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 30px 80px;
+    line-height: 1.55;
+    background: #fff;
+  }
+  h1, h2, h3 {
+    font-family: 'Bookman Old Style', Cambria, Georgia, serif;
+    color: var(--navy);
+  }
+  h1 {
+    border-bottom: 4px solid var(--teal);
+    padding-bottom: 12px;
+    font-size: 30px;
+  }
+  h2 {
+    margin-top: 40px;
+    border-left: 6px solid var(--teal);
+    padding-left: 14px;
+    font-size: 22px;
+  }
+  .banner {
+    background: var(--navy);
+    color: white;
+    padding: 6px 14px;
+    display: inline-block;
+    border-radius: 4px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .objectives, .analogy, .note, .warning {
+    background: var(--navy-light);
+    border-radius: 8px;
+    padding: 16px 22px;
+    margin: 18px 0;
+  }
+  .analogy {
+    background: var(--teal-light);
+    border-left: 5px solid var(--teal);
+  }
+  .note {
+    background: #fff8e6;
+    border-left: 5px solid #d9a300;
+  }
+  .warning {
+    background: #fdeaea;
+    border-left: 5px solid #c0392b;
+  }
+  .step {
+    margin: 26px 0;
+    padding-left: 18px;
+    border-left: 3px solid var(--navy-light);
+  }
+  .step h3 { margin-bottom: 6px; }
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--teal);
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-right: 10px;
+    font-family: Arial, sans-serif;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 14px 0;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 15px;
+  }
+  th { background: var(--navy); color: white; }
+  code, pre {
+    font-family: Consolas, 'Courier New', monospace;
+    background: #0f1830;
+    color: #e6f0ff;
+    border-radius: 6px;
+  }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline {
+    background: #eef0f8;
+    color: var(--navy);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .comment { color: #8fd6b4; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise {
+    background: #fff8e6;
+    border-left: 5px solid #d9a300;
+    padding: 14px 20px;
+    margin: 14px 0;
+    border-radius: 6px;
+  }
+  .footer-note {
+    margin-top: 50px;
+    font-size: 13px;
+    color: #666;
+    border-top: 1px solid #ddd;
+    padding-top: 14px;
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/cpp-structure-flow.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Program Structure and Flow</h1>
+<p><strong>Section focus:</strong> C/C++ Fundamentals — Lesson 1.1 &nbsp;|&nbsp; <strong>Duration:</strong> ~45 minutes</p>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain what a program actually is, in plain terms</li>
+    <li>Identify the essential parts of a C++ program and what each one does</li>
+    <li>Explain why order and punctuation matter to a computer in a way they don't in human language</li>
+    <li>Write, compile, and run your first C++ program</li>
+  </ul>
+</div>
+
+<div class="analogy">
+  <strong>Real-world analogy:</strong> A program is like a recipe. A recipe has ingredients (data), a strict order of steps (instructions), and it only works if you follow the steps in sequence — you can't bake the cake before mixing the batter. A computer follows code the exact same way: one instruction at a time, top to bottom, in the order it's written, unless something specifically tells it to skip around.
+</div>
+
+<div class="note">
+  <strong>What you'll need for this section:</strong> these lessons don't require your Arduino or any electronics yet — just a way to write and run plain C++ code. Any online C++ compiler (search "online C++ compiler" — many free ones exist) works fine, or an IDE installed on your computer if you already have one. When we reach Section 3, you'll see how these exact same ideas apply inside the Arduino IDE too, with a couple of small naming differences.
+</div>
+
+<h2>1. What Is a Program?</h2>
+<p>A program is a list of instructions that a computer carries out, one at a time, in order. That's it — there's no magic beyond that idea. Everything else you'll learn in this section is really just different ways of controlling <em>which</em> instructions run, and <em>when</em>.</p>
+
+<h2>2. Your First C++ Program</h2>
+<p>Here is the smallest complete C++ program that actually does something:</p>
+<pre><span class="comment">// My first program</span>
+#include &lt;iostream&gt;
+
+int main() {
+    std::cout &lt;&lt; "Hello, Club!" &lt;&lt; std::endl;
+    return 0;
+}</pre>
+<p>Type this into your compiler exactly as shown and run it. You should see <code class="inline">Hello, Club!</code> printed out. Before moving on, let's break down exactly what each piece is doing.</p>
+
+<h2>3. Breaking Down Every Line</h2>
+<table>
+  <tr><th>Line</th><th>What it does</th></tr>
+  <tr><td><code class="inline">// My first program</code></td><td>A <strong>comment</strong> — text the compiler completely ignores. Comments exist purely for humans reading the code later, including future-you.</td></tr>
+  <tr><td><code class="inline">#include &lt;iostream&gt;</code></td><td>Loads in a chunk of pre-written code that gives you the ability to print text to the screen. Think of it as borrowing a toolbox before you can use the tools inside it.</td></tr>
+  <tr><td><code class="inline">int main() { ... }</code></td><td>Every C++ program has exactly one <code class="inline">main()</code> function — this is where the program actually starts running. Everything the program does is written between its curly braces <code class="inline">{ }</code>.</td></tr>
+  <tr><td><code class="inline">std::cout &lt;&lt; "Hello, Club!" &lt;&lt; std::endl;</code></td><td>Prints the text between the quotes to the screen, then moves to a new line.</td></tr>
+  <tr><td><code class="inline">return 0;</code></td><td>Signals that the program finished successfully. You'll always include this line in <code class="inline">main()</code> for now — its full meaning will make more sense once you've written a few more programs.</td></tr>
+  <tr><td><code class="inline">;</code> (semicolons)</td><td>Marks the end of an instruction — like a full stop at the end of a sentence. Forgetting one is the single most common beginner mistake.</td></tr>
+</table>
+
+<div class="warning">
+  <strong>Computers are painfully literal.</strong> A human reading "prnt hello" would still understand you. A compiler won't — a single missing semicolon, misspelled word, or mismatched bracket will usually stop the whole program from running at all, with an error message rather than a guess at what you meant. This isn't the computer being difficult on purpose; it simply has no ability to guess your intent the way a person does. Reading error messages carefully, rather than fearing them, is a skill in itself.
+</div>
+
+<h2>4. Program Flow: Instructions Run in Order</h2>
+<p>Unless told otherwise, C++ runs your code from top to bottom, one line after another. Try this:</p>
+<pre>#include &lt;iostream&gt;
+
+int main() {
+    std::cout &lt;&lt; "Step 1: Mixing the batter" &lt;&lt; std::endl;
+    std::cout &lt;&lt; "Step 2: Pouring into the tin" &lt;&lt; std::endl;
+    std::cout &lt;&lt; "Step 3: Baking for 30 minutes" &lt;&lt; std::endl;
+    return 0;
+}</pre>
+<p>This prints all three lines in exactly the order they're written. Swap two lines around and run it again — the output changes to match, because the computer has no idea these lines represent "steps" other than the order you gave them in.</p>
+
+<div class="note">
+  <strong>Looking ahead:</strong> right now, your programs can only run straight through from top to bottom. In upcoming lessons, you'll learn how to make a program <em>skip</em> instructions (if statements), <em>repeat</em> instructions (loops), and <em>jump</em> to reusable blocks of instructions (functions) — these are the tools that let a program do more than just recite a fixed list once.
+</div>
+
+<h2>5. Curly Braces and Blocks</h2>
+<p>Notice that everything belonging to <code class="inline">main()</code> sits between a matching pair of curly braces: <code class="inline">{ }</code>. This grouping is called a <strong>block</strong>, and it's a pattern you'll see constantly in C++ — functions, if-statements, and loops all use the same <code class="inline">{ }</code> convention to say "everything in here belongs together."</p>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Change the text inside the quotes to print your own name instead.</li>
+    <li>Add a fourth <code class="inline">std::cout</code> line printing a message of your choice.</li>
+    <li>Delete a semicolon on purpose and run the program. Read the error message carefully — does it point you toward the actual mistake?</li>
+    <li>Challenge: print a small piece of ASCII art (multiple lines of text that form a simple picture) using several <code class="inline">std::cout</code> lines in a row.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ My "Hello, Club!" program compiles and runs without errors</label>
+  <label>☐ I can explain what <code class="inline">#include &lt;iostream&gt;</code> is for, in my own words</label>
+  <label>☐ I can explain why the order of lines in <code class="inline">main()</code> matters</label>
+  <label>☐ I intentionally broke my program (missing semicolon) and read the resulting error message</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — C/C++ Fundamentals &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

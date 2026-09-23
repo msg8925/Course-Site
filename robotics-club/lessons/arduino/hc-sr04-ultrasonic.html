@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "arduino/hc-sr04-ultrasonic";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Measuring Distance with the HC-SR04 Ultrasonic Sensor";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Measuring Distance with the HC-SR04 Ultrasonic Sensor</title>
+<style>
+  :root {
+    --navy: #1B2B5E;
+    --teal: #0D9488;
+    --teal-light: #e6f7f5;
+    --navy-light: #eef0f8;
+  }
+  body {
+    font-family: Calibri, Arial, sans-serif;
+    color: #1a1a1a;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 30px 80px;
+    line-height: 1.55;
+    background: #fff;
+  }
+  h1, h2, h3 {
+    font-family: 'Bookman Old Style', Cambria, Georgia, serif;
+    color: var(--navy);
+  }
+  h1 {
+    border-bottom: 4px solid var(--teal);
+    padding-bottom: 12px;
+    font-size: 30px;
+  }
+  h2 {
+    margin-top: 40px;
+    border-left: 6px solid var(--teal);
+    padding-left: 14px;
+    font-size: 22px;
+  }
+  .banner {
+    background: var(--navy);
+    color: white;
+    padding: 6px 14px;
+    display: inline-block;
+    border-radius: 4px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .objectives, .materials, .analogy, .troubleshoot, .extension, .warning, .note {
+    background: var(--navy-light);
+    border-radius: 8px;
+    padding: 16px 22px;
+    margin: 18px 0;
+  }
+  .analogy {
+    background: var(--teal-light);
+    border-left: 5px solid var(--teal);
+  }
+  .warning {
+    background: #fdeaea;
+    border-left: 5px solid #c0392b;
+  }
+  .note {
+    background: #fff8e6;
+    border-left: 5px solid #d9a300;
+  }
+  .step {
+    margin: 26px 0;
+    padding-left: 18px;
+    border-left: 3px solid var(--navy-light);
+  }
+  .step h3 {
+    margin-bottom: 6px;
+  }
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--teal);
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-right: 10px;
+    font-family: Arial, sans-serif;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 14px 0;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 15px;
+  }
+  th {
+    background: var(--navy);
+    color: white;
+  }
+  code, pre {
+    font-family: Consolas, 'Courier New', monospace;
+    background: #0f1830;
+    color: #e6f0ff;
+    border-radius: 6px;
+  }
+  pre {
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  code.inline {
+    background: #eef0f8;
+    color: var(--navy);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .comment { color: #8fd6b4; }
+  svg { display: block; margin: 20px auto; }
+  .caption { text-align: center; font-size: 13px; color: #555; margin-top: -10px; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise {
+    background: #fff8e6;
+    border-left: 5px solid #d9a300;
+    padding: 14px 20px;
+    margin: 14px 0;
+    border-radius: 6px;
+  }
+  .footer-note {
+    margin-top: 50px;
+    font-size: 13px;
+    color: #666;
+    border-top: 1px solid #ddd;
+    padding-top: 14px;
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/arduino-hc-sr04-ultrasonic.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Measuring Distance with the HC-SR04 Ultrasonic Sensor</h1>
+<p><strong>Session focus:</strong> Sensors — ultrasonic distance measurement &nbsp;|&nbsp; <strong>Duration:</strong> ~60 minutes</p>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain how the HC-SR04 measures distance using sound</li>
+    <li>Wire the sensor to an Arduino correctly</li>
+    <li>Write a program that reads distance and prints it to the Serial Monitor</li>
+    <li>Use a measured distance to trigger a simple decision in code (e.g. "too close")</li>
+  </ul>
+</div>
+
+<div class="analogy">
+  <strong>Real-world analogy:</strong> This sensor works exactly like a bat, or like shouting into a canyon and timing the echo. It sends out a short "shout" of ultrasonic sound (too high-pitched for us to hear), then times exactly how long it takes for the echo to bounce back off the nearest object. Since sound travels at a known, constant speed, that time tells us the distance.
+</div>
+
+<h2>1. What You Need</h2>
+<div class="materials">
+  <table>
+    <tr><th>Item</th><th>Quantity</th><th>Notes</th></tr>
+    <tr><td>Arduino Uno (or compatible)</td><td>1</td><td>Any Uno-compatible board works</td></tr>
+    <tr><td>HC-SR04 ultrasonic sensor</td><td>1</td><td>The module with two round "eyes" (transmitter and receiver)</td></tr>
+    <tr><td>Jumper wires</td><td>4</td><td>Male-to-male or male-to-female depending on your headers</td></tr>
+    <tr><td>USB cable</td><td>1</td><td>To connect Arduino to computer</td></tr>
+  </table>
+</div>
+
+<h2>2. Understanding the HC-SR04</h2>
+<p>The two round discs on the front of the module are its "eyes": one is a tiny speaker that sends out an ultrasonic pulse, and the other is a tiny microphone that listens for the echo. The module has four pins:</p>
+<table>
+  <tr><th>Pin</th><th>Function</th><th>Connects To</th></tr>
+  <tr><td>VCC</td><td>Power</td><td>Arduino 5V</td></tr>
+  <tr><td>Trig</td><td>Trigger — tells the sensor to send a pulse</td><td>Arduino digital pin (e.g. Pin 9)</td></tr>
+  <tr><td>Echo</td><td>Echo — goes HIGH for exactly as long as the pulse took to return</td><td>Arduino digital pin (e.g. Pin 10)</td></tr>
+  <tr><td>GND</td><td>Ground</td><td>Arduino GND</td></tr>
+</table>
+
+<div class="note">
+  <strong>The core idea:</strong> The Arduino briefly sets <code class="inline">Trig</code> HIGH to fire a pulse, then measures how long <code class="inline">Echo</code> stays HIGH waiting for it to bounce back. That time (in microseconds) is converted into a distance using the speed of sound.
+</div>
+
+<svg viewBox="0 0 760 300" width="100%" height="300">
+  <!-- Arduino board -->
+  <rect x="30" y="60" width="200" height="180" rx="10" fill="#1B2B5E"/>
+  <text x="130" y="45" text-anchor="middle" font-family="Arial" font-size="16" fill="#1B2B5E" font-weight="bold">Arduino Uno</text>
+
+  <circle cx="220" cy="100" r="6" fill="#ff5555"/>
+  <text x="234" y="104" font-family="Arial" font-size="12" fill="white">5V</text>
+  <circle cx="220" cy="130" r="6" fill="#ffcc00"/>
+  <text x="234" y="134" font-family="Arial" font-size="12" fill="white">Pin 9 (Trig)</text>
+  <circle cx="220" cy="160" r="6" fill="#66ccff"/>
+  <text x="234" y="164" font-family="Arial" font-size="12" fill="white">Pin 10 (Echo)</text>
+  <circle cx="220" cy="190" r="6" fill="#aaaaaa"/>
+  <text x="234" y="194" font-family="Arial" font-size="12" fill="white">GND</text>
+
+  <!-- Sensor board -->
+  <rect x="480" y="80" width="160" height="100" rx="8" fill="#0D9488"/>
+  <circle cx="520" cy="130" r="26" fill="#0f1830"/>
+  <circle cx="520" cy="130" r="18" fill="#333"/>
+  <circle cx="600" cy="130" r="26" fill="#0f1830"/>
+  <circle cx="600" cy="130" r="18" fill="#333"/>
+  <text x="560" y="65" text-anchor="middle" font-family="Arial" font-size="16" fill="#0D9488" font-weight="bold">HC-SR04</text>
+
+  <!-- Sound waves -->
+  <path d="M 630 130 Q 660 110 690 130" stroke="#e6f7f5" stroke-width="2" fill="none"/>
+  <path d="M 630 130 Q 670 95 710 130" stroke="#e6f7f5" stroke-width="2" fill="none"/>
+
+  <!-- wires -->
+  <line x1="226" y1="100" x2="500" y2="200" stroke="#ff5555" stroke-width="3"/>
+  <line x1="226" y1="130" x2="520" y2="200" stroke="#e6a800" stroke-width="3"/>
+  <line x1="226" y1="160" x2="560" y2="200" stroke="#66ccff" stroke-width="3"/>
+  <line x1="226" y1="190" x2="600" y2="200" stroke="#aaaaaa" stroke-width="3"/>
+
+  <text x="500" y="215" text-anchor="middle" font-family="Arial" font-size="10" fill="#333">VCC</text>
+  <text x="520" y="230" text-anchor="middle" font-family="Arial" font-size="10" fill="#333">Trig</text>
+  <text x="560" y="245" text-anchor="middle" font-family="Arial" font-size="10" fill="#333">Echo</text>
+  <text x="600" y="260" text-anchor="middle" font-family="Arial" font-size="10" fill="#333">GND</text>
+
+  <text x="130" y="265" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">Arduino</text>
+  <text x="560" y="285" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">HC-SR04 (transmitter / receiver "eyes")</text>
+</svg>
+<p class="caption">Figure 1: Trig sends the ultrasonic pulse; Echo reports how long it took to bounce back.</p>
+
+<h2>3. Step-by-Step Instructions</h2>
+
+<div class="step">
+  <h3><span class="step-num">1</span>Wire the sensor</h3>
+  <ul>
+    <li>VCC → Arduino 5V</li>
+    <li>Trig → Arduino Pin 9</li>
+    <li>Echo → Arduino Pin 10</li>
+    <li>GND → Arduino GND</li>
+  </ul>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">2</span>Write the program</h3>
+<pre><span class="comment">// HC-SR04 Distance Measurement Example</span>
+const int trigPin = 9;
+const int echoPin = 10;
+
+void setup() {
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  <span class="comment">// Send a short pulse to trigger a measurement</span>
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  <span class="comment">// Measure how long the echo pin stays HIGH (in microseconds)</span>
+  long duration = pulseIn(echoPin, HIGH);
+
+  <span class="comment">// Convert time into distance (cm)</span>
+  <span class="comment">// Sound travels ~0.034 cm per microsecond; divide by 2</span>
+  <span class="comment">// because the pulse travels there AND back</span>
+  float distanceCm = (duration * 0.034) / 2;
+
+  Serial.print("Distance: ");
+  Serial.print(distanceCm);
+  Serial.println(" cm");
+
+  delay(500);
+}</pre>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">3</span>Upload and test</h3>
+  <p>Upload the code, then open the Serial Monitor (Tools → Serial Monitor, or Ctrl+Shift+M) and set it to 9600 baud. Move your hand toward and away from the sensor and watch the distance readings change.</p>
+</div>
+
+<div class="troubleshoot">
+  <h3 style="margin-top:0;">Troubleshooting</h3>
+  <ul>
+    <li><strong>Readings are 0 or wildly inconsistent:</strong> check Trig and Echo aren't swapped, and that GND is connected.</li>
+    <li><strong>Nothing appears in Serial Monitor:</strong> check the baud rate is set to 9600 to match <code class="inline">Serial.begin(9600)</code>.</li>
+    <li><strong>Readings jump around even when nothing moves:</strong> this is normal to a small degree — ultrasonic sensors are sensitive to angled or soft surfaces that scatter sound rather than reflecting it cleanly.</li>
+    <li><strong>Very close objects (under ~2cm) don't register:</strong> this is a physical limitation of the sensor, not a wiring fault.</li>
+  </ul>
+</div>
+
+<h2>4. Making a Decision from the Reading</h2>
+<p>Sensors become useful once code responds to what they detect. Here's the same program extended to react when something gets close:</p>
+<pre>float distanceCm = (duration * 0.034) / 2;
+
+if (distanceCm &lt; 10) {
+  Serial.println("Object too close!");
+} else {
+  Serial.println("Clear");
+}</pre>
+
+<h2>5. Why This Matters</h2>
+<p>This is the sensor input half of the "sense-then-act" pattern that runs through robotics: a sensor measures the world, code makes a decision, and a motor responds. In our line-following vehicle, this same pattern applies — later sessions swap the ultrasonic sensor for a line sensor, but the structure (read sensor → decide → drive motor) stays identical.</p>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Change the threshold in the if-statement from 10cm to a distance of your choice, and test it.</li>
+    <li>Add a second condition so the program prints "Object very close!" under 5cm, "Object close" under 20cm, and "Clear" otherwise.</li>
+    <li>Challenge: combine this with the DC motor lesson — write a program that drives a motor forward, but stops it automatically if the sensor detects an object within 15cm.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ Sensor is wired correctly (VCC / Trig / Echo / GND)</label>
+  <label>☐ Serial Monitor is set to 9600 baud and shows changing readings</label>
+  <label>☐ I can explain why the duration is divided by 2 in the distance calculation</label>
+  <label>☐ I extended the code to make a decision based on distance</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Sensors Unit &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

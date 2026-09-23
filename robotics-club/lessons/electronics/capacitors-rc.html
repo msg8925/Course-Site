@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "electronics/capacitors-rc";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Capacitors and RC Circuits";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Capacitors and RC Circuits</title>
+<style>
+  :root { --navy: #1B2B5E; --teal: #0D9488; --teal-light: #e6f7f5; --navy-light: #eef0f8; }
+  body { font-family: Calibri, Arial, sans-serif; color: #1a1a1a; max-width: 900px; margin: 0 auto; padding: 40px 30px 80px; line-height: 1.55; background: #fff; }
+  h1, h2, h3 { font-family: 'Bookman Old Style', Cambria, Georgia, serif; color: var(--navy); }
+  h1 { border-bottom: 4px solid var(--teal); padding-bottom: 12px; font-size: 30px; }
+  h2 { margin-top: 40px; border-left: 6px solid var(--teal); padding-left: 14px; font-size: 22px; }
+  .banner { background: var(--navy); color: white; padding: 6px 14px; display: inline-block; border-radius: 4px; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .objectives, .analogy, .note, .warning { background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0; }
+  .analogy { background: var(--teal-light); border-left: 5px solid var(--teal); }
+  .note { background: #fff8e6; border-left: 5px solid #d9a300; }
+  .warning { background: #fdeaea; border-left: 5px solid #c0392b; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 15px; }
+  th { background: var(--navy); color: white; }
+  code, pre { font-family: Consolas, 'Courier New', monospace; background: #0f1830; color: #e6f0ff; border-radius: 6px; }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline { background: #eef0f8; color: var(--navy); padding: 2px 6px; border-radius: 4px; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise { background: #fff8e6; border-left: 5px solid #d9a300; padding: 14px 20px; margin: 14px 0; border-radius: 6px; }
+  .footer-note { margin-top: 50px; font-size: 13px; color: #666; border-top: 1px solid #ddd; padding-top: 14px; }
+  svg { display: block; margin: 20px auto; }
+  .caption { text-align: center; font-size: 13px; color: #555; margin-top: -10px; }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/electronics-capacitors-rc.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Capacitors and RC Circuits</h1>
+<p><strong>Section focus:</strong> Electronics Fundamentals — Lesson 2.5 &nbsp;|&nbsp; <strong>Duration:</strong> ~45 minutes</p>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain what a capacitor stores and how that differs from a battery</li>
+    <li>Identify a capacitor's two states: charging and discharging</li>
+    <li>Explain what an RC circuit is and why the resistor's value affects its timing</li>
+    <li>Predict, roughly, how changing resistance or capacitance affects charge time</li>
+  </ul>
+</div>
+
+<div class="analogy">
+  <strong>Real-world analogy:</strong> A capacitor is like a small water tank connected to a pipe. A narrow pipe (a large resistor) fills or drains the tank slowly; a wide pipe (a small resistor) fills or drains it quickly. The tank (capacitor) stores a limited amount of water (charge) and releases it back out once the input stops — unlike a water tower's constant supply (a battery), a tank empties as soon as you stop filling it and start drawing from it.
+</div>
+
+<h2>1. What a Capacitor Actually Stores</h2>
+<p>A capacitor stores electrical charge directly, using two conductive plates separated by a thin insulating layer. This is meaningfully different from a battery, which stores energy chemically and releases it steadily over a long time. A capacitor charges and discharges much faster, but usually holds far less energy overall — it's built for short bursts and precise timing, not long-term power storage.</p>
+
+<h2>2. Charging and Discharging</h2>
+<p>Connect a capacitor to a power source through a resistor, and it doesn't charge instantly — it fills gradually, fastest at first and slowing down as it approaches full charge:</p>
+
+<svg viewBox="0 0 500 220" width="100%" height="220">
+  <line x1="50" y1="180" x2="470" y2="180" stroke="#ccc" stroke-width="1"/>
+  <line x1="50" y1="180" x2="50" y2="20" stroke="#ccc" stroke-width="1"/>
+  <text x="30" y="25" font-family="Arial" font-size="11" fill="#666">V</text>
+  <text x="460" y="200" font-family="Arial" font-size="11" fill="#666">time</text>
+  <path d="M 50 180 C 120 40, 200 30, 470 30" stroke="#0D9488" stroke-width="3" fill="none"/>
+  <text x="250" y="60" font-family="Arial" font-size="12" fill="#0D9488">charging</text>
+  <line x1="50" y1="30" x2="470" y2="30" stroke="#d9a300" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="475" y="34" font-family="Arial" font-size="11" fill="#d9a300">full charge</text>
+</svg>
+<p class="caption">Figure 1: Charging curve — fast at first, then gradually levelling off as the capacitor approaches full charge.</p>
+
+<p>Discharging follows the mirror image of this curve — fast at first, then slowing as it approaches empty.</p>
+
+<h2>3. The RC Circuit and Time Constant</h2>
+<p>An RC circuit is simply a resistor (R) and a capacitor (C) wired together — the combination that produces exactly the charging behaviour shown above. How fast this happens is described by a value called the <strong>time constant</strong>, calculated as:</p>
+<pre>&tau; (tau) = R &times; C</pre>
+<p>Where R is resistance in ohms and C is capacitance in farads, giving &tau; in seconds. One time constant is roughly how long it takes the capacitor to reach about 63% of full charge — not fully charged, but a useful, consistent reference point for comparing circuits.</p>
+
+<table>
+  <tr><th>Change</th><th>Effect on charging speed</th></tr>
+  <tr><td>Larger resistor</td><td>Slower — less current can flow in to fill the capacitor</td></tr>
+  <tr><td>Smaller resistor</td><td>Faster — more current can flow in</td></tr>
+  <tr><td>Larger capacitor</td><td>Slower — there's simply more capacity to fill</td></tr>
+  <tr><td>Smaller capacitor</td><td>Faster — less capacity to fill</td></tr>
+</table>
+
+<div class="note">
+  <strong>A concrete example:</strong> a 10kΩ resistor and a 100µF (microfarad) capacitor give &tau; = 10,000 &times; 0.0001 = 1 second. Swap in a 1kΩ resistor instead, and &tau; drops to 0.1 seconds — ten times faster, matching the ten-times-smaller resistance.
+</div>
+
+<h2>4. Why Capacitors Matter in Practice</h2>
+<p>You've actually already met one reason capacitors matter, even without a dedicated lesson: the flyback diode from the transistor motor lesson protects against a sudden voltage <em>spike</em>; a capacitor placed near a motor or relay can additionally help smooth out rapid, noisy fluctuations in voltage, for a similar protective reason. RC circuits like this one also show up in simple timing circuits, basic filters that separate fast-changing signals from slow ones, and button "debouncing" — cleaning up the rapid, unwanted electrical noise created by a mechanical switch closing.</p>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Calculate the time constant for a 1kΩ resistor and a 1000µF capacitor.</li>
+    <li>If your calculated time constant doubled, would the capacitor charge faster or slower? Explain why in your own words.</li>
+    <li>Look up (or ask) what "microfarad" (µF) means in relation to a farad, and convert 100µF into farads.</li>
+    <li>Challenge: research what "debouncing" means for a mechanical switch, and explain in a sentence or two how an RC circuit could help solve that problem.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ I can explain the difference between how a capacitor and a battery store energy</label>
+  <label>☐ I can describe the shape of a capacitor's charging curve</label>
+  <label>☐ I correctly calculated a time constant from given resistor and capacitor values</label>
+  <label>☐ I can explain how changing R or C affects charging speed</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Electronics Fundamentals &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

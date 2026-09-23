@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "electronics/stepper-basics";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Stepper Motors — How They Work";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Stepper Motors — How They Work</title>
+<style>
+  :root { --navy: #1B2B5E; --teal: #0D9488; --teal-light: #e6f7f5; --navy-light: #eef0f8; }
+  body { font-family: Calibri, Arial, sans-serif; color: #1a1a1a; max-width: 900px; margin: 0 auto; padding: 40px 30px 80px; line-height: 1.55; background: #fff; }
+  h1, h2, h3 { font-family: 'Bookman Old Style', Cambria, Georgia, serif; color: var(--navy); }
+  h1 { border-bottom: 4px solid var(--teal); padding-bottom: 12px; font-size: 30px; }
+  h2 { margin-top: 40px; border-left: 6px solid var(--teal); padding-left: 14px; font-size: 22px; }
+  .banner { background: var(--navy); color: white; padding: 6px 14px; display: inline-block; border-radius: 4px; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .objectives, .analogy, .note, .warning { background: var(--navy-light); border-radius: 8px; padding: 16px 22px; margin: 18px 0; }
+  .analogy { background: var(--teal-light); border-left: 5px solid var(--teal); }
+  .note { background: #fff8e6; border-left: 5px solid #d9a300; }
+  .warning { background: #fdeaea; border-left: 5px solid #c0392b; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 15px; }
+  th { background: var(--navy); color: white; }
+  code, pre { font-family: Consolas, 'Courier New', monospace; background: #0f1830; color: #e6f0ff; border-radius: 6px; }
+  pre { padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.5; }
+  code.inline { background: #eef0f8; color: var(--navy); padding: 2px 6px; border-radius: 4px; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise { background: #fff8e6; border-left: 5px solid #d9a300; padding: 14px 20px; margin: 14px 0; border-radius: 6px; }
+  .footer-note { margin-top: 50px; font-size: 13px; color: #666; border-top: 1px solid #ddd; padding-top: 14px; }
+  svg { display: block; margin: 20px auto; }
+  .caption { text-align: center; font-size: 13px; color: #555; margin-top: -10px; }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/electronics-stepper-basics.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Stepper Motors — How They Work</h1>
+<p><strong>Section focus:</strong> Electronics Fundamentals — Lesson 2.9 &nbsp;|&nbsp; <strong>Duration:</strong> ~40 minutes</p>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain what makes a stepper motor fundamentally different from the DC motor covered in Lesson 2.7</li>
+    <li>Explain how energising coils in sequence produces controlled, discrete movement</li>
+    <li>Explain why a stepper motor "knows" its position without any sensor</li>
+    <li>Connect this concept to the driver hardware you'll use to control one</li>
+  </ul>
+</div>
+
+<div class="analogy">
+  <strong>Real-world analogy:</strong> Picture a ring of light bulbs arranged in a circle, with a magnet positioned nearby that's always attracted toward whichever bulb is currently lit. Light bulb 1, and the magnet moves to point at it. Turn off bulb 1 and light bulb 2 instead, and the magnet moves to point at that one — one small step at a time, in whichever order you switch the bulbs. Lighting them in sequence around the ring makes the magnet rotate, one precise step per switch.
+</div>
+
+<h2>1. The Core Difference from a DC Motor</h2>
+<p>Lesson 2.7 covered a DC motor that spins continuously and smoothly as long as power is applied — it has no built-in concept of "position," only "spinning" or "not spinning." A stepper motor is built entirely differently: instead of one continuously-spinning coil, it has <strong>several separate coils</strong> arranged around a central magnet, and it moves in small, fixed-size steps by energising those coils in a specific sequence, one (or a pair) at a time.</p>
+
+<h2>2. Stepping Through the Sequence</h2>
+<svg viewBox="0 0 500 260" width="100%" height="260">
+  <circle cx="250" cy="130" r="90" fill="none" stroke="#ccc" stroke-width="2"/>
+  <circle cx="250" cy="55" r="18" fill="#0D9488"/>
+  <text x="250" y="30" text-anchor="middle" font-family="Arial" font-size="12" fill="#0D9488">Coil A</text>
+  <circle cx="325" cy="130" r="18" fill="#ccc"/>
+  <text x="360" y="134" text-anchor="middle" font-family="Arial" font-size="12" fill="#888">Coil B</text>
+  <circle cx="250" cy="205" r="18" fill="#ccc"/>
+  <text x="250" y="235" text-anchor="middle" font-family="Arial" font-size="12" fill="#888">Coil C</text>
+  <circle cx="175" cy="130" r="18" fill="#ccc"/>
+  <text x="140" y="134" text-anchor="middle" font-family="Arial" font-size="12" fill="#888">Coil D</text>
+  <circle cx="250" cy="130" r="10" fill="#1B2B5E"/>
+  <line x1="250" y1="130" x2="250" y2="70" stroke="#1B2B5E" stroke-width="3"/>
+  <text x="250" y="260" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">Only Coil A is energised — the central magnet points toward it</text>
+</svg>
+<p class="caption">Figure 1: A simplified 4-coil stepper. Energising Coil B next (instead of A) would rotate the magnet 90° to point at B.</p>
+
+<p>Real steppers (like the 28BYJ-48 in your kit) have far more than 4 coil positions internally, combined with internal gearing, which is why they take many small steps (often 2048 per full revolution) rather than four large ones — but the underlying principle shown above is exactly the same, just repeated many times around a finer circle.</p>
+
+<h2>3. Why a Stepper "Knows" Its Position</h2>
+<p>Because each step is a fixed, known size, and the motor only moves when a coil is explicitly switched, keeping a simple count of how many steps you've commanded tells you exactly where the motor's shaft is — without needing any separate position sensor. This is the single biggest reason to choose a stepper over a DC motor: precise, trackable position, at the cost of top speed and smooth continuous rotation.</p>
+
+<div class="note">
+  <strong>Trade-off worth noting:</strong> that precision isn't free. A stepper motor is generally slower and less efficient than an equivalent-sized DC motor doing continuous rotation, and it draws current continuously just to hold a fixed position — a DC motor draws nothing at all once stopped. Choosing between them is a genuine engineering trade-off, not a simple "better/worse" choice.
+</div>
+
+<h2>4. Why Steppers Need a Dedicated Driver</h2>
+<p>Switching multiple coils in the correct rapid sequence is more complex than the single on/off switching a transistor provides for a DC motor. This is why stepper motors are typically paired with a dedicated driver chip (like the ULN2003 in your kit) — it handles switching the right coils in the right order at the right time, so your code only needs to say "step forward" or "step backward," not manage each individual coil.</p>
+
+<div class="note">
+  <strong>Looking ahead:</strong> Lesson 3.13 (Stepper Motors, in the Arduino section) puts this into practice with your actual 28BYJ-48 motor and ULN2003 driver board, including a specific pin-ordering detail in the code that only makes sense once you understand the coil-sequencing idea from this lesson.
+</div>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Using the 4-coil diagram above, sketch what sequence of coils (A, B, C, D) would need to energise, in order, to rotate the magnet a full 360°.</li>
+    <li>Research your kit's 28BYJ-48 motor's steps-per-revolution figure and calculate how many degrees a single step actually moves the shaft.</li>
+    <li>Explain in your own words why a stepper motor uses more power to simply <em>hold</em> a position than a DC motor uses to hold nothing (i.e. sit stopped).</li>
+    <li>Challenge: research the difference between "full-step" and "half-step" driving modes for a stepper motor, and explain what half-stepping achieves.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ I can explain the core difference between a stepper motor and a DC motor</label>
+  <label>☐ I can describe how energising coils in sequence produces rotation</label>
+  <label>☐ I can explain why a stepper "knows" its position without a sensor</label>
+  <label>☐ I can name one trade-off a stepper motor makes compared to a DC motor</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Electronics Fundamentals &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "arduino/dc-motor-l298n";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Controlling a DC Motor with Arduino";
+    window.location.replace("../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<title>Controlling a DC Motor with Arduino</title>
+<style>
+  :root {
+    --navy: #1B2B5E;
+    --teal: #0D9488;
+    --teal-light: #e6f7f5;
+    --navy-light: #eef0f8;
+  }
+  body {
+    font-family: Calibri, Arial, sans-serif;
+    color: #1a1a1a;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 30px 80px;
+    line-height: 1.55;
+    background: #fff;
+  }
+  h1, h2, h3 {
+    font-family: 'Bookman Old Style', Cambria, Georgia, serif;
+    color: var(--navy);
+  }
+  h1 {
+    border-bottom: 4px solid var(--teal);
+    padding-bottom: 12px;
+    font-size: 30px;
+  }
+  h2 {
+    margin-top: 40px;
+    border-left: 6px solid var(--teal);
+    padding-left: 14px;
+    font-size: 22px;
+  }
+  .banner {
+    background: var(--navy);
+    color: white;
+    padding: 6px 14px;
+    display: inline-block;
+    border-radius: 4px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .objectives, .materials, .analogy, .troubleshoot, .extension, .warning {
+    background: var(--navy-light);
+    border-radius: 8px;
+    padding: 16px 22px;
+    margin: 18px 0;
+  }
+  .analogy {
+    background: var(--teal-light);
+    border-left: 5px solid var(--teal);
+  }
+  .warning {
+    background: #fdeaea;
+    border-left: 5px solid #c0392b;
+  }
+  .step {
+    margin: 26px 0;
+    padding-left: 18px;
+    border-left: 3px solid var(--navy-light);
+  }
+  .step h3 {
+    margin-bottom: 6px;
+  }
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--teal);
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-right: 10px;
+    font-family: Arial, sans-serif;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 14px 0;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 15px;
+  }
+  th {
+    background: var(--navy);
+    color: white;
+  }
+  code, pre {
+    font-family: Consolas, 'Courier New', monospace;
+    background: #0f1830;
+    color: #e6f0ff;
+    border-radius: 6px;
+  }
+  pre {
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  code.inline {
+    background: #eef0f8;
+    color: var(--navy);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .comment { color: #8fd6b4; }
+  .wiring-table td.pin-arduino { font-weight: bold; color: var(--navy); }
+  .wiring-table td.pin-driver { font-weight: bold; color: var(--teal); }
+  svg { display: block; margin: 20px auto; }
+  .caption { text-align: center; font-size: 13px; color: #555; margin-top: -10px; }
+  .checklist label { display: block; margin: 6px 0; font-size: 15px; }
+  .exercise {
+    background: #fff8e6;
+    border-left: 5px solid #d9a300;
+    padding: 14px 20px;
+    margin: 14px 0;
+    border-radius: 6px;
+  }
+  .footer-note {
+    margin-top: 50px;
+    font-size: 13px;
+    color: #666;
+    border-top: 1px solid #ddd;
+    padding-top: 14px;
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../pdfs/arduino-dc-motor-l298n.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+<span class="banner">Programming, Robotics &amp; Electronics Club</span>
+<h1>Controlling a DC Motor with Arduino</h1>
+<p><strong>Session focus:</strong> Motors — small DC motor via motor driver &nbsp;|&nbsp; <strong>Duration:</strong> ~60 minutes</p>
+
+<div class="objectives">
+  <h3 style="margin-top:0;">Learning Objectives</h3>
+  <p>By the end of this session, you will be able to:</p>
+  <ul>
+    <li>Explain why a DC motor cannot be connected directly to an Arduino pin</li>
+    <li>Wire a DC motor to an Arduino using an L298N motor driver module</li>
+    <li>Write a program that controls motor direction and speed</li>
+    <li>Compare how a DC motor's continuous spin differs from a servo's fixed-angle positioning</li>
+  </ul>
+</div>
+
+<div class="analogy">
+  <strong>Real-world analogy:</strong> If a servo is like a clock hand that points at a specific number, a DC motor is like a bicycle wheel — it just spins, as fast or slow as you let it, for as long as you let it, in whichever direction you choose. It has no idea what "angle" it's at; it only knows "spin" or "stop."
+</div>
+
+<div class="warning">
+  <strong>Why we need a motor driver:</strong> An Arduino pin can only safely supply a tiny amount of current (about 20mA). A DC motor, even a small one, can pull far more than that when it starts spinning or slows down — enough to damage the Arduino if wired directly. A <strong>motor driver module</strong> (we'll use the L298N) sits between the Arduino and the motor: the Arduino sends it small, safe signals, and the driver uses a separate, stronger power supply to actually drive the motor. Never wire a DC motor straight into an Arduino pin.
+</div>
+
+<h2>1. What You Need</h2>
+<div class="materials">
+  <table>
+    <tr><th>Item</th><th>Quantity</th><th>Notes</th></tr>
+    <tr><td>Arduino Uno (or compatible)</td><td>1</td><td>Any Uno-compatible board works</td></tr>
+    <tr><td>Small DC motor</td><td>1</td><td>e.g. a basic hobby "TT" gear motor</td></tr>
+    <tr><td>L298N motor driver module</td><td>1</td><td>Common, inexpensive dual H-bridge board</td></tr>
+    <tr><td>External battery pack (e.g. 4×AA or 9V)</td><td>1</td><td>Powers the motor — do NOT use the Arduino's own 5V for this</td></tr>
+    <tr><td>Jumper wires</td><td>~6</td><td>Male-to-male / male-to-female as needed</td></tr>
+    <tr><td>USB cable</td><td>1</td><td>To connect Arduino to computer</td></tr>
+  </table>
+</div>
+
+<h2>2. Understanding the L298N Driver</h2>
+<p>The L298N takes a few signal pins from the Arduino and uses them to control a much bigger current flowing from the external battery pack to the motor. For one motor, we mainly use three connections:</p>
+<table class="wiring-table">
+  <tr><th>L298N Pin</th><th>Function</th><th>Connects To</th></tr>
+  <tr><td>IN1</td><td>Direction control A</td><td>Arduino Pin 8</td></tr>
+  <tr><td>IN2</td><td>Direction control B</td><td>Arduino Pin 9</td></tr>
+  <tr><td>ENA</td><td>Speed control (PWM)</td><td>Arduino Pin 10</td></tr>
+  <tr><td>OUT1 / OUT2</td><td>Motor terminals</td><td>The two motor wires (either way round)</td></tr>
+  <tr><td>+12V / GND (power side)</td><td>Motor power</td><td>External battery pack</td></tr>
+  <tr><td>GND (logic side)</td><td>Common ground</td><td>Arduino GND — <strong>must be connected</strong></td></tr>
+</table>
+<p><strong>How direction works:</strong> IN1 HIGH + IN2 LOW spins one way; IN1 LOW + IN2 HIGH spins the other way; both LOW (or both HIGH) stops the motor. ENA's PWM value (0–255) controls how fast it spins.</p>
+
+<svg viewBox="0 0 760 320" width="100%" height="320">
+  <!-- Arduino board -->
+  <rect x="30" y="70" width="200" height="180" rx="10" fill="#1B2B5E"/>
+  <text x="130" y="55" text-anchor="middle" font-family="Arial" font-size="16" fill="#1B2B5E" font-weight="bold">Arduino Uno</text>
+
+  <circle cx="220" cy="120" r="6" fill="#ffcc00"/>
+  <text x="234" y="124" font-family="Arial" font-size="12" fill="white">Pin 8 (IN1)</text>
+  <circle cx="220" cy="150" r="6" fill="#ff9d00"/>
+  <text x="234" y="154" font-family="Arial" font-size="12" fill="white">Pin 9 (IN2)</text>
+  <circle cx="220" cy="180" r="6" fill="#66ccff"/>
+  <text x="234" y="184" font-family="Arial" font-size="12" fill="white">Pin 10 (ENA)</text>
+  <circle cx="220" cy="210" r="6" fill="#aaaaaa"/>
+  <text x="234" y="214" font-family="Arial" font-size="12" fill="white">GND</text>
+
+  <!-- Driver board -->
+  <rect x="330" y="60" width="180" height="200" rx="8" fill="#0D9488"/>
+  <text x="420" y="45" text-anchor="middle" font-family="Arial" font-size="16" fill="#0D9488" font-weight="bold">L298N Driver</text>
+  <text x="420" y="90" text-anchor="middle" font-family="Arial" font-size="12" fill="white">IN1</text>
+  <text x="420" y="120" text-anchor="middle" font-family="Arial" font-size="12" fill="white">IN2</text>
+  <text x="420" y="150" text-anchor="middle" font-family="Arial" font-size="12" fill="white">ENA</text>
+  <text x="420" y="180" text-anchor="middle" font-family="Arial" font-size="12" fill="white">GND</text>
+  <text x="420" y="210" text-anchor="middle" font-family="Arial" font-size="12" fill="white">OUT1 / OUT2</text>
+  <text x="420" y="240" text-anchor="middle" font-family="Arial" font-size="12" fill="white">+12V</text>
+
+  <!-- wires arduino -> driver -->
+  <line x1="226" y1="120" x2="368" y2="90" stroke="#e6a800" stroke-width="3"/>
+  <line x1="226" y1="150" x2="368" y2="120" stroke="#ff9d00" stroke-width="3"/>
+  <line x1="226" y1="180" x2="368" y2="150" stroke="#66ccff" stroke-width="3"/>
+  <line x1="226" y1="210" x2="368" y2="180" stroke="#aaaaaa" stroke-width="3"/>
+
+  <!-- Motor -->
+  <circle cx="650" cy="150" r="45" fill="#333333"/>
+  <circle cx="650" cy="150" r="18" fill="#666666"/>
+  <text x="650" y="215" text-anchor="middle" font-family="Arial" font-size="14" fill="#1B2B5E" font-weight="bold">DC Motor</text>
+  <line x1="472" y1="210" x2="605" y2="150" stroke="#333333" stroke-width="3"/>
+  <line x1="472" y1="210" x2="605" y2="165" stroke="#333333" stroke-width="3"/>
+
+  <!-- Battery pack -->
+  <rect x="330" y="285" width="80" height="30" rx="4" fill="#c0392b"/>
+  <text x="370" y="305" text-anchor="middle" font-family="Arial" font-size="12" fill="white">Battery</text>
+  <line x1="410" y1="285" x2="472" y2="240" stroke="#c0392b" stroke-width="3"/>
+
+  <text x="130" y="270" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">Arduino (control signals)</text>
+  <text x="420" y="290" text-anchor="middle" font-family="Arial" font-size="12" fill="#333">L298N (power switching)</text>
+</svg>
+<p class="caption">Figure 1: Arduino sends control signals to the L298N driver, which switches power from an external battery pack to the DC motor.</p>
+
+<h2>3. Step-by-Step Instructions</h2>
+
+<div class="step">
+  <h3><span class="step-num">1</span>Wire the driver to the Arduino</h3>
+  <ul>
+    <li>IN1 → Arduino Pin 8</li>
+    <li>IN2 → Arduino Pin 9</li>
+    <li>ENA → Arduino Pin 10</li>
+    <li>GND (logic side) → Arduino GND</li>
+  </ul>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">2</span>Wire the motor and power</h3>
+  <ul>
+    <li>Connect the two motor wires to OUT1 and OUT2 (either order — it only affects which direction counts as "forward")</li>
+    <li>Connect the external battery pack's positive and negative leads to the driver's power input (+12V and GND)</li>
+  </ul>
+  <p>Leave the battery pack switched off (or disconnected) until wiring is fully checked.</p>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">3</span>Write the program</h3>
+<pre><span class="comment">// DC Motor Control Example</span>
+const int IN1 = 8;
+const int IN2 = 9;
+const int ENA = 10;
+
+void setup() {
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(ENA, OUTPUT);
+}
+
+void loop() {
+  <span class="comment">// Spin forward at full speed for 2 seconds</span>
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  analogWrite(ENA, 255);   <span class="comment">// speed: 0 (stop) to 255 (full speed)</span>
+  delay(2000);
+
+  <span class="comment">// Stop for 1 second</span>
+  analogWrite(ENA, 0);
+  delay(1000);
+
+  <span class="comment">// Spin backward at half speed for 2 seconds</span>
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+  analogWrite(ENA, 130);
+  delay(2000);
+
+  <span class="comment">// Stop for 1 second</span>
+  analogWrite(ENA, 0);
+  delay(1000);
+}</pre>
+</div>
+
+<div class="step">
+  <h3><span class="step-num">4</span>Power on and test</h3>
+  <p>Connect the USB cable, upload the code, then switch on the external battery pack. The motor should spin forward fast, stop, spin backward more slowly, stop, and repeat.</p>
+</div>
+
+<div class="troubleshoot">
+  <h3 style="margin-top:0;">Troubleshooting</h3>
+  <ul>
+    <li><strong>Motor doesn't spin at all:</strong> check the battery pack is switched on and its wires are firmly connected — this is the most common issue.</li>
+    <li><strong>Motor buzzes but doesn't turn:</strong> check ENA is receiving a PWM value above 0; a very low value may not be enough to overcome friction.</li>
+    <li><strong>Motor only spins one direction regardless of code:</strong> double check IN1 and IN2 are wired to the pin numbers written in the code.</li>
+    <li><strong>Arduino resets or behaves oddly when motor starts:</strong> this is usually a shared/weak ground — make sure the logic GND is connected between Arduino and driver.</li>
+  </ul>
+</div>
+
+<h2>4. Servo vs DC Motor — Quick Comparison</h2>
+<table>
+  <tr><th></th><th>Servo (SG90)</th><th>DC Motor (via L298N)</th></tr>
+  <tr><td>Movement type</td><td>Moves to a fixed angle (0°–180°) and holds</td><td>Spins continuously in a direction</td></tr>
+  <tr><td>Control command</td><td><code class="inline">myServo.write(angle)</code></td><td><code class="inline">digitalWrite()</code> for direction + <code class="inline">analogWrite()</code> for speed</td></tr>
+  <tr><td>Extra hardware needed</td><td>None — connects directly to Arduino</td><td>Motor driver + external power supply</td></tr>
+  <tr><td>Typical robot use</td><td>Steering, arms, pointing sensors</td><td>Driving wheels</td></tr>
+</table>
+
+<div class="exercise">
+  <strong>Try it yourself:</strong>
+  <ol>
+    <li>Change the speed value in <code class="inline">analogWrite(ENA, ...)</code> and observe how the motor's behaviour changes.</li>
+    <li>Rewrite the code so the motor gradually speeds up from 0 to 255 instead of jumping straight to full speed.</li>
+    <li>Challenge: combine this with the servo tutorial — write a program where a servo points in a direction while the DC motor drives forward, as a first step toward the line-following vehicle's steering and drive system.</li>
+  </ol>
+</div>
+
+<div class="checklist">
+  <h3>Self-Check Before You Finish</h3>
+  <label>☐ Driver is wired correctly to both Arduino and battery pack</label>
+  <label>☐ Logic GND is shared between Arduino and driver</label>
+  <label>☐ Code uploads without errors</label>
+  <label>☐ Motor spins forward, stops, and spins backward as expected</label>
+  <label>☐ I can explain why the motor needs a driver but the servo didn't</label>
+</div>
+
+<div class="footer-note">
+  Programming, Robotics &amp; Electronics Club — Motors Unit &nbsp;|&nbsp; Meritton British International School
+</div>
+
+</body>
+</html>
