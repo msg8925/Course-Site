@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "strand-b/t11-iteration";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Iteration: Pseudocode and Python — Practice Questions";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iteration: Practice Questions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E;
+    --navy-deep:#101a3a;
+    --teal:#0D9488;
+    --teal-light:#e6f5f3;
+    --red:#a4342a;
+    --red-light:#fbeae8;
+    --bg:#f5f6fa;
+    --panel:#ffffff;
+    --panel-alt:#eef1f8;
+    --border:#dde1ee;
+    --text:#1c2340;
+    --muted:#5b6472;
+    --serif:'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --sans:'Source Sans 3','Segoe UI',Arial,sans-serif;
+    --mono:'JetBrains Mono','Fira Code',Consolas,monospace;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.6; -webkit-font-smoothing:antialiased;}
+  a{color:var(--teal);}
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible{outline:3px solid var(--teal); outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;} }
+
+  header.page-head{background:var(--navy); color:#fff; padding:2.4rem 1.5rem 2.1rem;}
+  .head-inner{max-width:920px; margin:0 auto;}
+  .head-inner p.eyebrow{margin:0 0 0.6rem; color:#9fb0e0; font-size:0.98rem;}
+  .head-inner h1{font-family:var(--serif); font-weight:700; font-size:clamp(1.8rem, 4vw, 2.5rem); margin:0 0 0.7rem; line-height:1.15;}
+  .head-inner p.lede{margin:0; max-width:65ch; color:#dbe2f5; font-size:1.08rem;}
+
+  .progress-bar-wrap{max-width:920px; margin:1.3rem auto 0; background:#20295a; border-radius:999px; height:10px; overflow:hidden;}
+  .progress-bar-fill{height:100%; background:var(--teal); width:0%;}
+  .progress-caption{max-width:920px; margin:0.6rem auto 0; display:flex; justify-content:space-between; align-items:center; color:#c3cdea; font-size:0.88rem;}
+  .progress-caption button{background:none; border:none; color:#c3cdea; text-decoration:underline; cursor:pointer; font-size:0.85rem; padding:0; font-family:var(--sans);}
+
+  .layout{max-width:1120px; margin:0 auto; padding:2.4rem 1.5rem 5rem; display:flex; gap:2.8rem; align-items:flex-start;}
+  nav.toc{flex:0 0 230px; position:sticky; top:1.5rem; font-size:0.95rem;}
+  nav.toc h2{font-family:var(--serif); font-size:1rem; font-weight:600; margin:0 0 0.8rem; color:var(--navy);}
+  nav.toc ol{list-style:none; margin:0; padding:0; border-left:2px solid var(--border);}
+  nav.toc a{display:block; padding:0.4rem 0 0.4rem 0.9rem; margin-left:-2px; border-left:2px solid transparent; color:var(--muted); text-decoration:none;}
+  nav.toc a:hover{color:var(--navy);}
+  details.toc-mobile{display:none;}
+
+  main.article{flex:1 1 auto; min-width:0; max-width:760px;}
+  main.article section{margin-bottom:3rem; scroll-margin-top:1.4rem;}
+  .section-kicker{font-family:var(--mono); font-size:0.82rem; color:var(--teal); margin:0 0 0.35rem;}
+  main.article h2{font-family:var(--serif); font-weight:700; font-size:1.5rem; color:var(--navy); margin:0 0 0.5rem; line-height:1.25;}
+  main.article > section > p.section-intro{color:var(--muted); margin:0 0 1.2rem; max-width:65ch;}
+
+  .qcard{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:1.3rem 1.4rem 1.4rem; margin-bottom:1.1rem;}
+  .qcard-head{display:flex; align-items:flex-start; gap:0.7rem; margin-bottom:0.7rem;}
+  .qnum{flex:0 0 auto; width:2rem; height:2rem; border-radius:50%; background:var(--panel-alt); color:var(--navy); font-weight:700; font-family:var(--sans); display:flex; align-items:center; justify-content:center; font-size:0.92rem;}
+  .qnum.done{background:var(--teal); color:#fff;}
+  .qprompt{flex:1; margin:0; padding-top:0.15rem;}
+
+  .code-block{background:var(--navy-deep); border-radius:8px; overflow:hidden; margin:0.7rem 0;}
+  .code-block .code-label{background:#0c1430; color:#8b96c4; font-family:var(--sans); font-size:0.74rem; font-weight:600; padding:0.4rem 0.8rem; text-transform:uppercase; letter-spacing:0.04em;}
+  .code-block pre{margin:0; padding:0.8rem 0.9rem; font-family:var(--mono); font-size:0.84rem; color:#dbe2f5; line-height:1.7; overflow-x:auto;}
+
+  .quiz-options{display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.3rem;}
+  .quiz-options button{font-family:var(--sans); font-size:0.88rem; font-weight:600; border-radius:999px; padding:0.5rem 1rem; border:1.5px solid var(--border); background:#fff; color:var(--text); cursor:pointer;}
+  .quiz-options button.correct{background:var(--teal-light); border-color:var(--teal); color:var(--teal);}
+  .quiz-options button.incorrect{background:var(--red-light); border-color:var(--red); color:var(--red);}
+  .quiz-options button:disabled{cursor:default;}
+
+  .check-row{display:flex; gap:0.6rem; align-items:center; margin:0.8rem 0 0.3rem; flex-wrap:wrap;}
+  .answer-input{font-family:var(--mono); font-size:0.95rem; padding:0.55rem 0.75rem; border-radius:7px; border:1.5px solid var(--border); min-width:160px; flex:0 1 220px;}
+  .check-btn{font-family:var(--sans); font-weight:600; font-size:0.9rem; padding:0.55rem 1.1rem; border-radius:7px; border:none; background:var(--navy); color:#fff; cursor:pointer;}
+  .check-btn:hover{background:var(--navy-deep);}
+  .feedback{font-size:0.92rem; font-weight:600; padding:0.3rem 0;}
+  .feedback.correct{color:var(--teal);}
+  .feedback.incorrect{color:var(--red);}
+
+  .trace-table{width:100%; border-collapse:collapse; margin:0.7rem 0; font-size:0.88rem;}
+  .trace-table th, .trace-table td{border:1px solid var(--border); padding:0.4rem 0.5rem; text-align:center;}
+  .trace-table th{background:var(--navy); color:#fff; font-size:0.8rem;}
+  .trace-table td.given{background:var(--panel-alt); font-family:var(--mono); font-weight:600;}
+  .trace-table input{width:100%; border:none; background:transparent; text-align:center; font-family:var(--mono); font-size:0.85rem; padding:0.2rem;}
+  .trace-table input:focus{outline:2px solid var(--teal); border-radius:4px;}
+  .trace-table td.mark-correct{background:var(--teal-light);}
+  .trace-table td.mark-incorrect{background:var(--red-light);}
+
+  textarea.longanswer{width:100%; min-height:100px; font-family:var(--sans); font-size:0.95rem; padding:0.6rem 0.75rem; border-radius:7px; border:1.5px solid var(--border); margin:0.6rem 0 0.2rem; resize:vertical;}
+
+  details.solution{margin-top:0.7rem; border-top:1px dashed var(--border); padding-top:0.6rem;}
+  details.solution summary{cursor:pointer; font-weight:600; color:var(--navy); font-size:0.92rem;}
+  .solution-body{margin-top:0.8rem; font-size:0.94rem;}
+  .solution-body p{margin:0 0 0.6rem;}
+  .solution-body p:last-child{margin-bottom:0;}
+
+  .next-step{margin-top:2rem; padding:1.6rem; background:var(--panel-alt); border-radius:var(--radius); display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;}
+  .next-step p{margin:0; color:var(--muted);}
+  .next-step a.button{background:var(--navy); color:#fff; text-decoration:none; padding:0.7rem 1.3rem; border-radius:8px; font-weight:600; white-space:nowrap;}
+  .next-step a.button:hover{background:var(--navy-deep);}
+
+  @media (max-width:900px){
+    .layout{flex-direction:column; gap:1.2rem;}
+    nav.toc{display:none;}
+    details.toc-mobile{display:block; background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:0.2rem 1rem; width:100%;}
+    details.toc-mobile summary{padding:0.9rem 0; font-weight:600; color:var(--navy); cursor:pointer; font-family:var(--serif);}
+    details.toc-mobile ol{list-style:none; margin:0; padding:0 0 0.8rem;}
+    details.toc-mobile a{display:block; padding:0.4rem 0; color:var(--muted); text-decoration:none;}
+    main.article{max-width:none;}
+    .answer-input{flex:1 1 auto;}
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/strand-b-t11-iteration-practice.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+
+<header class="page-head">
+  <div class="head-inner">
+    <p class="eyebrow">Year 12 AS Computer Science (9618) &middot; Topic 11.2, Programming</p>
+    <h1>Iteration: Practice Questions</h1>
+    <p class="lede">14 questions covering FOR/WHILE/REPEAT...UNTIL loops in both Cambridge pseudocode and Python, plus trace tables. Type an answer to check it instantly, or open the full worked solution any time.</p>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill"></div></div>
+  <div class="progress-caption">
+    <span id="progress-text">0 of 9 checkable questions correct</span>
+    <button type="button" id="reset-progress">Reset progress</button>
+  </div>
+</header>
+
+<div class="layout">
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2>Sections</h2>
+    <ol>
+      <li><a href="#secA">Predict the output</a></li>
+      <li><a href="#secB">Choose the loop type</a></li>
+      <li><a href="#secC">Trace tables</a></li>
+      <li><a href="#secD">Translate</a></li>
+      <li><a href="#secE">Exam-style</a></li>
+    </ol>
+  </nav>
+
+  <details class="toc-mobile">
+    <summary>Sections</summary>
+    <ol>
+      <li><a href="#secA">Predict the output</a></li>
+      <li><a href="#secB">Choose the loop type</a></li>
+      <li><a href="#secC">Trace tables</a></li>
+      <li><a href="#secD">Translate</a></li>
+      <li><a href="#secE">Exam-style</a></li>
+    </ol>
+  </details>
+
+  <main class="article">
+
+    <section id="secA">
+      <p class="section-kicker">A</p>
+      <h2>Predict the output</h2>
+      <p class="section-intro">Work out exactly what each loop produces.</p>
+
+      <div class="qcard" data-qid="a1">
+        <div class="qcard-head"><div class="qnum">1</div>
+          <p class="qprompt">What value does this output?</p>
+        </div>
+        <div class="code-block"><div class="code-label">Pseudocode</div><pre>total &larr; 0
+FOR i &larr; 1 TO 4
+    total &larr; total + i
+NEXT i
+OUTPUT total</pre></div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="value">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>1 + 2 + 3 + 4 = <strong>10</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="a2">
+        <div class="qcard-head"><div class="qnum">2</div>
+          <p class="qprompt">What value does this output?</p>
+        </div>
+        <div class="code-block"><div class="code-label">Python</div><pre>total = 0
+for i in range(2, 10, 3):
+    total += i
+print(total)</pre></div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="value">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p><code>range(2, 10, 3)</code> gives 2, 5, 8 (stopping before 11). 2 + 5 + 8 = <strong>15</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="a3">
+        <div class="qcard-head"><div class="qnum">3</div>
+          <p class="qprompt">How many times does OUTPUT execute in this loop?</p>
+        </div>
+        <div class="code-block"><div class="code-label">Pseudocode</div><pre>count &larr; 5
+WHILE count &gt; 0 DO
+    OUTPUT count
+    count &larr; count - 1
+ENDWHILE</pre></div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="number of times" style="min-width:150px; flex-basis:150px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>count takes the values 5, 4, 3, 2, 1 before the condition becomes false at count = 0. OUTPUT runs <strong>5</strong> times.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="a4">
+        <div class="qcard-head"><div class="qnum">4</div>
+          <p class="qprompt">What is the final value of num after this loop ends?</p>
+        </div>
+        <div class="code-block"><div class="code-label">Pseudocode</div><pre>num &larr; 10
+REPEAT
+    num &larr; num - 3
+UNTIL num &lt;= 0</pre></div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="value">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>10 &rarr; 7 &rarr; 4 &rarr; 1 &rarr; &minus;2. At &minus;2 the condition num &lt;= 0 is finally true, so the loop stops. Final value: <strong>&minus;2</strong>.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secB">
+      <p class="section-kicker">B</p>
+      <h2>Choose the loop type</h2>
+      <p class="section-intro">Which construct best suits each scenario: FOR, WHILE, or REPEAT...UNTIL?</p>
+
+      <div class="qcard" data-qid="b1">
+        <div class="qcard-head"><div class="qnum">5</div>
+          <p class="qprompt">Printing the 12-times table from 1 to 12.</p>
+        </div>
+        <div class="quiz-options" data-qid="b1"></div>
+      </div>
+
+      <div class="qcard" data-qid="b2">
+        <div class="qcard-head"><div class="qnum">6</div>
+          <p class="qprompt">Repeatedly asking the user to enter a password until they enter one that is at least 8 characters long.</p>
+        </div>
+        <div class="quiz-options" data-qid="b2"></div>
+      </div>
+
+      <div class="qcard" data-qid="b3">
+        <div class="qcard-head"><div class="qnum">7</div>
+          <p class="qprompt">Processing items in a queue until the queue is empty &mdash; the queue might already be empty when the program starts.</p>
+        </div>
+        <div class="quiz-options" data-qid="b3"></div>
+      </div>
+    </section>
+
+    <section id="secC">
+      <p class="section-kicker">C</p>
+      <h2>Trace tables</h2>
+      <p class="section-intro">Complete each trace table for the given code.</p>
+
+      <div class="qcard" data-qid="c1">
+        <div class="qcard-head"><div class="qnum">8</div>
+          <p class="qprompt">Complete the trace table below.</p>
+        </div>
+        <div class="code-block"><div class="code-label">Pseudocode</div><pre>total &larr; 1
+FOR i &larr; 1 TO 3
+    total &larr; total * 2
+NEXT i</pre></div>
+        <table class="trace-table" id="c1-table"></table>
+        <div class="check-row">
+          <button type="button" class="check-btn" data-tracegroup="c1">Check table</button>
+          <span class="feedback" data-tracegroup="c1"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <p>i=1: total = 1 &times; 2 = 2. i=2: total = 2 &times; 2 = 4. i=3: total = 4 &times; 2 = 8.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="c2">
+        <div class="qcard-head"><div class="qnum">9</div>
+          <p class="qprompt">How many times does the loop body execute, and what is the final value of x?</p>
+        </div>
+        <div class="code-block"><div class="code-label">Pseudocode</div><pre>x &larr; 8
+WHILE x &gt; 10 DO
+    x &larr; x + 1
+ENDWHILE
+OUTPUT x</pre></div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="e.g. 0 times, x=8">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>x = 8 is not greater than 10, so the WHILE condition is false <em>before the first pass</em>. The loop body never runs. Final value of x: <strong>8</strong> (unchanged).</p></div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secD">
+      <p class="section-kicker">D</p>
+      <h2>Translate</h2>
+      <p class="section-intro">Translate each snippet into the other language, then compare with the model answer.</p>
+
+      <div class="qcard" data-qid="d1">
+        <div class="qcard-head"><div class="qnum">10</div>
+          <p class="qprompt">Translate this Cambridge pseudocode into Python.</p>
+        </div>
+        <div class="code-block"><div class="code-label">Pseudocode</div><pre>FOR i &larr; 0 TO 20 STEP 5
+    OUTPUT i
+NEXT i</pre></div>
+        <textarea class="longanswer" placeholder="Write your Python translation here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body">
+            <div class="code-block"><div class="code-label">Python</div><pre>for i in range(0, 21, 5):
+    print(i)</pre></div>
+            <p>The stop value is 21, not 20, so that 20 itself is included.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="d2">
+        <div class="qcard-head"><div class="qnum">11</div>
+          <p class="qprompt">Translate this Python into Cambridge pseudocode.</p>
+        </div>
+        <div class="code-block"><div class="code-label">Python</div><pre>count = 0
+while True:
+    count += 2
+    if count >= 10:
+        break
+print(count)</pre></div>
+        <textarea class="longanswer" placeholder="Write your pseudocode translation here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body">
+            <p>The <code>while True</code> / <code>break</code> pattern is Python's emulation of REPEAT...UNTIL:</p>
+            <div class="code-block"><div class="code-label">Pseudocode</div><pre>count &larr; 0
+REPEAT
+    count &larr; count + 2
+UNTIL count &gt;= 10
+OUTPUT count</pre></div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secE">
+      <p class="section-kicker">E</p>
+      <h2>Exam-style question</h2>
+      <p class="section-intro">A longer, multi-part question.</p>
+
+      <div class="qcard" data-qid="e1">
+        <div class="qcard-head"><div class="qnum">12</div>
+          <p class="qprompt">
+            A vending machine program repeatedly asks the customer to insert coins until the total inserted is at least 200 cents. Each time, it adds the coin's value to a running total and displays the total so far.<br><br>
+            (a) Which loop type (FOR, WHILE, or REPEAT...UNTIL) is most appropriate here? Justify your answer.<br>
+            (b) Write Cambridge pseudocode for this loop, using <code>INPUT coin</code> to read a coin's value and <code>OUTPUT total</code> to display the running total.<br>
+            (c) Complete a trace table for a customer who inserts coins of value 50, 75, and 100 (in that order).
+          </p>
+        </div>
+        <textarea class="longanswer" placeholder="Write your full answer here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body">
+            <p><strong>(a)</strong> REPEAT...UNTIL. The customer must insert at least one coin before the total can be checked at all &mdash; the action has to happen before the condition can be tested, which is exactly what a post-condition loop guarantees.</p>
+            <p><strong>(b)</strong></p>
+            <div class="code-block"><div class="code-label">Pseudocode</div><pre>total &larr; 0
+REPEAT
+    INPUT coin
+    total &larr; total + coin
+    OUTPUT total
+UNTIL total &gt;= 200</pre></div>
+            <p><strong>(c)</strong> coin = 50 &rarr; total = 50. coin = 75 &rarr; total = 125. coin = 100 &rarr; total = 225. The loop stops after the third coin, since 225 &ge; 200.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <div class="next-step">
+      <p>Want to revisit the explanations first?</p>
+      <a class="button" href="explainer.html">Back to the explainer</a>
+    </div>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  const STORAGE_KEY = "iterationProgress_v1";
+  function loadProgress(){
+    try{ const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : {}; }
+    catch(e){ return {}; }
+  }
+  function saveProgress(p){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); }catch(e){} }
+  let progress = loadProgress();
+
+  /* ---------------- Text-answer questions ---------------- */
+  const TEXT_ANSWERS = {
+    a1: {type:"decimal", value:10},
+    a2: {type:"decimal", value:15},
+    a3: {type:"decimal", value:5},
+    a4: {type:"decimal", value:-2}
+  };
+
+  function normalizeDecimal(str){
+    const s = str.trim().replace(/[,\s]+/g,"");
+    if(!/^-?\d+$/.test(s)) return null;
+    return parseInt(s,10);
+  }
+
+  Object.keys(TEXT_ANSWERS).forEach(qid=>{
+    const card = document.querySelector('.qcard[data-qid="'+qid+'"]');
+    if(!card) return;
+    const input = card.querySelector(".answer-input");
+    const btn = card.querySelector(".check-btn");
+    const feedback = card.querySelector(".feedback");
+    const answer = TEXT_ANSWERS[qid];
+
+    function doCheck(){
+      const given = normalizeDecimal(input.value);
+      if(given === null){
+        feedback.textContent = "Check the format of your answer.";
+        feedback.className = "feedback incorrect";
+        return;
+      }
+      const isCorrect = given === answer.value;
+      feedback.textContent = isCorrect ? "Correct." : "Not quite \u2014 try again, or open the full working below.";
+      feedback.className = "feedback " + (isCorrect ? "correct" : "incorrect");
+      progress[qid] = isCorrect;
+      saveProgress(progress);
+      updateProgressUI();
+    }
+    btn.addEventListener("click", doCheck);
+    input.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ e.preventDefault(); doCheck(); } });
+  });
+
+  /* ---------------- MCQ (section B) ---------------- */
+  const MCQ = {
+    b1: { options:["FOR","WHILE","REPEAT...UNTIL"], answer:"FOR" },
+    b2: { options:["FOR","WHILE","REPEAT...UNTIL"], answer:"REPEAT...UNTIL" },
+    b3: { options:["FOR","WHILE","REPEAT...UNTIL"], answer:"WHILE" }
+  };
+  Object.keys(MCQ).forEach(qid=>{
+    const container = document.querySelector('.quiz-options[data-qid="'+qid+'"]');
+    if(!container) return;
+    const q = MCQ[qid];
+    q.options.forEach(opt=>{
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = opt;
+      btn.addEventListener("click", ()=>{
+        const buttons = container.querySelectorAll("button");
+        buttons.forEach(b=>b.disabled = true);
+        const isCorrect = opt === q.answer;
+        if(isCorrect){ btn.classList.add("correct"); }
+        else{
+          btn.classList.add("incorrect");
+          buttons.forEach(b=>{ if(b.textContent === q.answer) b.classList.add("correct"); });
+        }
+        progress[qid] = isCorrect;
+        saveProgress(progress);
+        updateProgressUI();
+      });
+      container.appendChild(btn);
+    });
+  });
+
+  /* ---------------- Trace table (C1) ---------------- */
+  (function(){
+    const table = document.getElementById("c1-table");
+    const header = document.createElement("tr");
+    ["i","total"].forEach(h=>{
+      const th = document.createElement("th"); th.textContent = h; header.appendChild(th);
+    });
+    table.appendChild(header);
+
+    const rows = [
+      { i:"1", total:"2" },
+      { i:"2", total:"4" },
+      { i:"3", total:"8" }
+    ];
+    rows.forEach((r, idx)=>{
+      const tr = document.createElement("tr");
+      const tdI = document.createElement("td"); tdI.className="given"; tdI.textContent = r.i;
+      const tdTotal = document.createElement("td"); tdTotal.innerHTML = '<input type="text" data-answer="'+r.total+'" data-cell="c1-'+idx+'">';
+      tr.appendChild(tdI); tr.appendChild(tdTotal);
+      table.appendChild(tr);
+    });
+  })();
+
+  function normalizeCell(str){ return str.trim().toLowerCase(); }
+
+  document.querySelectorAll('.check-btn[data-tracegroup]').forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const group = btn.dataset.tracegroup;
+      const table = document.getElementById(group + "-table");
+      const inputs = table.querySelectorAll("input[data-answer]");
+      let allCorrect = true;
+      inputs.forEach(inp=>{
+        const expected = normalizeCell(inp.dataset.answer);
+        const given = normalizeCell(inp.value);
+        const isCorrect = given === expected;
+        if(!isCorrect) allCorrect = false;
+        inp.parentElement.className = isCorrect ? "mark-correct" : "mark-incorrect";
+      });
+      const feedback = document.querySelector('.feedback[data-tracegroup="'+group+'"]');
+      feedback.textContent = allCorrect ? "All correct." : "Some cells need another look \u2014 check the highlighted ones, or open the full working below.";
+      feedback.className = "feedback " + (allCorrect ? "correct" : "incorrect");
+      progress[group] = allCorrect;
+      saveProgress(progress);
+      updateProgressUI();
+    });
+  });
+
+  /* ---------------- C2 (free text, two-part answer) ---------------- */
+  (function(){
+    const card = document.querySelector('.qcard[data-qid="c2"]');
+    const input = card.querySelector(".answer-input");
+    const btn = card.querySelector(".check-btn");
+    const feedback = card.querySelector(".feedback");
+
+    function doCheck(){
+      const raw = input.value.toLowerCase();
+      const hasZero = /\b0\b|zero|never/.test(raw);
+      const hasEight = /\b8\b|eight/.test(raw);
+      const isCorrect = hasZero && hasEight;
+      feedback.textContent = isCorrect ? "Correct." : "Not quite \u2014 make sure you mention both the number of iterations AND the final value of x, or open the full working below.";
+      feedback.className = "feedback " + (isCorrect ? "correct" : "incorrect");
+      progress["c2"] = isCorrect;
+      saveProgress(progress);
+      updateProgressUI();
+    }
+    btn.addEventListener("click", doCheck);
+    input.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ e.preventDefault(); doCheck(); } });
+  })();
+
+  /* ---------------- Progress ---------------- */
+  const CHECKABLE_IDS = ["a1","a2","a3","a4","b1","b2","b3","c1","c2"];
+  function updateProgressUI(){
+    const total = CHECKABLE_IDS.length;
+    const done = CHECKABLE_IDS.filter(id => progress[id] === true).length;
+    document.getElementById("progress-text").textContent = done + " of " + total + " checkable questions correct";
+    document.getElementById("progress-fill").style.width = Math.round((done/total)*100) + "%";
+    CHECKABLE_IDS.forEach(qid=>{
+      const numEl = document.querySelector('.qcard[data-qid="'+qid+'"] .qnum');
+      if(numEl){ numEl.classList.toggle("done", progress[qid]===true); }
+    });
+  }
+
+  document.getElementById("reset-progress").addEventListener("click", ()=>{
+    progress = {};
+    saveProgress(progress);
+    updateProgressUI();
+    document.querySelectorAll(".feedback").forEach(f=>{ f.textContent=""; f.className="feedback"; });
+    document.querySelectorAll(".answer-input").forEach(i=>{ i.value=""; });
+    document.querySelectorAll(".quiz-options button").forEach(b=>{ b.disabled=false; b.className=""; });
+    document.querySelectorAll(".trace-table input").forEach(i=>{ i.value=""; i.parentElement.className=""; });
+  });
+
+  updateProgressUI();
+
+})();
+</script>
+</body>
+</html>

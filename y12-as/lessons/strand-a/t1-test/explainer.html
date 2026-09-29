@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "strand-a/t1-test";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Topic 1 Test";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 1 Consolidation — AS Level Computer Science (9618)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:"Source Sans 3", sans-serif; line-height:1.6; }
+  h1,h2,h3{ font-family:"Source Serif 4", serif; font-weight:600; color:var(--navy); }
+  code, .mono { font-family:"JetBrains Mono", monospace; }
+
+  header.page-head{ background:linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%); color:#eef1fb; padding:2.6rem 1.5rem 3.2rem; }
+  .head-inner{ max-width:1180px; margin:0 auto; }
+  .eyebrow{ color:#9fb0e6; font-size:0.95rem; margin-bottom:0.6rem; }
+  header.page-head h1{ color:#fff; font-size:2.1rem; margin:0 0 0.7rem; max-width:36ch; }
+  .lede{ color:#c7d0ee; max-width:64ch; font-size:1.05rem; }
+
+  .layout{ max-width:1180px; margin:0 auto; padding:2rem 1.5rem 4rem; display:grid; grid-template-columns:230px minmax(0,760px); gap:2.5rem; align-items:start; }
+
+  nav.toc{ position:sticky; top:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.1rem; max-height:calc(100vh - 3rem); overflow-y:auto; }
+  nav.toc h2{ font-size:0.95rem; margin:0 0 0.7rem; color:var(--muted); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+  nav.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.4rem; }
+  nav.toc a{ color:var(--text); text-decoration:none; font-size:0.87rem; display:block; padding:0.12rem 0; border-left:2px solid transparent; padding-left:0.6rem; }
+  nav.toc a:hover{ color:var(--teal); }
+  nav.toc a.active{ border-left-color:var(--teal); color:var(--teal); font-weight:600; }
+
+  article{ max-width:760px; }
+  section{ margin-bottom:2.6rem; }
+  .section-kicker{ font-family:"JetBrains Mono", monospace; color:var(--teal); font-size:0.85rem; margin-bottom:0.35rem; }
+  section h2{ font-size:1.4rem; margin:0 0 0.9rem; }
+  section p{ margin:0 0 1rem; }
+  section ul, section ol{ margin:0 0 1rem; padding-left:1.3rem; }
+  section li{ margin-bottom:0.35rem; }
+
+  .tip, .warn{ border-radius:8px; padding:0.85rem 1.05rem; margin:1rem 0; font-size:0.94rem; }
+  .tip{ background:var(--teal-light); border:1px solid #bfe4df; }
+  .warn{ background:var(--amber-light); border:1px solid #eccba0; }
+  .tip strong:first-child, .warn strong:first-child{ display:block; margin-bottom:0.25rem; }
+
+  .code-block{ background:var(--navy-deep); border-radius:10px; overflow:hidden; margin:1rem 0; }
+  .code-label{ background:#0a1330; color:#8fa0d6; font-size:0.76rem; padding:0.4rem 0.85rem; font-family:"JetBrains Mono",monospace; border-bottom:1px solid #223163; }
+  .code-block pre{ margin:0; padding:0.9rem 1rem; overflow-x:auto; }
+  .code-block code{ color:#e7ecfb; font-size:0.86rem; line-height:1.6; }
+  .code-block .kw{ color:#7ad4ff; } .code-block .id{ color:#ffd479; } .code-block .str{ color:#a8e6a1; } .code-block .cm{ color:#7d89b0; font-style:italic; }
+
+  table.ref{ width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.88rem; }
+  table.ref th, table.ref td{ text-align:left; padding:0.5rem 0.65rem; border-bottom:1px solid var(--border); }
+  table.ref th{ background:var(--panel-alt); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+  table.ref td code{ font-size:0.85rem; }
+
+  .formula{ background:var(--panel-alt); border:1px solid var(--border); border-radius:8px; padding:0.8rem 1rem; margin:1rem 0; font-family:"JetBrains Mono",monospace; font-size:0.95rem; text-align:center; color:var(--navy); }
+
+  .playground{ background:var(--navy-deep); border-radius:12px; padding:1.3rem; margin:1.2rem 0; color:#e7ecfb; }
+  .playground h3{ color:#fff; font-size:1.05rem; margin:0 0 0.3rem; }
+  .playground .sub{ color:#9fb0e6; font-size:0.87rem; margin-bottom:1rem; }
+
+  .mode-toggle{ display:flex; gap:0.5rem; margin-bottom:1rem; flex-wrap:wrap; }
+  .mode-toggle button{ background:#1a2653; color:#c7d0ee; border:1px solid #2c3a72; border-radius:20px; padding:0.4rem 0.95rem; font-size:0.85rem; cursor:pointer; font-family:"Source Sans 3",sans-serif; }
+  .mode-toggle button.active{ background:var(--teal); border-color:var(--teal); color:#052c28; font-weight:600; }
+
+  .calc-grid{ display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; margin-bottom:1rem; }
+  @media (max-width:560px){ .calc-grid{ grid-template-columns:1fr; } }
+  .field{ display:flex; flex-direction:column; gap:0.3rem; }
+  .field label{ font-size:0.8rem; color:#9fb0e6; }
+  .field input[type=number], .field select{ background:#101a3a; border:1px solid #2c3a72; color:#e7ecfb; border-radius:6px; padding:0.5rem 0.6rem; font-family:"JetBrains Mono",monospace; font-size:0.92rem; }
+  .field input[type=range]{ width:100%; }
+
+  .result-box{ background:#182452; border:1px solid #2c3a72; border-radius:10px; padding:1rem 1.1rem; margin-top:0.5rem; }
+  .result-row{ display:flex; justify-content:space-between; padding:0.3rem 0; font-family:"JetBrains Mono",monospace; font-size:0.95rem; }
+  .result-row .name{ color:#9fb0e6; }
+  .result-row .val{ color:#ffd479; font-weight:600; }
+
+  .converter-display{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.8rem; margin-top:1rem; }
+  @media (max-width:560px){ .converter-display{ grid-template-columns:1fr; } }
+  .conv-box{ background:#101a3a; border:1px solid #2c3a72; border-radius:8px; padding:0.8rem; text-align:center; }
+  .conv-box h4{ margin:0 0 0.4rem; font-size:0.78rem; color:#9fb0e6; font-family:"Source Sans 3",sans-serif; font-weight:600; }
+  .conv-box .value{ font-family:"JetBrains Mono",monospace; font-size:1.2rem; color:#7be0c9; word-break:break-all; }
+
+  footer.page-foot{ max-width:1180px; margin:0 auto; padding:0 1.5rem 3rem; }
+  .foot-nav{ display:flex; justify-content:space-between; gap:1rem; border-top:1px solid var(--border); padding-top:1.5rem; flex-wrap:wrap; }
+  .foot-nav a{ text-decoration:none; color:var(--navy); font-weight:600; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:0.7rem 1.1rem; font-size:0.9rem; }
+  .foot-nav a:hover{ border-color:var(--teal); color:var(--teal); }
+  .foot-nav .next{ margin-left:auto; }
+
+  details.mobile-toc{ display:none; }
+  @media (max-width:900px){
+    .layout{ grid-template-columns:1fr; }
+    nav.toc{ display:none; }
+    details.mobile-toc{ display:block; margin-bottom:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.1rem; }
+    details.mobile-toc summary{ cursor:pointer; font-weight:600; color:var(--navy); }
+    details.mobile-toc ol{ list-style:none; padding:0; margin:0.8rem 0 0; display:flex; flex-direction:column; gap:0.45rem; }
+    details.mobile-toc a{ color:var(--text); text-decoration:none; font-size:0.9rem; }
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/strand-a-t1-test-explainer.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+
+<header class="page-head">
+  <div class="head-inner">
+    <div class="eyebrow">Year 12 AS Computer Science (9618) &middot; Topic 1.11, Data Representation</div>
+    <h1>Topic 1 Consolidation</h1>
+    <p class="lede">Everything from number systems through vector graphics, in one place — the reference sheet to revise from before the test.</p>
+  </div>
+</header>
+
+<div class="layout">
+  <details class="mobile-toc">
+    <summary>Contents</summary>
+    <ol>
+      <li><a href="#s01">01 · Number systems</a></li>
+      <li><a href="#s02">02 · Binary arithmetic</a></li>
+      <li><a href="#s03">03 · Binary prefixes</a></li>
+      <li><a href="#s04">04 · ASCII, Extended ASCII, Unicode</a></li>
+      <li><a href="#s05">05 · Sound representation</a></li>
+      <li><a href="#s06">06 · Image representation</a></li>
+      <li><a href="#s07">07 · Compression &amp; RLE</a></li>
+      <li><a href="#s08">08 · Binary Coded Decimal</a></li>
+      <li><a href="#s09">09 · Vector graphics</a></li>
+    </ol>
+  </details>
+
+  <nav class="toc" id="desktopToc">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#s01">01 · Number systems</a></li>
+      <li><a href="#s02">02 · Binary arithmetic</a></li>
+      <li><a href="#s03">03 · Binary prefixes</a></li>
+      <li><a href="#s04">04 · ASCII/Unicode</a></li>
+      <li><a href="#s05">05 · Sound</a></li>
+      <li><a href="#s06">06 · Image</a></li>
+      <li><a href="#s07">07 · Compression &amp; RLE</a></li>
+      <li><a href="#s08">08 · BCD</a></li>
+      <li><a href="#s09">09 · Vector graphics</a></li>
+    </ol>
+  </nav>
+
+  <article>
+
+    <section id="s01">
+      <div class="section-kicker">01</div>
+      <h2>Number systems: denary, binary, hexadecimal</h2>
+      <p>Computers store everything in binary, but binary is unwieldy for humans to read, so hexadecimal is used as shorthand — each hex digit represents exactly 4 bits, so an 8-bit byte is always exactly 2 hex digits.</p>
+      <table class="ref">
+        <tr><th>Denary</th><th>Binary</th><th>Hex</th></tr>
+        <tr><td>0–9</td><td>0000–1001</td><td>0–9</td></tr>
+        <tr><td>10–15</td><td>1010–1111</td><td>A–F</td></tr>
+      </table>
+      <p>To convert binary to hex, split into groups of 4 bits (from the right) and convert each group separately. To convert hex to binary, do the reverse — each hex digit expands to exactly 4 bits.</p>
+      <div class="tip">
+        <strong>Worked example</strong>
+        Convert 173 (denary) to binary and hex: 173 = 128+32+8+4+1 = <code>10101101</code>. Split into nibbles: <code>1010</code> <code>1101</code> → A, D → <code>AD</code> in hex.
+      </div>
+      <div class="playground">
+        <h3>Base converter</h3>
+        <div class="sub">Drag the slider or type a denary value from 0–255</div>
+        <input type="range" id="baseSlider" min="0" max="255" value="173" style="width:100%; margin-bottom:0.8rem;">
+        <div class="converter-display">
+          <div class="conv-box"><h4>Denary</h4><input type="number" id="baseDenaryInput" min="0" max="255" value="173" style="width:100%; background:transparent; border:none; color:#7be0c9; font-family:'JetBrains Mono',monospace; font-size:1.2rem; text-align:center;"></div>
+          <div class="conv-box"><h4>Binary</h4><div class="value" id="baseBinaryVal">10101101</div></div>
+          <div class="conv-box"><h4>Hexadecimal</h4><div class="value" id="baseHexVal">AD</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="s02">
+      <div class="section-kicker">02</div>
+      <h2>Binary arithmetic: addition, two's complement, overflow</h2>
+      <p>Adding two 8-bit binary numbers works exactly like column addition in denary, carrying into the next column when a column totals 2 or more.</p>
+      <div class="tip">
+        <strong>Worked example</strong>
+        77 (<code>01001101</code>) + 54 (<code>00110110</code>) = 131, which is <code>10000011</code> in 8 bits.
+      </div>
+      <p><strong>Two's complement</strong> represents negative numbers by inverting every bit of the positive value and adding 1. This makes addition work uniformly whether numbers are positive or negative — the hardware doesn't need separate circuitry for subtraction.</p>
+      <div class="tip">
+        <strong>Worked example</strong>
+        To represent −54 in 8-bit two's complement: start from 54 (<code>00110110</code>), invert every bit (<code>11001001</code>), then add 1 → <code>11001010</code>.
+      </div>
+      <div class="warn">
+        <strong>Overflow</strong>
+        An 8-bit signed (two's complement) number ranges from −128 to +127. Overflow happens when the result of adding two numbers of the <em>same sign</em> produces a result with the <em>opposite</em> sign — a sure sign the true result didn't fit. In the 77 + 54 example above, two positive numbers were added but the result, <code>10000011</code>, has its leftmost bit set to 1 — which would be read as negative if this byte were being treated as a signed value. That mismatch is the signal that signed overflow has occurred.
+      </div>
+    </section>
+
+    <section id="s03">
+      <div class="section-kicker">03</div>
+      <h2>Binary prefixes</h2>
+      <p>Binary prefixes (kibi, mebi, gibi, tebi) are powers of 1024, and are distinct from the decimal prefixes (kilo, mega, giga, tera) which are powers of 1000. Storage manufacturers often use decimal prefixes; operating systems often report binary ones — which is why a "500 GB" drive shows less than 500 GB once formatted.</p>
+      <table class="ref">
+        <tr><th>Prefix</th><th>Binary meaning</th><th>Decimal meaning</th></tr>
+        <tr><td>kibi / kilo</td><td>2<sup>10</sup> = 1024</td><td>10<sup>3</sup> = 1000</td></tr>
+        <tr><td>mebi / mega</td><td>2<sup>20</sup> = 1,048,576</td><td>10<sup>6</sup> = 1,000,000</td></tr>
+        <tr><td>gibi / giga</td><td>2<sup>30</sup></td><td>10<sup>9</sup></td></tr>
+        <tr><td>tebi / tera</td><td>2<sup>40</sup></td><td>10<sup>12</sup></td></tr>
+      </table>
+      <div class="tip">
+        <strong>Worked example</strong>
+        5 MiB in bytes = 5 × 1024 × 1024 = <strong>5,242,880 bytes</strong>. Compare with 5 MB (decimal) = 5 × 1,000,000 = 5,000,000 bytes — a difference of over 240,000 bytes.
+      </div>
+    </section>
+
+    <section id="s04">
+      <div class="section-kicker">04</div>
+      <h2>ASCII, Extended ASCII and Unicode</h2>
+      <table class="ref">
+        <tr><th>Character set</th><th>Bits per character</th><th>Characters representable</th></tr>
+        <tr><td>ASCII</td><td>7</td><td>128</td></tr>
+        <tr><td>Extended ASCII</td><td>8</td><td>256</td></tr>
+        <tr><td>Unicode</td><td>16 or 32 (varies by encoding)</td><td>over 1 million</td></tr>
+      </table>
+      <p>Plain ASCII's 128 characters are enough for unaccented English text and control codes, but not for accented letters, symbols, or non-Latin scripts. Extended ASCII doubles the range using the 8th bit. Unicode goes much further, assigning a unique code point to virtually every character in every writing system in use — necessary for genuinely international software.</p>
+      <div class="tip">
+        <strong>Worked example</strong>
+        The character <code>'A'</code> has ASCII code 65, which is <code>01000001</code> in 7-bit binary (shown here padded to 8 bits).
+      </div>
+    </section>
+
+    <section id="s05">
+      <div class="section-kicker">05</div>
+      <h2>Sound representation</h2>
+      <p>Analogue sound is converted to digital using an <strong>Analogue-to-Digital Converter (ADC)</strong>, which samples the amplitude of the sound wave at regular intervals (the <strong>sample rate</strong>, in Hz) and stores each sample using a fixed number of bits (the <strong>bit depth</strong> or resolution).</p>
+      <div class="formula">file size (bits) = sample rate × bit depth × duration (seconds) × channels</div>
+      <p>Increasing the sample rate captures the waveform more often, improving accuracy of playback but increasing file size. Increasing the bit depth allows finer distinctions in amplitude (more possible volume levels per sample), also improving accuracy at the cost of size.</p>
+      <div class="tip">
+        <strong>Worked example</strong>
+        A 10-second mono recording at 44,100 Hz, 16-bit: 44,100 × 16 × 10 × 1 = 7,056,000 bits = 882,000 bytes ≈ <strong>861.33 KiB</strong>.
+      </div>
+    </section>
+
+    <section id="s06">
+      <div class="section-kicker">06</div>
+      <h2>Image representation</h2>
+      <p>A bitmap image is stored as a grid of pixels, each holding a colour value. The number of bits used per pixel — the <strong>colour depth</strong> — determines how many distinct colours each pixel can represent (2<sup>colour depth</sup> possible colours).</p>
+      <div class="formula">file size (bits) = width (pixels) × height (pixels) × colour depth (bits)</div>
+      <div class="tip">
+        <strong>Worked example</strong>
+        An 800 × 600 image at 24-bit colour: 800 × 600 × 24 = 11,520,000 bits = 1,440,000 bytes ≈ <strong>1406.25 KiB</strong> (about 1.37 MiB).
+      </div>
+
+      <div class="playground">
+        <h3>File size calculator</h3>
+        <div class="sub">Switch between sound and image, then adjust the values</div>
+        <div class="mode-toggle">
+          <button id="modeSoundBtn" class="active" data-calcmode="sound">Sound</button>
+          <button id="modeImageBtn" data-calcmode="image">Image</button>
+        </div>
+
+        <div id="soundFields" class="calc-grid">
+          <div class="field"><label for="sampleRate">Sample rate (Hz)</label><input type="number" id="sampleRate" value="44100" min="1"></div>
+          <div class="field"><label for="bitDepth">Bit depth (bits)</label><input type="number" id="bitDepth" value="16" min="1" max="32"></div>
+          <div class="field"><label for="duration">Duration (seconds)</label><input type="number" id="duration" value="10" min="0" step="0.1"></div>
+          <div class="field"><label for="channels">Channels</label>
+            <select id="channels">
+              <option value="1" selected>Mono (1)</option>
+              <option value="2">Stereo (2)</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="imageFields" class="calc-grid" style="display:none;">
+          <div class="field"><label for="imgWidth">Width (pixels)</label><input type="number" id="imgWidth" value="800" min="1"></div>
+          <div class="field"><label for="imgHeight">Height (pixels)</label><input type="number" id="imgHeight" value="600" min="1"></div>
+          <div class="field"><label for="colourDepth">Colour depth (bits)</label><input type="number" id="colourDepth" value="24" min="1" max="32"></div>
+        </div>
+
+        <div class="result-box">
+          <div class="result-row"><span class="name">Total size (bits)</span><span class="val" id="resBits">—</span></div>
+          <div class="result-row"><span class="name">Total size (bytes)</span><span class="val" id="resBytes">—</span></div>
+          <div class="result-row"><span class="name">Total size (KiB)</span><span class="val" id="resKiB">—</span></div>
+          <div class="result-row"><span class="name">Total size (MiB)</span><span class="val" id="resMiB">—</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="s07">
+      <div class="section-kicker">07</div>
+      <h2>Data compression: lossy vs lossless, and RLE</h2>
+      <table class="ref">
+        <tr><th></th><th>Lossless</th><th>Lossy</th></tr>
+        <tr><td>Data on decompression</td><td>Identical to the original</td><td>Some detail permanently discarded</td></tr>
+        <tr><td>Typical use</td><td>Text, program files, anything needing exact recovery</td><td>Photos, audio, video — where minor quality loss is acceptable for much smaller files</td></tr>
+      </table>
+      <p><strong>Run-Length Encoding (RLE)</strong> is a lossless technique that replaces runs of repeated data with a count and the value, which works well on data with long repeated runs (like a simple graphic with blocks of solid colour) and poorly on data with little repetition.</p>
+      <div class="tip">
+        <strong>Worked example</strong>
+        Encoding <code>AAAABBBCCDAA</code> (12 characters): count each run — 4×A, 3×B, 2×C, 1×D, 2×A — giving <code>4A3B2C1D2A</code>, just 10 characters. Compression ratio = 12∶10 = <strong>1.2∶1</strong>.
+      </div>
+    </section>
+
+    <section id="s08">
+      <div class="section-kicker">08</div>
+      <h2>Binary Coded Decimal (BCD)</h2>
+      <p>BCD encodes a denary number by converting <em>each digit separately</em> into its own 4-bit binary pattern, rather than converting the whole number to pure binary at once. This makes converting back to a human-readable display trivial — each nibble maps straight to one digit — which is why BCD is common in digital clocks, calculators and other seven-segment displays.</p>
+      <div class="tip">
+        <strong>Worked example</strong>
+        947 in BCD: 9 → <code>1001</code>, 4 → <code>0100</code>, 7 → <code>0111</code>, giving <code>1001 0100 0111</code> (12 bits total — 3 digits × 4 bits each).
+      </div>
+      <div class="warn">
+        <strong>BCD is not the same as pure binary</strong>
+        947 in pure binary is <code>1110110011</code> (10 bits) — shorter, but not divisible into neat per-digit chunks. BCD trades some space efficiency for much simpler digit-by-digit conversion.
+      </div>
+    </section>
+
+    <section id="s09">
+      <div class="section-kicker">09</div>
+      <h2>Vector graphics</h2>
+      <p>Instead of storing a colour value for every pixel, a vector graphic stores a <strong>drawing list</strong> of <strong>drawing objects</strong> (lines, circles, rectangles, curves), each with a set of <strong>properties</strong> (position, dimensions, colour, line thickness, fill) that describe how to draw it.</p>
+      <table class="ref">
+        <tr><th></th><th>Bitmap</th><th>Vector</th></tr>
+        <tr><td>Stores</td><td>A colour value per pixel</td><td>A list of objects and their properties</td></tr>
+        <tr><td>Scaling</td><td>Loses quality (pixelates)</td><td>Scales to any size with no quality loss</td></tr>
+        <tr><td>File size vs complexity</td><td>Depends on resolution &amp; colour depth, not image complexity</td><td>Depends on number of objects, not size on screen</td></tr>
+        <tr><td>Best suited to</td><td>Photographs, scanned images</td><td>Logos, diagrams, illustrations with flat colour and clean lines</td></tr>
+      </table>
+      <div class="tip">
+        <strong>Worked example</strong>
+        A vector circle might be stored as: object = circle, centre = (100, 100), radius = 50, fill colour = red, line thickness = 2. Scaling the whole image up by 10× just means recalculating these numbers — the circle stays perfectly smooth.
+      </div>
+    </section>
+
+  </article>
+</div>
+
+<script>
+(function(){
+  var sections = document.querySelectorAll('article section[id]');
+  var tocLinks = document.querySelectorAll('#desktopToc a');
+  function onScroll(){
+    var current = '';
+    for (var i = 0; i < sections.length; i++){
+      var rect = sections[i].getBoundingClientRect();
+      if (rect.top <= 140) current = sections[i].id;
+    }
+    for (var j = 0; j < tocLinks.length; j++){
+      var a = tocLinks[j];
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    }
+  }
+  document.addEventListener('scroll', onScroll);
+  onScroll();
+})();
+
+(function(){
+  // Base converter
+  var slider = document.getElementById('baseSlider');
+  var denaryInput = document.getElementById('baseDenaryInput');
+  var binaryVal = document.getElementById('baseBinaryVal');
+  var hexVal = document.getElementById('baseHexVal');
+
+  function pad(str, len){
+    while (str.length < len){ str = '0' + str; }
+    return str;
+  }
+
+  function update(n){
+    n = Math.max(0, Math.min(255, n | 0));
+    slider.value = n;
+    denaryInput.value = n;
+    binaryVal.textContent = pad(n.toString(2), 8);
+    hexVal.textContent = pad(n.toString(16).toUpperCase(), 2);
+  }
+
+  slider.addEventListener('input', function(){ update(parseInt(slider.value, 10)); });
+  denaryInput.addEventListener('input', function(){
+    var n = parseInt(denaryInput.value, 10);
+    if (!isNaN(n)) update(n);
+  });
+
+  update(173);
+})();
+
+(function(){
+  // File size calculator (sound / image)
+  var mode = 'sound';
+  var soundBtn = document.getElementById('modeSoundBtn');
+  var imageBtn = document.getElementById('modeImageBtn');
+  var soundFields = document.getElementById('soundFields');
+  var imageFields = document.getElementById('imageFields');
+
+  var sampleRate = document.getElementById('sampleRate');
+  var bitDepth = document.getElementById('bitDepth');
+  var duration = document.getElementById('duration');
+  var channels = document.getElementById('channels');
+
+  var imgWidth = document.getElementById('imgWidth');
+  var imgHeight = document.getElementById('imgHeight');
+  var colourDepth = document.getElementById('colourDepth');
+
+  var resBits = document.getElementById('resBits');
+  var resBytes = document.getElementById('resBytes');
+  var resKiB = document.getElementById('resKiB');
+  var resMiB = document.getElementById('resMiB');
+
+  function fmtInt(n){
+    var s = Math.round(n).toString();
+    return s.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  function fmtDecimal(n){
+    var parts = n.toFixed(2).split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return parts.join('.');
+  }
+
+  function recalc(){
+    var bits;
+    if (mode === 'sound'){
+      var sr = parseFloat(sampleRate.value) || 0;
+      var bd = parseFloat(bitDepth.value) || 0;
+      var dur = parseFloat(duration.value) || 0;
+      var ch = parseFloat(channels.value) || 1;
+      bits = sr * bd * dur * ch;
+    } else {
+      var w = parseFloat(imgWidth.value) || 0;
+      var h = parseFloat(imgHeight.value) || 0;
+      var cd = parseFloat(colourDepth.value) || 0;
+      bits = w * h * cd;
+    }
+    var bytes = bits / 8;
+    var kib = bytes / 1024;
+    var mib = kib / 1024;
+    resBits.textContent = fmtInt(bits);
+    resBytes.textContent = fmtInt(bytes);
+    resKiB.textContent = fmtDecimal(kib);
+    resMiB.textContent = fmtDecimal(mib);
+  }
+
+  function setMode(m){
+    mode = m;
+    soundBtn.classList.toggle('active', m === 'sound');
+    imageBtn.classList.toggle('active', m === 'image');
+    soundFields.style.display = m === 'sound' ? 'grid' : 'none';
+    imageFields.style.display = m === 'image' ? 'grid' : 'none';
+    recalc();
+  }
+
+  soundBtn.addEventListener('click', function(){ setMode('sound'); });
+  imageBtn.addEventListener('click', function(){ setMode('image'); });
+
+  var allInputs = [sampleRate, bitDepth, duration, channels, imgWidth, imgHeight, colourDepth];
+  for (var i = 0; i < allInputs.length; i++){
+    allInputs[i].addEventListener('input', recalc);
+    allInputs[i].addEventListener('change', recalc);
+  }
+
+  recalc();
+})();
+</script>
+
+</body>
+</html>

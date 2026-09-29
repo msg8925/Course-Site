@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "strand-b/t10-records";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Records and User-Defined Data Types";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Records / User-Defined Data Types — AS Level Computer Science (9618)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:"Source Sans 3", sans-serif; line-height:1.6; }
+  h1,h2,h3{ font-family:"Source Serif 4", serif; font-weight:600; color:var(--navy); }
+  code, .mono { font-family:"JetBrains Mono", monospace; }
+
+  header.page-head{ background:linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%); color:#eef1fb; padding:2.6rem 1.5rem 3.2rem; }
+  .head-inner{ max-width:1180px; margin:0 auto; }
+  .eyebrow{ color:#9fb0e6; font-size:0.95rem; margin-bottom:0.6rem; }
+  header.page-head h1{ color:#fff; font-size:2.1rem; margin:0 0 0.7rem; max-width:34ch; }
+  .lede{ color:#c7d0ee; max-width:62ch; font-size:1.05rem; }
+
+  .layout{ max-width:1180px; margin:0 auto; padding:2rem 1.5rem 4rem; display:grid; grid-template-columns:230px minmax(0,760px); gap:2.5rem; align-items:start; }
+
+  nav.toc{ position:sticky; top:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.1rem; }
+  nav.toc h2{ font-size:0.95rem; margin:0 0 0.7rem; color:var(--muted); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+  nav.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.45rem; }
+  nav.toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; display:block; padding:0.15rem 0; border-left:2px solid transparent; padding-left:0.6rem; }
+  nav.toc a:hover{ color:var(--teal); }
+  nav.toc a.active{ border-left-color:var(--teal); color:var(--teal); font-weight:600; }
+
+  article{ max-width:760px; }
+  section{ margin-bottom:2.8rem; }
+  .section-kicker{ font-family:"JetBrains Mono", monospace; color:var(--teal); font-size:0.85rem; margin-bottom:0.35rem; }
+  section h2{ font-size:1.5rem; margin:0 0 0.9rem; }
+  section p{ margin:0 0 1rem; }
+  section ul, section ol{ margin:0 0 1rem; padding-left:1.3rem; }
+  section li{ margin-bottom:0.4rem; }
+
+  .tip, .warn{ border-radius:8px; padding:0.9rem 1.1rem; margin:1.1rem 0; font-size:0.96rem; }
+  .tip{ background:var(--teal-light); border:1px solid #bfe4df; }
+  .warn{ background:var(--amber-light); border:1px solid #eccba0; }
+  .tip strong:first-child, .warn strong:first-child{ display:block; margin-bottom:0.25rem; }
+
+  .code-block{ background:var(--navy-deep); border-radius:10px; overflow:hidden; margin:1.1rem 0; }
+  .code-label{ background:#0a1330; color:#8fa0d6; font-size:0.78rem; padding:0.45rem 0.9rem; font-family:"JetBrains Mono",monospace; border-bottom:1px solid #223163; }
+  .code-block pre{ margin:0; padding:1rem 1.1rem; overflow-x:auto; }
+  .code-block code{ color:#e7ecfb; font-size:0.88rem; line-height:1.65; }
+  .code-block .kw{ color:#7ad4ff; }
+  .code-block .id{ color:#ffd479; }
+  .code-block .str{ color:#a8e6a1; }
+  .code-block .cm{ color:#7d89b0; font-style:italic; }
+
+  table.ref{ width:100%; border-collapse:collapse; margin:1.1rem 0; font-size:0.92rem; }
+  table.ref th, table.ref td{ text-align:left; padding:0.55rem 0.7rem; border-bottom:1px solid var(--border); }
+  table.ref th{ background:var(--panel-alt); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+
+  .playground{ background:var(--navy-deep); border-radius:12px; padding:1.3rem; margin:1.3rem 0; color:#e7ecfb; }
+  .playground h3{ color:#fff; font-size:1.05rem; margin:0 0 0.3rem; }
+  .playground .sub{ color:#9fb0e6; font-size:0.88rem; margin-bottom:1rem; }
+
+  .record-row{ display:flex; gap:0.8rem; margin:1rem 0; flex-wrap:wrap; }
+  .record-card{ background:#182452; border:2px solid #2c3a72; border-radius:10px; padding:0.8rem 1rem; min-width:150px; transition:border-color 0.3s; }
+  .record-card.active{ border-color:#ffd479; }
+  .record-card.done{ border-color:var(--teal); }
+  .record-card h4{ margin:0 0 0.5rem; font-size:0.85rem; color:#9fb0e6; font-family:"Source Sans 3",sans-serif; }
+  .field-row{ display:flex; justify-content:space-between; font-family:"JetBrains Mono",monospace; font-size:0.88rem; padding:0.2rem 0; }
+  .field-row .fname{ color:#9fb0e6; }
+  .field-row .fval{ color:#ffd479; font-weight:600; }
+  .field-row.filled .fval{ color:#7be0c9; }
+
+  .step-line{ background:#101a3a; border-radius:8px; padding:0.75rem 0.95rem; font-family:"JetBrains Mono",monospace; font-size:0.87rem; margin-bottom:1rem; color:#e7ecfb; min-height:2.4em; }
+  .step-controls{ display:flex; gap:0.6rem; align-items:center; }
+  .step-controls button{ background:var(--teal); color:#052c28; border:none; border-radius:6px; padding:0.5rem 1rem; font-weight:600; cursor:pointer; font-family:"Source Sans 3",sans-serif; }
+  .step-controls button:disabled{ opacity:0.4; cursor:default; }
+  .step-controls button.secondary{ background:#1a2653; color:#c7d0ee; border:1px solid #2c3a72; }
+  .step-count{ color:#9fb0e6; font-size:0.85rem; margin-left:auto; }
+  .running-total{ text-align:center; font-family:"JetBrains Mono",monospace; font-size:1rem; color:#7be0c9; margin-top:0.8rem; padding:0.6rem; background:#123a34; border-radius:8px; border:1px solid #1f7a63; }
+
+  footer.page-foot{ max-width:1180px; margin:0 auto; padding:0 1.5rem 3rem; }
+  .foot-nav{ display:flex; justify-content:space-between; gap:1rem; border-top:1px solid var(--border); padding-top:1.5rem; flex-wrap:wrap; }
+  .foot-nav a{ text-decoration:none; color:var(--navy); font-weight:600; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:0.7rem 1.1rem; font-size:0.92rem; }
+  .foot-nav a:hover{ border-color:var(--teal); color:var(--teal); }
+  .foot-nav .next{ margin-left:auto; }
+
+  details.mobile-toc{ display:none; }
+  @media (max-width:900px){
+    .layout{ grid-template-columns:1fr; }
+    nav.toc{ display:none; }
+    details.mobile-toc{ display:block; margin-bottom:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.1rem; }
+    details.mobile-toc summary{ cursor:pointer; font-weight:600; color:var(--navy); }
+    details.mobile-toc ol{ list-style:none; padding:0; margin:0.8rem 0 0; display:flex; flex-direction:column; gap:0.5rem; }
+    details.mobile-toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; }
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/strand-b-t10-records-explainer.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+
+<header class="page-head">
+  <div class="head-inner">
+    <div class="eyebrow">Year 12 AS Computer Science (9618) &middot; Topic 10.1, Data Structures</div>
+    <h1>Records</h1>
+    <p class="lede">An array holds many values of the same type. A record holds several values of <em>different</em> types, all describing one thing.</p>
+  </div>
+</header>
+
+<div class="layout">
+  <details class="mobile-toc">
+    <summary>Contents</summary>
+    <ol>
+      <li><a href="#why">01 · Why records?</a></li>
+      <li><a href="#declaring">02 · Declaring a record type</a></li>
+      <li><a href="#using">03 · Declaring a variable and using dot notation</a></li>
+      <li><a href="#arrays">04 · Arrays of records</a></li>
+      <li><a href="#populate">05 · Populating an array of records</a></li>
+      <li><a href="#traverse">06 · Traversing an array of records</a></li>
+      <li><a href="#mistakes">07 · Common mistakes</a></li>
+    </ol>
+  </details>
+
+  <nav class="toc" id="desktopToc">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#why">01 · Why records?</a></li>
+      <li><a href="#declaring">02 · Declaring a type</a></li>
+      <li><a href="#using">03 · Dot notation</a></li>
+      <li><a href="#arrays">04 · Arrays of records</a></li>
+      <li><a href="#populate">05 · Populating</a></li>
+      <li><a href="#traverse">06 · Traversing</a></li>
+      <li><a href="#mistakes">07 · Common mistakes</a></li>
+    </ol>
+  </nav>
+
+  <article>
+
+    <section id="why">
+      <div class="section-kicker">01</div>
+      <h2>Why records?</h2>
+      <p>An array is excellent for many values of the <em>same</em> type — five test scores, ten temperatures. But what about one student's name (STRING), age (INTEGER), and grade (CHAR) — three different types, all describing the <em>same</em> student? An array can't hold mixed types. A <strong>record</strong> can: it groups several named fields, each with its own data type, under one identifier.</p>
+    </section>
+
+    <section id="declaring">
+      <div class="section-kicker">02</div>
+      <h2>Declaring a record type</h2>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">TYPE</span> &lt;identifier&gt;
+   <span class="kw">DECLARE</span> &lt;fieldname&gt; : &lt;data type&gt;
+   <span class="kw">DECLARE</span> &lt;fieldname&gt; : &lt;data type&gt;
+   ...
+<span class="kw">ENDTYPE</span></code></pre>
+      </div>
+      <p>This defines the <em>shape</em> of the record — its name and fields — but doesn't create any actual data yet, just as declaring a procedure doesn't run it.</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">TYPE</span> <span class="id">StudentRecord</span>
+   <span class="kw">DECLARE</span> Name : STRING
+   <span class="kw">DECLARE</span> Age : INTEGER
+   <span class="kw">DECLARE</span> Grade : CHAR
+<span class="kw">ENDTYPE</span></code></pre>
+      </div>
+    </section>
+
+    <section id="using">
+      <div class="section-kicker">03</div>
+      <h2>Declaring a variable and using dot notation</h2>
+      <p>Once a record type exists, it can be used exactly like any built-in type — INTEGER, STRING — when declaring a variable:</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">DECLARE</span> Student1 : StudentRecord</code></pre>
+      </div>
+      <p>To access or assign one field of a record variable, write the variable's name, a dot, then the field name:</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code>Student1.Name ← <span class="str">"Amara"</span>
+Student1.Age ← 16
+Student1.Grade ← <span class="str">'B'</span>
+OUTPUT Student1.Name, <span class="str">" is "</span>, Student1.Age</code></pre>
+      </div>
+      <div class="tip">
+        <strong>The dot means "belongs to"</strong>
+        Read <code>Student1.Age</code> as "the Age field that belongs to Student1." Every record variable gets its own independent copy of every field — a second <code>Student2 : StudentRecord</code> has a completely separate <code>Student2.Age</code>.
+      </div>
+    </section>
+
+    <section id="arrays">
+      <div class="section-kicker">04</div>
+      <h2>Arrays of records</h2>
+      <p>Records and arrays combine naturally: an <strong>array of records</strong> stores many records of the same type, each accessible by index — a whole class of students, say, each with a name, age and grade.</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">DECLARE</span> <span class="id">Students</span> : <span class="kw">ARRAY</span>[1:3] <span class="kw">OF</span> StudentRecord</code></pre>
+      </div>
+      <p>To reach a specific field of a specific student, combine array indexing with dot notation — the index comes right after the array name, and the field name after that:</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code>Students[1].Name ← <span class="str">"Amara"</span>
+Students[1].Age ← 16
+Students[1].Grade ← <span class="str">'B'</span></code></pre>
+      </div>
+    </section>
+
+    <section id="populate">
+      <div class="section-kicker">05</div>
+      <h2>Populating an array of records</h2>
+      <p>Step through populating three students' records below.</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code>Students[1].Name ← <span class="str">"Amara"</span>
+Students[1].Age ← 16
+Students[1].Grade ← <span class="str">'B'</span>
+Students[2].Name ← <span class="str">"Kai"</span>
+Students[2].Age ← 17
+Students[2].Grade ← <span class="str">'A'</span>
+Students[3].Name ← <span class="str">"Priya"</span>
+Students[3].Age ← 16
+Students[3].Grade ← <span class="str">'C'</span></code></pre>
+      </div>
+      <div class="playground">
+        <h3>Populating Students</h3>
+        <div class="sub">Each student's record fills in field by field</div>
+        <div class="record-row" id="populateRow"></div>
+        <div class="step-line" id="populateStepLine">Press Next to begin</div>
+        <div class="step-controls">
+          <button class="secondary" id="populateResetBtn">Reset</button>
+          <button id="populateNextBtn">Next step ▸</button>
+          <span class="step-count" id="populateStepCount">Step 0 / 9</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="traverse">
+      <div class="section-kicker">06</div>
+      <h2>Traversing an array of records</h2>
+      <p>A single loop is enough to visit every record in the array (unlike a 2D array of plain values, this doesn't need nesting — each index already refers to one whole record, fields and all).</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">DECLARE</span> Total : INTEGER
+Total ← 0
+<span class="kw">FOR</span> Index ← 1 <span class="kw">TO</span> 3
+   Total ← Total + Students[Index].Age
+<span class="kw">NEXT</span> Index
+<span class="kw">DECLARE</span> AverageAge : REAL
+AverageAge ← Total / 3</code></pre>
+      </div>
+      <p>Step through this trace against the three populated students above.</p>
+      <div class="playground">
+        <h3>Computing the average age</h3>
+        <div class="step-line" id="traceStepLine">Press Next to begin</div>
+        <div class="step-controls">
+          <button class="secondary" id="traceResetBtn">Reset</button>
+          <button id="traceNextBtn">Next step ▸</button>
+          <span class="step-count" id="traceStepCount">Step 0 / 4</span>
+        </div>
+        <div class="running-total" id="traceTotal">Total = 0</div>
+      </div>
+    </section>
+
+    <section id="mistakes">
+      <div class="section-kicker">07</div>
+      <h2>Common mistakes</h2>
+      <ul>
+        <li><strong>Forgetting the dot notation.</strong> Writing <code>Students[1]Age</code> or trying to treat <code>Students[1]</code> as if it were a single value, rather than a whole record with fields inside it.</li>
+        <li><strong>Confusing the type definition with a variable.</strong> <code>TYPE StudentRecord ... ENDTYPE</code> only defines the shape — it does not create any actual student. A separate <code>DECLARE</code> is always needed to make a usable variable of that type.</li>
+        <li><strong>Assigning the wrong data type to a field.</strong> Every field keeps the data type it was declared with — assigning a STRING to a field declared INTEGER is just as invalid as it would be for an ordinary variable.</li>
+      </ul>
+      <div class="warn">
+        <strong>A record variable is not a record type</strong>
+        <code>StudentRecord</code> is the type — the blueprint. <code>Student1</code> is a variable of that type — one actual student following that blueprint. You can declare as many variables of the same record type as you need, each with its own independent set of field values.
+      </div>
+    </section>
+
+  </article>
+</div>
+
+<script>
+(function(){
+  var sections = document.querySelectorAll('article section[id]');
+  var tocLinks = document.querySelectorAll('#desktopToc a');
+  function onScroll(){
+    var current = '';
+    for (var i = 0; i < sections.length; i++){
+      var rect = sections[i].getBoundingClientRect();
+      if (rect.top <= 140) current = sections[i].id;
+    }
+    for (var j = 0; j < tocLinks.length; j++){
+      var a = tocLinks[j];
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    }
+  }
+  document.addEventListener('scroll', onScroll);
+  onScroll();
+})();
+
+(function(){
+  // Populate widget
+  var students = [
+    {Name: 'Amara', Age: 16, Grade: 'B'},
+    {Name: 'Kai', Age: 17, Grade: 'A'},
+    {Name: 'Priya', Age: 16, Grade: 'C'}
+  ];
+  var fieldOrder = ['Name', 'Age', 'Grade'];
+  var fieldQuote = { Name: '"', Age: '', Grade: "'" };
+  var totalSteps = 9;
+  var step = 0;
+
+  var row = document.getElementById('populateRow');
+  var stepLine = document.getElementById('populateStepLine');
+  var stepCount = document.getElementById('populateStepCount');
+  var nextBtn = document.getElementById('populateNextBtn');
+  var resetBtn = document.getElementById('populateResetBtn');
+
+  function buildCards(){
+    row.innerHTML = '';
+    for (var s = 0; s < 3; s++){
+      var card = document.createElement('div');
+      card.className = 'record-card';
+      card.id = 'card-' + s;
+      var h4 = document.createElement('h4');
+      h4.textContent = 'Students[' + (s + 1) + ']';
+      card.appendChild(h4);
+      for (var f = 0; f < fieldOrder.length; f++){
+        var fr = document.createElement('div');
+        fr.className = 'field-row';
+        fr.id = 'field-' + s + '-' + fieldOrder[f];
+        fr.innerHTML = '<span class="fname">' + fieldOrder[f] + '</span><span class="fval">—</span>';
+        card.appendChild(fr);
+      }
+      row.appendChild(card);
+    }
+  }
+
+  function render(){
+    buildCards();
+    if (step === 0){
+      stepLine.textContent = 'Step 0 — press Next to begin populating Students[1]';
+    } else {
+      var idx = step - 1;
+      var studentIdx = Math.floor(idx / 3);
+      var fieldIdx = idx % 3;
+      var fieldName = fieldOrder[fieldIdx];
+      var value = students[studentIdx][fieldName];
+
+      for (var i = 0; i < step; i++){
+        var si = Math.floor(i / 3);
+        var fi = i % 3;
+        var fn = fieldOrder[fi];
+        var fr = document.getElementById('field-' + si + '-' + fn);
+        fr.classList.add('filled');
+        var q = fieldQuote[fn];
+        fr.querySelector('.fval').textContent = q + students[si][fn] + q;
+      }
+      var currentCard = document.getElementById('card-' + studentIdx);
+      currentCard.classList.add(fieldIdx === 2 ? 'done' : 'active');
+
+      var vq = fieldQuote[fieldName];
+      stepLine.textContent = 'Step ' + step + ' — Students[' + (studentIdx + 1) + '].' + fieldName + ' \u2190 ' + vq + value + vq;
+    }
+    stepCount.textContent = 'Step ' + step + ' / ' + totalSteps;
+    nextBtn.disabled = step >= totalSteps;
+  }
+
+  nextBtn.addEventListener('click', function(){ if (step < totalSteps){ step++; render(); } });
+  resetBtn.addEventListener('click', function(){ step = 0; render(); });
+
+  render();
+})();
+
+(function(){
+  // Average age trace
+  var ages = [16, 17, 16];
+  var step = 0;
+  var totalSteps = 4;
+  var stepLine = document.getElementById('traceStepLine');
+  var stepCount = document.getElementById('traceStepCount');
+  var totalEl = document.getElementById('traceTotal');
+  var nextBtn = document.getElementById('traceNextBtn');
+  var resetBtn = document.getElementById('traceResetBtn');
+
+  function render(){
+    if (step === 0){
+      stepLine.textContent = 'Step 0 — Total \u2190 0, press Next to begin the loop';
+      totalEl.textContent = 'Total = 0';
+    } else if (step <= 3){
+      var idx = step - 1;
+      var runningTotal = ages.slice(0, step).reduce(function(a, b){ return a + b; }, 0);
+      stepLine.textContent = 'Step ' + step + ' — Index = ' + step + ': Total \u2190 Total + Students[' + step + '].Age (' + ages[idx] + ') = ' + runningTotal;
+      totalEl.textContent = 'Total = ' + runningTotal;
+    } else {
+      var finalTotal = ages.reduce(function(a, b){ return a + b; }, 0);
+      var avg = (finalTotal / 3).toFixed(2);
+      stepLine.textContent = 'Step 4 — loop finished. AverageAge \u2190 Total / 3 = ' + finalTotal + ' / 3 = ' + avg;
+      totalEl.textContent = 'AverageAge = ' + avg;
+    }
+    stepCount.textContent = 'Step ' + step + ' / ' + totalSteps;
+    nextBtn.disabled = step >= totalSteps;
+  }
+
+  nextBtn.addEventListener('click', function(){ if (step < totalSteps){ step++; render(); } });
+  resetBtn.addEventListener('click', function(){ step = 0; render(); });
+
+  render();
+})();
+</script>
+
+</body>
+</html>

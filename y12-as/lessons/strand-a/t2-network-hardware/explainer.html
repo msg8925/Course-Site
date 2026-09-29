@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "strand-a/t2-network-hardware";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Network Hardware: NIC, MAC/IP Addressing, Routers";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Network Hardware — AS Level Computer Science (9618)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:"Source Sans 3", sans-serif; line-height:1.6; }
+  h1,h2,h3{ font-family:"Source Serif 4", serif; font-weight:600; color:var(--navy); }
+  code, .mono { font-family:"JetBrains Mono", monospace; }
+
+  header.page-head{ background:linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%); color:#eef1fb; padding:2.6rem 1.5rem 3.2rem; }
+  .head-inner{ max-width:1180px; margin:0 auto; }
+  .eyebrow{ color:#9fb0e6; font-size:0.95rem; margin-bottom:0.6rem; }
+  header.page-head h1{ color:#fff; font-size:2.1rem; margin:0 0 0.7rem; max-width:34ch; }
+  .lede{ color:#c7d0ee; max-width:62ch; font-size:1.05rem; }
+
+  .layout{ max-width:1180px; margin:0 auto; padding:2rem 1.5rem 4rem; display:grid; grid-template-columns:230px minmax(0,760px); gap:2.5rem; align-items:start; }
+
+  nav.toc{ position:sticky; top:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.1rem; }
+  nav.toc h2{ font-size:0.95rem; margin:0 0 0.7rem; color:var(--muted); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+  nav.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.45rem; }
+  nav.toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; display:block; padding:0.15rem 0; border-left:2px solid transparent; padding-left:0.6rem; }
+  nav.toc a:hover{ color:var(--teal); }
+  nav.toc a.active{ border-left-color:var(--teal); color:var(--teal); font-weight:600; }
+
+  article{ max-width:760px; }
+  section{ margin-bottom:2.8rem; }
+  .section-kicker{ font-family:"JetBrains Mono", monospace; color:var(--teal); font-size:0.85rem; margin-bottom:0.35rem; }
+  section h2{ font-size:1.5rem; margin:0 0 0.9rem; }
+  section p{ margin:0 0 1rem; }
+  section ul, section ol{ margin:0 0 1rem; padding-left:1.3rem; }
+  section li{ margin-bottom:0.4rem; }
+
+  .tip, .warn{ border-radius:8px; padding:0.9rem 1.1rem; margin:1.1rem 0; font-size:0.96rem; }
+  .tip{ background:var(--teal-light); border:1px solid #bfe4df; }
+  .warn{ background:var(--amber-light); border:1px solid #eccba0; }
+  .tip strong:first-child, .warn strong:first-child{ display:block; margin-bottom:0.25rem; }
+
+  table.ref{ width:100%; border-collapse:collapse; margin:1.1rem 0; font-size:0.92rem; }
+  table.ref th, table.ref td{ text-align:left; padding:0.55rem 0.7rem; border-bottom:1px solid var(--border); }
+  table.ref th{ background:var(--panel-alt); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+
+  .playground{ background:var(--navy-deep); border-radius:12px; padding:1.3rem; margin:1.3rem 0; color:#e7ecfb; }
+  .playground h3{ color:#fff; font-size:1.05rem; margin:0 0 0.3rem; }
+  .playground .sub{ color:#9fb0e6; font-size:0.88rem; margin-bottom:1rem; }
+
+  .mode-toggle{ display:flex; gap:0.5rem; margin-bottom:1rem; flex-wrap:wrap; }
+  .mode-toggle button{ background:#1a2653; color:#c7d0ee; border:1px solid #2c3a72; border-radius:20px; padding:0.4rem 0.95rem; font-size:0.85rem; cursor:pointer; font-family:"Source Sans 3",sans-serif; }
+  .mode-toggle button.active{ background:var(--teal); border-color:var(--teal); color:#052c28; font-weight:600; }
+
+  .mac-display{ display:flex; gap:0.3rem; flex-wrap:wrap; justify-content:center; margin:1.2rem 0; font-family:"JetBrains Mono",monospace; font-size:1.3rem; }
+  .mac-byte{ padding:0.5rem 0.7rem; border-radius:6px; background:#182452; border:1px solid #2c3a72; }
+  .mac-byte.oui{ background:#1a2f5c; border-color:#3a5ba8; color:#7ad4ff; }
+  .mac-byte.device{ background:#123a34; border-color:#1f7a63; color:#7be0c9; }
+  .mac-legend{ display:flex; gap:1.5rem; justify-content:center; font-size:0.85rem; margin-bottom:0.5rem; flex-wrap:wrap; }
+  .mac-legend span{ display:flex; align-items:center; gap:0.4rem; }
+  .legend-swatch{ width:12px; height:12px; border-radius:3px; display:inline-block; }
+
+  .trace-boxes{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.8rem; margin-bottom:1rem; }
+  @media (max-width:640px){ .trace-boxes{ grid-template-columns:1fr; } }
+  .trace-box{ background:#182452; border:1px solid #2c3a72; border-radius:10px; padding:0.85rem 0.9rem; text-align:center; transition:border-color 0.3s, background 0.3s; }
+  .trace-box.active{ border-color:var(--teal); background:#123a34; }
+  .trace-box h4{ margin:0 0 0.5rem; font-size:0.78rem; color:#9fb0e6; font-family:"Source Sans 3",sans-serif; font-weight:600; }
+  .trace-box .addr{ font-family:"JetBrains Mono",monospace; font-size:0.82rem; color:#e7ecfb; }
+  .trace-box .addr .mac{ color:#7ad4ff; }
+  .trace-box .addr .ip{ color:#ffd479; }
+
+  .step-line{ background:#101a3a; border-radius:8px; padding:0.75rem 0.95rem; font-family:"JetBrains Mono",monospace; font-size:0.87rem; margin-bottom:1rem; color:#e7ecfb; min-height:2.6em; }
+  .step-controls{ display:flex; gap:0.6rem; align-items:center; }
+  .step-controls button{ background:var(--teal); color:#052c28; border:none; border-radius:6px; padding:0.5rem 1rem; font-weight:600; cursor:pointer; font-family:"Source Sans 3",sans-serif; }
+  .step-controls button:disabled{ opacity:0.4; cursor:default; }
+  .step-controls button.secondary{ background:#1a2653; color:#c7d0ee; border:1px solid #2c3a72; }
+  .step-count{ color:#9fb0e6; font-size:0.85rem; margin-left:auto; }
+
+  footer.page-foot{ max-width:1180px; margin:0 auto; padding:0 1.5rem 3rem; }
+  .foot-nav{ display:flex; justify-content:space-between; gap:1rem; border-top:1px solid var(--border); padding-top:1.5rem; flex-wrap:wrap; }
+  .foot-nav a{ text-decoration:none; color:var(--navy); font-weight:600; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:0.7rem 1.1rem; font-size:0.92rem; }
+  .foot-nav a:hover{ border-color:var(--teal); color:var(--teal); }
+  .foot-nav .next{ margin-left:auto; }
+
+  details.mobile-toc{ display:none; }
+  @media (max-width:900px){
+    .layout{ grid-template-columns:1fr; }
+    nav.toc{ display:none; }
+    details.mobile-toc{ display:block; margin-bottom:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.1rem; }
+    details.mobile-toc summary{ cursor:pointer; font-weight:600; color:var(--navy); }
+    details.mobile-toc ol{ list-style:none; padding:0; margin:0.8rem 0 0; display:flex; flex-direction:column; gap:0.5rem; }
+    details.mobile-toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; }
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/strand-a-t2-network-hardware-explainer.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+
+<header class="page-head">
+  <div class="head-inner">
+    <div class="eyebrow">Year 12 AS Computer Science (9618) &middot; Topic 2.1, Communication and Internet Technologies</div>
+    <h1>Network Hardware</h1>
+    <p class="lede">Every device on a network needs an address — but it turns out it needs two different kinds, for two different jobs.</p>
+  </div>
+</header>
+
+<div class="layout">
+  <details class="mobile-toc">
+    <summary>Contents</summary>
+    <ol>
+      <li><a href="#why">01 · Why networks need addressing</a></li>
+      <li><a href="#nic">02 · The Network Interface Card</a></li>
+      <li><a href="#mac">03 · MAC addresses</a></li>
+      <li><a href="#ip">04 · IP addresses</a></li>
+      <li><a href="#macvsip">05 · MAC vs IP: two jobs, not one</a></li>
+      <li><a href="#switch">06 · Switches</a></li>
+      <li><a href="#router">07 · Routers</a></li>
+      <li><a href="#journey">08 · Tracing a packet's journey</a></li>
+    </ol>
+  </details>
+
+  <nav class="toc" id="desktopToc">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#why">01 · Why addressing?</a></li>
+      <li><a href="#nic">02 · The NIC</a></li>
+      <li><a href="#mac">03 · MAC addresses</a></li>
+      <li><a href="#ip">04 · IP addresses</a></li>
+      <li><a href="#macvsip">05 · MAC vs IP</a></li>
+      <li><a href="#switch">06 · Switches</a></li>
+      <li><a href="#router">07 · Routers</a></li>
+      <li><a href="#journey">08 · A packet's journey</a></li>
+    </ol>
+  </nav>
+
+  <article>
+
+    <section id="why">
+      <div class="section-kicker">01</div>
+      <h2>Why networks need addressing</h2>
+      <p>A network is only useful if data sent by one device reliably reaches a specific other device, out of potentially millions connected across the world. That requires every device to have an address — and, as this lesson covers, a real network actually relies on <strong>two different kinds of address</strong> working together, handled by different pieces of hardware.</p>
+    </section>
+
+    <section id="nic">
+      <div class="section-kicker">02</div>
+      <h2>The Network Interface Card (NIC)</h2>
+      <p>A <strong>Network Interface Card (NIC)</strong> is the hardware that physically connects a device to a network — built into modern motherboards, though once a separate expansion card. Every NIC is given a unique <strong>MAC address</strong> by its manufacturer, permanently built into the hardware itself.</p>
+      <div class="tip">
+        <strong>Wired vs wireless</strong>
+        A wired NIC connects via an Ethernet cable; a wireless NIC (WNIC) connects via radio signals to a wireless access point. Either way, the NIC's job is the same: handle the physical sending and receiving of data, and identify the device on the local network.
+      </div>
+    </section>
+
+    <section id="mac">
+      <div class="section-kicker">03</div>
+      <h2>MAC addresses</h2>
+      <p>A <strong>MAC (Media Access Control) address</strong> is a 48-bit number, permanently assigned to a NIC by its manufacturer, and written as 12 hexadecimal digits in 6 pairs, e.g. <code>3C:A8:2A:1B:6F:09</code>. It never changes for the life of that hardware, and no two NICs ever share one.</p>
+      <p>The address is split into two halves: the first half identifies the <strong>manufacturer</strong> (the Organisationally Unique Identifier, or OUI), and the second half is a unique <strong>serial number</strong> assigned by that manufacturer.</p>
+      <div class="playground">
+        <h3>MAC address structure</h3>
+        <div class="sub">Each hex pair represents one byte (8 bits) — 6 pairs, 48 bits total</div>
+        <div class="mac-legend">
+          <span><span class="legend-swatch" style="background:#1a2f5c;"></span>Manufacturer (OUI) — 24 bits</span>
+          <span><span class="legend-swatch" style="background:#123a34;"></span>Device serial number — 24 bits</span>
+        </div>
+        <div class="mac-display" id="macDisplay"></div>
+        <div class="mode-toggle" id="macButtons"></div>
+      </div>
+    </section>
+
+    <section id="ip">
+      <div class="section-kicker">04</div>
+      <h2>IP addresses</h2>
+      <p>An <strong>IP (Internet Protocol) address</strong> identifies a device's location <em>on a network</em>, rather than the physical hardware itself. An IPv4 address is a 32-bit number, written as 4 numbers from 0–255 separated by dots (dotted decimal), e.g. <code>192.168.1.10</code>.</p>
+      <div class="tip">
+        <strong>Assigned, not built-in</strong>
+        Unlike a MAC address, an IP address is <em>assigned</em> — usually automatically by a router when a device joins a network — and can change: a laptop gets a different IP address on the office network than at home, even though its MAC address never changes.
+      </div>
+      <table class="ref">
+        <tr><th></th><th>MAC address</th><th>IP address</th></tr>
+        <tr><td>Length</td><td>48 bits (12 hex digits)</td><td>32 bits (4 decimal numbers, IPv4)</td></tr>
+        <tr><td>Assigned by</td><td>The manufacturer, permanently</td><td>The network, when a device joins</td></tr>
+        <tr><td>Changes?</td><td>Never</td><td>Can change between networks</td></tr>
+      </table>
+    </section>
+
+    <section id="macvsip">
+      <div class="section-kicker">05</div>
+      <h2>MAC vs IP: two jobs, not one</h2>
+      <p>It's tempting to think one address should be enough — so why do networks bother with both? Because they solve two different problems:</p>
+      <ul>
+        <li><strong>MAC addresses</strong> identify a specific piece of hardware <em>within</em> a local network (a LAN) — used to get a frame of data to the correct device once it's already on the right local network.</li>
+        <li><strong>IP addresses</strong> identify which network — and which device on it — data needs to reach, potentially across many networks joined together (like the internet) — used to work out <em>which direction</em> to send data in the first place.</li>
+      </ul>
+      <p>Section 08 traces an actual journey using both together, but first, the two pieces of hardware that do the forwarding.</p>
+    </section>
+
+    <section id="switch">
+      <div class="section-kicker">06</div>
+      <h2>Switches</h2>
+      <p>A <strong>switch</strong> connects multiple devices together within a single local network, and uses <strong>MAC addresses</strong> to decide where to send each frame of data — learning which MAC address is reachable down which physical cable, and forwarding data only to the correct one, rather than broadcasting it to every device.</p>
+    </section>
+
+    <section id="router">
+      <div class="section-kicker">07</div>
+      <h2>Routers</h2>
+      <p>A <strong>router</strong> connects separate networks together — most commonly, a home or office LAN to the wider internet — and uses <strong>IP addresses</strong> to decide where to forward data between them. When a device wants to reach an address outside its own local network, it sends the data to its router (its "default gateway"), which works out the next step of the journey.</p>
+    </section>
+
+    <section id="journey">
+      <div class="section-kicker">08</div>
+      <h2>Tracing a packet's journey</h2>
+      <p>Laptop A wants to send data to Laptop B, on a different local network. Step through what happens, and notice exactly where a MAC address is used and where an IP address is used.</p>
+
+      <div class="playground">
+        <h3>Packet journey simulator</h3>
+        <div class="sub">Laptop A (LAN 1) sending to Laptop B (LAN 2), via a router</div>
+        <div class="trace-boxes">
+          <div class="trace-box" id="boxA">
+            <h4>Laptop A — LAN 1</h4>
+            <div class="addr">MAC <span class="mac">AA:AA:AA:11:11:11</span><br>IP <span class="ip">192.168.1.10</span></div>
+          </div>
+          <div class="trace-box" id="boxRouter">
+            <h4>Router</h4>
+            <div class="addr">LAN1 IP <span class="ip">192.168.1.1</span><br>LAN2 IP <span class="ip">192.168.2.1</span></div>
+          </div>
+          <div class="trace-box" id="boxB">
+            <h4>Laptop B — LAN 2</h4>
+            <div class="addr">MAC <span class="mac">BB:BB:BB:22:22:22</span><br>IP <span class="ip">192.168.2.20</span></div>
+          </div>
+        </div>
+        <div class="step-line" id="journeyStepLine">Press Next to begin tracing the journey from A to B</div>
+        <div class="step-controls">
+          <button class="secondary" id="journeyResetBtn">Reset</button>
+          <button id="journeyNextBtn">Next step ▸</button>
+          <span class="step-count" id="journeyStepCount">Step 0 / 5</span>
+        </div>
+      </div>
+
+      <div class="warn">
+        <strong>The key takeaway</strong>
+        The IP address decided the overall <em>direction</em> — that B is on a different network, reached via the router. The MAC address handled the <em>local delivery</em> at each end — getting the frame from A to the router's LAN1 side, and from the router's LAN2 side to B. Neither address could do the other's job alone.
+      </div>
+    </section>
+
+  </article>
+</div>
+
+<script>
+(function(){
+  var sections = document.querySelectorAll('article section[id]');
+  var tocLinks = document.querySelectorAll('#desktopToc a');
+  function onScroll(){
+    var current = '';
+    for (var i = 0; i < sections.length; i++){
+      var rect = sections[i].getBoundingClientRect();
+      if (rect.top <= 140) current = sections[i].id;
+    }
+    for (var j = 0; j < tocLinks.length; j++){
+      var a = tocLinks[j];
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    }
+  }
+  document.addEventListener('scroll', onScroll);
+  onScroll();
+})();
+
+(function(){
+  // MAC address structure widget
+  var samples = [
+    ['3C','A8','2A','1B','6F','09'],
+    ['00','1A','2B','3E','7C','44'],
+    ['B4','2E','99','5D','0F','C1']
+  ];
+  var display = document.getElementById('macDisplay');
+  var buttonBar = document.getElementById('macButtons');
+
+  function render(idx){
+    var bytes = samples[idx];
+    display.innerHTML = '';
+    for (var i = 0; i < bytes.length; i++){
+      var span = document.createElement('span');
+      span.className = 'mac-byte ' + (i < 3 ? 'oui' : 'device');
+      span.textContent = bytes[i];
+      display.appendChild(span);
+    }
+  }
+
+  buttonBar.innerHTML = '';
+  for (var s = 0; s < samples.length; s++){
+    var btn = document.createElement('button');
+    btn.textContent = 'Example ' + (s + 1);
+    if (s === 0) btn.className = 'active';
+    btn.setAttribute('data-idx', s);
+    buttonBar.appendChild(btn);
+  }
+  var macButtons = buttonBar.querySelectorAll('button');
+  for (var b = 0; b < macButtons.length; b++){
+    macButtons[b].addEventListener('click', function(){
+      for (var k = 0; k < macButtons.length; k++){ macButtons[k].classList.remove('active'); }
+      this.classList.add('active');
+      render(parseInt(this.getAttribute('data-idx'), 10));
+    });
+  }
+
+  render(0);
+})();
+
+(function(){
+  // Packet journey simulator
+  var step = 0;
+  var totalSteps = 5;
+  var boxA = document.getElementById('boxA');
+  var boxRouter = document.getElementById('boxRouter');
+  var boxB = document.getElementById('boxB');
+  var stepLine = document.getElementById('journeyStepLine');
+  var stepCount = document.getElementById('journeyStepCount');
+  var nextBtn = document.getElementById('journeyNextBtn');
+  var resetBtn = document.getElementById('journeyResetBtn');
+
+  var messages = [
+    'Step 0 — A wants to send data to B (192.168.2.20).',
+    'Step 1 — A checks the destination IP: it is on a different network (192.168.2.x, not A\'s own 192.168.1.x). So A must send via its router.',
+    'Step 2 — A\'s NIC builds a frame addressed, at the MAC level, to the router\'s LAN1 MAC address. The switch on LAN 1 reads this MAC address and forwards the frame straight to the router.',
+    'Step 3 — The router looks at the IP address inside the packet (192.168.2.20) and works out that LAN 2 is where it needs to go next.',
+    'Step 4 — The router builds a new frame addressed, at the MAC level, to B\'s MAC address, and sends it out onto LAN 2. The switch on LAN 2 forwards it straight to B.',
+    'Step 5 — B receives the frame. The IP address got the data to the right network; the MAC address got it to the right device at each end.'
+  ];
+
+  function clearActive(){
+    boxA.classList.remove('active');
+    boxRouter.classList.remove('active');
+    boxB.classList.remove('active');
+  }
+
+  function render(){
+    clearActive();
+    stepLine.textContent = messages[step];
+    stepCount.textContent = 'Step ' + step + ' / ' + totalSteps;
+    nextBtn.disabled = step >= totalSteps;
+    if (step === 1 || step === 2){ boxA.classList.add('active'); }
+    if (step === 2 || step === 3 || step === 4){ boxRouter.classList.add('active'); }
+    if (step === 4 || step === 5){ boxB.classList.add('active'); }
+  }
+
+  nextBtn.addEventListener('click', function(){ if (step < totalSteps){ step++; render(); } });
+  resetBtn.addEventListener('click', function(){ step = 0; render(); });
+
+  render();
+})();
+</script>
+
+</body>
+</html>

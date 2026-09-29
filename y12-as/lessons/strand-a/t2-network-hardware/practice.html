@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "strand-a/t2-network-hardware";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Network Hardware: NIC, MAC/IP Addressing, Routers — Practice Questions";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practice: Network Hardware — AS Level Computer Science (9618)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:"Source Sans 3", sans-serif; line-height:1.6; }
+  h1,h2,h3{ font-family:"Source Serif 4", serif; font-weight:600; color:var(--navy); }
+  code, .mono { font-family:"JetBrains Mono", monospace; }
+
+  header.page-head{ background:linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%); color:#eef1fb; padding:2rem 1.5rem 1.6rem; }
+  .head-inner{ max-width:1180px; margin:0 auto; }
+  .eyebrow{ color:#9fb0e6; font-size:0.95rem; margin-bottom:0.5rem; }
+  header.page-head h1{ color:#fff; font-size:1.85rem; margin:0 0 0.9rem; max-width:34ch; }
+
+  .progress-row{ display:flex; align-items:center; gap:1rem; max-width:100%; }
+  .progress-track{ flex:1; height:10px; background:#26346b; border-radius:6px; overflow:hidden; }
+  .progress-fill{ height:100%; width:0%; background:var(--teal); transition:width 0.3s; }
+  .progress-label{ font-size:0.85rem; color:#c7d0ee; white-space:nowrap; }
+  .reset-btn{ background:transparent; border:1px solid #3a4a86; color:#c7d0ee; border-radius:6px; padding:0.4rem 0.85rem; font-size:0.82rem; cursor:pointer; font-family:"Source Sans 3",sans-serif; white-space:nowrap; }
+  .reset-btn:hover{ border-color:var(--teal); color:var(--teal); }
+
+  .layout{ max-width:1180px; margin:0 auto; padding:2rem 1.5rem 4rem; display:grid; grid-template-columns:230px minmax(0,760px); gap:2.5rem; align-items:start; }
+
+  nav.toc{ position:sticky; top:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.1rem; }
+  nav.toc h2{ font-size:0.95rem; margin:0 0 0.7rem; color:var(--muted); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+  nav.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.45rem; }
+  nav.toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; display:block; padding:0.15rem 0; border-left:2px solid transparent; padding-left:0.6rem; }
+  nav.toc a:hover{ color:var(--teal); }
+
+  article{ max-width:760px; }
+  section.qsection{ margin-bottom:2.6rem; }
+  .section-kicker{ font-family:"JetBrains Mono", monospace; color:var(--teal); font-size:0.85rem; margin-bottom:0.35rem; }
+  section.qsection h2{ font-size:1.4rem; margin:0 0 1.1rem; }
+
+  .question{ background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.2rem; margin-bottom:1.1rem; }
+  .qprompt{ margin:0 0 0.9rem; font-size:0.98rem; }
+  .qprompt code{ font-size:0.92rem; }
+  .qcode{ background:var(--navy-deep); color:#e7ecfb; border-radius:8px; padding:0.8rem 0.95rem; font-family:"JetBrains Mono",monospace; font-size:0.85rem; line-height:1.6; margin:0.7rem 0; white-space:pre-wrap; }
+
+  .free-row{ display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center; }
+  .free-row input[type=text]{ flex:1; min-width:120px; padding:0.55rem 0.7rem; border:1px solid var(--border); border-radius:6px; font-family:"JetBrains Mono",monospace; font-size:0.92rem; }
+  .check-btn{ background:var(--navy); color:#fff; border:none; border-radius:6px; padding:0.55rem 1.1rem; font-weight:600; cursor:pointer; font-size:0.88rem; }
+  .check-btn:hover{ background:var(--navy-deep); }
+  .feedback{ margin-top:0.6rem; font-size:0.9rem; min-height:1.3em; }
+  .feedback.correct{ color:#0D9488; font-weight:600; }
+  .feedback.incorrect{ color:var(--red); font-weight:600; }
+
+  .mcq-options{ display:flex; flex-wrap:wrap; gap:0.55rem; }
+  .mcq-pill{ background:var(--panel-alt); border:1px solid var(--border); border-radius:20px; padding:0.5rem 1rem; cursor:pointer; font-size:0.88rem; text-align:left; }
+  .mcq-pill:hover{ border-color:var(--teal); }
+  .mcq-pill.correct{ background:var(--teal-light); border-color:var(--teal); }
+  .mcq-pill.incorrect{ background:var(--red-light); border-color:var(--red); }
+
+  textarea.long-answer{ width:100%; min-height:110px; padding:0.7rem 0.85rem; border:1px solid var(--border); border-radius:8px; font-family:"Source Sans 3",sans-serif; font-size:0.92rem; resize:vertical; }
+  details.reveal{ margin-top:0.8rem; }
+  details.reveal summary{ cursor:pointer; color:var(--purple); font-weight:600; font-size:0.88rem; }
+  .model-answer{ background:var(--purple-light); border:1px solid #ddc7ea; border-radius:8px; padding:0.85rem 1rem; margin-top:0.6rem; font-size:0.92rem; }
+
+  footer.page-foot{ max-width:1180px; margin:0 auto; padding:0 1.5rem 3rem; }
+  .foot-nav{ display:flex; justify-content:space-between; gap:1rem; border-top:1px solid var(--border); padding-top:1.5rem; flex-wrap:wrap; }
+  .foot-nav a{ text-decoration:none; color:var(--navy); font-weight:600; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:0.7rem 1.1rem; font-size:0.92rem; }
+  .foot-nav a:hover{ border-color:var(--teal); color:var(--teal); }
+
+  details.mobile-toc{ display:none; }
+  @media (max-width:900px){
+    .layout{ grid-template-columns:1fr; }
+    nav.toc{ display:none; }
+    details.mobile-toc{ display:block; margin-bottom:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.1rem; }
+    details.mobile-toc summary{ cursor:pointer; font-weight:600; color:var(--navy); }
+    details.mobile-toc ol{ list-style:none; padding:0; margin:0.8rem 0 0; display:flex; flex-direction:column; gap:0.5rem; }
+    details.mobile-toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; }
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/strand-a-t2-network-hardware-practice.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+
+<header class="page-head">
+  <div class="head-inner">
+    <div class="eyebrow">Year 12 AS Computer Science (9618) &middot; Topic 2.1, Communication and Internet Technologies</div>
+    <h1>Network Hardware — 13 checkable questions</h1>
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel">0 / 13 correct</div>
+      <button class="reset-btn" id="resetProgressBtn">Reset progress</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <details class="mobile-toc">
+    <summary>Sections</summary>
+    <ol>
+      <li><a href="#secA">A · NIC &amp; MAC addresses</a></li>
+      <li><a href="#secB">B · IP addresses</a></li>
+      <li><a href="#secC">C · MAC vs IP</a></li>
+      <li><a href="#secD">D · Switches &amp; routers</a></li>
+      <li><a href="#secE">E · Exam-style</a></li>
+    </ol>
+  </details>
+
+  <nav class="toc">
+    <h2>Sections</h2>
+    <ol>
+      <li><a href="#secA">A · NIC &amp; MAC addresses</a></li>
+      <li><a href="#secB">B · IP addresses</a></li>
+      <li><a href="#secC">C · MAC vs IP</a></li>
+      <li><a href="#secD">D · Switches &amp; routers</a></li>
+      <li><a href="#secE">E · Exam-style</a></li>
+    </ol>
+  </nav>
+
+  <article>
+
+    <section class="qsection" id="secA">
+      <div class="section-kicker">A</div>
+      <h2>NIC and MAC addresses</h2>
+
+      <div class="question" data-qid="a1">
+        <p class="qprompt">What piece of hardware physically connects a device to a network, and is given a unique MAC address by its manufacturer?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="a2">
+        <p class="qprompt">How many bits make up a MAC address?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="48">48</button>
+          <button class="mcq-pill" data-value="32">32</button>
+          <button class="mcq-pill" data-value="24">24</button>
+          <button class="mcq-pill" data-value="8">8</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="a3">
+        <p class="qprompt">A MAC address is <code>E4:CE:8F:2A:9B:01</code>. Which part identifies the manufacturer (the OUI)?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secB">
+      <div class="section-kicker">B</div>
+      <h2>IP addresses</h2>
+
+      <div class="question" data-qid="b1">
+        <p class="qprompt">How many bits make up an IPv4 address?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="b2">
+        <p class="qprompt">Which best describes how an IP address is assigned to a device?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="Automatically by the network when the device joins, and it can change">Automatically by the network when the device joins, and it can change</button>
+          <button class="mcq-pill" data-value="Permanently built in by the manufacturer">Permanently built in by the manufacturer</button>
+          <button class="mcq-pill" data-value="Chosen once by the user and never changed again">Chosen once by the user and never changed again</button>
+          <button class="mcq-pill" data-value="It is identical for every device on the internet">It is identical for every device on the internet</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="b3">
+        <p class="qprompt">True or False: a laptop's IP address can be different on different networks, while its MAC address stays the same.</p>
+        <div class="free-row"><input type="text" placeholder="True or False"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secC">
+      <div class="section-kicker">C</div>
+      <h2>MAC vs IP</h2>
+
+      <div class="question" data-qid="c1">
+        <p class="qprompt">Which address is used to get a frame of data to the correct device once it's already on the right local network?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="MAC address">MAC address</button>
+          <button class="mcq-pill" data-value="IP address">IP address</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c2">
+        <p class="qprompt">Which address is used to work out which network — potentially far away — data needs to travel to in the first place?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="MAC address">MAC address</button>
+          <button class="mcq-pill" data-value="IP address">IP address</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c3">
+        <p class="qprompt">In one sentence, why do networks need both kinds of address rather than just one?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secD">
+      <div class="section-kicker">D</div>
+      <h2>Switches and routers</h2>
+
+      <div class="question" data-qid="d1">
+        <p class="qprompt">Which device connects multiple devices together within a single local network, using MAC addresses to forward each frame to the correct one?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="d2">
+        <p class="qprompt">Which device connects separate networks together, using IP addresses to decide where to forward data between them?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="d3">
+        <p class="qprompt">A device sends data to its "default gateway" whenever it wants to reach an address outside its own local network. What is the default gateway?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="The router">The router</button>
+          <button class="mcq-pill" data-value="The switch">The switch</button>
+          <button class="mcq-pill" data-value="The NIC">The NIC</button>
+          <button class="mcq-pill" data-value="The manufacturer's server">The manufacturer's server</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="d4">
+        <p class="qprompt">A switch receives a frame but does not yet know which cable a particular destination MAC address is reachable down. What does it do, according to the lesson?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="It learns which MAC address is reachable down which cable over time">It learns which MAC address is reachable down which cable over time</button>
+          <button class="mcq-pill" data-value="It discards the frame immediately">It discards the frame immediately</button>
+          <button class="mcq-pill" data-value="It converts the MAC address into an IP address">It converts the MAC address into an IP address</button>
+          <button class="mcq-pill" data-value="It sends the frame to the internet">It sends the frame to the internet</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secE">
+      <div class="section-kicker">E</div>
+      <h2>Exam-style questions</h2>
+
+      <div class="question" data-qid="e1">
+        <p class="qprompt">Two laptops, X (<code>10.0.0.5</code>) and Y (<code>10.0.0.9</code>), are on the same local network. Explain whether a router is involved when X sends data to Y, and which address is used to deliver it.</p>
+        <textarea class="long-answer" placeholder="Write your answer here"></textarea>
+        <details class="reveal">
+          <summary>Reveal model answer</summary>
+          <div class="model-answer">
+            <p>No router is needed. Both devices share the same network portion of their IP address (<code>10.0.0.x</code>), so X can tell Y is on the same local network. The switch delivers the frame directly using Y's <strong>MAC address</strong> — there's no need to leave the local network, so the router (which works with IP addresses to reach other networks) is never involved.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="question" data-qid="e2">
+        <p class="qprompt">A technician says: "We don't need IP addresses — MAC addresses already uniquely identify every device in the world, so we could route the whole internet using just those." Explain the flaw in this argument.</p>
+        <textarea class="long-answer" placeholder="Write your answer here"></textarea>
+        <details class="reveal">
+          <summary>Reveal model answer</summary>
+          <div class="model-answer">
+            <p>MAC addresses are unique, but they carry no information about <em>where</em> a device is on the wider network of networks — they only identify hardware, not location or which network it's part of. Routers need a way to work out which direction to send data in, based on which network a destination belongs to; IP addresses are structured (network portion plus host portion) so that this decision can be made without knowing every single device's exact position in advance. Trying to route by MAC address alone would mean every router on the internet needing a direct record of literally every device that exists, with no way to group them by location — which does not scale.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+  </article>
+</div>
+
+<footer class="page-foot">
+  <div class="foot-nav">
+    <a href="explainer.html">◂ Back to explainer</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var STORAGE_KEY = 'y12-9618-network-hardware-practice-v1';
+  var CHECKABLE_IDS = ['a1','a2','a3','b1','b2','b3','c1','c2','c3','d1','d2','d3','d4'];
+  var ANSWERS = {
+    a1: 'NIC',
+    a2: '48',
+    a3: 'E4:CE:8F',
+    b1: '32',
+    b2: 'Automatically by the network when the device joins, and it can change',
+    b3: 'True',
+    c1: 'MAC address',
+    c2: 'IP address',
+    c3: 'two problems',
+    d1: 'switch',
+    d2: 'router',
+    d3: 'The router',
+    d4: 'It learns which MAC address is reachable down which cable over time'
+  };
+
+  function normalize(v){
+    return (v || '').toString().trim().toLowerCase().replace(/\s+/g,' ');
+  }
+
+  function altOk(qid, raw){
+    var v = normalize(raw);
+    if (qid === 'a1'){
+      return v === 'nic' || v.indexOf('network interface card') !== -1;
+    }
+    if (qid === 'a3'){
+      return v.replace(/[^a-f0-9]/gi,'') === 'e4ce8f';
+    }
+    if (qid === 'b3'){
+      return v === 'true' || v === 't' || v === 'yes';
+    }
+    if (qid === 'c3'){
+      return v.indexOf('local') !== -1 || v.indexOf('within') !== -1 || v.indexOf('direction') !== -1 || v.indexOf('two') !== -1 || v.indexOf('different') !== -1;
+    }
+    if (qid === 'd1'){
+      return v === 'switch' || v === 'a switch';
+    }
+    if (qid === 'd2'){
+      return v === 'router' || v === 'a router';
+    }
+    return v === normalize(ANSWERS[qid]);
+  }
+
+  var progress = {};
+  try {
+    var saved = window.localStorage.getItem(STORAGE_KEY);
+    if (saved) progress = JSON.parse(saved);
+  } catch(e) { progress = {}; }
+
+  function saveProgress(){
+    try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch(e){}
+  }
+
+  function updateProgressBar(){
+    var correctCount = 0;
+    for (var i = 0; i < CHECKABLE_IDS.length; i++){
+      if (progress[CHECKABLE_IDS[i]] === true) correctCount++;
+    }
+    var pct = Math.round((correctCount / CHECKABLE_IDS.length) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = correctCount + ' / ' + CHECKABLE_IDS.length + ' correct';
+  }
+
+  function markQuestionState(qid){
+    var q = document.querySelector('.question[data-qid="' + qid + '"]');
+    if (!q) return;
+    var fb = q.querySelector('.feedback');
+    if (progress[qid] === true){
+      fb.textContent = 'Correct.';
+      fb.className = 'feedback correct';
+    }
+  }
+
+  function findQuestionAncestor(el){
+    var node = el;
+    while (node && node.nodeType === 1){
+      if (node.className && node.className.indexOf('question') !== -1) return node;
+      node = node.parentNode;
+    }
+    return null;
+  }
+
+  var freeQuestions = document.querySelectorAll('.question .free-row');
+  for (var fi = 0; fi < freeQuestions.length; fi++){
+    (function(row){
+      var qEl = findQuestionAncestor(row);
+      var qid = qEl.getAttribute('data-qid');
+      var input = row.querySelector('input[type=text]');
+      var btn = row.querySelector('.check-btn');
+      var fb = qEl.querySelector('.feedback');
+      btn.addEventListener('click', function(){
+        var ok = altOk(qid, input.value);
+        if (ok){
+          fb.textContent = 'Correct.';
+          fb.className = 'feedback correct';
+          progress[qid] = true;
+        } else {
+          fb.textContent = 'Not quite — check the lesson and try again.';
+          fb.className = 'feedback incorrect';
+        }
+        saveProgress();
+        updateProgressBar();
+      });
+      input.addEventListener('keydown', function(ev){
+        if (ev.key === 'Enter'){ btn.click(); }
+      });
+    })(freeQuestions[fi]);
+  }
+
+  var mcqGroups = document.querySelectorAll('.question .mcq-options');
+  for (var mi = 0; mi < mcqGroups.length; mi++){
+    (function(group){
+      var qEl = findQuestionAncestor(group);
+      var qid = qEl.getAttribute('data-qid');
+      var pills = group.querySelectorAll('.mcq-pill');
+      var fb = qEl.querySelector('.feedback');
+      for (var pi = 0; pi < pills.length; pi++){
+        pills[pi].addEventListener('click', function(){
+          var chosen = this.getAttribute('data-value');
+          for (var k = 0; k < pills.length; k++){
+            pills[k].classList.remove('correct','incorrect');
+          }
+          var isCorrect = chosen === ANSWERS[qid];
+          if (isCorrect){
+            this.classList.add('correct');
+            fb.textContent = 'Correct.';
+            fb.className = 'feedback correct';
+            progress[qid] = true;
+          } else {
+            this.classList.add('incorrect');
+            fb.textContent = 'Not quite — try again.';
+            fb.className = 'feedback incorrect';
+          }
+          saveProgress();
+          updateProgressBar();
+        });
+      }
+    })(mcqGroups[mi]);
+  }
+
+  for (var ri = 0; ri < CHECKABLE_IDS.length; ri++){
+    markQuestionState(CHECKABLE_IDS[ri]);
+  }
+  updateProgressBar();
+
+  document.getElementById('resetProgressBtn').addEventListener('click', function(){
+    progress = {};
+    saveProgress();
+    var feedbacks = document.querySelectorAll('.feedback');
+    for (var i = 0; i < feedbacks.length; i++){
+      feedbacks[i].textContent = '';
+      feedbacks[i].className = 'feedback';
+    }
+    var pills = document.querySelectorAll('.mcq-pill');
+    for (var j = 0; j < pills.length; j++){
+      pills[j].classList.remove('correct','incorrect');
+    }
+    var inputs = document.querySelectorAll('input[type=text]');
+    for (var k = 0; k < inputs.length; k++){ inputs[k].value = ''; }
+    updateProgressBar();
+  });
+})();
+</script>
+
+</body>
+</html>

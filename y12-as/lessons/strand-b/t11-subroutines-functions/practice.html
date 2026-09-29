@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "strand-b/t11-subroutines-functions";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Subroutines: Functions with Parameters — Practice Questions";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practice: Functions with Parameters — AS Level Computer Science (9618)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:"Source Sans 3", sans-serif; line-height:1.6; }
+  h1,h2,h3{ font-family:"Source Serif 4", serif; font-weight:600; color:var(--navy); }
+  code, .mono { font-family:"JetBrains Mono", monospace; }
+
+  header.page-head{ background:linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%); color:#eef1fb; padding:2rem 1.5rem 1.6rem; }
+  .head-inner{ max-width:1180px; margin:0 auto; }
+  .eyebrow{ color:#9fb0e6; font-size:0.95rem; margin-bottom:0.5rem; }
+  header.page-head h1{ color:#fff; font-size:1.85rem; margin:0 0 0.9rem; max-width:34ch; }
+
+  .progress-row{ display:flex; align-items:center; gap:1rem; max-width:100%; }
+  .progress-track{ flex:1; height:10px; background:#26346b; border-radius:6px; overflow:hidden; }
+  .progress-fill{ height:100%; width:0%; background:var(--teal); transition:width 0.3s; }
+  .progress-label{ font-size:0.85rem; color:#c7d0ee; white-space:nowrap; }
+  .reset-btn{ background:transparent; border:1px solid #3a4a86; color:#c7d0ee; border-radius:6px; padding:0.4rem 0.85rem; font-size:0.82rem; cursor:pointer; font-family:"Source Sans 3",sans-serif; white-space:nowrap; }
+  .reset-btn:hover{ border-color:var(--teal); color:var(--teal); }
+
+  .layout{ max-width:1180px; margin:0 auto; padding:2rem 1.5rem 4rem; display:grid; grid-template-columns:230px minmax(0,760px); gap:2.5rem; align-items:start; }
+
+  nav.toc{ position:sticky; top:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.1rem; }
+  nav.toc h2{ font-size:0.95rem; margin:0 0 0.7rem; color:var(--muted); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+  nav.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.45rem; }
+  nav.toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; display:block; padding:0.15rem 0; border-left:2px solid transparent; padding-left:0.6rem; }
+  nav.toc a:hover{ color:var(--teal); }
+
+  article{ max-width:760px; }
+  section.qsection{ margin-bottom:2.6rem; }
+  .section-kicker{ font-family:"JetBrains Mono", monospace; color:var(--teal); font-size:0.85rem; margin-bottom:0.35rem; }
+  section.qsection h2{ font-size:1.4rem; margin:0 0 1.1rem; }
+
+  .question{ background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.2rem; margin-bottom:1.1rem; }
+  .qprompt{ margin:0 0 0.9rem; font-size:0.98rem; }
+  .qprompt code{ font-size:0.92rem; }
+  .qcode{ background:var(--navy-deep); color:#e7ecfb; border-radius:8px; padding:0.8rem 0.95rem; font-family:"JetBrains Mono",monospace; font-size:0.85rem; line-height:1.6; margin:0.7rem 0; white-space:pre-wrap; }
+  .qcode .kw{ color:#7ad4ff; } .qcode .id{ color:#ffd479; } .qcode .str{ color:#a8e6a1; } .qcode .cm{ color:#7d89b0; font-style:italic; }
+
+  .free-row{ display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center; }
+  .free-row input[type=text]{ flex:1; min-width:120px; padding:0.55rem 0.7rem; border:1px solid var(--border); border-radius:6px; font-family:"JetBrains Mono",monospace; font-size:0.92rem; }
+  .check-btn{ background:var(--navy); color:#fff; border:none; border-radius:6px; padding:0.55rem 1.1rem; font-weight:600; cursor:pointer; font-size:0.88rem; }
+  .check-btn:hover{ background:var(--navy-deep); }
+  .feedback{ margin-top:0.6rem; font-size:0.9rem; min-height:1.3em; }
+  .feedback.correct{ color:#0D9488; font-weight:600; }
+  .feedback.incorrect{ color:var(--red); font-weight:600; }
+
+  .mcq-options{ display:flex; flex-wrap:wrap; gap:0.55rem; }
+  .mcq-pill{ background:var(--panel-alt); border:1px solid var(--border); border-radius:20px; padding:0.5rem 1rem; cursor:pointer; font-size:0.88rem; text-align:left; }
+  .mcq-pill:hover{ border-color:var(--teal); }
+  .mcq-pill.selected{ border-color:var(--navy); background:#e4e8f7; }
+  .mcq-pill.correct{ background:var(--teal-light); border-color:var(--teal); }
+  .mcq-pill.incorrect{ background:var(--red-light); border-color:var(--red); }
+
+  textarea.long-answer{ width:100%; min-height:110px; padding:0.7rem 0.85rem; border:1px solid var(--border); border-radius:8px; font-family:"Source Sans 3",sans-serif; font-size:0.92rem; resize:vertical; }
+  details.reveal{ margin-top:0.8rem; }
+  details.reveal summary{ cursor:pointer; color:var(--purple); font-weight:600; font-size:0.88rem; }
+  .model-answer{ background:var(--purple-light); border:1px solid #ddc7ea; border-radius:8px; padding:0.85rem 1rem; margin-top:0.6rem; font-size:0.92rem; }
+
+  footer.page-foot{ max-width:1180px; margin:0 auto; padding:0 1.5rem 3rem; }
+  .foot-nav{ display:flex; justify-content:space-between; gap:1rem; border-top:1px solid var(--border); padding-top:1.5rem; flex-wrap:wrap; }
+  .foot-nav a{ text-decoration:none; color:var(--navy); font-weight:600; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:0.7rem 1.1rem; font-size:0.92rem; }
+  .foot-nav a:hover{ border-color:var(--teal); color:var(--teal); }
+
+  details.mobile-toc{ display:none; }
+  @media (max-width:900px){
+    .layout{ grid-template-columns:1fr; }
+    nav.toc{ display:none; }
+    details.mobile-toc{ display:block; margin-bottom:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.1rem; }
+    details.mobile-toc summary{ cursor:pointer; font-weight:600; color:var(--navy); }
+    details.mobile-toc ol{ list-style:none; padding:0; margin:0.8rem 0 0; display:flex; flex-direction:column; gap:0.5rem; }
+    details.mobile-toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; }
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/strand-b-t11-subroutines-functions-practice.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+
+<header class="page-head">
+  <div class="head-inner">
+    <div class="eyebrow">Year 12 AS Computer Science (9618) &middot; Topic 11.4, Programming</div>
+    <h1>Functions with Parameters — 13 checkable questions</h1>
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel">0 / 13 correct</div>
+      <button class="reset-btn" id="resetProgressBtn">Reset progress</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <details class="mobile-toc">
+    <summary>Sections</summary>
+    <ol>
+      <li><a href="#secA">A · Terminology</a></li>
+      <li><a href="#secB">B · Defining &amp; calling</a></li>
+      <li><a href="#secC">C · Parameters</a></li>
+      <li><a href="#secD">D · Expressions &amp; RETURN</a></li>
+      <li><a href="#secE">E · Exam-style</a></li>
+    </ol>
+  </details>
+
+  <nav class="toc">
+    <h2>Sections</h2>
+    <ol>
+      <li><a href="#secA">A · Terminology</a></li>
+      <li><a href="#secB">B · Defining &amp; calling</a></li>
+      <li><a href="#secC">C · Parameters</a></li>
+      <li><a href="#secD">D · Expressions &amp; RETURN</a></li>
+      <li><a href="#secE">E · Exam-style</a></li>
+    </ol>
+  </nav>
+
+  <article>
+
+    <section class="qsection" id="secA">
+      <div class="section-kicker">A</div>
+      <h2>Terminology</h2>
+
+      <div class="question" data-qid="a1">
+        <p class="qprompt">What's the key difference between a function and a procedure?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="A function returns a value; a procedure does not">A function returns a value; a procedure does not</button>
+          <button class="mcq-pill" data-value="A function can't take parameters">A function can't take parameters</button>
+          <button class="mcq-pill" data-value="A procedure runs faster">A procedure runs faster</button>
+          <button class="mcq-pill" data-value="A function must be called with CALL">A function must be called with CALL</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="a2">
+        <p class="qprompt">Which keyword is used inside a function's body to send a value back to the caller?</p>
+        <div class="free-row">
+          <input type="text" placeholder="Type your answer">
+          <button class="check-btn">Check</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="a3">
+        <p class="qprompt">Which keyword closes a function definition?</p>
+        <div class="free-row">
+          <input type="text" placeholder="Type your answer">
+          <button class="check-btn">Check</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secB">
+      <div class="section-kicker">B</div>
+      <h2>Defining and calling functions</h2>
+
+      <div class="question" data-qid="b1">
+        <p class="qprompt">Complete the function header:</p>
+        <div class="qcode">FUNCTION Max(Number1 : INTEGER, Number2 : INTEGER) ______ INTEGER</div>
+        <div class="free-row">
+          <input type="text" placeholder="Type the missing keyword">
+          <button class="check-btn">Check</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="b2">
+        <p class="qprompt">Which of these correctly calls a function that returns an <code>INTEGER</code>, storing the result in <code>Total</code>?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="Total ← Max(10, 20)">Total ← Max(10, 20)</button>
+          <button class="mcq-pill" data-value="CALL Max(10, 20)">CALL Max(10, 20)</button>
+          <button class="mcq-pill" data-value="Total ← CALL Max(10, 20)">Total ← CALL Max(10, 20)</button>
+          <button class="mcq-pill" data-value="RETURN Max(10, 20)">RETURN Max(10, 20)</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="b3">
+        <p class="qprompt">In one short phrase — why is <code>CALL</code> never used when invoking a function?</p>
+        <div class="free-row">
+          <input type="text" placeholder="Type your answer">
+          <button class="check-btn">Check</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secC">
+      <div class="section-kicker">C</div>
+      <h2>Parameters in functions</h2>
+
+      <div class="question" data-qid="c1">
+        <p class="qprompt">Which passing mode can a function's parameters use?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="BYVAL only">BYVAL only</button>
+          <button class="mcq-pill" data-value="BYREF only">BYREF only</button>
+          <button class="mcq-pill" data-value="Either BYVAL or BYREF">Either BYVAL or BYREF</button>
+          <button class="mcq-pill" data-value="Neither — functions take no parameters">Neither — functions take no parameters</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c2">
+        <p class="qprompt">True or False: a function's parameters can be declared <code>BYREF</code>.</p>
+        <div class="free-row">
+          <input type="text" placeholder="True or False">
+          <button class="check-btn">Check</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c3">
+        <p class="qprompt">In <code>FUNCTION Increment(BYVAL Num : INTEGER) RETURNS INTEGER</code>, the <code>BYVAL</code> keyword:</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="Is redundant — BYVAL is already the only option for a function's parameters">Is redundant — BYVAL is already the only option for a function's parameters</button>
+          <button class="mcq-pill" data-value="Is required, since functions default to BYREF">Is required, since functions default to BYREF</button>
+          <button class="mcq-pill" data-value="Makes Num a global variable">Makes Num a global variable</button>
+          <button class="mcq-pill" data-value="Prevents the function from being called">Prevents the function from being called</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secD">
+      <div class="section-kicker">D</div>
+      <h2>Expressions and RETURN behaviour</h2>
+
+      <div class="question" data-qid="d1">
+        <p class="qprompt">Trace this, then answer the question below it.</p>
+        <div class="qcode"><span class="kw">FUNCTION</span> <span class="id">Max</span>(Number1 : INTEGER, Number2 : INTEGER) <span class="kw">RETURNS</span> INTEGER
+   <span class="kw">IF</span> Number1 > Number2 <span class="kw">THEN</span>
+      <span class="kw">RETURN</span> Number1
+   <span class="kw">ELSE</span>
+      <span class="kw">RETURN</span> Number2
+   <span class="kw">ENDIF</span>
+<span class="kw">ENDFUNCTION</span>
+
+DECLARE Distance : INTEGER
+Distance ← 30
+OUTPUT <span class="str">"Penalty Fine = "</span>, <span class="id">Max</span>(10, Distance*2)</div>
+        <p class="qprompt">What number does this <code>OUTPUT</code> statement print?</p>
+        <div class="free-row">
+          <input type="text" placeholder="Type your answer">
+          <button class="check-btn">Check</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="d2">
+        <p class="qprompt">In the <code>Max</code> function above, what happens the instant a <code>RETURN</code> statement executes?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="The function ends immediately and no further lines run">The function ends immediately and no further lines run</button>
+          <button class="mcq-pill" data-value="The function continues to the next line">The function continues to the next line</button>
+          <button class="mcq-pill" data-value="The value is stored for later, but the function keeps running">The value is stored for later, but the function keeps running</button>
+          <button class="mcq-pill" data-value="Nothing — RETURN is just a comment">Nothing — RETURN is just a comment</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="d3">
+        <p class="qprompt">Using this function:</p>
+        <div class="qcode"><span class="kw">FUNCTION</span> <span class="id">Classify</span>(Mark : INTEGER) <span class="kw">RETURNS</span> STRING
+   <span class="kw">IF</span> Mark >= 70 <span class="kw">THEN</span>
+      <span class="kw">RETURN</span> <span class="str">"Distinction"</span>
+   <span class="kw">ENDIF</span>
+   <span class="kw">IF</span> Mark >= 50 <span class="kw">THEN</span>
+      <span class="kw">RETURN</span> <span class="str">"Pass"</span>
+   <span class="kw">ENDIF</span>
+   <span class="kw">RETURN</span> <span class="str">"Fail"</span>
+<span class="kw">ENDFUNCTION</span></div>
+        <p class="qprompt">What does <code>Classify(62)</code> return?</p>
+        <div class="free-row">
+          <input type="text" placeholder="Type your answer">
+          <button class="check-btn">Check</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="d4">
+        <p class="qprompt">Using the same <code>Classify</code> function — what does <code>Classify(70)</code> return? (Check the boundary carefully.)</p>
+        <div class="free-row">
+          <input type="text" placeholder="Type your answer">
+          <button class="check-btn">Check</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secE">
+      <div class="section-kicker">E</div>
+      <h2>Exam-style questions</h2>
+
+      <div class="question" data-qid="e1">
+        <p class="qprompt">Using the same <code>Classify</code> function from section D, what does this statement print, and why doesn't the first <code>IF</code> fire?</p>
+        <div class="qcode">OUTPUT <span class="str">"Grade: "</span>, <span class="id">Classify</span>(49)</div>
+        <textarea class="long-answer" placeholder="Write your answer and reasoning here"></textarea>
+        <details class="reveal">
+          <summary>Reveal model answer</summary>
+          <div class="model-answer">
+            <p><strong>Prints: Grade: Fail</strong></p>
+            <p><code>Mark >= 70</code> is <code>49 >= 70</code>, which is <code>FALSE</code>, so the first <code>RETURN</code> is skipped. <code>Mark >= 50</code> is <code>49 >= 50</code>, also <code>FALSE</code>, so the second <code>RETURN</code> is skipped too. Execution reaches the final <code>RETURN "Fail"</code>, which fires unconditionally if nothing else has already returned.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="question" data-qid="e2">
+        <p class="qprompt">A student wrote this code and it doesn't work. Identify every mistake, and rewrite it correctly.</p>
+        <div class="qcode"><span class="kw">PROCEDURE</span> <span class="id">Classify</span>(Mark : INTEGER) <span class="kw">RETURNS</span> STRING
+   <span class="kw">IF</span> Mark >= 70 <span class="kw">THEN</span>
+      <span class="kw">RETURN</span> <span class="str">"Distinction"</span>
+   <span class="kw">ENDIF</span>
+   <span class="kw">RETURN</span> <span class="str">"Fail"</span>
+<span class="kw">ENDPROCEDURE</span>
+
+<span class="kw">CALL</span> <span class="id">Classify</span>(62)</div>
+        <textarea class="long-answer" placeholder="List the mistakes and write the corrected code"></textarea>
+        <details class="reveal">
+          <summary>Reveal model answer</summary>
+          <div class="model-answer">
+            <p><strong>Three mistakes:</strong> (1) it's declared as <code>PROCEDURE</code> but has a <code>RETURNS</code> clause and <code>RETURN</code> statements, which only belong on a <code>FUNCTION</code>; (2) it's closed with <code>ENDPROCEDURE</code> instead of <code>ENDFUNCTION</code>; (3) it's invoked with <code>CALL</code> and the returned value is thrown away — a function call must sit inside an expression, such as an <code>OUTPUT</code> or an assignment.</p>
+            <p><strong>Corrected:</strong></p>
+            <p><code>FUNCTION Classify(Mark : INTEGER) RETURNS STRING</code><br>
+            <code>&nbsp;&nbsp;&nbsp;IF Mark >= 70 THEN</code><br>
+            <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN "Distinction"</code><br>
+            <code>&nbsp;&nbsp;&nbsp;ENDIF</code><br>
+            <code>&nbsp;&nbsp;&nbsp;RETURN "Fail"</code><br>
+            <code>ENDFUNCTION</code></p>
+            <p><code>OUTPUT Classify(62)</code> — or assign it, e.g. <code>Grade ← Classify(62)</code>.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+  </article>
+</div>
+
+<footer class="page-foot">
+  <div class="foot-nav">
+    <a href="explainer.html">◂ Back to explainer</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var STORAGE_KEY = 'y12-9618-functions-practice-v1';
+  var CHECKABLE_IDS = ['a1','a2','a3','b1','b2','b3','c1','c2','c3','d1','d2','d3','d4'];
+  var ANSWERS = {
+    a1: 'A function returns a value; a procedure does not',
+    a2: 'RETURN',
+    a3: 'ENDFUNCTION',
+    b1: 'RETURNS',
+    b2: 'Total ← Max(10, 20)',
+    b3: 'returns a value',
+    c1: 'BYVAL only',
+    c2: 'False',
+    c3: 'Is redundant — BYVAL is already the only option for a function\'s parameters',
+    d1: '60',
+    d2: 'The function ends immediately and no further lines run',
+    d3: 'Pass',
+    d4: 'Distinction'
+  };
+
+  function normalize(v){
+    return (v || '').toString().trim().toLowerCase().replace(/\s+/g,' ');
+  }
+
+  function altOk(qid, raw){
+    var v = normalize(raw);
+    if (qid === 'b1'){
+      return v === 'returns';
+    }
+    if (qid === 'b3'){
+      return v.indexOf('return') !== -1 || v.indexOf('expression') !== -1 || v.indexOf('value') !== -1;
+    }
+    if (qid === 'c2'){
+      return v === 'false' || v === 'f' || v === 'no';
+    }
+    return v === normalize(ANSWERS[qid]);
+  }
+
+  var progress = {};
+  try {
+    var saved = window.localStorage.getItem(STORAGE_KEY);
+    if (saved) progress = JSON.parse(saved);
+  } catch(e) { progress = {}; }
+
+  function saveProgress(){
+    try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch(e){}
+  }
+
+  function updateProgressBar(){
+    var correctCount = 0;
+    for (var i = 0; i < CHECKABLE_IDS.length; i++){
+      if (progress[CHECKABLE_IDS[i]] === true) correctCount++;
+    }
+    var pct = Math.round((correctCount / CHECKABLE_IDS.length) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = correctCount + ' / ' + CHECKABLE_IDS.length + ' correct';
+  }
+
+  function markQuestionState(qid){
+    var q = document.querySelector('.question[data-qid="' + qid + '"]');
+    if (!q) return;
+    var fb = q.querySelector('.feedback');
+    if (progress[qid] === true){
+      fb.textContent = 'Correct.';
+      fb.className = 'feedback correct';
+    }
+  }
+
+  function findQuestionAncestor(el){
+    var node = el;
+    while (node && node.nodeType === 1){
+      if (node.className && node.className.indexOf('question') !== -1) return node;
+      node = node.parentNode;
+    }
+    return null;
+  }
+
+  // Free-text questions
+  var freeQuestions = document.querySelectorAll('.question .free-row');
+  for (var fi = 0; fi < freeQuestions.length; fi++){
+    (function(row){
+      var qEl = findQuestionAncestor(row);
+      var qid = qEl.getAttribute('data-qid');
+      var input = row.querySelector('input[type=text]');
+      var btn = row.querySelector('.check-btn');
+      var fb = qEl.querySelector('.feedback');
+      btn.addEventListener('click', function(){
+        var ok = altOk(qid, input.value);
+        if (ok){
+          fb.textContent = 'Correct.';
+          fb.className = 'feedback correct';
+          progress[qid] = true;
+        } else {
+          fb.textContent = 'Not quite — check the pseudocode above and try again.';
+          fb.className = 'feedback incorrect';
+        }
+        saveProgress();
+        updateProgressBar();
+      });
+      input.addEventListener('keydown', function(ev){
+        if (ev.key === 'Enter'){ btn.click(); }
+      });
+    })(freeQuestions[fi]);
+  }
+
+  // MCQ questions
+  var mcqGroups = document.querySelectorAll('.question .mcq-options');
+  for (var mi = 0; mi < mcqGroups.length; mi++){
+    (function(group){
+      var qEl = findQuestionAncestor(group);
+      var qid = qEl.getAttribute('data-qid');
+      var pills = group.querySelectorAll('.mcq-pill');
+      var fb = qEl.querySelector('.feedback');
+      for (var pi = 0; pi < pills.length; pi++){
+        pills[pi].addEventListener('click', function(){
+          var chosen = this.getAttribute('data-value');
+          for (var k = 0; k < pills.length; k++){
+            pills[k].classList.remove('selected','correct','incorrect');
+          }
+          var isCorrect = chosen === ANSWERS[qid];
+          if (isCorrect){
+            this.classList.add('correct');
+            fb.textContent = 'Correct.';
+            fb.className = 'feedback correct';
+            progress[qid] = true;
+          } else {
+            this.classList.add('incorrect');
+            fb.textContent = 'Not quite — try again.';
+            fb.className = 'feedback incorrect';
+          }
+          saveProgress();
+          updateProgressBar();
+        });
+      }
+    })(mcqGroups[mi]);
+  }
+
+  // Restore state on load
+  for (var ri = 0; ri < CHECKABLE_IDS.length; ri++){
+    markQuestionState(CHECKABLE_IDS[ri]);
+  }
+  updateProgressBar();
+
+  document.getElementById('resetProgressBtn').addEventListener('click', function(){
+    progress = {};
+    saveProgress();
+    var feedbacks = document.querySelectorAll('.feedback');
+    for (var i = 0; i < feedbacks.length; i++){
+      feedbacks[i].textContent = '';
+      feedbacks[i].className = 'feedback';
+    }
+    var pills = document.querySelectorAll('.mcq-pill');
+    for (var j = 0; j < pills.length; j++){
+      pills[j].classList.remove('selected','correct','incorrect');
+    }
+    var inputs = document.querySelectorAll('input[type=text]');
+    for (var k = 0; k < inputs.length; k++){ inputs[k].value = ''; }
+    updateProgressBar();
+  });
+})();
+</script>
+
+</body>
+</html>

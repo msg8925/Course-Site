@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "strand-a/t1-number-systems";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Number Systems: Denary, Binary and Hexadecimal Conversions — Practice Questions";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Number Systems: Practice Questions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E;
+    --navy-deep:#101a3a;
+    --teal:#0D9488;
+    --teal-light:#e6f5f3;
+    --purple:#7C4DA0;
+    --purple-light:#f1e9f6;
+    --red:#a4342a;
+    --bg:#f5f6fa;
+    --panel:#ffffff;
+    --panel-alt:#eef1f8;
+    --border:#dde1ee;
+    --text:#1c2340;
+    --muted:#5b6472;
+    --serif:'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --sans:'Source Sans 3','Segoe UI',Arial,sans-serif;
+    --mono:'JetBrains Mono','Fira Code',Consolas,monospace;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.6; -webkit-font-smoothing:antialiased;}
+  a{color:var(--teal);}
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible{outline:3px solid var(--teal); outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;} }
+
+  header.page-head{background:var(--navy); color:#fff; padding:2.4rem 1.5rem 2.1rem;}
+  .head-inner{max-width:920px; margin:0 auto;}
+  .head-inner p.eyebrow{margin:0 0 0.6rem; color:#9fb0e0; font-size:0.98rem;}
+  .head-inner h1{font-family:var(--serif); font-weight:700; font-size:clamp(1.8rem, 4vw, 2.5rem); margin:0 0 0.7rem; line-height:1.15;}
+  .head-inner p.lede{margin:0; max-width:65ch; color:#dbe2f5; font-size:1.08rem;}
+
+  .progress-bar-wrap{max-width:920px; margin:1.3rem auto 0; background:#20295a; border-radius:999px; height:10px; overflow:hidden;}
+  .progress-bar-fill{height:100%; background:var(--teal); width:0%;}
+  .progress-caption{max-width:920px; margin:0.6rem auto 0; display:flex; justify-content:space-between; align-items:center; color:#c3cdea; font-size:0.88rem;}
+  .progress-caption button{background:none; border:none; color:#c3cdea; text-decoration:underline; cursor:pointer; font-size:0.85rem; padding:0; font-family:var(--sans);}
+
+  .layout{max-width:1120px; margin:0 auto; padding:2.4rem 1.5rem 5rem; display:flex; gap:2.8rem; align-items:flex-start;}
+  nav.toc{flex:0 0 230px; position:sticky; top:1.5rem; font-size:0.95rem;}
+  nav.toc h2{font-family:var(--serif); font-size:1rem; font-weight:600; margin:0 0 0.8rem; color:var(--navy);}
+  nav.toc ol{list-style:none; margin:0; padding:0; border-left:2px solid var(--border);}
+  nav.toc a{display:block; padding:0.4rem 0 0.4rem 0.9rem; margin-left:-2px; border-left:2px solid transparent; color:var(--muted); text-decoration:none;}
+  nav.toc a:hover{color:var(--navy);}
+  details.toc-mobile{display:none;}
+
+  main.article{flex:1 1 auto; min-width:0; max-width:760px;}
+  main.article section{margin-bottom:3rem; scroll-margin-top:1.4rem;}
+  .section-kicker{font-family:var(--mono); font-size:0.82rem; color:var(--teal); margin:0 0 0.35rem;}
+  main.article h2{font-family:var(--serif); font-weight:700; font-size:1.5rem; color:var(--navy); margin:0 0 0.5rem; line-height:1.25;}
+  main.article > section > p.section-intro{color:var(--muted); margin:0 0 1.2rem; max-width:65ch;}
+
+  .qcard{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:1.3rem 1.4rem 1.4rem; margin-bottom:1.1rem;}
+  .qcard-head{display:flex; align-items:flex-start; gap:0.7rem; margin-bottom:0.7rem;}
+  .qnum{flex:0 0 auto; width:2rem; height:2rem; border-radius:50%; background:var(--panel-alt); color:var(--navy); font-weight:700; font-family:var(--sans); display:flex; align-items:center; justify-content:center; font-size:0.92rem;}
+  .qnum.done{background:var(--teal); color:#fff;}
+  .qprompt{flex:1; margin:0; padding-top:0.15rem;}
+  .qprompt .binline{display:inline-block; font-family:var(--mono); background:var(--panel-alt); padding:0.15rem 0.5rem; border-radius:5px; margin:0.15rem 0.15rem 0.15rem 0;}
+  .check-row{display:flex; gap:0.6rem; align-items:center; margin:0.8rem 0 0.3rem; flex-wrap:wrap;}
+  .answer-input{font-family:var(--mono); font-size:0.98rem; padding:0.55rem 0.75rem; border-radius:7px; border:1.5px solid var(--border); min-width:160px; flex:0 1 220px;}
+  .check-btn{font-family:var(--sans); font-weight:600; font-size:0.9rem; padding:0.55rem 1.1rem; border-radius:7px; border:none; background:var(--navy); color:#fff; cursor:pointer;}
+  .check-btn:hover{background:var(--navy-deep);}
+  .feedback{font-size:0.92rem; font-weight:600; padding:0.3rem 0;}
+  .feedback.correct{color:var(--teal);}
+  .feedback.incorrect{color:var(--red);}
+
+  details.solution{margin-top:0.7rem; border-top:1px dashed var(--border); padding-top:0.6rem;}
+  details.solution summary{cursor:pointer; font-weight:600; color:var(--navy); font-size:0.92rem;}
+  .solution-body{margin-top:0.8rem; font-size:0.94rem;}
+  .solution-body p{margin:0 0 0.6rem;}
+  .solution-body p:last-child{margin-bottom:0;}
+
+  .steps-mini{font-family:var(--mono); font-size:0.86rem; background:var(--panel-alt); border-radius:7px; padding:0.7rem 0.9rem; line-height:1.85; white-space:pre-wrap; margin:0.6rem 0;}
+
+  .nibble-demo{display:flex; gap:0.5rem; margin:0.8rem 0; flex-wrap:wrap;}
+  .nibble-group{display:flex; flex-direction:column; align-items:center; gap:0.3rem; padding:0.6rem 0.8rem; border-radius:8px; flex:1; min-width:120px;}
+  .nibble-group.high{background:var(--teal-light);}
+  .nibble-group.low{background:var(--purple-light);}
+  .nibble-group .bits{font-family:var(--mono); font-size:1.05rem; font-weight:700;}
+  .nibble-group.high .bits{color:var(--teal);}
+  .nibble-group.low .bits{color:var(--purple);}
+  .nibble-group .arrow{color:var(--muted); font-size:0.8rem;}
+  .nibble-group .hexdigit{font-family:var(--mono); font-size:1.35rem; font-weight:700;}
+  .nibble-group.high .hexdigit{color:var(--teal);}
+  .nibble-group.low .hexdigit{color:var(--purple);}
+
+  textarea.longanswer{width:100%; min-height:110px; font-family:var(--sans); font-size:0.95rem; padding:0.6rem 0.75rem; border-radius:7px; border:1.5px solid var(--border); margin:0.6rem 0 0.2rem; resize:vertical;}
+
+  .next-step{margin-top:2rem; padding:1.6rem; background:var(--panel-alt); border-radius:var(--radius); display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;}
+  .next-step p{margin:0; color:var(--muted);}
+  .next-step a.button{background:var(--navy); color:#fff; text-decoration:none; padding:0.7rem 1.3rem; border-radius:8px; font-weight:600; white-space:nowrap;}
+  .next-step a.button:hover{background:var(--navy-deep);}
+
+  @media (max-width:900px){
+    .layout{flex-direction:column; gap:1.2rem;}
+    nav.toc{display:none;}
+    details.toc-mobile{display:block; background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:0.2rem 1rem; width:100%;}
+    details.toc-mobile summary{padding:0.9rem 0; font-weight:600; color:var(--navy); cursor:pointer; font-family:var(--serif);}
+    details.toc-mobile ol{list-style:none; margin:0; padding:0 0 0.8rem;}
+    details.toc-mobile a{display:block; padding:0.4rem 0; color:var(--muted); text-decoration:none;}
+    main.article{max-width:none;}
+    .answer-input{flex:1 1 auto;}
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/strand-a-t1-number-systems-practice.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+
+<header class="page-head">
+  <div class="head-inner">
+    <p class="eyebrow">Year 12 AS Computer Science (9618) &middot; Topic 1.2, Data Representation</p>
+    <h1>Number Systems: Practice Questions</h1>
+    <p class="lede">12 questions covering denary, binary, and hex conversion &mdash; including the nibble shortcut. Type an answer to check it instantly, or open the full worked solution any time.</p>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill"></div></div>
+  <div class="progress-caption">
+    <span id="progress-text">0 of 11 checkable questions correct</span>
+    <button type="button" id="reset-progress">Reset progress</button>
+  </div>
+</header>
+
+<div class="layout">
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2>Sections</h2>
+    <ol>
+      <li><a href="#secA">Denary &harr; binary</a></li>
+      <li><a href="#secB">Denary &harr; hex</a></li>
+      <li><a href="#secC">The nibble shortcut</a></li>
+      <li><a href="#secD">Mixed &amp; applied</a></li>
+    </ol>
+  </nav>
+
+  <details class="toc-mobile">
+    <summary>Sections</summary>
+    <ol>
+      <li><a href="#secA">Denary &harr; binary</a></li>
+      <li><a href="#secB">Denary &harr; hex</a></li>
+      <li><a href="#secC">The nibble shortcut</a></li>
+      <li><a href="#secD">Mixed &amp; applied</a></li>
+    </ol>
+  </details>
+
+  <main class="article">
+
+    <section id="secA">
+      <p class="section-kicker">A</p>
+      <h2>Denary &harr; binary</h2>
+      <p class="section-intro">A quick recap before we extend to hex.</p>
+
+      <div class="qcard" data-qid="a1">
+        <div class="qcard-head"><div class="qnum">1</div>
+          <p class="qprompt">Convert 91 to 8-bit binary.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="8-bit answer">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="steps-mini">91 &divide; 2 = 45 remainder 1
+45 &divide; 2 = 22 remainder 1
+22 &divide; 2 = 11 remainder 0
+11 &divide; 2 = 5  remainder 1
+5  &divide; 2 = 2  remainder 1
+2  &divide; 2 = 1  remainder 0
+1  &divide; 2 = 0  remainder 1</div>
+            <p>Reading bottom to top: <strong>01011011</strong>. Check: 64 + 16 + 8 + 2 + 1 = 91.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="a2">
+        <div class="qcard-head"><div class="qnum">2</div>
+          <p class="qprompt">Convert <span class="binline">11010110</span> to denary.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="decimal answer" style="min-width:140px; flex-basis:140px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="steps-mini">128 + 64 + 0 + 16 + 0 + 4 + 2 + 0 = 214</div>
+            <p>Answer: <strong>214</strong>.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secB">
+      <p class="section-kicker">B</p>
+      <h2>Denary &harr; hex</h2>
+      <p class="section-intro">Use repeated division by 16, or the place-value sum, as shown in the explainer.</p>
+
+      <div class="qcard" data-qid="b1">
+        <div class="qcard-head"><div class="qnum">3</div>
+          <p class="qprompt">Convert 173 to hexadecimal.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="hex answer" style="min-width:140px; flex-basis:140px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="steps-mini">173 &divide; 16 = 10 remainder 13 (D)
+10  &divide; 16 = 0  remainder 10 (A)</div>
+            <p>Reading bottom to top: <strong>AD</strong>. Check: (10 &times; 16) + 13 = 173.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="b2">
+        <div class="qcard-head"><div class="qnum">4</div>
+          <p class="qprompt">Convert hex <span class="binline">4E</span> to denary.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="decimal answer" style="min-width:140px; flex-basis:140px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="steps-mini">(4 &times; 16) + (14 &times; 1) = 64 + 14 = 78</div>
+            <p>Answer: <strong>78</strong>.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secC">
+      <p class="section-kicker">C</p>
+      <h2>The nibble shortcut</h2>
+      <p class="section-intro">Convert directly between binary and hex, four bits at a time &mdash; no denary needed.</p>
+
+      <div class="qcard" data-qid="c1">
+        <div class="qcard-head"><div class="qnum">5</div>
+          <p class="qprompt">Convert <span class="binline">11100011</span> to hex using the nibble shortcut.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="hex answer" style="min-width:140px; flex-basis:140px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="nibble-demo">
+              <div class="nibble-group high"><div class="bits">1110</div><div class="arrow">&darr;</div><div class="hexdigit">E</div></div>
+              <div class="nibble-group low"><div class="bits">0011</div><div class="arrow">&darr;</div><div class="hexdigit">3</div></div>
+            </div>
+            <p>Answer: <strong>E3</strong>.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="c2">
+        <div class="qcard-head"><div class="qnum">6</div>
+          <p class="qprompt">Convert <span class="binline">01001111</span> to hex using the nibble shortcut.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="hex answer" style="min-width:140px; flex-basis:140px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="nibble-demo">
+              <div class="nibble-group high"><div class="bits">0100</div><div class="arrow">&darr;</div><div class="hexdigit">4</div></div>
+              <div class="nibble-group low"><div class="bits">1111</div><div class="arrow">&darr;</div><div class="hexdigit">F</div></div>
+            </div>
+            <p>Answer: <strong>4F</strong>.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="c3">
+        <div class="qcard-head"><div class="qnum">7</div>
+          <p class="qprompt">Convert hex <span class="binline">7A</span> to 8-bit binary using the nibble shortcut.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="8-bit answer">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="nibble-demo">
+              <div class="nibble-group high"><div class="hexdigit">7</div><div class="arrow">&darr;</div><div class="bits">0111</div></div>
+              <div class="nibble-group low"><div class="hexdigit">A</div><div class="arrow">&darr;</div><div class="bits">1010</div></div>
+            </div>
+            <p>Answer: <strong>01111010</strong>.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="c4">
+        <div class="qcard-head"><div class="qnum">8</div>
+          <p class="qprompt">Convert hex <span class="binline">F0</span> to 8-bit binary using the nibble shortcut.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="8-bit answer">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="nibble-demo">
+              <div class="nibble-group high"><div class="hexdigit">F</div><div class="arrow">&darr;</div><div class="bits">1111</div></div>
+              <div class="nibble-group low"><div class="hexdigit">0</div><div class="arrow">&darr;</div><div class="bits">0000</div></div>
+            </div>
+            <p>Answer: <strong>11110000</strong>.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="c5">
+        <div class="qcard-head"><div class="qnum">9</div>
+          <p class="qprompt">Convert <span class="binline">00001010</span> to hex using the nibble shortcut.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="hex answer" style="min-width:140px; flex-basis:140px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="nibble-demo">
+              <div class="nibble-group high"><div class="bits">0000</div><div class="arrow">&darr;</div><div class="hexdigit">0</div></div>
+              <div class="nibble-group low"><div class="bits">1010</div><div class="arrow">&darr;</div><div class="hexdigit">A</div></div>
+            </div>
+            <p>Answer: <strong>0A</strong>. Don't drop the leading zero &mdash; a byte's hex representation is always 2 digits.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secD">
+      <p class="section-kicker">D</p>
+      <h2>Mixed &amp; applied</h2>
+      <p class="section-intro">Bringing conversions together with ideas from earlier lessons.</p>
+
+      <div class="qcard" data-qid="d1">
+        <div class="qcard-head"><div class="qnum">10</div>
+          <p class="qprompt">A network diagnostic tool shows one byte of a MAC address as hex <span class="binline">3F</span>. Give this value in 8-bit binary.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="8-bit answer">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="nibble-demo">
+              <div class="nibble-group high"><div class="hexdigit">3</div><div class="arrow">&darr;</div><div class="bits">0011</div></div>
+              <div class="nibble-group low"><div class="hexdigit">F</div><div class="arrow">&darr;</div><div class="bits">1111</div></div>
+            </div>
+            <p>Answer: <strong>00111111</strong> (which is 63 in denary &mdash; the same byte, three different ways of writing it down).</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="d2">
+        <div class="qcard-head"><div class="qnum">11</div>
+          <p class="qprompt">A colour's red channel is stored as binary <span class="binline">11001000</span>. Give this as a 2-digit hex value, as you'd see it in a colour code.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="hex answer" style="min-width:140px; flex-basis:140px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="nibble-demo">
+              <div class="nibble-group high"><div class="bits">1100</div><div class="arrow">&darr;</div><div class="hexdigit">C</div></div>
+              <div class="nibble-group low"><div class="bits">1000</div><div class="arrow">&darr;</div><div class="hexdigit">8</div></div>
+            </div>
+            <p>Answer: <strong>C8</strong>. In a full colour code this red channel would appear as the first pair of digits, e.g. <code>#C8....</code></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="d3">
+        <div class="qcard-head"><div class="qnum">12</div>
+          <p class="qprompt">Convert the denary number 219 to 8-bit binary <strong>and</strong> to hexadecimal. Show your working for both: use repeated division for the binary conversion, then the nibble shortcut to get the hex from your binary answer.</p>
+        </div>
+        <textarea class="longanswer" placeholder="Write your full working and both answers here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body">
+            <p><strong>Step 1 &mdash; denary to binary by repeated division:</strong></p>
+            <div class="steps-mini">219 &divide; 2 = 109 remainder 1
+109 &divide; 2 = 54  remainder 1
+54  &divide; 2 = 27  remainder 0
+27  &divide; 2 = 13  remainder 1
+13  &divide; 2 = 6   remainder 1
+6   &divide; 2 = 3   remainder 0
+3   &divide; 2 = 1   remainder 1
+1   &divide; 2 = 0   remainder 1</div>
+            <p>Reading bottom to top: <strong>11011011</strong>.</p>
+            <p><strong>Step 2 &mdash; binary to hex using the nibble shortcut:</strong></p>
+            <div class="nibble-demo">
+              <div class="nibble-group high"><div class="bits">1101</div><div class="arrow">&darr;</div><div class="hexdigit">D</div></div>
+              <div class="nibble-group low"><div class="bits">1011</div><div class="arrow">&darr;</div><div class="hexdigit">B</div></div>
+            </div>
+            <p>Final answers: <strong>11011011</strong> (binary) and <strong>DB</strong> (hex). Check: (13 &times; 16) + 11 = 208 + 11 = 219.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <div class="next-step">
+      <p>Want to revisit the explanations first?</p>
+      <a class="button" href="explainer.html">Back to the explainer</a>
+    </div>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  const STORAGE_KEY = "numberSystemsProgress_v1";
+  function loadProgress(){
+    try{ const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : {}; }
+    catch(e){ return {}; }
+  }
+  function saveProgress(p){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); }catch(e){}
+  }
+  let progress = loadProgress();
+
+  const ANSWERS = {
+    a1: {type:"binary", value:"01011011"},
+    a2: {type:"decimal", value:214},
+    b1: {type:"hex", value:"AD"},
+    b2: {type:"decimal", value:78},
+    c1: {type:"hex", value:"E3"},
+    c2: {type:"hex", value:"4F"},
+    c3: {type:"binary", value:"01111010"},
+    c4: {type:"binary", value:"11110000"},
+    c5: {type:"hex", value:"0A"},
+    d1: {type:"binary", value:"00111111"},
+    d2: {type:"hex", value:"C8"}
+  };
+
+  function normalizeBinary(str){
+    let s = str.replace(/\s+/g,"").replace(/^0b/i,"");
+    if(!/^[01]+$/.test(s)) return null;
+    while(s.length < 8) s = "0" + s;
+    return s;
+  }
+  function normalizeDecimal(str){
+    const s = str.trim().replace(/\s+/g,"");
+    if(!/^-?\d+$/.test(s)) return null;
+    return parseInt(s,10);
+  }
+  function normalizeHex(str){
+    let s = str.trim().replace(/^0x/i,"").toUpperCase();
+    if(!/^[0-9A-F]{1,2}$/.test(s)) return null;
+    while(s.length < 2) s = "0" + s;
+    return s;
+  }
+
+  function updateProgressUI(){
+    const total = Object.keys(ANSWERS).length;
+    const done = Object.keys(progress).filter(k=>progress[k]===true && ANSWERS[k]).length;
+    document.getElementById("progress-text").textContent = done + " of " + total + " checkable questions correct";
+    document.getElementById("progress-fill").style.width = Math.round((done/total)*100) + "%";
+    Object.keys(ANSWERS).forEach(qid=>{
+      const numEl = document.querySelector('.qcard[data-qid="'+qid+'"] .qnum');
+      if(numEl){ numEl.classList.toggle("done", progress[qid]===true); }
+    });
+  }
+
+  function wireQuestion(qid){
+    const card = document.querySelector('.qcard[data-qid="'+qid+'"]');
+    if(!card) return;
+    const input = card.querySelector(".answer-input");
+    const btn = card.querySelector(".check-btn");
+    const feedback = card.querySelector(".feedback");
+    const answer = ANSWERS[qid];
+    if(!input || !btn || !answer) return;
+
+    function doCheck(){
+      const raw = input.value;
+      let given = null;
+      if(answer.type === "binary") given = normalizeBinary(raw);
+      else if(answer.type === "decimal") given = normalizeDecimal(raw);
+      else if(answer.type === "hex") given = normalizeHex(raw);
+
+      if(given === null){
+        feedback.textContent = "Check the format of your answer.";
+        feedback.className = "feedback incorrect";
+        return;
+      }
+      const isCorrect = given === answer.value;
+      if(isCorrect){
+        feedback.textContent = "Correct.";
+        feedback.className = "feedback correct";
+        progress[qid] = true;
+      } else {
+        feedback.textContent = "Not quite \u2014 try again, or open the full working below.";
+        feedback.className = "feedback incorrect";
+      }
+      saveProgress(progress);
+      updateProgressUI();
+    }
+    btn.addEventListener("click", doCheck);
+    input.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ e.preventDefault(); doCheck(); } });
+  }
+  Object.keys(ANSWERS).forEach(wireQuestion);
+
+  document.getElementById("reset-progress").addEventListener("click", ()=>{
+    progress = {};
+    saveProgress(progress);
+    updateProgressUI();
+    document.querySelectorAll(".feedback").forEach(f=>{ f.textContent=""; f.className="feedback"; });
+    document.querySelectorAll(".answer-input").forEach(i=>{ i.value=""; });
+  });
+
+  updateProgressUI();
+
+})();
+</script>
+</body>
+</html>

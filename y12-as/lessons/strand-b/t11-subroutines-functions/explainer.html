@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "strand-b/t11-subroutines-functions";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Subroutines: Functions with Parameters";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Functions with Parameters — AS Level Computer Science (9618)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:"Source Sans 3", sans-serif; line-height:1.6;
+  }
+  h1,h2,h3{ font-family:"Source Serif 4", serif; font-weight:600; color:var(--navy); }
+  code, .mono { font-family:"JetBrains Mono", monospace; }
+
+  header.page-head{
+    background:linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%);
+    color:#eef1fb; padding:2.6rem 1.5rem 3.2rem;
+  }
+  .head-inner{ max-width:1180px; margin:0 auto; }
+  .eyebrow{ color:#9fb0e6; font-size:0.95rem; margin-bottom:0.6rem; }
+  header.page-head h1{ color:#fff; font-size:2.1rem; margin:0 0 0.7rem; max-width:34ch; }
+  .lede{ color:#c7d0ee; max-width:62ch; font-size:1.05rem; }
+
+  .layout{ max-width:1180px; margin:0 auto; padding:2rem 1.5rem 4rem; display:grid; grid-template-columns:230px minmax(0,760px); gap:2.5rem; align-items:start; }
+
+  nav.toc{ position:sticky; top:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.1rem; }
+  nav.toc h2{ font-size:0.95rem; margin:0 0 0.7rem; color:var(--muted); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+  nav.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.45rem; }
+  nav.toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; display:block; padding:0.15rem 0; border-left:2px solid transparent; padding-left:0.6rem; }
+  nav.toc a:hover{ color:var(--teal); }
+  nav.toc a.active{ border-left-color:var(--teal); color:var(--teal); font-weight:600; }
+
+  article{ max-width:760px; }
+  section{ margin-bottom:2.8rem; }
+  .section-kicker{ font-family:"JetBrains Mono", monospace; color:var(--teal); font-size:0.85rem; margin-bottom:0.35rem; }
+  section h2{ font-size:1.5rem; margin:0 0 0.9rem; }
+  section p{ margin:0 0 1rem; }
+  section ul, section ol{ margin:0 0 1rem; padding-left:1.3rem; }
+  section li{ margin-bottom:0.4rem; }
+
+  .tip, .warn{ border-radius:8px; padding:0.9rem 1.1rem; margin:1.1rem 0; font-size:0.96rem; }
+  .tip{ background:var(--teal-light); border:1px solid #bfe4df; }
+  .warn{ background:var(--amber-light); border:1px solid #eccba0; }
+  .tip strong:first-child, .warn strong:first-child{ display:block; margin-bottom:0.25rem; }
+
+  .code-block{ background:var(--navy-deep); border-radius:10px; overflow:hidden; margin:1.1rem 0; }
+  .code-label{ background:#0a1330; color:#8fa0d6; font-size:0.78rem; padding:0.45rem 0.9rem; font-family:"JetBrains Mono",monospace; border-bottom:1px solid #223163; }
+  .code-block pre{ margin:0; padding:1rem 1.1rem; overflow-x:auto; }
+  .code-block code{ color:#e7ecfb; font-size:0.88rem; line-height:1.65; }
+  .code-block .kw{ color:#7ad4ff; }
+  .code-block .id{ color:#ffd479; }
+  .code-block .str{ color:#a8e6a1; }
+  .code-block .cm{ color:#7d89b0; font-style:italic; }
+
+  table.ref{ width:100%; border-collapse:collapse; margin:1.1rem 0; font-size:0.92rem; }
+  table.ref th, table.ref td{ text-align:left; padding:0.55rem 0.7rem; border-bottom:1px solid var(--border); }
+  table.ref th{ background:var(--panel-alt); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+
+  .playground{ background:var(--navy-deep); border-radius:12px; padding:1.3rem; margin:1.3rem 0; color:#e7ecfb; }
+  .playground h3{ color:#fff; font-size:1.05rem; margin:0 0 0.3rem; }
+  .playground .sub{ color:#9fb0e6; font-size:0.88rem; margin-bottom:1rem; }
+
+  .mode-toggle{ display:flex; gap:0.5rem; margin-bottom:1rem; flex-wrap:wrap; }
+  .mode-toggle button{ background:#1a2653; color:#c7d0ee; border:1px solid #2c3a72; border-radius:20px; padding:0.4rem 0.95rem; font-size:0.85rem; cursor:pointer; font-family:"Source Sans 3",sans-serif; }
+  .mode-toggle button.active{ background:var(--teal); border-color:var(--teal); color:#052c28; font-weight:600; }
+
+  .trace-boxes{ display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem; }
+  @media (max-width:560px){ .trace-boxes{ grid-template-columns:1fr; } }
+  .trace-box{ background:#182452; border:1px solid #2c3a72; border-radius:10px; padding:0.9rem 1rem; }
+  .trace-box h4{ margin:0 0 0.6rem; font-size:0.85rem; color:#9fb0e6; font-family:"Source Sans 3",sans-serif; font-weight:600; }
+  .var-row{ display:flex; justify-content:space-between; align-items:center; padding:0.4rem 0.6rem; background:#101a3a; border-radius:6px; margin-bottom:0.5rem; font-family:"JetBrains Mono",monospace; font-size:0.92rem; }
+  .var-row .name{ color:#c7d0ee; }
+  .var-row .val{ color:#ffd479; font-weight:600; transition:color 0.3s; }
+  .var-row .val.changed{ color:#7be0c9; }
+
+  .step-line{ background:#101a3a; border-radius:8px; padding:0.75rem 0.95rem; font-family:"JetBrains Mono",monospace; font-size:0.9rem; margin-bottom:1rem; color:#e7ecfb; min-height:1.4em; }
+  .step-controls{ display:flex; gap:0.6rem; align-items:center; }
+  .step-controls button{ background:var(--teal); color:#052c28; border:none; border-radius:6px; padding:0.5rem 1rem; font-weight:600; cursor:pointer; font-family:"Source Sans 3",sans-serif; }
+  .step-controls button:disabled{ opacity:0.4; cursor:default; }
+  .step-controls button.secondary{ background:#1a2653; color:#c7d0ee; border:1px solid #2c3a72; }
+  .step-count{ color:#9fb0e6; font-size:0.85rem; margin-left:auto; }
+
+  .code-line{ display:block; padding:0.15rem 0.4rem; border-radius:4px; }
+  .code-line.active{ background:#2c3a72; }
+  .code-line.skipped{ opacity:0.35; text-decoration:line-through; }
+
+  .mark-outcome{ margin-top:1rem; padding:0.85rem 1rem; border-radius:8px; font-size:0.92rem; background:#182452; border:1px solid #2c3a72; }
+  .mark-outcome strong{ display:block; margin-bottom:0.25rem; color:#7be0c9; }
+
+  footer.page-foot{ max-width:1180px; margin:0 auto; padding:0 1.5rem 3rem; }
+  .foot-nav{ display:flex; justify-content:space-between; gap:1rem; border-top:1px solid var(--border); padding-top:1.5rem; flex-wrap:wrap; }
+  .foot-nav a{ text-decoration:none; color:var(--navy); font-weight:600; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:0.7rem 1.1rem; font-size:0.92rem; }
+  .foot-nav a:hover{ border-color:var(--teal); color:var(--teal); }
+  .foot-nav .next{ margin-left:auto; }
+
+  details.mobile-toc{ display:none; }
+  @media (max-width:900px){
+    .layout{ grid-template-columns:1fr; }
+    nav.toc{ display:none; }
+    details.mobile-toc{ display:block; margin-bottom:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.1rem; }
+    details.mobile-toc summary{ cursor:pointer; font-weight:600; color:var(--navy); }
+    details.mobile-toc ol{ list-style:none; padding:0; margin:0.8rem 0 0; display:flex; flex-direction:column; gap:0.5rem; }
+    details.mobile-toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; }
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/strand-b-t11-subroutines-functions-explainer.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+
+<header class="page-head">
+  <div class="head-inner">
+    <div class="eyebrow">Year 12 AS Computer Science (9618) &middot; Topic 11.4, Programming</div>
+    <h1>Functions with Parameters</h1>
+    <p class="lede">Procedures run a block of statements. Functions do the same thing — but hand a value back to whatever called them.</p>
+  </div>
+</header>
+
+<div class="layout">
+  <details class="mobile-toc">
+    <summary>Contents</summary>
+    <ol>
+      <li><a href="#diff">01 · Procedure or function?</a></li>
+      <li><a href="#defining">02 · Defining and calling a function</a></li>
+      <li><a href="#expressions">03 · Functions live inside expressions</a></li>
+      <li><a href="#params">04 · Parameters in functions</a></li>
+      <li><a href="#return">05 · RETURN stops the function immediately</a></li>
+      <li><a href="#scope">06 · Local variables inside a function</a></li>
+      <li><a href="#trace">07 · Tracing a function with several exits</a></li>
+    </ol>
+  </details>
+
+  <nav class="toc" id="desktopToc">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#diff">01 · Procedure or function?</a></li>
+      <li><a href="#defining">02 · Defining &amp; calling</a></li>
+      <li><a href="#expressions">03 · Inside expressions</a></li>
+      <li><a href="#params">04 · Parameters</a></li>
+      <li><a href="#return">05 · RETURN</a></li>
+      <li><a href="#scope">06 · Local scope</a></li>
+      <li><a href="#trace">07 · Tracing a call</a></li>
+    </ol>
+  </nav>
+
+  <article>
+
+    <section id="diff">
+      <div class="section-kicker">01</div>
+      <h2>Procedure or function?</h2>
+      <p>Yesterday's procedures package a sequence of statements under a name, so they can be called and reused. A <strong>function</strong> is the same idea, with one crucial addition: a function always hands a single value back to the place it was called from.</p>
+      <table class="ref">
+        <tr><th></th><th>Procedure</th><th>Function</th></tr>
+        <tr><td>Returns a value?</td><td>No</td><td>Yes — exactly one</td></tr>
+        <tr><td>Defined with</td><td><code>PROCEDURE</code> … <code>ENDPROCEDURE</code></td><td><code>FUNCTION</code> … <code>ENDFUNCTION</code></td></tr>
+        <tr><td>Called with</td><td><code>CALL</code> statement</td><td>Used inside an expression — never <code>CALL</code></td></tr>
+        <tr><td>BYREF parameters allowed?</td><td>Yes</td><td>No — parameters are always by value</td></tr>
+      </table>
+      <p>That last row matters, and it's easy to forget under exam pressure — we'll come back to it in section 04.</p>
+    </section>
+
+    <section id="defining">
+      <div class="section-kicker">02</div>
+      <h2>Defining and calling a function</h2>
+      <p>A function definition looks like a procedure's, with two differences: <code>RETURNS &lt;data type&gt;</code> appears after the parameter list, stating the type of value the function sends back, and the keyword <code>RETURN</code> is used somewhere in the body to actually send a value back.</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">FUNCTION</span> <span class="id">Max</span>(Number1 : INTEGER, Number2 : INTEGER) <span class="kw">RETURNS</span> INTEGER
+   <span class="kw">IF</span> Number1 > Number2 <span class="kw">THEN</span>
+      <span class="kw">RETURN</span> Number1
+   <span class="kw">ELSE</span>
+      <span class="kw">RETURN</span> Number2
+   <span class="kw">ENDIF</span>
+<span class="kw">ENDFUNCTION</span></code></pre>
+      </div>
+      <p>A function with no parameters still needs the empty brackets and <code>RETURNS</code>:</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">FUNCTION</span> <span class="id">RandomDigit</span>() <span class="kw">RETURNS</span> INTEGER
+   <span class="kw">RETURN</span> INT(RAND(10))
+<span class="kw">ENDFUNCTION</span></code></pre>
+      </div>
+      <div class="tip">
+        <strong>RETURNS vs RETURN</strong>
+        <code>RETURNS &lt;type&gt;</code> is part of the function <em>header</em> — it appears once, and states what data type will come back. <code>RETURN &lt;value&gt;</code> is a <em>statement</em> inside the body — it can appear more than once, and each time it runs it sends a specific value back immediately. Mixing these up (or writing <code>ENDPROCEDURE</code> to close a <code>FUNCTION</code>) is a common slip worth checking for in your own code.
+      </div>
+    </section>
+
+    <section id="expressions">
+      <div class="section-kicker">03</div>
+      <h2>Functions live inside expressions</h2>
+      <p>A procedure call is a complete statement on its own line, run using <code>CALL</code>. A function call is different: because it produces a value, it's never a statement by itself — it's used as part of a larger expression, wherever a value of that type could go. The keyword <code>CALL</code> is never used for a function.</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code>DECLARE Distance : INTEGER
+Distance ← 30
+OUTPUT <span class="str">"Penalty Fine = "</span>, <span class="id">Max</span>(10, Distance*2)</code></pre>
+      </div>
+      <p>Here, <code>Max(10, Distance*2)</code> isn't run in isolation — it's one part of the value list being sent to <code>OUTPUT</code>. The arguments are evaluated first (<code>Distance*2</code> becomes <code>60</code>), the function runs and returns a value, and that returned value drops into the expression exactly where the function call was written — as if it had been a literal all along.</p>
+      <p>Function calls can appear anywhere an expression is allowed: in an assignment (<code>Total ← Max(A, B)</code>), inside a condition (<code>IF Max(A, B) > 100 THEN</code>), or nested inside another call (<code>Max(Max(A, B), C)</code>).</p>
+    </section>
+
+    <section id="params">
+      <div class="section-kicker">04</div>
+      <h2>Parameters in functions</h2>
+      <p>Function parameters work exactly like the BYVAL parameters from yesterday's lesson — the function receives its own copy of each argument. The difference is that this isn't just the default for functions, it's the <em>only</em> option: the Cambridge pseudocode rules explicitly state that parameters must not be passed by reference to a function.</p>
+      <div class="warn">
+        <strong>No BYREF in a function</strong>
+        <code>FUNCTION Increment(BYREF Num : INTEGER) RETURNS INTEGER</code> is not valid pseudocode. If a subroutine genuinely needs to modify one of the caller's variables directly, that's a job for a BYREF <em>procedure</em> parameter, not a function — a function's job is to work something out and hand back one value, not to reach out and change the caller's variables as a side effect.
+      </div>
+      <p>Writing <code>BYVAL</code> explicitly in front of a function's parameters is allowed, but adds nothing — it's already the only mode available:</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">FUNCTION</span> <span class="id">Increment</span>(<span class="kw">BYVAL</span> Num : INTEGER) <span class="kw">RETURNS</span> INTEGER
+   <span class="kw">RETURN</span> Num + 1
+<span class="kw">ENDFUNCTION</span></code></pre>
+      </div>
+
+      <div class="playground">
+        <h3>Expression trace</h3>
+        <div class="sub">DECLARE Distance : INTEGER; Distance ← 30; OUTPUT "Penalty Fine = ", Max(10, Distance*2)</div>
+        <div class="trace-boxes">
+          <div class="trace-box">
+            <h4>Calling program</h4>
+            <div class="var-row"><span class="name">Distance</span><span class="val" id="distVal">30</span></div>
+            <div class="var-row"><span class="name">expression so far</span><span class="val" id="exprVal">Max(10, Distance*2)</span></div>
+          </div>
+          <div class="trace-box">
+            <h4>Inside Max</h4>
+            <div class="var-row"><span class="name">Number1</span><span class="val" id="n1Val">—</span></div>
+            <div class="var-row"><span class="name">Number2</span><span class="val" id="n2Val">—</span></div>
+          </div>
+        </div>
+        <div class="step-line" id="exprStepLine">Step 0 of 4 — press Next to begin evaluating the OUTPUT statement</div>
+        <div class="step-controls">
+          <button class="secondary" id="exprResetBtn">Reset</button>
+          <button id="exprNextBtn">Next step ▸</button>
+          <span class="step-count" id="exprStepCount">Step 0 / 4</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="return">
+      <div class="section-kicker">05</div>
+      <h2>RETURN stops the function immediately</h2>
+      <p>When a <code>RETURN</code> statement executes, the function ends there and then — control passes straight back to the calling expression with that value, and any statements written after it in the function are never reached. This lets a function have several possible exit points, one for each case it needs to handle.</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">FUNCTION</span> <span class="id">Classify</span>(Mark : INTEGER) <span class="kw">RETURNS</span> STRING
+   <span class="kw">IF</span> Mark >= 70 <span class="kw">THEN</span>
+      <span class="kw">RETURN</span> <span class="str">"Distinction"</span>
+   <span class="kw">ENDIF</span>
+   <span class="kw">IF</span> Mark >= 50 <span class="kw">THEN</span>
+      <span class="kw">RETURN</span> <span class="str">"Pass"</span>
+   <span class="kw">ENDIF</span>
+   <span class="kw">RETURN</span> <span class="str">"Fail"</span>
+<span class="kw">ENDFUNCTION</span></code></pre>
+      </div>
+      <p>Notice there's no <code>ELSE</code> here — it isn't needed. If the first <code>RETURN</code> fires, the function has already ended, so the second <code>IF</code> is never even tested.</p>
+    </section>
+
+    <section id="scope">
+      <div class="section-kicker">06</div>
+      <h2>Local variables inside a function</h2>
+      <p>Just like a procedure, a function can <code>DECLARE</code> its own variables in addition to its parameters, and they follow the same scope rules from yesterday: local to that function, created on each call, and gone once the function returns.</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">FUNCTION</span> <span class="id">Average</span>(A : INTEGER, B : INTEGER) <span class="kw">RETURNS</span> REAL
+   DECLARE Total : INTEGER
+   Total ← A + B
+   <span class="kw">RETURN</span> Total / 2
+<span class="kw">ENDFUNCTION</span></code></pre>
+      </div>
+      <p><code>Total</code> only exists while <code>Average</code> is running. It can't be read from the calling program, and a separate call to <code>Average</code> gets a fresh <code>Total</code> each time — nothing carries over between calls.</p>
+    </section>
+
+    <section id="trace">
+      <div class="section-kicker">07</div>
+      <h2>Tracing a function with several exits</h2>
+      <p>Pick a mark and step through <code>Classify</code> to see exactly which <code>IF</code> fires, and which lines get skipped because the function has already returned.</p>
+
+      <div class="playground">
+        <h3>Classify simulator</h3>
+        <div class="sub">FUNCTION Classify(Mark : INTEGER) RETURNS STRING — pick a value for Mark</div>
+        <div class="mode-toggle">
+          <button class="markBtn active" data-mark="85">Mark = 85</button>
+          <button class="markBtn" data-mark="62">Mark = 62</button>
+          <button class="markBtn" data-mark="40">Mark = 40</button>
+          <button class="markBtn" data-mark="70">Mark = 70 (boundary)</button>
+        </div>
+        <div class="code-block" style="margin:0 0 1rem;">
+          <div class="code-label">pseudocode</div>
+          <pre><code id="classifyCode"><span class="kw">FUNCTION</span> <span class="id">Classify</span>(Mark : INTEGER) <span class="kw">RETURNS</span> STRING
+<span class="code-line" data-line="1">   <span class="kw">IF</span> Mark >= 70 <span class="kw">THEN</span></span>
+<span class="code-line" data-line="2">      <span class="kw">RETURN</span> <span class="str">"Distinction"</span></span>
+<span class="code-line" data-line="3">   <span class="kw">ENDIF</span></span>
+<span class="code-line" data-line="4">   <span class="kw">IF</span> Mark >= 50 <span class="kw">THEN</span></span>
+<span class="code-line" data-line="5">      <span class="kw">RETURN</span> <span class="str">"Pass"</span></span>
+<span class="code-line" data-line="6">   <span class="kw">ENDIF</span></span>
+<span class="code-line" data-line="7">   <span class="kw">RETURN</span> <span class="str">"Fail"</span></span>
+<span class="kw">ENDFUNCTION</span></code></pre>
+        </div>
+        <div class="step-line" id="classifyStepLine">Press Next to begin the trace for Mark = 85</div>
+        <div class="step-controls">
+          <button class="secondary" id="classifyResetBtn">Reset</button>
+          <button id="classifyNextBtn">Next step ▸</button>
+          <span class="step-count" id="classifyStepCount">Step 0</span>
+        </div>
+        <div class="mark-outcome" id="classifyOutcome" style="display:none;"></div>
+      </div>
+    </section>
+
+  </article>
+</div>
+
+<script>
+(function(){
+  // Scroll-spy for TOC
+  var sections = document.querySelectorAll('article section[id]');
+  var tocLinks = document.querySelectorAll('#desktopToc a');
+  function onScroll(){
+    var current = '';
+    for (var i = 0; i < sections.length; i++){
+      var rect = sections[i].getBoundingClientRect();
+      if (rect.top <= 140) current = sections[i].id;
+    }
+    for (var j = 0; j < tocLinks.length; j++){
+      var a = tocLinks[j];
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    }
+  }
+  document.addEventListener('scroll', onScroll);
+  onScroll();
+})();
+
+(function(){
+  // Expression trace widget: OUTPUT "Penalty Fine = ", Max(10, Distance*2), Distance = 30
+  var step = 0;
+  var totalSteps = 4;
+  var exprVal = document.getElementById('exprVal');
+  var n1Val = document.getElementById('n1Val');
+  var n2Val = document.getElementById('n2Val');
+  var stepLine = document.getElementById('exprStepLine');
+  var stepCount = document.getElementById('exprStepCount');
+  var nextBtn = document.getElementById('exprNextBtn');
+  var resetBtn = document.getElementById('exprResetBtn');
+
+  function render(){
+    exprVal.textContent = 'Max(10, Distance*2)';
+    exprVal.classList.remove('changed');
+    n1Val.textContent = '—';
+    n2Val.textContent = '—';
+
+    if (step === 0){
+      stepLine.textContent = 'Step 0 of ' + totalSteps + ' — press Next to begin evaluating the OUTPUT statement';
+    }
+    if (step >= 1){
+      exprVal.textContent = 'Max(10, 60)';
+      stepLine.textContent = 'Step 1 — arguments are evaluated first: Distance*2 becomes 60';
+    }
+    if (step >= 2){
+      n1Val.textContent = '10';
+      n2Val.textContent = '60';
+      stepLine.textContent = 'Step 2 — Max is called: Number1 = 10, Number2 = 60 (both BYVAL copies)';
+    }
+    if (step >= 3){
+      stepLine.textContent = 'Step 3 — inside Max: 10 > 60 is FALSE, so RETURN Number2 fires, sending back 60';
+    }
+    if (step >= 4){
+      exprVal.textContent = '"Penalty Fine = 60"';
+      exprVal.classList.add('changed');
+      stepLine.textContent = 'Step 4 — the function call is replaced by 60, and OUTPUT prints: Penalty Fine = 60';
+    }
+    stepCount.textContent = 'Step ' + step + ' / ' + totalSteps;
+    nextBtn.disabled = step >= totalSteps;
+  }
+
+  nextBtn.addEventListener('click', function(){ if (step < totalSteps){ step++; render(); } });
+  resetBtn.addEventListener('click', function(){ step = 0; render(); });
+
+  render();
+})();
+
+(function(){
+  // Classify simulator
+  var mark = 85;
+  var step = 0;
+  var markBtns = document.querySelectorAll('.markBtn');
+  var stepLine = document.getElementById('classifyStepLine');
+  var stepCount = document.getElementById('classifyStepCount');
+  var nextBtn = document.getElementById('classifyNextBtn');
+  var resetBtn = document.getElementById('classifyResetBtn');
+  var outcome = document.getElementById('classifyOutcome');
+  var codeLines = document.querySelectorAll('.code-line');
+
+  function clearLines(){
+    for (var i = 0; i < codeLines.length; i++){
+      codeLines[i].classList.remove('active','skipped');
+    }
+  }
+  function setLine(n, cls){
+    for (var i = 0; i < codeLines.length; i++){
+      if (codeLines[i].getAttribute('data-line') === String(n)) codeLines[i].classList.add(cls);
+    }
+  }
+
+  // Build the step sequence for a given mark
+  function buildSequence(m){
+    var seq = [];
+    seq.push({line: 1, note: 'IF Mark >= 70 THEN  →  ' + m + ' >= 70 is ' + (m >= 70)});
+    if (m >= 70){
+      seq.push({line: 2, note: 'RETURN "Distinction" fires — function ends here', final: 'Distinction'});
+      seq.push({line: 4, note: 'skipped — the function already returned', skip: true});
+      seq.push({line: 5, note: 'skipped', skip: true});
+      seq.push({line: 7, note: 'skipped', skip: true});
+    } else {
+      seq.push({line: 3, note: 'condition was FALSE — ENDIF, continue to the next check'});
+      seq.push({line: 4, note: 'IF Mark >= 50 THEN  →  ' + m + ' >= 50 is ' + (m >= 50)});
+      if (m >= 50){
+        seq.push({line: 5, note: 'RETURN "Pass" fires — function ends here', final: 'Pass'});
+        seq.push({line: 7, note: 'skipped — the function already returned', skip: true});
+      } else {
+        seq.push({line: 6, note: 'condition was FALSE — ENDIF, continue'});
+        seq.push({line: 7, note: 'RETURN "Fail" fires — function ends here', final: 'Fail'});
+      }
+    }
+    return seq;
+  }
+
+  var sequence = buildSequence(mark);
+
+  function render(){
+    clearLines();
+    outcome.style.display = 'none';
+    if (step === 0){
+      stepLine.textContent = 'Press Next to begin the trace for Mark = ' + mark;
+      stepCount.textContent = 'Step 0';
+      nextBtn.disabled = false;
+      return;
+    }
+    var idx = step - 1;
+    var upto = Math.min(step, sequence.length);
+    for (var i = 0; i < upto; i++){
+      var s = sequence[i];
+      if (i === upto - 1){
+        setLine(s.line, s.skip ? 'skipped' : 'active');
+      } else if (s.skip) {
+        setLine(s.line, 'skipped');
+      }
+    }
+    var current = sequence[idx];
+    stepLine.textContent = current.note;
+    stepCount.textContent = 'Step ' + step + ' / ' + sequence.length;
+    if (current.final){
+      outcome.style.display = 'block';
+      outcome.innerHTML = '<strong>Classify(' + mark + ') returns "' + current.final + '"</strong>Every line after this RETURN is skipped, no matter what they contain.';
+    }
+    nextBtn.disabled = step >= sequence.length;
+  }
+
+  for (var b = 0; b < markBtns.length; b++){
+    markBtns[b].addEventListener('click', function(){
+      for (var k = 0; k < markBtns.length; k++){ markBtns[k].classList.remove('active'); }
+      this.classList.add('active');
+      mark = parseInt(this.getAttribute('data-mark'), 10);
+      sequence = buildSequence(mark);
+      step = 0;
+      render();
+    });
+  }
+
+  nextBtn.addEventListener('click', function(){ if (step < sequence.length){ step++; render(); } });
+  resetBtn.addEventListener('click', function(){ step = 0; render(); });
+
+  render();
+})();
+</script>
+
+</body>
+</html>

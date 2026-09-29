@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "strand-a/t1-binary-prefixes-ascii";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Binary Prefixes and Introducing ASCII — Practice Questions";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Binary Prefixes &amp; ASCII: Practice Questions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E;
+    --navy-deep:#101a3a;
+    --teal:#0D9488;
+    --teal-light:#e6f5f3;
+    --red:#a4342a;
+    --red-light:#fbeae8;
+    --bg:#f5f6fa;
+    --panel:#ffffff;
+    --panel-alt:#eef1f8;
+    --border:#dde1ee;
+    --text:#1c2340;
+    --muted:#5b6472;
+    --serif:'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --sans:'Source Sans 3','Segoe UI',Arial,sans-serif;
+    --mono:'JetBrains Mono','Fira Code',Consolas,monospace;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.6; -webkit-font-smoothing:antialiased;}
+  a{color:var(--teal);}
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible{outline:3px solid var(--teal); outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;} }
+
+  header.page-head{background:var(--navy); color:#fff; padding:2.4rem 1.5rem 2.1rem;}
+  .head-inner{max-width:920px; margin:0 auto;}
+  .head-inner p.eyebrow{margin:0 0 0.6rem; color:#9fb0e0; font-size:0.98rem;}
+  .head-inner h1{font-family:var(--serif); font-weight:700; font-size:clamp(1.8rem, 4vw, 2.5rem); margin:0 0 0.7rem; line-height:1.15;}
+  .head-inner p.lede{margin:0; max-width:65ch; color:#dbe2f5; font-size:1.08rem;}
+
+  .progress-bar-wrap{max-width:920px; margin:1.3rem auto 0; background:#20295a; border-radius:999px; height:10px; overflow:hidden;}
+  .progress-bar-fill{height:100%; background:var(--teal); width:0%;}
+  .progress-caption{max-width:920px; margin:0.6rem auto 0; display:flex; justify-content:space-between; align-items:center; color:#c3cdea; font-size:0.88rem;}
+  .progress-caption button{background:none; border:none; color:#c3cdea; text-decoration:underline; cursor:pointer; font-size:0.85rem; padding:0; font-family:var(--sans);}
+
+  .layout{max-width:1120px; margin:0 auto; padding:2.4rem 1.5rem 5rem; display:flex; gap:2.8rem; align-items:flex-start;}
+  nav.toc{flex:0 0 230px; position:sticky; top:1.5rem; font-size:0.95rem;}
+  nav.toc h2{font-family:var(--serif); font-size:1rem; font-weight:600; margin:0 0 0.8rem; color:var(--navy);}
+  nav.toc ol{list-style:none; margin:0; padding:0; border-left:2px solid var(--border);}
+  nav.toc a{display:block; padding:0.4rem 0 0.4rem 0.9rem; margin-left:-2px; border-left:2px solid transparent; color:var(--muted); text-decoration:none;}
+  nav.toc a:hover{color:var(--navy);}
+  details.toc-mobile{display:none;}
+
+  main.article{flex:1 1 auto; min-width:0; max-width:760px;}
+  main.article section{margin-bottom:3rem; scroll-margin-top:1.4rem;}
+  .section-kicker{font-family:var(--mono); font-size:0.82rem; color:var(--teal); margin:0 0 0.35rem;}
+  main.article h2{font-family:var(--serif); font-weight:700; font-size:1.5rem; color:var(--navy); margin:0 0 0.5rem; line-height:1.25;}
+  main.article > section > p.section-intro{color:var(--muted); margin:0 0 1.2rem; max-width:65ch;}
+
+  .qcard{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:1.3rem 1.4rem 1.4rem; margin-bottom:1.1rem;}
+  .qcard-head{display:flex; align-items:flex-start; gap:0.7rem; margin-bottom:0.7rem;}
+  .qnum{flex:0 0 auto; width:2rem; height:2rem; border-radius:50%; background:var(--panel-alt); color:var(--navy); font-weight:700; font-family:var(--sans); display:flex; align-items:center; justify-content:center; font-size:0.92rem;}
+  .qnum.done{background:var(--teal); color:#fff;}
+  .qprompt{flex:1; margin:0; padding-top:0.15rem;}
+  .qprompt .binline{display:inline-block; font-family:var(--mono); background:var(--panel-alt); padding:0.15rem 0.5rem; border-radius:5px; margin:0.15rem 0.15rem 0.15rem 0;}
+
+  .check-row{display:flex; gap:0.6rem; align-items:center; margin:0.8rem 0 0.3rem; flex-wrap:wrap;}
+  .answer-input{font-family:var(--mono); font-size:0.95rem; padding:0.55rem 0.75rem; border-radius:7px; border:1.5px solid var(--border); min-width:160px; flex:0 1 220px;}
+  .check-btn{font-family:var(--sans); font-weight:600; font-size:0.9rem; padding:0.55rem 1.1rem; border-radius:7px; border:none; background:var(--navy); color:#fff; cursor:pointer;}
+  .check-btn:hover{background:var(--navy-deep);}
+  .feedback{font-size:0.92rem; font-weight:600; padding:0.3rem 0;}
+  .feedback.correct{color:var(--teal);}
+  .feedback.incorrect{color:var(--red);}
+
+  textarea.longanswer{width:100%; min-height:100px; font-family:var(--sans); font-size:0.95rem; padding:0.6rem 0.75rem; border-radius:7px; border:1.5px solid var(--border); margin:0.6rem 0 0.2rem; resize:vertical;}
+
+  details.solution{margin-top:0.7rem; border-top:1px dashed var(--border); padding-top:0.6rem;}
+  details.solution summary{cursor:pointer; font-weight:600; color:var(--navy); font-size:0.92rem;}
+  .solution-body{margin-top:0.8rem; font-size:0.94rem;}
+  .solution-body p{margin:0 0 0.6rem;}
+  .solution-body p:last-child{margin-bottom:0;}
+  .solution-body .steps{font-family:var(--mono); font-size:0.85rem; background:var(--panel-alt); border-radius:7px; padding:0.7rem 0.9rem; line-height:1.85; white-space:pre-wrap; margin:0.5rem 0;}
+
+  .next-step{margin-top:2rem; padding:1.6rem; background:var(--panel-alt); border-radius:var(--radius); display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;}
+  .next-step p{margin:0; color:var(--muted);}
+  .next-step a.button{background:var(--navy); color:#fff; text-decoration:none; padding:0.7rem 1.3rem; border-radius:8px; font-weight:600; white-space:nowrap;}
+  .next-step a.button:hover{background:var(--navy-deep);}
+
+  @media (max-width:900px){
+    .layout{flex-direction:column; gap:1.2rem;}
+    nav.toc{display:none;}
+    details.toc-mobile{display:block; background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:0.2rem 1rem; width:100%;}
+    details.toc-mobile summary{padding:0.9rem 0; font-weight:600; color:var(--navy); cursor:pointer; font-family:var(--serif);}
+    details.toc-mobile ol{list-style:none; margin:0; padding:0 0 0.8rem;}
+    details.toc-mobile a{display:block; padding:0.4rem 0; color:var(--muted); text-decoration:none;}
+    main.article{max-width:none;}
+    .answer-input{flex:1 1 auto;}
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/strand-a-t1-binary-prefixes-ascii-practice.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+
+<header class="page-head">
+  <div class="head-inner">
+    <p class="eyebrow">Year 12 AS Computer Science (9618) &middot; Topic 1.3, Data Representation</p>
+    <h1>Binary Prefixes &amp; ASCII: Practice Questions</h1>
+    <p class="lede">14 questions covering decimal vs binary prefixes and ASCII encoding. Type an answer to check it instantly, or open the full worked solution any time.</p>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill"></div></div>
+  <div class="progress-caption">
+    <span id="progress-text">0 of 11 checkable questions correct</span>
+    <button type="button" id="reset-progress">Reset progress</button>
+  </div>
+</header>
+
+<div class="layout">
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2>Sections</h2>
+    <ol>
+      <li><a href="#secA">Decimal vs binary prefixes</a></li>
+      <li><a href="#secB">ASCII encode/decode</a></li>
+      <li><a href="#secC">Patterns</a></li>
+      <li><a href="#secD">Mixed &amp; applied</a></li>
+      <li><a href="#secE">Exam-style</a></li>
+    </ol>
+  </nav>
+
+  <details class="toc-mobile">
+    <summary>Sections</summary>
+    <ol>
+      <li><a href="#secA">Decimal vs binary prefixes</a></li>
+      <li><a href="#secB">ASCII encode/decode</a></li>
+      <li><a href="#secC">Patterns</a></li>
+      <li><a href="#secD">Mixed &amp; applied</a></li>
+      <li><a href="#secE">Exam-style</a></li>
+    </ol>
+  </details>
+
+  <main class="article">
+
+    <section id="secA">
+      <p class="section-kicker">A</p>
+      <h2>Decimal vs binary prefixes</h2>
+      <p class="section-intro">Use the definitions from the explainer: kilo/mega/giga/tera are powers of 10; kibi/mebi/gibi/tebi are powers of 2.</p>
+
+      <div class="qcard" data-qid="a1">
+        <div class="qcard-head"><div class="qnum">1</div>
+          <p class="qprompt">How many bytes are in 1 KiB?</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="number of bytes">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>1 KiB = 2<sup>10</sup> = <strong>1,024</strong> bytes.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="a2">
+        <div class="qcard-head"><div class="qnum">2</div>
+          <p class="qprompt">How many bytes are in 1 kB (decimal kilobyte)?</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="number of bytes">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>1 kB = 10<sup>3</sup> = <strong>1,000</strong> bytes.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="a3">
+        <div class="qcard-head"><div class="qnum">3</div>
+          <p class="qprompt">A file is exactly 2 MiB. How many bytes is this?</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="number of bytes">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="steps">1 MiB = 2\u00b2\u2070 = 1,048,576 bytes
+2 MiB = 2 × 1,048,576 = 2,097,152 bytes</div>
+            <p>Answer: <strong>2,097,152</strong> bytes.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="a4">
+        <div class="qcard-head"><div class="qnum">4</div>
+          <p class="qprompt">A hard drive is advertised as 4 TB (decimal). Approximately how many TiB will an operating system report? Give your answer to 2 decimal places.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="e.g. 3.64">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="steps">4 TB = 4 × 10¹² = 4,000,000,000,000 bytes
+1 TiB = 2\u2074\u2070 = 1,099,511,627,776 bytes
+4,000,000,000,000 ÷ 1,099,511,627,776 ≈ 3.64</div>
+            <p>Answer: <strong>3.64</strong> TiB.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secB">
+      <p class="section-kicker">B</p>
+      <h2>ASCII encode/decode</h2>
+      <p class="section-intro">Use the ASCII table structure and worked example from the explainer.</p>
+
+      <div class="qcard" data-qid="b1">
+        <div class="qcard-head"><div class="qnum">5</div>
+          <p class="qprompt">What is the ASCII decimal code for the character <span class="binline">'C'</span>?</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="decimal code">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>'A' = 65, 'B' = 66, 'C' = <strong>67</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="b2">
+        <div class="qcard-head"><div class="qnum">6</div>
+          <p class="qprompt">What character has ASCII code 104?</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="character">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>'a' = 97, so 104 is 7 places further: a-b-c-d-e-f-g-<strong>h</strong>. Code 104 = <strong>'h'</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="b3">
+        <div class="qcard-head"><div class="qnum">7</div>
+          <p class="qprompt">What is the 8-bit binary ASCII code for <span class="binline">'5'</span>?</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="8-bit binary">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>'0' = 48, so '5' = 48 + 5 = 53. 53 in 8-bit binary is <strong>00110101</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="b4">
+        <div class="qcard-head"><div class="qnum">8</div>
+          <p class="qprompt">Convert the ASCII binary code <span class="binline">01000001</span> to its character.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="character">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>01000001 = 64 + 1 = 65 = <strong>'A'</strong>.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secC">
+      <p class="section-kicker">C</p>
+      <h2>Patterns</h2>
+      <p class="section-intro">Apply the digit trick and the case bit from the explainer.</p>
+
+      <div class="qcard" data-qid="c1">
+        <div class="qcard-head"><div class="qnum">9</div>
+          <p class="qprompt">The ASCII code for 'M' is 77. What is the ASCII code for 'm' (lowercase)?</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="decimal code">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>Lowercase = uppercase + 32. 77 + 32 = <strong>109</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="c2">
+        <div class="qcard-head"><div class="qnum">10</div>
+          <p class="qprompt">The ASCII code for the digit character '7' is 55. What numeric value does this digit represent?</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="numeric value">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>55 &minus; 48 = <strong>7</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="c3">
+        <div class="qcard-head"><div class="qnum">11</div>
+          <p class="qprompt">True or false: flipping bit 5 (the value-32 bit) of an uppercase letter's ASCII code converts it to lowercase.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="true or false" style="min-width:140px; flex-basis:140px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p><strong>True.</strong> Uppercase and lowercase letters differ by exactly 32, which is a single bit (bit 5) in binary.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secD">
+      <p class="section-kicker">D</p>
+      <h2>Mixed &amp; applied</h2>
+      <p class="section-intro">Bringing both halves of today's lesson together.</p>
+
+      <div class="qcard" data-qid="d1">
+        <div class="qcard-head"><div class="qnum">12</div>
+          <p class="qprompt">A student encodes the word "Hi" in ASCII. Give the two 8-bit binary codes, one for each letter.</p>
+        </div>
+        <textarea class="longanswer" placeholder="Write both 8-bit codes here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body">
+            <p>'H' = 72 = <strong>01001000</strong></p>
+            <p>'i' = 105 = <strong>01101001</strong></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="d2">
+        <div class="qcard-head"><div class="qnum">13</div>
+          <p class="qprompt">Explain why a drive advertised as "1TB" might be reported by an operating system as approximately "931GB" of usable space. Include a calculation in your answer.</p>
+        </div>
+        <textarea class="longanswer" placeholder="Write your explanation and calculation here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body">
+            <p>The manufacturer uses the decimal definition: 1 TB = 1,000,000,000,000 bytes. The operating system calculates the size using binary arithmetic (dividing by 2<sup>30</sup> = 1,073,741,824 to get "GB") but mislabels the binary unit (GiB) as GB.</p>
+            <div class="steps">1,000,000,000,000 ÷ 1,073,741,824 ≈ 931.32</div>
+            <p>This matches the commonly seen reported figure of approximately 931GB &mdash; the same bytes, described using the wrong-sized unit.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secE">
+      <p class="section-kicker">E</p>
+      <h2>Exam-style question</h2>
+      <p class="section-intro">A longer, multi-part question.</p>
+
+      <div class="qcard" data-qid="e1">
+        <div class="qcard-head"><div class="qnum">14</div>
+          <p class="qprompt">
+            (a) Explain the difference between the prefixes "mega" and "mebi", including their numeric values.<br>
+            (b) A camera's memory card is advertised as 32GB. Calculate how many bytes this represents, using the decimal definition.<br>
+            (c) The operating system reports the same card as having "29.8GB" of usable space. Suggest why the reported figure differs from the advertised figure, referencing binary vs decimal prefixes in your answer.
+          </p>
+        </div>
+        <textarea class="longanswer" placeholder="Write your full answer here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body">
+            <p><strong>(a)</strong> Mega is a decimal (SI) prefix meaning 10<sup>6</sup> = 1,000,000. Mebi is a binary (IEC) prefix meaning 2<sup>20</sup> = 1,048,576. Mega is used for round decimal quantities; mebi for exact binary computer quantities.</p>
+            <p><strong>(b)</strong></p>
+            <div class="steps">32 × 1,000,000,000 = 32,000,000,000 bytes</div>
+            <p><strong>(c)</strong> The operating system calculates the size using binary arithmetic (dividing by 2<sup>30</sup> = 1,073,741,824) but mislabels the result "GB" instead of the correct "GiB". Because 1,073,741,824 is larger than 1,000,000,000, dividing the same number of bytes by the larger binary unit gives a smaller reported figure:</p>
+            <div class="steps">32,000,000,000 ÷ 1,073,741,824 ≈ 29.8</div>
+            <p>This matches the reported 29.8GB exactly.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <div class="next-step">
+      <p>Want to revisit the explanations first?</p>
+      <a class="button" href="explainer.html">Back to the explainer</a>
+    </div>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  const STORAGE_KEY = "prefixesAsciiProgress_v1";
+  function loadProgress(){
+    try{ const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : {}; }
+    catch(e){ return {}; }
+  }
+  function saveProgress(p){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); }catch(e){} }
+  let progress = loadProgress();
+
+  const ANSWERS = {
+    a1: {type:"decimal", value:1024},
+    a2: {type:"decimal", value:1000},
+    a3: {type:"decimal", value:2097152},
+    a4: {type:"decimal_float", value:3.64},
+    b1: {type:"decimal", value:67},
+    b2: {type:"text", value:"h"},
+    b3: {type:"binary", value:"00110101"},
+    b4: {type:"text", value:"a"},
+    c1: {type:"decimal", value:109},
+    c2: {type:"decimal", value:7},
+    c3: {type:"boolean", value:"true"}
+  };
+
+  function normalizeDecimal(str){
+    const s = str.trim().replace(/[,\s]+/g,"");
+    if(!/^-?\d+$/.test(s)) return null;
+    return parseInt(s,10);
+  }
+  function normalizeFloat(str){
+    const s = str.trim().replace(/\s+/g,"");
+    if(!/^-?\d+(\.\d+)?$/.test(s)) return null;
+    return parseFloat(s);
+  }
+  function normalizeBinary(str){
+    let s = str.replace(/\s+/g,"").replace(/^0b/i,"");
+    if(!/^[01]+$/.test(s)) return null;
+    while(s.length < 8) s = "0" + s;
+    return s;
+  }
+  function normalizeText(str){
+    return str.trim().toLowerCase().replace(/^['"]|['"]$/g,"");
+  }
+  function normalizeBoolean(str){
+    const s = str.trim().toLowerCase();
+    if(["true","t","yes"].includes(s)) return "true";
+    if(["false","f","no"].includes(s)) return "false";
+    return null;
+  }
+
+  function updateProgressUI(){
+    const total = Object.keys(ANSWERS).length;
+    const done = Object.keys(ANSWERS).filter(k => progress[k] === true).length;
+    document.getElementById("progress-text").textContent = done + " of " + total + " checkable questions correct";
+    document.getElementById("progress-fill").style.width = Math.round((done/total)*100) + "%";
+    Object.keys(ANSWERS).forEach(qid=>{
+      const numEl = document.querySelector('.qcard[data-qid="'+qid+'"] .qnum');
+      if(numEl){ numEl.classList.toggle("done", progress[qid]===true); }
+    });
+  }
+
+  function wireQuestion(qid){
+    const card = document.querySelector('.qcard[data-qid="'+qid+'"]');
+    if(!card) return;
+    const input = card.querySelector(".answer-input");
+    const btn = card.querySelector(".check-btn");
+    const feedback = card.querySelector(".feedback");
+    const answer = ANSWERS[qid];
+    if(!input || !btn || !answer) return;
+
+    function doCheck(){
+      const raw = input.value;
+      let given = null;
+      if(answer.type === "decimal") given = normalizeDecimal(raw);
+      else if(answer.type === "decimal_float") given = normalizeFloat(raw);
+      else if(answer.type === "binary") given = normalizeBinary(raw);
+      else if(answer.type === "text") given = normalizeText(raw);
+      else if(answer.type === "boolean") given = normalizeBoolean(raw);
+
+      if(given === null){
+        feedback.textContent = "Check the format of your answer.";
+        feedback.className = "feedback incorrect";
+        return;
+      }
+      let isCorrect;
+      if(answer.type === "decimal_float"){
+        isCorrect = Math.abs(given - answer.value) < 0.015;
+      } else {
+        isCorrect = given === answer.value;
+      }
+      if(isCorrect){
+        feedback.textContent = "Correct.";
+        feedback.className = "feedback correct";
+        progress[qid] = true;
+      } else {
+        feedback.textContent = "Not quite \u2014 try again, or open the full working below.";
+        feedback.className = "feedback incorrect";
+      }
+      saveProgress(progress);
+      updateProgressUI();
+    }
+    btn.addEventListener("click", doCheck);
+    input.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ e.preventDefault(); doCheck(); } });
+  }
+  Object.keys(ANSWERS).forEach(wireQuestion);
+
+  document.getElementById("reset-progress").addEventListener("click", ()=>{
+    progress = {};
+    saveProgress(progress);
+    updateProgressUI();
+    document.querySelectorAll(".feedback").forEach(f=>{ f.textContent=""; f.className="feedback"; });
+    document.querySelectorAll(".answer-input").forEach(i=>{ i.value=""; });
+  });
+
+  updateProgressUI();
+
+})();
+</script>
+</body>
+</html>

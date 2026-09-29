@@ -1,4 +1,4 @@
-// Meritton British International School — Course Site Directory
+// Course Site Directory
 //
 // This file lists every course "branch" shown on the top-level homepage.
 // Edit it via admin-7f3q2k9x.html (recommended), or by hand.
@@ -17,6 +17,13 @@ window.COURSES_CONFIG = [
     title: "Programming, Robotics & Electronics Club",
     description: "After-school club building toward an end-of-year black-tape-following robotic vehicle competition.",
     path: "robotics-club/",
+    status: "active"
+  },
+  {
+    id: "cambridge-pseudocode",
+    title: "Cambridge Pseudocode",
+    description: "Cambridge pseudocode for IGCSE (0478) and AS (9618): explainers, practice questions and Pseudocode Pro tasks, topic by topic.",
+    path: "cambridge-pseudocode/",
     status: "active"
   },
   {
@@ -66,6 +73,13 @@ window.COURSES_CONFIG = [
     title: "Y7 — Computing (Cambridge Lower Secondary)",
     description: "Y7 Cambridge Lower Secondary Computing lessons.",
     path: "y7-computing/",
+    status: "active"
+  },
+  {
+    id: "networking-filius",
+    title: "Practical Networking with Filius",
+    description: "Hands-on networking labs built in Filius, working from a single PC up to a full WAN — aligned to the Communication strand of Cambridge International AS Computer Science (9618).",
+    path: "networking-filius/",
     status: "active"
   }
 ];

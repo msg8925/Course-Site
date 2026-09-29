@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "strand-a/t1-extended-ascii-unicode";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Extended ASCII and Unicode — Practice Questions";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Extended ASCII &amp; Unicode: Practice Questions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E;
+    --navy-deep:#101a3a;
+    --teal:#0D9488;
+    --teal-light:#e6f5f3;
+    --red:#a4342a;
+    --red-light:#fbeae8;
+    --bg:#f5f6fa;
+    --panel:#ffffff;
+    --panel-alt:#eef1f8;
+    --border:#dde1ee;
+    --text:#1c2340;
+    --muted:#5b6472;
+    --serif:'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --sans:'Source Sans 3','Segoe UI',Arial,sans-serif;
+    --mono:'JetBrains Mono','Fira Code',Consolas,monospace;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.6; -webkit-font-smoothing:antialiased;}
+  a{color:var(--teal);}
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible{outline:3px solid var(--teal); outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;} }
+
+  header.page-head{background:var(--navy); color:#fff; padding:2.4rem 1.5rem 2.1rem;}
+  .head-inner{max-width:920px; margin:0 auto;}
+  .head-inner p.eyebrow{margin:0 0 0.6rem; color:#9fb0e0; font-size:0.98rem;}
+  .head-inner h1{font-family:var(--serif); font-weight:700; font-size:clamp(1.8rem, 4vw, 2.5rem); margin:0 0 0.7rem; line-height:1.15;}
+  .head-inner p.lede{margin:0; max-width:65ch; color:#dbe2f5; font-size:1.08rem;}
+
+  .progress-bar-wrap{max-width:920px; margin:1.3rem auto 0; background:#20295a; border-radius:999px; height:10px; overflow:hidden;}
+  .progress-bar-fill{height:100%; background:var(--teal); width:0%;}
+  .progress-caption{max-width:920px; margin:0.6rem auto 0; display:flex; justify-content:space-between; align-items:center; color:#c3cdea; font-size:0.88rem;}
+  .progress-caption button{background:none; border:none; color:#c3cdea; text-decoration:underline; cursor:pointer; font-size:0.85rem; padding:0; font-family:var(--sans);}
+
+  .layout{max-width:1120px; margin:0 auto; padding:2.4rem 1.5rem 5rem; display:flex; gap:2.8rem; align-items:flex-start;}
+  nav.toc{flex:0 0 230px; position:sticky; top:1.5rem; font-size:0.95rem;}
+  nav.toc h2{font-family:var(--serif); font-size:1rem; font-weight:600; margin:0 0 0.8rem; color:var(--navy);}
+  nav.toc ol{list-style:none; margin:0; padding:0; border-left:2px solid var(--border);}
+  nav.toc a{display:block; padding:0.4rem 0 0.4rem 0.9rem; margin-left:-2px; border-left:2px solid transparent; color:var(--muted); text-decoration:none;}
+  nav.toc a:hover{color:var(--navy);}
+  details.toc-mobile{display:none;}
+
+  main.article{flex:1 1 auto; min-width:0; max-width:760px;}
+  main.article section{margin-bottom:3rem; scroll-margin-top:1.4rem;}
+  .section-kicker{font-family:var(--mono); font-size:0.82rem; color:var(--teal); margin:0 0 0.35rem;}
+  main.article h2{font-family:var(--serif); font-weight:700; font-size:1.5rem; color:var(--navy); margin:0 0 0.5rem; line-height:1.25;}
+  main.article > section > p.section-intro{color:var(--muted); margin:0 0 1.2rem; max-width:65ch;}
+
+  .qcard{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:1.3rem 1.4rem 1.4rem; margin-bottom:1.1rem;}
+  .qcard-head{display:flex; align-items:flex-start; gap:0.7rem; margin-bottom:0.7rem;}
+  .qnum{flex:0 0 auto; width:2rem; height:2rem; border-radius:50%; background:var(--panel-alt); color:var(--navy); font-weight:700; font-family:var(--sans); display:flex; align-items:center; justify-content:center; font-size:0.92rem;}
+  .qnum.done{background:var(--teal); color:#fff;}
+  .qprompt{flex:1; margin:0; padding-top:0.15rem;}
+  .qprompt .binline{display:inline-block; font-family:var(--mono); background:var(--panel-alt); padding:0.15rem 0.5rem; border-radius:5px; margin:0.15rem 0.15rem 0.15rem 0;}
+
+  .quiz-options{display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.3rem;}
+  .quiz-options button{font-family:var(--sans); font-size:0.88rem; font-weight:600; border-radius:999px; padding:0.5rem 1rem; border:1.5px solid var(--border); background:#fff; color:var(--text); cursor:pointer;}
+  .quiz-options button.correct{background:var(--teal-light); border-color:var(--teal); color:var(--teal);}
+  .quiz-options button.incorrect{background:var(--red-light); border-color:var(--red); color:var(--red);}
+  .quiz-options button:disabled{cursor:default;}
+
+  .check-row{display:flex; gap:0.6rem; align-items:center; margin:0.8rem 0 0.3rem; flex-wrap:wrap;}
+  .answer-input{font-family:var(--mono); font-size:0.95rem; padding:0.55rem 0.75rem; border-radius:7px; border:1.5px solid var(--border); min-width:160px; flex:0 1 220px;}
+  .check-btn{font-family:var(--sans); font-weight:600; font-size:0.9rem; padding:0.55rem 1.1rem; border-radius:7px; border:none; background:var(--navy); color:#fff; cursor:pointer;}
+  .check-btn:hover{background:var(--navy-deep);}
+  .feedback{font-size:0.92rem; font-weight:600; padding:0.3rem 0;}
+  .feedback.correct{color:var(--teal);}
+  .feedback.incorrect{color:var(--red);}
+
+  textarea.longanswer{width:100%; min-height:100px; font-family:var(--sans); font-size:0.95rem; padding:0.6rem 0.75rem; border-radius:7px; border:1.5px solid var(--border); margin:0.6rem 0 0.2rem; resize:vertical;}
+
+  details.solution{margin-top:0.7rem; border-top:1px dashed var(--border); padding-top:0.6rem;}
+  details.solution summary{cursor:pointer; font-weight:600; color:var(--navy); font-size:0.92rem;}
+  .solution-body{margin-top:0.8rem; font-size:0.94rem;}
+  .solution-body p{margin:0 0 0.6rem;}
+  .solution-body p:last-child{margin-bottom:0;}
+
+  .next-step{margin-top:2rem; padding:1.6rem; background:var(--panel-alt); border-radius:var(--radius); display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;}
+  .next-step p{margin:0; color:var(--muted);}
+  .next-step a.button{background:var(--navy); color:#fff; text-decoration:none; padding:0.7rem 1.3rem; border-radius:8px; font-weight:600; white-space:nowrap;}
+  .next-step a.button:hover{background:var(--navy-deep);}
+
+  @media (max-width:900px){
+    .layout{flex-direction:column; gap:1.2rem;}
+    nav.toc{display:none;}
+    details.toc-mobile{display:block; background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:0.2rem 1rem; width:100%;}
+    details.toc-mobile summary{padding:0.9rem 0; font-weight:600; color:var(--navy); cursor:pointer; font-family:var(--serif);}
+    details.toc-mobile ol{list-style:none; margin:0; padding:0 0 0.8rem;}
+    details.toc-mobile a{display:block; padding:0.4rem 0; color:var(--muted); text-decoration:none;}
+    main.article{max-width:none;}
+    .answer-input{flex:1 1 auto;}
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/strand-a-t1-extended-ascii-unicode-practice.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+
+<header class="page-head">
+  <div class="head-inner">
+    <p class="eyebrow">Year 12 AS Computer Science (9618) &middot; Topic 1.4, Data Representation</p>
+    <h1>Extended ASCII &amp; Unicode: Practice Questions</h1>
+    <p class="lede">15 questions covering extended ASCII, code pages, Unicode code points, and UTF-8 encoding. Type an answer to check it instantly, or open the full worked solution any time.</p>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill"></div></div>
+  <div class="progress-caption">
+    <span id="progress-text">0 of 11 checkable questions correct</span>
+    <button type="button" id="reset-progress">Reset progress</button>
+  </div>
+</header>
+
+<div class="layout">
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2>Sections</h2>
+    <ol>
+      <li><a href="#secA">The limits of ASCII</a></li>
+      <li><a href="#secB">Extended ASCII &amp; code pages</a></li>
+      <li><a href="#secC">Unicode code points</a></li>
+      <li><a href="#secD">UTF-8 byte counts</a></li>
+      <li><a href="#secE">Exam-style</a></li>
+    </ol>
+  </nav>
+
+  <details class="toc-mobile">
+    <summary>Sections</summary>
+    <ol>
+      <li><a href="#secA">The limits of ASCII</a></li>
+      <li><a href="#secB">Extended ASCII &amp; code pages</a></li>
+      <li><a href="#secC">Unicode code points</a></li>
+      <li><a href="#secD">UTF-8 byte counts</a></li>
+      <li><a href="#secE">Exam-style</a></li>
+    </ol>
+  </details>
+
+  <main class="article">
+
+    <section id="secA">
+      <p class="section-kicker">A</p>
+      <h2>The limits of ASCII</h2>
+      <p class="section-intro">Quick recap before extending into Unicode.</p>
+
+      <div class="qcard" data-qid="a1">
+        <div class="qcard-head"><div class="qnum">1</div>
+          <p class="qprompt">Standard (7-bit) ASCII can represent how many different characters in total?</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="number">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>7 bits gives 2<sup>7</sup> = <strong>128</strong> possible codes.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="a2">
+        <div class="qcard-head"><div class="qnum">2</div>
+          <p class="qprompt">Which of these could <strong>not</strong> be represented in standard 7-bit ASCII?</p>
+        </div>
+        <div class="quiz-options" data-qid="a2"></div>
+      </div>
+
+      <div class="qcard" data-qid="a3">
+        <div class="qcard-head"><div class="qnum">3</div>
+          <p class="qprompt">Give one example of a character or symbol that standard ASCII cannot represent, and briefly explain why it's a problem for a global piece of software.</p>
+        </div>
+        <textarea class="longanswer" placeholder="Write your answer here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body">
+            <p>Any character outside the 128 standard ASCII codes is acceptable, for example: an accented letter like <code>é</code> or <code>ñ</code>, a non-Latin script character like <code>中</code> or <code>д</code>, a currency symbol like <code>€</code>, or an emoji like <code>😀</code>.</p>
+            <p>This matters because software used internationally needs to display names, messages, and content in the user's own language and script &mdash; something impossible if only 128 English-oriented codes are available.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secB">
+      <p class="section-kicker">B</p>
+      <h2>Extended ASCII &amp; code pages</h2>
+      <p class="section-intro">Using the 8th bit doubles the code space &mdash; but creates a new problem.</p>
+
+      <div class="qcard" data-qid="b1">
+        <div class="qcard-head"><div class="qnum">4</div>
+          <p class="qprompt">How many different characters can extended (8-bit) ASCII represent in total?</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="number">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>8 bits gives 2<sup>8</sup> = <strong>256</strong> possible codes.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="b2">
+        <div class="qcard-head"><div class="qnum">5</div>
+          <p class="qprompt">Byte 233 (0xE9) means <span class="binline">é</span> in the Latin-1 code page. Explain what could go wrong if a piece of software assumes a <em>different</em> code page (e.g. a Cyrillic one) when reading a file that was saved using Latin-1.</p>
+        </div>
+        <textarea class="longanswer" placeholder="Write your explanation here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body">
+            <p>The byte value itself (233 / 0xE9) never changes, but each code page assigns it to a different character. If the software assumes the wrong code page, it will display the wrong character entirely &mdash; in this case, showing a Cyrillic letter instead of <code>é</code>. Across a whole document, this produces garbled, unreadable text known as <strong>mojibake</strong>, even though no data has actually been lost or corrupted &mdash; it's purely a mismatch in interpretation.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="b3">
+        <div class="qcard-head"><div class="qnum">6</div>
+          <p class="qprompt">What is the general term for text displaying as garbled, incorrect characters because the wrong code page (or encoding) was used to interpret it?</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="term">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p><strong>Mojibake.</strong></p></div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secC">
+      <p class="section-kicker">C</p>
+      <h2>Unicode code points</h2>
+      <p class="section-intro">Unicode assigns one unambiguous code point to every character.</p>
+
+      <div class="qcard" data-qid="c1">
+        <div class="qcard-head"><div class="qnum">7</div>
+          <p class="qprompt">What is the Unicode code point for <span class="binline">'A'</span>? Give your answer in the form U+XXXX.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="U+XXXX">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>'A' has the same value in Unicode as in ASCII: 65 in hex is 41, so the code point is <strong>U+0041</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="c2">
+        <div class="qcard-head"><div class="qnum">8</div>
+          <p class="qprompt">What is the Unicode code point for <span class="binline">é</span>? Give your answer in the form U+XXXX.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="U+XXXX">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>é is code point <strong>U+00E9</strong> (denary 233).</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="c3">
+        <div class="qcard-head"><div class="qnum">9</div>
+          <p class="qprompt">True or false: Unicode code point U+00E9 means the same character on every computer system that supports Unicode.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="true or false" style="min-width:140px; flex-basis:140px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p><strong>True.</strong> This is exactly the problem Unicode was designed to solve &mdash; one universal, unambiguous meaning per code point, unlike the competing code pages of extended ASCII.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secD">
+      <p class="section-kicker">D</p>
+      <h2>UTF-8 byte counts</h2>
+      <p class="section-intro">Use the code point ranges from the explainer to work out how many bytes UTF-8 needs.</p>
+
+      <div class="qcard" data-qid="d1">
+        <div class="qcard-head"><div class="qnum">10</div>
+          <p class="qprompt">How many bytes does UTF-8 use to encode the character <span class="binline">'A'</span> (U+0041)?</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="number of bytes" style="min-width:140px; flex-basis:140px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>U+0041 is in the range U+0000&ndash;U+007F, so UTF-8 uses <strong>1 byte</strong> &mdash; identical to standard ASCII.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="d2">
+        <div class="qcard-head"><div class="qnum">11</div>
+          <p class="qprompt">How many bytes does UTF-8 use to encode <span class="binline">é</span> (U+00E9)?</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="number of bytes" style="min-width:140px; flex-basis:140px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>U+00E9 is in the range U+0080&ndash;U+07FF, so UTF-8 uses <strong>2 bytes</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="d3">
+        <div class="qcard-head"><div class="qnum">12</div>
+          <p class="qprompt">How many bytes does UTF-8 use to encode <span class="binline">€</span> (U+20AC)?</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="number of bytes" style="min-width:140px; flex-basis:140px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>U+20AC is in the range U+0800&ndash;U+FFFF, so UTF-8 uses <strong>3 bytes</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="d4">
+        <div class="qcard-head"><div class="qnum">13</div>
+          <p class="qprompt">How many bytes does UTF-8 typically use to encode an emoji such as 😀 (U+1F600)?</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="number of bytes" style="min-width:140px; flex-basis:140px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>U+1F600 is above U+FFFF, so UTF-8 uses <strong>4 bytes</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="d5">
+        <div class="qcard-head"><div class="qnum">14</div>
+          <p class="qprompt">Explain why any valid ASCII text file is automatically also a valid UTF-8 file.</p>
+        </div>
+        <textarea class="longanswer" placeholder="Write your explanation here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body">
+            <p>UTF-8 encodes code points U+0000 to U+007F (the entire standard ASCII range) using exactly 1 byte, with the same bit pattern as standard ASCII itself. Since every byte in an ASCII file is already a valid 1-byte UTF-8 character, the file needs no conversion at all to be read correctly as UTF-8.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secE">
+      <p class="section-kicker">E</p>
+      <h2>Exam-style question</h2>
+      <p class="section-intro">A longer, multi-part question bringing the whole lesson together.</p>
+
+      <div class="qcard" data-qid="e1">
+        <div class="qcard-head"><div class="qnum">15</div>
+          <p class="qprompt">
+            A company's old customer database was created using the Windows-1253 (Greek) code page. It is being migrated to a new system that uses Unicode (UTF-8) throughout.<br><br>
+            (a) Explain one problem that could occur if the old database's raw bytes are copied directly into the new system without first identifying which code page they use.<br>
+            (b) Explain why converting the data to Unicode, rather than to a different extended-ASCII code page, is a better long-term solution.<br>
+            (c) The Greek letter iota (&iota;) has Unicode code point U+03B9. State how many bytes UTF-8 will use to store it, and justify your answer using the code point ranges.
+          </p>
+        </div>
+        <textarea class="longanswer" placeholder="Write your full answer here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body">
+            <p><strong>(a)</strong> If the software reading the raw bytes assumes the wrong code page (e.g. Latin-1 instead of Windows-1253), each byte will be interpreted as the wrong character, producing garbled text (mojibake) throughout the database &mdash; even though none of the underlying data has actually been lost.</p>
+            <p><strong>(b)</strong> Unicode assigns a single, universal code point to every character regardless of language or script, so there is no risk of a future code-page mismatch. Converting to another extended-ASCII code page would only replace one 256-character, region-specific system with another, still leaving the business unable to correctly store, say, both Greek and Chinese customer names in the same database.</p>
+            <p><strong>(c)</strong> U+03B9 falls in the range U+0080&ndash;U+07FF, so UTF-8 will use <strong>2 bytes</strong> to store it.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <div class="next-step">
+      <p>Want to revisit the explanations first?</p>
+      <a class="button" href="explainer.html">Back to the explainer</a>
+    </div>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  const STORAGE_KEY = "unicodeProgress_v1";
+  function loadProgress(){
+    try{ const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : {}; }
+    catch(e){ return {}; }
+  }
+  function saveProgress(p){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); }catch(e){} }
+  let progress = loadProgress();
+
+  /* ---------------- Text-answer questions ---------------- */
+  const TEXT_ANSWERS = {
+    a1: {type:"decimal", value:128},
+    b1: {type:"decimal", value:256},
+    b3: {type:"text", value:"mojibake"},
+    c1: {type:"codepoint", value:"U+0041"},
+    c2: {type:"codepoint", value:"U+00E9"},
+    c3: {type:"boolean", value:"true"},
+    d1: {type:"decimal", value:1},
+    d2: {type:"decimal", value:2},
+    d3: {type:"decimal", value:3},
+    d4: {type:"decimal", value:4}
+  };
+
+  function normalizeDecimal(str){
+    const s = str.trim().replace(/[,\s]+/g,"");
+    if(!/^-?\d+$/.test(s)) return null;
+    return parseInt(s,10);
+  }
+  function normalizeText(str){
+    return str.trim().toLowerCase();
+  }
+  function normalizeBoolean(str){
+    const s = str.trim().toLowerCase();
+    if(["true","t","yes"].includes(s)) return "true";
+    if(["false","f","no"].includes(s)) return "false";
+    return null;
+  }
+  function normalizeCodepoint(str){
+    let s = str.trim().toUpperCase().replace(/^U\+?/,"").replace(/^0X/,"");
+    if(!/^[0-9A-F]+$/.test(s)) return null;
+    while(s.length < 4) s = "0" + s;
+    return "U+" + s;
+  }
+
+  /* ---------------- MCQ (section A2) ---------------- */
+  const MCQ = {
+    a2: { options:["'A'","'7'","'é'","'!'"], answer:"'é'" }
+  };
+  Object.keys(MCQ).forEach(qid=>{
+    const container = document.querySelector('.quiz-options[data-qid="'+qid+'"]');
+    if(!container) return;
+    const q = MCQ[qid];
+    q.options.forEach(opt=>{
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = opt;
+      btn.addEventListener("click", ()=>{
+        const buttons = container.querySelectorAll("button");
+        buttons.forEach(b=>b.disabled = true);
+        const isCorrect = opt === q.answer;
+        if(isCorrect){ btn.classList.add("correct"); }
+        else{
+          btn.classList.add("incorrect");
+          buttons.forEach(b=>{ if(b.textContent === q.answer) b.classList.add("correct"); });
+        }
+        progress[qid] = isCorrect;
+        saveProgress(progress);
+        updateProgressUI();
+      });
+      container.appendChild(btn);
+    });
+  });
+
+  /* ---------------- Progress ---------------- */
+  const CHECKABLE_IDS = ["a1","a2","b1","b3","c1","c2","c3","d1","d2","d3","d4"];
+  function updateProgressUI(){
+    const total = CHECKABLE_IDS.length;
+    const done = CHECKABLE_IDS.filter(id => progress[id] === true).length;
+    document.getElementById("progress-text").textContent = done + " of " + total + " checkable questions correct";
+    document.getElementById("progress-fill").style.width = Math.round((done/total)*100) + "%";
+    CHECKABLE_IDS.forEach(qid=>{
+      const numEl = document.querySelector('.qcard[data-qid="'+qid+'"] .qnum');
+      if(numEl){ numEl.classList.toggle("done", progress[qid]===true); }
+    });
+  }
+
+  function wireQuestion(qid){
+    const card = document.querySelector('.qcard[data-qid="'+qid+'"]');
+    if(!card) return;
+    const input = card.querySelector(".answer-input");
+    const btn = card.querySelector(".check-btn");
+    const feedback = card.querySelector(".feedback");
+    const answer = TEXT_ANSWERS[qid];
+    if(!input || !btn || !answer) return;
+
+    function doCheck(){
+      const raw = input.value;
+      let given = null;
+      if(answer.type === "decimal") given = normalizeDecimal(raw);
+      else if(answer.type === "text") given = normalizeText(raw);
+      else if(answer.type === "boolean") given = normalizeBoolean(raw);
+      else if(answer.type === "codepoint") given = normalizeCodepoint(raw);
+
+      if(given === null){
+        feedback.textContent = "Check the format of your answer.";
+        feedback.className = "feedback incorrect";
+        return;
+      }
+      const isCorrect = given === answer.value;
+      if(isCorrect){
+        feedback.textContent = "Correct.";
+        feedback.className = "feedback correct";
+        progress[qid] = true;
+      } else {
+        feedback.textContent = "Not quite \u2014 try again, or open the full working below.";
+        feedback.className = "feedback incorrect";
+      }
+      saveProgress(progress);
+      updateProgressUI();
+    }
+    btn.addEventListener("click", doCheck);
+    input.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ e.preventDefault(); doCheck(); } });
+  }
+  Object.keys(TEXT_ANSWERS).forEach(wireQuestion);
+
+  document.getElementById("reset-progress").addEventListener("click", ()=>{
+    progress = {};
+    saveProgress(progress);
+    updateProgressUI();
+    document.querySelectorAll(".feedback").forEach(f=>{ f.textContent=""; f.className="feedback"; });
+    document.querySelectorAll(".answer-input").forEach(i=>{ i.value=""; });
+    document.querySelectorAll(".quiz-options button").forEach(b=>{ b.disabled=false; b.className=""; });
+  });
+
+  updateProgressUI();
+
+})();
+</script>
+</body>
+</html>

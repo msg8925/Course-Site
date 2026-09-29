@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "strand-a/t1-vector-graphics";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Vector Graphics — Practice Questions";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vector Graphics: Practice Questions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E;
+    --navy-deep:#101a3a;
+    --teal:#0D9488;
+    --teal-light:#e6f5f3;
+    --red:#a4342a;
+    --red-light:#fbeae8;
+    --bg:#f5f6fa;
+    --panel:#ffffff;
+    --panel-alt:#eef1f8;
+    --border:#dde1ee;
+    --text:#1c2340;
+    --muted:#5b6472;
+    --serif:'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --sans:'Source Sans 3','Segoe UI',Arial,sans-serif;
+    --mono:'JetBrains Mono','Fira Code',Consolas,monospace;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.6; -webkit-font-smoothing:antialiased;}
+  a{color:var(--teal);}
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible{outline:3px solid var(--teal); outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;} }
+
+  header.page-head{background:var(--navy); color:#fff; padding:2.4rem 1.5rem 2.1rem;}
+  .head-inner{max-width:920px; margin:0 auto;}
+  .head-inner p.eyebrow{margin:0 0 0.6rem; color:#9fb0e0; font-size:0.98rem;}
+  .head-inner h1{font-family:var(--serif); font-weight:700; font-size:clamp(1.8rem, 4vw, 2.5rem); margin:0 0 0.7rem; line-height:1.15;}
+  .head-inner p.lede{margin:0; max-width:65ch; color:#dbe2f5; font-size:1.08rem;}
+
+  .progress-bar-wrap{max-width:920px; margin:1.3rem auto 0; background:#20295a; border-radius:999px; height:10px; overflow:hidden;}
+  .progress-bar-fill{height:100%; background:var(--teal); width:0%;}
+  .progress-caption{max-width:920px; margin:0.6rem auto 0; display:flex; justify-content:space-between; align-items:center; color:#c3cdea; font-size:0.88rem;}
+  .progress-caption button{background:none; border:none; color:#c3cdea; text-decoration:underline; cursor:pointer; font-size:0.85rem; padding:0; font-family:var(--sans);}
+
+  .layout{max-width:1120px; margin:0 auto; padding:2.4rem 1.5rem 5rem; display:flex; gap:2.8rem; align-items:flex-start;}
+  nav.toc{flex:0 0 230px; position:sticky; top:1.5rem; font-size:0.95rem;}
+  nav.toc h2{font-family:var(--serif); font-size:1rem; font-weight:600; margin:0 0 0.8rem; color:var(--navy);}
+  nav.toc ol{list-style:none; margin:0; padding:0; border-left:2px solid var(--border);}
+  nav.toc a{display:block; padding:0.4rem 0 0.4rem 0.9rem; margin-left:-2px; border-left:2px solid transparent; color:var(--muted); text-decoration:none;}
+  nav.toc a:hover{color:var(--navy);}
+  details.toc-mobile{display:none;}
+
+  main.article{flex:1 1 auto; min-width:0; max-width:760px;}
+  main.article section{margin-bottom:3rem; scroll-margin-top:1.4rem;}
+  .section-kicker{font-family:var(--mono); font-size:0.82rem; color:var(--teal); margin:0 0 0.35rem;}
+  main.article h2{font-family:var(--serif); font-weight:700; font-size:1.5rem; color:var(--navy); margin:0 0 0.5rem; line-height:1.25;}
+  main.article > section > p.section-intro{color:var(--muted); margin:0 0 1.2rem; max-width:65ch;}
+
+  .qcard{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:1.3rem 1.4rem 1.4rem; margin-bottom:1.1rem;}
+  .qcard-head{display:flex; align-items:flex-start; gap:0.7rem; margin-bottom:0.7rem;}
+  .qnum{flex:0 0 auto; width:2rem; height:2rem; border-radius:50%; background:var(--panel-alt); color:var(--navy); font-weight:700; font-family:var(--sans); display:flex; align-items:center; justify-content:center; font-size:0.92rem;}
+  .qnum.done{background:var(--teal); color:#fff;}
+  .qprompt{flex:1; margin:0; padding-top:0.15rem;}
+
+  .quiz-options{display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.3rem;}
+  .quiz-options button{font-family:var(--sans); font-size:0.88rem; font-weight:600; border-radius:999px; padding:0.5rem 1rem; border:1.5px solid var(--border); background:#fff; color:var(--text); cursor:pointer;}
+  .quiz-options button.correct{background:var(--teal-light); border-color:var(--teal); color:var(--teal);}
+  .quiz-options button.incorrect{background:var(--red-light); border-color:var(--red); color:var(--red);}
+  .quiz-options button:disabled{cursor:default;}
+
+  .check-row{display:flex; gap:0.6rem; align-items:center; margin:0.8rem 0 0.3rem; flex-wrap:wrap;}
+  .answer-input{font-family:var(--mono); font-size:0.95rem; padding:0.55rem 0.75rem; border-radius:7px; border:1.5px solid var(--border); min-width:180px; flex:0 1 260px;}
+  .check-btn{font-family:var(--sans); font-weight:600; font-size:0.9rem; padding:0.55rem 1.1rem; border-radius:7px; border:none; background:var(--navy); color:#fff; cursor:pointer;}
+  .check-btn:hover{background:var(--navy-deep);}
+  .feedback{font-size:0.92rem; font-weight:600; padding:0.3rem 0;}
+  .feedback.correct{color:var(--teal);}
+  .feedback.incorrect{color:var(--red);}
+
+  textarea.longanswer{width:100%; min-height:100px; font-family:var(--sans); font-size:0.95rem; padding:0.6rem 0.75rem; border-radius:7px; border:1.5px solid var(--border); margin:0.6rem 0 0.2rem; resize:vertical;}
+
+  details.solution{margin-top:0.7rem; border-top:1px dashed var(--border); padding-top:0.6rem;}
+  details.solution summary{cursor:pointer; font-weight:600; color:var(--navy); font-size:0.92rem;}
+  .solution-body{margin-top:0.8rem; font-size:0.94rem;}
+  .solution-body p{margin:0 0 0.6rem;}
+  .solution-body p:last-child{margin-bottom:0;}
+
+  .next-step{margin-top:2rem; padding:1.6rem; background:var(--panel-alt); border-radius:var(--radius); display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;}
+  .next-step p{margin:0; color:var(--muted);}
+  .next-step a.button{background:var(--navy); color:#fff; text-decoration:none; padding:0.7rem 1.3rem; border-radius:8px; font-weight:600; white-space:nowrap;}
+  .next-step a.button:hover{background:var(--navy-deep);}
+
+  @media (max-width:900px){
+    .layout{flex-direction:column; gap:1.2rem;}
+    nav.toc{display:none;}
+    details.toc-mobile{display:block; background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:0.2rem 1rem; width:100%;}
+    details.toc-mobile summary{padding:0.9rem 0; font-weight:600; color:var(--navy); cursor:pointer; font-family:var(--serif);}
+    details.toc-mobile ol{list-style:none; margin:0; padding:0 0 0.8rem;}
+    details.toc-mobile a{display:block; padding:0.4rem 0; color:var(--muted); text-decoration:none;}
+    main.article{max-width:none;}
+    .answer-input{flex:1 1 auto;}
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/strand-a-t1-vector-graphics-practice.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+
+<header class="page-head">
+  <div class="head-inner">
+    <p class="eyebrow">Year 12 AS Computer Science (9618) &middot; Topic 1.9, Data Representation</p>
+    <h1>Vector Graphics: Practice Questions</h1>
+    <p class="lede">13 questions covering drawing objects, properties, drawing lists, and choosing between vector and bitmap. Type an answer to check it instantly, or open the full worked solution any time.</p>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill"></div></div>
+  <div class="progress-caption">
+    <span id="progress-text">0 of 9 checkable questions correct</span>
+    <button type="button" id="reset-progress">Reset progress</button>
+  </div>
+</header>
+
+<div class="layout">
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2>Sections</h2>
+    <ol>
+      <li><a href="#secA">Objects &amp; properties</a></li>
+      <li><a href="#secB">Scaling</a></li>
+      <li><a href="#secC">Choosing the format</a></li>
+      <li><a href="#secD">Applied reasoning</a></li>
+      <li><a href="#secE">Exam-style</a></li>
+    </ol>
+  </nav>
+
+  <details class="toc-mobile">
+    <summary>Sections</summary>
+    <ol>
+      <li><a href="#secA">Objects &amp; properties</a></li>
+      <li><a href="#secB">Scaling</a></li>
+      <li><a href="#secC">Choosing the format</a></li>
+      <li><a href="#secD">Applied reasoning</a></li>
+      <li><a href="#secE">Exam-style</a></li>
+    </ol>
+  </details>
+
+  <main class="article">
+
+    <section id="secA">
+      <p class="section-kicker">A</p>
+      <h2>Objects &amp; properties</h2>
+      <p class="section-intro">Test your understanding of how vector graphics are structured.</p>
+
+      <div class="qcard" data-qid="a1">
+        <div class="qcard-head"><div class="qnum">1</div>
+          <p class="qprompt">Name the three core things a vector graphic file needs to store.</p>
+        </div>
+        <textarea class="longanswer" placeholder="Write your answer here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body"><p><strong>Drawing objects</strong> (the shapes), <strong>properties</strong> (the values describing each shape, such as position, size, and colour), and the <strong>drawing list</strong> (the ordered sequence the objects are drawn in).</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="a2">
+        <div class="qcard-head"><div class="qnum">2</div>
+          <p class="qprompt">List two properties you would expect a "circle" drawing object to have.</p>
+        </div>
+        <textarea class="longanswer" placeholder="Write your answer here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body"><p>Any two of: centre position (x, y coordinates), radius, fill colour, outline colour, outline thickness.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="a3">
+        <div class="qcard-head"><div class="qnum">3</div>
+          <p class="qprompt">In a drawing list, what determines which object appears "on top" when two objects overlap?</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="your answer">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>The object that appears <strong>later</strong> in the drawing list is drawn on top.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="a4">
+        <div class="qcard-head"><div class="qnum">4</div>
+          <p class="qprompt">A drawing list already has 5 objects in it. You want to add a new rectangle so that it appears on top of everything already there. Where in the list should it be added?</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="your answer">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>At the <strong>end</strong> of the list (as the 6th object).</p></div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secB">
+      <p class="section-kicker">B</p>
+      <h2>Scaling</h2>
+      <p class="section-intro">The core practical difference between vector and bitmap.</p>
+
+      <div class="qcard" data-qid="b1">
+        <div class="qcard-head"><div class="qnum">5</div>
+          <p class="qprompt">True or false: enlarging a vector graphic causes it to become pixelated.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="true or false" style="min-width:140px; flex-basis:140px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p><strong>False.</strong> Vector graphics are redrawn from their properties at any size, so they stay crisp.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="b2">
+        <div class="qcard-head"><div class="qnum">6</div>
+          <p class="qprompt">True or false: enlarging a bitmap image causes it to become pixelated.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="true or false" style="min-width:140px; flex-basis:140px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p><strong>True.</strong> A bitmap has a fixed number of pixels; enlarging it stretches those same pixels over a larger area, making them visible as blocks.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="b3">
+        <div class="qcard-head"><div class="qnum">7</div>
+          <p class="qprompt">Explain why a vector graphic doesn't lose quality when it's scaled up.</p>
+        </div>
+        <textarea class="longanswer" placeholder="Write your explanation here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body"><p>A vector graphic isn't stored as fixed pixels &mdash; it's stored as a list of shapes and their properties. Whenever it's displayed, each shape is <strong>redrawn</strong> mathematically at whatever size is needed, so a circle is still calculated as a perfect circle regardless of scale, with no pixelation.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secC">
+      <p class="section-kicker">C</p>
+      <h2>Choosing the format</h2>
+      <p class="section-intro">Vector, or bitmap?</p>
+
+      <div class="qcard" data-qid="c1">
+        <div class="qcard-head"><div class="qnum">8</div>
+          <p class="qprompt">A company logo needs to be used on both a business card and a large billboard. Which format is more appropriate?</p>
+        </div>
+        <div class="quiz-options" data-qid="c1"></div>
+      </div>
+
+      <div class="qcard" data-qid="c2">
+        <div class="qcard-head"><div class="qnum">9</div>
+          <p class="qprompt">A photograph taken on a smartphone camera. Which format is more appropriate?</p>
+        </div>
+        <div class="quiz-options" data-qid="c2"></div>
+      </div>
+
+      <div class="qcard" data-qid="c3">
+        <div class="qcard-head"><div class="qnum">10</div>
+          <p class="qprompt">A simple line-drawing icon set for a website. Which format is more appropriate?</p>
+        </div>
+        <div class="quiz-options" data-qid="c3"></div>
+      </div>
+
+      <div class="qcard" data-qid="c4">
+        <div class="qcard-head"><div class="qnum">11</div>
+          <p class="qprompt">A detailed, photorealistic painting with continuous colour gradients. Which format is more appropriate?</p>
+        </div>
+        <div class="quiz-options" data-qid="c4"></div>
+      </div>
+    </section>
+
+    <section id="secD">
+      <p class="section-kicker">D</p>
+      <h2>Applied reasoning</h2>
+      <p class="section-intro">Bringing the storage model and the use-case together.</p>
+
+      <div class="qcard" data-qid="d1">
+        <div class="qcard-head"><div class="qnum">12</div>
+          <p class="qprompt">Explain why a vector graphic of a simple logo is typically a much smaller file than a bitmap of the same logo.</p>
+        </div>
+        <textarea class="longanswer" placeholder="Write your answer here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body"><p>A simple logo might only need a handful of drawing objects (a few shapes and their properties) to describe completely, which takes very little storage. A bitmap of the same logo has to store a colour value for <em>every single pixel</em> in the image, regardless of how simple the actual picture is &mdash; which adds up to far more data for the same visual result.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secE">
+      <p class="section-kicker">E</p>
+      <h2>Exam-style question</h2>
+      <p class="section-intro">A longer, multi-part question.</p>
+
+      <div class="qcard" data-qid="e1">
+        <div class="qcard-head"><div class="qnum">13</div>
+          <p class="qprompt">
+            A vector graphic shows a simple traffic light: three circles (red, amber, green) stacked vertically inside a rounded rectangle background.<br><br>
+            (a) List the drawing objects needed for this image, in the order they should appear in the drawing list.<br>
+            (b) State one property each for the rectangle and for one of the circles.<br>
+            (c) Explain why a vector graphic is a more appropriate choice for this traffic-light icon than a bitmap, referencing how the two formats store image data.
+          </p>
+        </div>
+        <textarea class="longanswer" placeholder="Write your full answer here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body">
+            <p><strong>(a)</strong> 1. Rounded rectangle (background). 2. Red circle. 3. Amber circle. 4. Green circle. The rectangle must be listed <strong>first</strong>, so the circles are drawn on top of it rather than being hidden underneath.</p>
+            <p><strong>(b)</strong> Rectangle: e.g. its width and height, or its fill colour. Circle: e.g. its centre position, or its radius, or its fill colour.</p>
+            <p><strong>(c)</strong> The icon is made entirely of simple geometric shapes, so it can be described compactly as a short list of objects and properties &mdash; far less data than storing every pixel in a bitmap. It will also stay crisp at any size, whether displayed small in an app or large on a road sign, because vector graphics are redrawn from their properties rather than relying on a fixed grid of pixels.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <div class="next-step">
+      <p>Want to revisit the explanations first?</p>
+      <a class="button" href="explainer.html">Back to the explainer</a>
+    </div>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  const STORAGE_KEY = "vectorProgress_v1";
+  function loadProgress(){
+    try{ const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : {}; }
+    catch(e){ return {}; }
+  }
+  function saveProgress(p){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); }catch(e){} }
+  let progress = loadProgress();
+
+  /* ---------------- MCQ ---------------- */
+  const MCQ = {
+    c1: { options:["Vector","Bitmap"], answer:"Vector" },
+    c2: { options:["Vector","Bitmap"], answer:"Bitmap" },
+    c3: { options:["Vector","Bitmap"], answer:"Vector" },
+    c4: { options:["Vector","Bitmap"], answer:"Bitmap" }
+  };
+  Object.keys(MCQ).forEach(qid=>{
+    const container = document.querySelector('.quiz-options[data-qid="'+qid+'"]');
+    if(!container) return;
+    const q = MCQ[qid];
+    q.options.forEach(opt=>{
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = opt;
+      btn.addEventListener("click", ()=>{
+        const buttons = container.querySelectorAll("button");
+        for(let i = 0; i < buttons.length; i++){ buttons[i].disabled = true; }
+        const isCorrect = opt === q.answer;
+        if(isCorrect){ btn.classList.add("correct"); }
+        else{
+          for(let i = 0; i < buttons.length; i++){ if(buttons[i].textContent === q.answer) buttons[i].classList.add("correct"); }
+          btn.classList.add("incorrect");
+        }
+        progress[qid] = isCorrect;
+        saveProgress(progress);
+        updateProgressUI();
+      });
+      container.appendChild(btn);
+    });
+  });
+
+  /* ---------------- Text-answer questions ---------------- */
+  const TEXT_ANSWERS = {
+    a3: {keywords:["later","last","end","after"]},
+    a4: {keywords:["end","last","6th","sixth"]},
+    b1: {type:"boolean", value:"false"},
+    b2: {type:"boolean", value:"true"}
+  };
+
+  function normalizeBoolean(str){
+    const s = str.trim().toLowerCase();
+    if(["true","t","yes"].includes(s)) return "true";
+    if(["false","f","no"].includes(s)) return "false";
+    return null;
+  }
+
+  Object.keys(TEXT_ANSWERS).forEach(qid=>{
+    const card = document.querySelector('.qcard[data-qid="'+qid+'"]');
+    if(!card) return;
+    const input = card.querySelector(".answer-input");
+    const btn = card.querySelector(".check-btn");
+    const feedback = card.querySelector(".feedback");
+    const answer = TEXT_ANSWERS[qid];
+
+    function doCheck(){
+      const raw = input.value.trim();
+      if(raw === ""){
+        feedback.textContent = "Check the format of your answer.";
+        feedback.className = "feedback incorrect";
+        return;
+      }
+      let isCorrect;
+      if(answer.type === "boolean"){
+        const given = normalizeBoolean(raw);
+        if(given === null){
+          feedback.textContent = "Check the format of your answer.";
+          feedback.className = "feedback incorrect";
+          return;
+        }
+        isCorrect = given === answer.value;
+      } else {
+        const lower = raw.toLowerCase();
+        isCorrect = answer.keywords.some(function(kw){ return lower.indexOf(kw) !== -1; });
+      }
+      feedback.textContent = isCorrect ? "Correct." : "Not quite \u2014 try again, or open the full working below.";
+      feedback.className = "feedback " + (isCorrect ? "correct" : "incorrect");
+      progress[qid] = isCorrect;
+      saveProgress(progress);
+      updateProgressUI();
+    }
+    btn.addEventListener("click", doCheck);
+    input.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ e.preventDefault(); doCheck(); } });
+  });
+
+  /* ---------------- Progress ---------------- */
+  const CHECKABLE_IDS = ["a3","a4","b1","b2","c1","c2","c3","c4"];
+  function updateProgressUI(){
+    const total = CHECKABLE_IDS.length;
+    const done = CHECKABLE_IDS.filter(id => progress[id] === true).length;
+    document.getElementById("progress-text").textContent = done + " of " + total + " checkable questions correct";
+    document.getElementById("progress-fill").style.width = Math.round((done/total)*100) + "%";
+    CHECKABLE_IDS.forEach(qid=>{
+      const numEl = document.querySelector('.qcard[data-qid="'+qid+'"] .qnum');
+      if(numEl){ numEl.classList.toggle("done", progress[qid]===true); }
+    });
+  }
+
+  document.getElementById("reset-progress").addEventListener("click", ()=>{
+    progress = {};
+    saveProgress(progress);
+    updateProgressUI();
+    const feedbacks = document.querySelectorAll(".feedback");
+    for(let i = 0; i < feedbacks.length; i++){ feedbacks[i].textContent = ""; feedbacks[i].className = "feedback"; }
+    const inputs = document.querySelectorAll(".answer-input");
+    for(let i = 0; i < inputs.length; i++){ inputs[i].value = ""; }
+    const optButtons = document.querySelectorAll(".quiz-options button");
+    for(let i = 0; i < optButtons.length; i++){ optButtons[i].disabled = false; optButtons[i].className = ""; }
+  });
+
+  updateProgressUI();
+
+})();
+</script>
+</body>
+</html>
