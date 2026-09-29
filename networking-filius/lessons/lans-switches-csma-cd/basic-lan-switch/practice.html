@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "lans-switches-csma-cd/basic-lan-switch";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Session 3 Practice: Basic LAN with a Switch";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Session 3 Practice — Basic LAN with a Switch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --amber:#a8560c; --amber-light:#fbeee0; --red:#a4342a; --red-light:#fbeae8;
+    --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8; --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:'Source Sans 3',Arial,sans-serif; line-height:1.6}
+  header{background:var(--navy); color:#fff; padding:32px 24px}
+  .eyebrow{font-size:14px; letter-spacing:1.5px; text-transform:uppercase; color:#8fd8d0; font-weight:600; max-width:900px; margin:0 auto}
+  h1{font-family:'Source Serif 4',Georgia,serif; font-size:32px; margin:8px auto 16px; max-width:900px}
+  .progress-wrap{max-width:900px; margin:0 auto; display:flex; align-items:center; gap:16px}
+  .progress-bar{flex:1; height:10px; background:#33447f; border-radius:6px; overflow:hidden}
+  .progress-fill{height:100%; background:var(--teal); width:0%; transition:width .3s}
+  #resetBtn{background:transparent; border:1px solid #5ec9bd; color:#8fd8d0; padding:6px 14px; border-radius:6px; cursor:pointer; font-size:13px}
+  .layout{display:flex; max-width:1100px; margin:0 auto; gap:40px; padding:32px 24px 80px; align-items:flex-start}
+  nav.toc{position:sticky; top:24px; width:220px; flex-shrink:0; font-size:14px}
+  nav.toc a{display:block; color:var(--muted); text-decoration:none; padding:6px 0; border-left:3px solid transparent}
+  nav.toc a:hover{color:var(--navy); border-left-color:var(--teal); padding-left:10px}
+  article{max-width:740px}
+  .section-kicker{display:inline-block; background:var(--teal); color:#fff; font-size:12px; font-weight:700; padding:3px 10px; border-radius:4px; margin-bottom:8px}
+  h2{font-family:'Source Serif 4',Georgia,serif; font-size:26px; color:var(--navy); margin-top:48px}
+  .q{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:22px 24px; margin:18px 0}
+  .q p.prompt{font-weight:600; margin-top:0}
+  input.text-check{font-family:'JetBrains Mono',monospace; padding:8px 10px; border:1px solid var(--border); border-radius:6px; font-size:15px; width:260px}
+  button.check-btn{background:var(--teal); color:#fff; border:none; padding:8px 16px; border-radius:6px; cursor:pointer; font-size:14px; margin-left:8px}
+  .feedback{margin-top:10px; font-size:15px; font-weight:600}
+  .feedback.correct{color:var(--teal)}
+  .feedback.incorrect{color:var(--red)}
+  .pill{display:inline-block; background:var(--panel-alt); border:1px solid var(--border); padding:8px 16px; border-radius:20px; margin:4px 6px 4px 0; cursor:pointer; font-size:15px}
+  .pill.correct{background:var(--teal); color:#fff; border-color:var(--teal)}
+  .pill.wrong{background:var(--red-light); border-color:var(--red); color:var(--red)}
+  textarea{width:100%; min-height:90px; font-family:'Source Sans 3',Arial,sans-serif; font-size:15px; padding:10px; border:1px solid var(--border); border-radius:6px}
+  details.reveal{margin-top:12px}
+  details.reveal summary{cursor:pointer; color:var(--navy); font-weight:600; font-size:14px}
+  details.reveal .model{background:var(--teal-light); border-radius:8px; padding:14px 16px; margin-top:8px; font-size:15px}
+  footer{background:var(--navy-deep); color:#c7ccdc; padding:28px 24px; text-align:center; font-size:14px}
+  footer a{color:#8fd8d0}
+  details.toc-mobile{display:none}
+  @media (max-width:900px){
+    .layout{flex-direction:column}
+    nav.toc{display:none}
+    details.toc-mobile{display:block; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:12px 16px; margin-bottom:24px; max-width:740px}
+    details.toc-mobile a{display:block; padding:6px 0; color:var(--navy); text-decoration:none}
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+</div>
+
+<header>
+  <p class="eyebrow">Y12 AS Computer Science (9618) &middot; Networking Lab Sequence</p>
+  <h1>Session 3 Practice: Basic LAN with a Switch</h1>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span id="progressText" style="font-size:13px; color:#c7ccdc">0 / 12 checked</span>
+    <button id="resetBtn">Reset</button>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="toc">
+    <a href="#a">A &middot; LAN basics</a>
+    <a href="#b">B &middot; The switch</a>
+    <a href="#c">C &middot; ARP at scale</a>
+    <a href="#d">D &middot; The lab</a>
+    <a href="#e">E &middot; Exam-style</a>
+  </nav>
+
+  <article>
+    <details class="toc-mobile"><summary>Contents</summary>
+      <a href="#a">A LAN basics</a>
+      <a href="#b">B The switch</a>
+      <a href="#c">C ARP at scale</a>
+      <a href="#d">D The lab</a>
+      <a href="#e">E Exam-style</a>
+    </details>
+
+    <section id="a">
+      <span class="section-kicker">A</span>
+      <h2>LAN basics</h2>
+
+      <div class="q">
+        <p class="prompt">1. What does LAN stand for?</p>
+        <input type="text" class="text-check" data-qid="q1" data-answer="local area network" placeholder="Type your answer">
+        <button class="check-btn" data-check="q1">Check</button>
+        <div class="feedback" id="fb-q1"></div>
+      </div>
+
+      <div class="q">
+        <p class="prompt">2. Give one characteristic of a LAN.</p>
+        <textarea data-qid="q2" placeholder="Type your answer..."></textarea>
+        <details class="reveal"><summary>Reveal model answer</summary>
+          <div class="model">Confined to a small geographic area, typically owned by a single organisation, and offering high-speed connections.</div>
+        </details>
+      </div>
+
+      <div class="q">
+        <p class="prompt">3. True or false: a LAN can span multiple cities.</p>
+        <div class="pill-group" data-qid="q3" data-answer="False">
+          <span class="pill" data-value="True">True</span>
+          <span class="pill" data-value="False">False</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="b">
+      <span class="section-kicker">B</span>
+      <h2>The switch</h2>
+
+      <div class="q">
+        <p class="prompt">4. What does a switch use to decide where to forward each frame?</p>
+        <div class="pill-group" data-qid="q4" data-answer="MAC address">
+          <span class="pill" data-value="IP address">IP address</span>
+          <span class="pill" data-value="MAC address">MAC address</span>
+          <span class="pill" data-value="Domain name">Domain name</span>
+        </div>
+      </div>
+
+      <div class="q">
+        <p class="prompt">5. What is the name of the table a switch builds to do this?</p>
+        <input type="text" class="text-check" data-qid="q5" data-answer="mac address table" placeholder="Type your answer">
+        <button class="check-btn" data-check="q5">Check</button>
+        <div class="feedback" id="fb-q5"></div>
+      </div>
+
+      <div class="q">
+        <p class="prompt">6. Explain one difference between a switch's MAC address table and a PC's ARP table.</p>
+        <textarea data-qid="q6" placeholder="Type your answer..."></textarea>
+        <details class="reveal"><summary>Reveal model answer</summary>
+          <div class="model">The switch's table maps MAC addresses to physical ports so it knows where to forward frames; a PC's ARP table maps IP addresses to MAC addresses so the PC knows who to address data to.</div>
+        </details>
+      </div>
+    </section>
+
+    <section id="c">
+      <span class="section-kicker">C</span>
+      <h2>ARP at scale</h2>
+
+      <div class="q">
+        <p class="prompt">7. Four PCs share a switch. Only PC1 has ever pinged PC2. What is in PC3's ARP table?</p>
+        <div class="pill-group" data-qid="q7" data-answer="Nothing — it's empty">
+          <span class="pill" data-value="PC1 and PC2's MAC addresses">PC1 and PC2's MAC addresses</span>
+          <span class="pill" data-value="Nothing — it's empty">Nothing — it's empty</span>
+          <span class="pill" data-value="Every device on the LAN">Every device on the LAN</span>
+        </div>
+      </div>
+
+      <div class="q">
+        <p class="prompt">8. Why doesn't adding more PCs to a switch automatically fill in everyone's ARP tables?</p>
+        <textarea data-qid="q8" placeholder="Type your answer..."></textarea>
+        <details class="reveal"><summary>Reveal model answer</summary>
+          <div class="model">An ARP entry is only created when a device actually needs to resolve another device's MAC address — being connected to the same switch doesn't trigger that on its own.</div>
+        </details>
+      </div>
+
+      <div class="q">
+        <p class="prompt">9. In the ping/ARP sequence, which happens first?</p>
+        <div class="pill-group" data-qid="q9" data-answer="ARP request/reply">
+          <span class="pill" data-value="ARP request/reply">ARP request/reply</span>
+          <span class="pill" data-value="ICMP echo request/reply">ICMP echo request/reply</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="d">
+      <span class="section-kicker">D</span>
+      <h2>The lab</h2>
+
+      <div class="q">
+        <p class="prompt">10. In the lab, after PC1 pinged PC2, what happened to PC1's ARP table?</p>
+        <textarea data-qid="q10" placeholder="Type your answer..."></textarea>
+        <details class="reveal"><summary>Reveal model answer</summary>
+          <div class="model">A new entry appeared, linking PC2's IP address to its MAC address.</div>
+        </details>
+      </div>
+
+      <div class="q">
+        <p class="prompt">11. Which tool did you use to inspect the ARP and ICMP stages as separate steps?</p>
+        <input type="text" class="text-check" data-qid="q11" data-answer="data-exchange view" placeholder="Type your answer">
+        <button class="check-btn" data-check="q11">Check</button>
+        <div class="feedback" id="fb-q11"></div>
+      </div>
+    </section>
+
+    <section id="e">
+      <span class="section-kicker">E</span>
+      <h2>Exam-style question</h2>
+
+      <div class="q">
+        <p class="prompt">12. A technician claims that connecting four PCs to the same switch means every PC "automatically knows" every other PC's MAC address. Explain why this claim is incorrect, and describe what would actually need to happen for two specific PCs' ARP tables to gain entries for each other.</p>
+        <textarea data-qid="q12" placeholder="Type your answer..." style="min-height:130px"></textarea>
+        <details class="reveal"><summary>Reveal model answer</summary>
+          <div class="model">Being connected to the same switch only provides the physical path for data to travel — it doesn't automatically populate ARP tables. Each PC's ARP table only gains an entry for another device once it actually needs to communicate with it, triggering an ARP request and reply between those two specific devices. For two PCs to learn each other's MAC addresses, one would need to send data (e.g. a ping) to the other, prompting the ARP resolution process.</div>
+        </details>
+      </div>
+    </section>
+  </article>
+</div>
+
+<footer>
+  Session 3 of 16 &middot; Networking Lab Sequence &middot; <a href="explainer.html">&larr; Back to explainer</a>
+</footer>
+
+<script>
+(function(){
+  var STORAGE_KEY = "netlab-s3-basic-lan-switch-progress";
+  var CHECKABLE_IDS = ["q1","q2","q3","q4","q5","q6","q7","q8","q9","q10","q11","q12"];
+
+  function loadProgress(){
+    try { return JSON.parse(window.localStorage.getItem(STORAGE_KEY)) || {}; }
+    catch (e) { return {}; }
+  }
+  function saveProgress(p){
+    try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); } catch (e) {}
+  }
+  var progress = loadProgress();
+
+  function updateProgressBar(){
+    var done = 0;
+    for (var i = 0; i < CHECKABLE_IDS.length; i++) { if (progress[CHECKABLE_IDS[i]]) { done++; } }
+    var pct = Math.round((done / CHECKABLE_IDS.length) * 100);
+    document.getElementById("progressFill").style.width = pct + "%";
+    document.getElementById("progressText").textContent = done + " / " + CHECKABLE_IDS.length + " checked";
+  }
+
+  function markDone(qid){
+    progress[qid] = true;
+    saveProgress(progress);
+    updateProgressBar();
+  }
+
+  var groups = document.querySelectorAll(".pill-group");
+  for (var g = 0; g < groups.length; g++) {
+    (function(group){
+      var qid = group.getAttribute("data-qid");
+      var answer = group.getAttribute("data-answer");
+      var pills = group.querySelectorAll(".pill");
+      for (var p = 0; p < pills.length; p++) {
+        pills[p].addEventListener("click", function(){
+          var value = this.getAttribute("data-value");
+          for (var k = 0; k < pills.length; k++) {
+            pills[k].classList.remove("correct", "wrong");
+          }
+          if (value === answer) {
+            this.classList.add("correct");
+          } else {
+            this.classList.add("wrong");
+            for (var m = 0; m < pills.length; m++) {
+              if (pills[m].getAttribute("data-value") === answer) { pills[m].classList.add("correct"); }
+            }
+          }
+          markDone(qid);
+        });
+      }
+      if (progress[qid]) {
+        for (var q = 0; q < pills.length; q++) {
+          if (pills[q].getAttribute("data-value") === answer) { pills[q].classList.add("correct"); }
+        }
+      }
+    })(groups[g]);
+  }
+
+  var checkButtons = document.querySelectorAll("[data-check]");
+  for (var c = 0; c < checkButtons.length; c++) {
+    checkButtons[c].addEventListener("click", function(){
+      var qid = this.getAttribute("data-check");
+      var input = document.querySelector('input[data-qid="' + qid + '"]');
+      var answer = input.getAttribute("data-answer");
+      var fb = document.getElementById("fb-" + qid);
+      var given = input.value.trim().toLowerCase().replace(/\s+/g, " ");
+      var expected = answer.toLowerCase().replace(/\s+/g, " ");
+      if (given === expected) {
+        fb.textContent = "Correct.";
+        fb.className = "feedback correct";
+      } else {
+        fb.textContent = "Not quite — expected: " + answer;
+        fb.className = "feedback incorrect";
+      }
+      markDone(qid);
+    });
+  }
+
+  var textareas = document.querySelectorAll("textarea[data-qid]");
+  for (var t = 0; t < textareas.length; t++) {
+    textareas[t].addEventListener("blur", function(){
+      if (this.value.trim().length > 0) { markDone(this.getAttribute("data-qid")); }
+    });
+  }
+
+  document.getElementById("resetBtn").addEventListener("click", function(){
+    progress = {};
+    saveProgress(progress);
+    updateProgressBar();
+    var pills = document.querySelectorAll(".pill");
+    for (var i = 0; i < pills.length; i++) { pills[i].classList.remove("correct", "wrong"); }
+    var inputs = document.querySelectorAll("input.text-check");
+    for (var j = 0; j < inputs.length; j++) { inputs[j].value = ""; }
+    var feedbacks = document.querySelectorAll(".feedback");
+    for (var k = 0; k < feedbacks.length; k++) { feedbacks[k].textContent = ""; }
+    var areas = document.querySelectorAll("textarea");
+    for (var m = 0; m < areas.length; m++) { areas[m].value = ""; }
+  });
+
+  updateProgressBar();
+})();
+</script>
+</body>
+</html>

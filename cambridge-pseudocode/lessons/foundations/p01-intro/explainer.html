@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "foundations/p01-intro";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Introduction to Pseudocode & Pseudocode Pro";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Introduction to Pseudocode</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1B2B5E;--navy-deep:#101a3a;--teal:#0D9488;--teal-light:#e6f5f3;--purple:#7C4DA0;--purple-light:#f1e9f6;--amber:#a8560c;--amber-light:#fbeee0;--red:#a4342a;--red-light:#fbeae8;--bg:#f5f6fa;--panel:#ffffff;--panel-alt:#eef1f8;--border:#dde1ee;--text:#1c2340;--muted:#5b6472}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Source Sans 3",Arial,sans-serif;font-size:17px;line-height:1.6}
+header.hero{background:var(--navy);color:#fff;padding:36px 20px 32px}
+.hero-inner{max-width:1100px;margin:0 auto}
+.eyebrow{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#9fe3dc;font-weight:700}
+h1{font-family:"Source Serif 4",Georgia,serif;font-size:36px;line-height:1.2;margin:8px 0 10px}
+.lede{max-width:720px;color:#dfe4f3;margin:0;font-size:18px}
+.layout{max-width:1100px;margin:0 auto;padding:28px 20px 60px;display:flex;gap:40px;align-items:flex-start}
+nav.toc{width:230px;flex-shrink:0;position:sticky;top:20px;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px}
+nav.toc h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 8px;font-family:"Source Sans 3",Arial,sans-serif}
+nav.toc a{display:block;color:var(--text);text-decoration:none;font-size:15px;padding:5px 8px;border-radius:6px;border-left:3px solid transparent}
+nav.toc a:hover{background:var(--panel-alt)}
+nav.toc a.active{border-left-color:var(--teal);background:var(--teal-light);color:var(--navy);font-weight:600}
+details.toc-mobile{display:none}
+article{max-width:740px;min-width:0;flex:1}
+section{margin-bottom:44px}
+.section-kicker{font-family:"JetBrains Mono",monospace;color:var(--teal);font-weight:600;font-size:14px}
+h2.sec{font-family:"Source Serif 4",Georgia,serif;font-size:27px;color:var(--navy);margin:2px 0 12px}
+h3{font-family:"Source Serif 4",Georgia,serif;color:var(--navy);font-size:20px;margin:24px 0 8px}
+code{font-family:"JetBrains Mono",monospace;font-size:.88em;background:var(--panel-alt);padding:1px 5px;border-radius:4px}
+.tip,.warn,.level{border-radius:8px;padding:14px 16px;margin:18px 0}
+.tip{background:var(--teal-light);border-left:4px solid var(--teal)}
+.warn{background:var(--amber-light);border-left:4px solid var(--amber)}
+.level{background:var(--purple-light);border-left:4px solid var(--purple)}
+.tip>strong:first-child,.warn>strong:first-child,.level>strong:first-child{display:block;margin-bottom:4px;color:var(--navy)}
+.code-wrap{margin:16px 0;border-radius:8px;overflow:hidden;background:var(--navy-deep)}
+.code-label{background:#1f2c55;color:#b8c2e0;font-family:"JetBrains Mono",monospace;font-size:12px;padding:6px 12px;display:flex;justify-content:space-between}
+pre{margin:0;padding:14px 16px;color:#e8ecf8;font-family:"JetBrains Mono",monospace;font-size:14.5px;line-height:1.65;overflow-x:auto;white-space:pre}
+.kw{color:#7fd3ff;font-weight:600}.id{color:#ffe08a}.op{color:#ff9fb8}.lit{color:#a6e3a1}.cm{color:#8b95b8;font-style:italic}.ty{color:#d2a8ff}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
+.legend span{font-size:14px;padding:3px 10px;border-radius:20px;background:var(--navy-deep);font-family:"JetBrains Mono",monospace}
+table.ref{width:100%;border-collapse:collapse;margin:14px 0;background:var(--panel);font-size:15.5px}
+table.ref th{background:var(--navy);color:#fff;text-align:left;padding:8px 10px}
+table.ref td{border:1px solid var(--border);padding:8px 10px;vertical-align:top}
+.good{color:var(--teal);font-weight:700}.bad{color:var(--red);font-weight:700}
+.playground{background:var(--navy-deep);color:#e8ecf8;border-radius:10px;padding:18px;margin:20px 0}
+.playground h4{margin:0 0 10px;font-family:"Source Serif 4",Georgia,serif;font-size:18px;color:#fff}
+.playground input[type=text]{width:100%;padding:10px 12px;font-family:"JetBrains Mono",monospace;font-size:16px;border-radius:6px;border:1px solid #3a4a80;background:#0b1330;color:#fff}
+.chips{margin-top:10px}
+.chip{display:inline-block;background:#223266;color:#cfe0ff;border:none;border-radius:20px;padding:4px 11px;margin:3px 3px 0 0;font-family:"JetBrains Mono",monospace;font-size:13px;cursor:pointer}
+.chip:hover{background:#2e4488}
+.verdict{margin-top:14px;padding:12px 14px;border-radius:8px;background:#0b1330;min-height:48px}
+.verdict .v-title{font-weight:700;font-size:17px}
+.v-ok{color:#5eead4}.v-bad{color:#ff9f93}.v-meh{color:#ffd28a}
+.verdict ul{margin:6px 0 0;padding-left:20px}
+.tracer{display:flex;gap:14px;flex-wrap:wrap}
+.tr-code{flex:1 1 330px;background:#0b1330;border-radius:8px;padding:10px 0;font-family:"JetBrains Mono",monospace;font-size:13.5px}
+.tr-line{padding:2px 12px;white-space:pre;border-left:3px solid transparent}
+.tr-line .ln{color:#5b6a99;display:inline-block;width:22px}
+.tr-line.cur{background:#1d3a6b;border-left-color:#5eead4}
+.tr-line.done{opacity:.55}
+.tr-side{flex:1 1 220px;min-width:200px}
+.tr-box{background:#0b1330;border-radius:8px;padding:10px 12px;margin-bottom:10px}
+.tr-box h5{margin:0 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#9fb0dd}
+.var-row{display:flex;justify-content:space-between;font-family:"JetBrains Mono",monospace;font-size:14px;padding:2px 0;border-bottom:1px dashed #243463}
+.var-row.flash{color:#5eead4;font-weight:600}
+.out{font-family:"JetBrains Mono",monospace;font-size:14px;white-space:pre-wrap;min-height:44px;color:#a6e3a1}
+.tr-note{background:#132552;border-radius:8px;padding:10px 12px;font-size:15px;margin-top:10px;min-height:48px}
+.btns{margin-top:12px}
+.btn{background:var(--teal);color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:15px;font-weight:600;cursor:pointer;margin-right:8px;font-family:inherit}
+.btn.ghost{background:#2a3a6e}
+.btn[disabled]{opacity:.45;cursor:default}
+ol.steps{padding-left:0;list-style:none;counter-reset:st}
+ol.steps li{counter-increment:st;position:relative;padding:10px 12px 10px 52px;background:var(--panel);border:1px solid var(--border);border-radius:8px;margin-bottom:8px}
+ol.steps li:before{content:counter(st);position:absolute;left:12px;top:10px;width:28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;font-weight:700;text-align:center;line-height:28px;font-size:14px}
+.kbd{font-family:"JetBrains Mono",monospace;font-size:13px;background:#fff;border:1px solid var(--border);border-bottom-width:2px;border-radius:4px;padding:0 5px}
+footer.lesson-foot{border-top:1px solid var(--border);padding-top:20px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+footer.lesson-foot a{color:var(--navy);font-weight:600;text-decoration:none;background:var(--panel);border:1px solid var(--border);padding:10px 14px;border-radius:8px}
+footer.lesson-foot a.primary{background:var(--teal);color:#fff;border-color:var(--teal)}
+a{color:var(--teal)}
+@media (max-width:900px){
+ .layout{display:block;padding-top:16px}
+ nav.toc{display:none}
+ details.toc-mobile{display:block;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:22px}
+ details.toc-mobile summary{font-weight:700;cursor:pointer;color:var(--navy)}
+ details.toc-mobile a{display:block;padding:5px 0;color:var(--text);text-decoration:none}
+ h1{font-size:29px}
+}
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/foundations-p01-intro-explainer.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<header class="hero">
+ <div class="hero-inner">
+  <div class="eyebrow">Cambridge Pseudocode · Foundations · Topic 1</div>
+  <h1>Introduction to Pseudocode &amp; Pseudocode Pro</h1>
+  <p class="lede">What pseudocode is, the house rules Cambridge examiners expect you to follow, and how to write, run and trace your first program in the Pseudocode Pro editor.</p>
+ </div>
+</header>
+
+<div class="layout">
+ <nav class="toc" id="toc">
+  <h2>On this page</h2>
+  <a href="#what">01 What is pseudocode?</a>
+  <a href="#anatomy">02 Anatomy of a program</a>
+  <a href="#rules">03 The Cambridge conventions</a>
+  <a href="#identifiers">04 Naming things</a>
+  <a href="#sequence">05 Sequence: one line at a time</a>
+  <a href="#pro">06 Using Pseudocode Pro</a>
+  <a href="#exam">07 Exam tips</a>
+ </nav>
+
+ <article>
+  <div class="lesson-video" data-lesson="foundations/p01-intro"></div>
+  <details class="toc-mobile">
+   <summary>On this page</summary>
+   <a href="#what">01 What is pseudocode?</a>
+   <a href="#anatomy">02 Anatomy of a program</a>
+   <a href="#rules">03 The Cambridge conventions</a>
+   <a href="#identifiers">04 Naming things</a>
+   <a href="#sequence">05 Sequence: one line at a time</a>
+   <a href="#pro">06 Using Pseudocode Pro</a>
+   <a href="#exam">07 Exam tips</a>
+  </details>
+
+  <!-- 01 -->
+  <section id="what">
+   <div class="section-kicker">01</div>
+   <h2 class="sec">What is pseudocode?</h2>
+   <p><strong>Pseudocode</strong> is a way of writing an algorithm that looks like program code but is not tied to any one real programming language. It is written for <em>people</em> to read, so it keeps the structure of a program (steps, decisions, loops) without the fussy details of Python, Java or Visual Basic.</p>
+   <p>Think of it like a recipe written in plain, structured steps. A chef in Bangkok and a chef in London can both follow “boil 500 ml of water, then add the pasta” even though their kitchens have different cookers. Pseudocode does the same job for programmers: anyone can turn it into their own language.</p>
+   <h3>Why Cambridge uses its own pseudocode</h3>
+   <p>Students around the world learn different languages, so Cambridge exams ask for algorithms in a <strong>standard pseudocode</strong>. It has a fixed set of keywords and layout rules, which means an examiner can read your answer quickly and fairly, whichever language you use in class.</p>
+   <div class="tip"><strong>Key idea</strong>Normally pseudocode cannot be run by a computer. It is a design tool. Pseudocode Pro is special: it understands Cambridge pseudocode well enough to run it, so you can test your answers before the exam.</div>
+  </section>
+
+  <!-- 02 -->
+  <section id="anatomy">
+   <div class="section-kicker">02</div>
+   <h2 class="sec">Anatomy of a program</h2>
+   <p>Here is a complete, small program. The colours show the different kinds of “word” it is made from.</p>
+   <div class="legend">
+    <span class="kw">KEYWORD</span><span class="id">Identifier</span><span class="ty">DATATYPE</span><span class="op">operator ←</span><span class="lit">"literal"</span><span class="cm">// comment</span>
+   </div>
+   <div class="code-wrap">
+    <div class="code-label"><span>pseudocode</span><span>Welcome program</span></div>
+<pre><span class="cm">// Greets the user and shows the year</span>
+<span class="kw">DECLARE</span> <span class="id">UserName</span> : <span class="ty">STRING</span>
+<span class="kw">DECLARE</span> <span class="id">Year</span> : <span class="ty">INTEGER</span>
+<span class="id">UserName</span> <span class="op">←</span> <span class="lit">"Alex"</span>
+<span class="id">Year</span> <span class="op">←</span> <span class="lit">2026</span>
+<span class="kw">OUTPUT</span> <span class="lit">"Welcome, "</span>, <span class="id">UserName</span>
+<span class="kw">OUTPUT</span> <span class="lit">"The year is "</span>, <span class="id">Year</span></pre>
+   </div>
+   <table class="ref">
+    <tr><th style="width:26%">Part</th><th>What it is</th></tr>
+    <tr><td><strong>Keyword</strong></td><td>A word with a fixed meaning in the language, such as <code>DECLARE</code> or <code>OUTPUT</code>. Always written in UPPER CASE.</td></tr>
+    <tr><td><strong>Identifier</strong></td><td>A name <em>you</em> choose for something, such as a variable. Here: <code>UserName</code> and <code>Year</code>.</td></tr>
+    <tr><td><strong>Data type</strong></td><td>The kind of data an identifier holds, e.g. <code>STRING</code> for text or <code>INTEGER</code> for whole numbers. (Next lesson covers these in full.)</td></tr>
+    <tr><td><strong>Assignment ←</strong></td><td>Puts a value into a variable. Read <code>Year ← 2026</code> as “Year <em>becomes</em> 2026”.</td></tr>
+    <tr><td><strong>Literal</strong></td><td>A fixed value typed straight into the code: <code>"Alex"</code> or <code>2026</code>.</td></tr>
+    <tr><td><strong>Comment</strong></td><td>A note for humans, starting with <code>//</code>. The computer ignores it.</td></tr>
+   </table>
+   <p>When this program runs it outputs:</p>
+   <div class="code-wrap"><div class="code-label"><span>output</span></div>
+<pre>Welcome, Alex
+The year is 2026</pre></div>
+   <p>Notice that <code>OUTPUT</code> can display several items separated by <strong>commas</strong>. They are joined together with no extra spaces added, which is why <code>"Welcome, "</code> has a space before its closing quote.</p>
+  </section>
+
+  <!-- 03 -->
+  <section id="rules">
+   <div class="section-kicker">03</div>
+   <h2 class="sec">The Cambridge conventions</h2>
+   <p>Cambridge publishes a guide that sets out how pseudocode should look. These six rules apply to every program you write, from this lesson onwards.</p>
+   <table class="ref">
+    <tr><th style="width:30%">Rule</th><th>Correct</th><th>Avoid</th></tr>
+    <tr><td>Keywords in UPPER CASE</td><td><code>OUTPUT Total</code></td><td><code>output Total</code></td></tr>
+    <tr><td>Identifiers in mixed case (PascalCase)</td><td><code>HighScore</code></td><td><code>highscore</code>, <code>HIGHSCORE</code></td></tr>
+    <tr><td>Assignment uses the arrow <code>←</code></td><td><code>Count ← 0</code></td><td><code>Count = 0</code>, <code>Count := 0</code></td></tr>
+    <tr><td>Comments start with <code>//</code></td><td><code>// add VAT</code></td><td><code># add VAT</code></td></tr>
+    <tr><td>Indent by four spaces inside a structure</td><td>see below</td><td>no indentation</td></tr>
+    <tr><td>Strings in double quotes, single characters in single quotes</td><td><code>"Hello"</code>, <code>'Y'</code></td><td><code>'Hello'</code></td></tr>
+   </table>
+   <h3>Why the arrow?</h3>
+   <p>In maths, <code>=</code> means “is equal to”, which is a statement of fact. Assignment is an <em>action</em>: take the value on the right and store it in the variable on the left. The arrow shows the direction the data moves. So <code>Score ← Score + 10</code> makes perfect sense (“Score becomes its old value plus 10”), even though <code>Score = Score + 10</code> would be impossible in maths.</p>
+   <h3>Indentation</h3>
+   <p>You will meet IF statements and loops in later lessons. The lines <em>inside</em> them are indented by four spaces so the reader can see at a glance which lines belong together:</p>
+   <div class="code-wrap"><div class="code-label"><span>pseudocode</span><span>preview of a later topic</span></div>
+<pre><span class="kw">IF</span> <span class="id">Score</span> > <span class="lit">50</span> <span class="kw">THEN</span>
+    <span class="kw">OUTPUT</span> <span class="lit">"Pass"</span>        <span class="cm">// indented 4 spaces</span>
+<span class="kw">ENDIF</span></pre></div>
+   <div class="level"><strong>IGCSE (0478) and AS (9618)</strong>These conventions are the same for both courses. Where later topics differ between the two syllabuses, look for a purple box like this one.</div>
+  </section>
+
+  <!-- 04 -->
+  <section id="identifiers">
+   <div class="section-kicker">04</div>
+   <h2 class="sec">Naming things: identifiers</h2>
+   <p>An identifier must follow these <strong>rules</strong>, or the program is wrong:</p>
+   <ul>
+    <li>It may only contain letters (A–Z, a–z), digits (0–9) and the underscore <code>_</code>.</li>
+    <li>It must <strong>start with a letter</strong>.</li>
+    <li>It cannot contain spaces.</li>
+    <li>It cannot be a keyword, so a variable called <code>OUTPUT</code> is not allowed.</li>
+   </ul>
+   <p>It should also follow good <strong>style</strong>, which examiners reward because it makes code readable:</p>
+   <ul>
+    <li>Use a <strong>meaningful</strong> name: <code>TotalCost</code>, not <code>x</code>.</li>
+    <li>Use <strong>PascalCase</strong>: start each word with a capital, e.g. <code>NumberOfStudents</code>.</li>
+    <li>Identifiers are treated as <strong>case-insensitive</strong>, so never use <code>Total</code> and <code>TOTAL</code> as two different variables.</li>
+   </ul>
+
+   <div class="playground" id="idChecker">
+    <h4>Identifier checker</h4>
+    <p style="margin:0 0 10px;color:#c9d2ee;font-size:15px">Type a name, or tap an example, to see whether it is allowed and whether it is good style.</p>
+    <input type="text" id="idInput" placeholder="e.g. HighScore" autocomplete="off" spellcheck="false">
+    <div class="chips" id="idChips">
+     <button class="chip" type="button">HighScore</button>
+     <button class="chip" type="button">2ndPlace</button>
+     <button class="chip" type="button">Player Name</button>
+     <button class="chip" type="button">OUTPUT</button>
+     <button class="chip" type="button">total_cost</button>
+     <button class="chip" type="button">x</button>
+     <button class="chip" type="button">Price£</button>
+     <button class="chip" type="button">MaxTemp2</button>
+    </div>
+    <div class="verdict" id="idVerdict"><span style="color:#9fb0dd">Waiting for a name…</span></div>
+   </div>
+  </section>
+
+  <!-- 05 -->
+  <section id="sequence">
+   <div class="section-kicker">05</div>
+   <h2 class="sec">Sequence: one line at a time</h2>
+   <p>A program runs from the <strong>top line to the bottom line, in order</strong>. This is called <strong>sequence</strong>. A variable holds exactly one value at a time: assigning a new value replaces the old one completely.</p>
+   <p>Step through the program below and watch the variables. Pay attention to what happens to <code>Total</code> when <code>Price</code> changes near the end.</p>
+
+   <div class="playground">
+    <h4>Step-through tracer</h4>
+    <div class="tracer">
+     <div class="tr-code" id="trCode"></div>
+     <div class="tr-side">
+      <div class="tr-box"><h5>Variables</h5><div id="trVars"></div></div>
+      <div class="tr-box"><h5>Output</h5><div class="out" id="trOut"></div></div>
+     </div>
+    </div>
+    <div class="tr-note" id="trNote">Press <strong>Step</strong> to run the first line.</div>
+    <div class="btns">
+     <button class="btn" type="button" id="trStep">Step ▶</button>
+     <button class="btn ghost" type="button" id="trReset">Reset</button>
+    </div>
+   </div>
+
+   <div class="warn"><strong>Common misconception</strong><code>Total ← Price * Quantity</code> works out the answer <em>once</em>, at that moment, and stores the number 12. It does not create a link. Changing <code>Price</code> later does not change <code>Total</code> unless you run the calculation again.</div>
+  </section>
+
+  <!-- 06 -->
+  <section id="pro">
+   <div class="section-kicker">06</div>
+   <h2 class="sec">Using Pseudocode Pro</h2>
+   <p><a href="https://pseudocode.pro/editor" target="_blank" rel="noopener">Pseudocode Pro</a> is a free website that runs Cambridge pseudocode in your browser. Use it to test every program you write in this course.</p>
+   <ol class="steps">
+    <li><strong>Open the editor</strong> at <a href="https://pseudocode.pro/editor" target="_blank" rel="noopener">pseudocode.pro/editor</a>. You do not need an account.</li>
+    <li><strong>Choose your syllabus</strong> from the <em>Syllabus</em> menu: “Cambridge IGCSE 0478” or “Cambridge A-Level 9618”. The editor then checks your code against the rules for your course.</li>
+    <li><strong>Type the arrow</strong> by typing <code>&lt;-</code> (less-than, then hyphen). The editor turns it into <code>←</code> automatically. You can also press <span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">&lt;</span>.</li>
+    <li><strong>Run your code</strong> with the triangular play button. Under <em>Run &amp; Options</em> you can change the execution mode: “Run on click” is the calmest choice while you are learning, because “Live” re-runs after every key you type.</li>
+    <li><strong>Read the error panel.</strong> It says <em>No errors ✅</em> when your code is valid. If something is wrong it shows a message and the line number, which you can click to jump to the mistake.</li>
+    <li><strong>Make a trace table</strong> with the <em>Create Trace Table</em> button. The table is only generated while that window is open, so open it first and then run the program. You will use this a lot in later topics.</li>
+    <li><strong>Save your work</strong> with <em>Download</em>, which saves a <code>.pseudo</code> file. The editor also autosaves in your browser, but that copy is lost in a private window or if browser data is cleared.</li>
+   </ol>
+   <div class="warn"><strong>Pseudocode Pro is strict about data types</strong>It checks that every variable is declared with <code>DECLARE</code> and that you only store the right kind of value in it. That is why the programs on this page start with <code>DECLARE</code> lines. You will learn exactly how these work next lesson; for now, copy them as shown.</div>
+   <div class="tip"><strong>Worked example: your first run</strong>Type the Welcome program from section 02 into the editor, press play, and check that the output matches exactly. Then change <code>"Alex"</code> to your own name and run it again.</div>
+  </section>
+
+  <!-- 07 -->
+  <section id="exam">
+   <div class="section-kicker">07</div>
+   <h2 class="sec">Exam tips</h2>
+   <ul>
+    <li>Write keywords in capitals and use <code>←</code> for assignment. Examiners read hundreds of scripts, and clear, standard code is easier to credit.</li>
+    <li>Choose meaningful identifiers. If a question has already named a variable (e.g. <code>Total</code>), use that exact name.</li>
+    <li>Indent the contents of every IF, CASE and loop. It helps you spot missing <code>ENDIF</code>s and helps the examiner follow your logic.</li>
+    <li>A comment can explain a tricky step, but you do not need one on every line.</li>
+    <li>When asked what a program outputs, work through it <strong>line by line</strong> and keep track of every variable, just like the tracer above.</li>
+   </ul>
+  </section>
+
+  <footer class="lesson-foot">
+   <a href="practice.html" class="primary">Practise this topic →</a>
+   <a href="../p02-data-types/explainer.html">Next: Data types, variables &amp; constants →</a>
+  </footer>
+ </article>
+</div>
+
+<script>
+/* ---------- Identifier checker ---------- */
+var KEYWORDS = ["DECLARE","CONSTANT","INPUT","OUTPUT","IF","THEN","ELSE","ENDIF","CASE","OF","OTHERWISE","ENDCASE","FOR","TO","STEP","NEXT","WHILE","DO","ENDWHILE","REPEAT","UNTIL","PROCEDURE","ENDPROCEDURE","FUNCTION","ENDFUNCTION","RETURN","RETURNS","CALL","AND","OR","NOT","TRUE","FALSE","INTEGER","REAL","CHAR","STRING","BOOLEAN","DATE","ARRAY","TYPE","ENDTYPE","OPENFILE","READFILE","WRITEFILE","CLOSEFILE","EOF","READ","WRITE","APPEND","DIV","MOD","BYVAL","BYREF"];
+
+function checkIdentifier(name){
+  var res = {valid:true, problems:[], style:[]};
+  if(name.length === 0){ return null; }
+  if(/\s/.test(name)){ res.valid=false; res.problems.push("It contains a space. Identifiers must be one unbroken word."); }
+  if(!/^[A-Za-z]/.test(name)){ res.valid=false; res.problems.push("It does not start with a letter."); }
+  var bad = name.replace(/[A-Za-z0-9_\s]/g,"");
+  if(bad.length > 0){ res.valid=false; res.problems.push("It contains a character that is not allowed: " + bad.charAt(0) + " (only letters, digits and _ are allowed)."); }
+  if(KEYWORDS.indexOf(name.toUpperCase()) !== -1){ res.valid=false; res.problems.push(name.toUpperCase() + " is a keyword, so it cannot be used as a name."); }
+  if(res.valid){
+    if(name.length === 1){ res.style.push("A single letter is allowed but not meaningful. What does it store?"); }
+    if(/^[a-z]/.test(name)){ res.style.push("Starts with a lower-case letter. Cambridge style is PascalCase, e.g. " + name.charAt(0).toUpperCase() + name.slice(1).replace(/_([a-z])/g,function(m,c){return c.toUpperCase();}) + "."); }
+    else if(name.length > 1 && name === name.toUpperCase() && /[A-Z]/.test(name)){ res.style.push("All capitals usually signals a CONSTANT. For a variable, use PascalCase."); }
+    if(name.indexOf("_") !== -1 && !/^[a-z]/.test(name)){ res.style.push("Underscores are allowed, but PascalCase (capital letters) is the usual Cambridge style."); }
+  }
+  return res;
+}
+
+function renderVerdict(name){
+  var box = document.getElementById("idVerdict");
+  var r = checkIdentifier(name);
+  if(r === null){ box.innerHTML = '<span style="color:#9fb0dd">Waiting for a name…</span>'; return; }
+  var safe = name.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+  var html;
+  if(!r.valid){
+    html = '<div class="v-title v-bad">✗ Not allowed: ' + safe + '</div><ul>';
+    for(var i=0;i<r.problems.length;i++){ html += '<li>' + r.problems[i].replace(/</g,"&lt;") + '</li>'; }
+    html += '</ul>';
+  } else if(r.style.length > 0){
+    html = '<div class="v-title v-meh">✓ Allowed, but could be better: ' + safe + '</div><ul>';
+    for(var j=0;j<r.style.length;j++){ html += '<li>' + r.style[j] + '</li>'; }
+    html += '</ul>';
+  } else {
+    html = '<div class="v-title v-ok">✓ Allowed and good style: ' + safe + '</div><div style="margin-top:4px;color:#c9d2ee">Starts with a letter, uses only permitted characters, is not a keyword and uses PascalCase.</div>';
+  }
+  box.innerHTML = html;
+}
+
+var idInput = document.getElementById("idInput");
+idInput.oninput = function(){ renderVerdict(idInput.value); };
+var chipEls = document.getElementById("idChips").getElementsByTagName("button");
+for(var c=0;c<chipEls.length;c++){
+  chipEls[c].onclick = function(){ idInput.value = this.textContent; renderVerdict(this.textContent); };
+}
+
+/* ---------- Step-through tracer ---------- */
+var TR_LINES = [
+  "DECLARE Price : INTEGER",
+  "DECLARE Quantity : INTEGER",
+  "DECLARE Total : INTEGER",
+  "Price ← 4",
+  "Quantity ← 3",
+  "Total ← Price * Quantity",
+  "OUTPUT \"Total cost: \", Total",
+  "Price ← 5",
+  "OUTPUT \"New price: \", Price, \" Total is still: \", Total"
+];
+/* each step: vars after the line, output line added (or null), changed var, note */
+var TR_STEPS = [
+  {vars:{Price:"–"}, out:null, changed:"Price", note:"DECLARE creates a variable called Price that can hold an INTEGER. It has no value yet."},
+  {vars:{Price:"–",Quantity:"–"}, out:null, changed:"Quantity", note:"A second variable, Quantity, is created."},
+  {vars:{Price:"–",Quantity:"–",Total:"–"}, out:null, changed:"Total", note:"A third variable, Total, is created. All three are still empty."},
+  {vars:{Price:"4",Quantity:"–",Total:"–"}, out:null, changed:"Price", note:"Price becomes 4."},
+  {vars:{Price:"4",Quantity:"3",Total:"–"}, out:null, changed:"Quantity", note:"Quantity becomes 3."},
+  {vars:{Price:"4",Quantity:"3",Total:"12"}, out:null, changed:"Total", note:"The right-hand side is worked out first: 4 * 3 = 12. Then Total becomes 12."},
+  {vars:{Price:"4",Quantity:"3",Total:"12"}, out:"Total cost: 12", changed:null, note:"OUTPUT joins the text and the value of Total, with no extra space added."},
+  {vars:{Price:"5",Quantity:"3",Total:"12"}, out:null, changed:"Price", note:"Price becomes 5. The old value 4 is replaced. Look at Total: it has NOT changed."},
+  {vars:{Price:"5",Quantity:"3",Total:"12"}, out:"New price: 5 Total is still: 12", changed:null, note:"Total is still 12 because line 6 is not run again. Assignment stores a value once; it is not a formula that updates itself."}
+];
+var trPos = -1;
+
+function trRender(){
+  var codeHtml = "";
+  for(var i=0;i<TR_LINES.length;i++){
+    var cls = "tr-line";
+    if(i === trPos){ cls += " cur"; } else if(i < trPos){ cls += " done"; }
+    var txt = TR_LINES[i].replace(/&/g,"&amp;").replace(/</g,"&lt;");
+    codeHtml += '<div class="' + cls + '"><span class="ln">' + (i+1) + '</span>' + txt + '</div>';
+  }
+  document.getElementById("trCode").innerHTML = codeHtml;
+  var varsHtml = "", outText = "";
+  if(trPos >= 0){
+    var st = TR_STEPS[trPos];
+    for(var k in st.vars){
+      if(st.vars.hasOwnProperty(k)){
+        varsHtml += '<div class="var-row' + (k === st.changed ? ' flash' : '') + '"><span>' + k + '</span><span>' + st.vars[k] + '</span></div>';
+      }
+    }
+    for(var j=0;j<=trPos;j++){ if(TR_STEPS[j].out !== null){ outText += TR_STEPS[j].out + "\n"; } }
+    document.getElementById("trNote").innerHTML = "<strong>Line " + (trPos+1) + ":</strong> " + st.note;
+  } else {
+    varsHtml = '<span style="color:#7d8bb8">No variables yet</span>';
+    document.getElementById("trNote").innerHTML = "Press <strong>Step</strong> to run the first line.";
+  }
+  document.getElementById("trVars").innerHTML = varsHtml;
+  document.getElementById("trOut").textContent = outText;
+  var stepBtn = document.getElementById("trStep");
+  stepBtn.disabled = (trPos >= TR_LINES.length - 1);
+  stepBtn.innerHTML = stepBtn.disabled ? "Finished" : "Step ▶";
+}
+document.getElementById("trStep").onclick = function(){ if(trPos < TR_LINES.length - 1){ trPos++; trRender(); } };
+document.getElementById("trReset").onclick = function(){ trPos = -1; trRender(); };
+trRender();
+
+/* ---------- TOC scroll-spy ---------- */
+(function(){
+  var links = document.getElementById("toc").getElementsByTagName("a");
+  function spy(){
+    var current = null;
+    for(var i=0;i<links.length;i++){
+      var sec = document.getElementById(links[i].getAttribute("href").substring(1));
+      if(sec && sec.getBoundingClientRect().top < 140){ current = i; }
+    }
+    for(var j=0;j<links.length;j++){ links[j].className = (j === current) ? "active" : ""; }
+  }
+  window.addEventListener("scroll", spy);
+  spy();
+})();
+</script>
+<script src="../../../videos-config.js"></script>
+<script src="../../../../video-embed.js"></script>
+</body>
+</html>

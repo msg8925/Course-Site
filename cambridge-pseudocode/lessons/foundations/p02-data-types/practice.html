@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "foundations/p02-data-types";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Data Types, Variables & Constants";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Types Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1B2B5E;--navy-deep:#101a3a;--teal:#0D9488;--teal-light:#e6f5f3;--purple:#7C4DA0;--purple-light:#f1e9f6;--amber:#a8560c;--amber-light:#fbeee0;--red:#a4342a;--red-light:#fbeae8;--bg:#f5f6fa;--panel:#ffffff;--panel-alt:#eef1f8;--border:#dde1ee;--text:#1c2340;--muted:#5b6472}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Source Sans 3",Arial,sans-serif;font-size:17px;line-height:1.6}
+header.hero{background:var(--navy);color:#fff;padding:32px 20px 26px}
+.hero-inner{max-width:1100px;margin:0 auto}
+.eyebrow{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#9fe3dc;font-weight:700}
+h1{font-family:"Source Serif 4",Georgia,serif;font-size:34px;line-height:1.2;margin:8px 0 10px}
+.lede{max-width:720px;color:#dfe4f3;margin:0 0 16px;font-size:17px}
+.progress-row{display:flex;align-items:center;gap:14px;max-width:720px;flex-wrap:wrap}
+.progress{flex:1;min-width:200px;height:12px;background:#33447a;border-radius:10px;overflow:hidden}
+.progress-fill{height:12px;width:0;background:var(--teal);transition:width .3s}
+.progress-text{font-size:15px;color:#dfe4f3}
+.reset-btn{background:transparent;color:#fff;border:1px solid #6d7cb3;border-radius:6px;padding:5px 12px;cursor:pointer;font-family:inherit;font-size:14px}
+.layout{max-width:1100px;margin:0 auto;padding:28px 20px 60px;display:flex;gap:40px;align-items:flex-start}
+nav.toc{width:230px;flex-shrink:0;position:sticky;top:20px;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px}
+nav.toc h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 8px}
+nav.toc a{display:block;color:var(--text);text-decoration:none;font-size:15px;padding:5px 8px;border-radius:6px;border-left:3px solid transparent}
+nav.toc a:hover{background:var(--panel-alt)}
+nav.toc a.active{border-left-color:var(--teal);background:var(--teal-light);color:var(--navy);font-weight:600}
+details.toc-mobile{display:none}
+article{max-width:740px;min-width:0;flex:1}
+section{margin-bottom:44px}
+.section-kicker{font-family:"JetBrains Mono",monospace;color:var(--teal);font-weight:600;font-size:14px}
+h2.sec{font-family:"Source Serif 4",Georgia,serif;font-size:26px;color:var(--navy);margin:2px 0 8px}
+.intro{color:var(--muted);margin-top:0}
+.q{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin:14px 0}
+.q-head{display:flex;justify-content:space-between;gap:10px;font-weight:700;color:var(--navy)}
+.marks{font-weight:400;color:var(--muted);font-size:14px;white-space:nowrap}
+.q p{margin:6px 0}
+code{font-family:"JetBrains Mono",monospace;font-size:.88em;background:var(--panel-alt);padding:1px 5px;border-radius:4px}
+.code-wrap{margin:12px 0;border-radius:8px;overflow:hidden;background:var(--navy-deep)}
+.code-label{background:#1f2c55;color:#b8c2e0;font-family:"JetBrains Mono",monospace;font-size:12px;padding:6px 12px;display:flex;justify-content:space-between;align-items:center}
+.copy-btn{background:var(--teal);color:#fff;border:none;border-radius:5px;padding:3px 10px;font-size:12px;cursor:pointer;font-family:"Source Sans 3",Arial,sans-serif;font-weight:600}
+pre{margin:0;padding:12px 16px;color:#e8ecf8;font-family:"JetBrains Mono",monospace;font-size:14px;line-height:1.6;overflow-x:auto;white-space:pre}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.pill{background:var(--panel-alt);border:1px solid var(--border);border-radius:22px;padding:7px 14px;cursor:pointer;font-family:"JetBrains Mono",monospace;font-size:14px;color:var(--text)}
+.pill:hover{border-color:var(--teal)}
+.pill.right{background:var(--teal-light);border-color:var(--teal);color:#07544d;font-weight:600}
+.pill.wrong{background:var(--red-light);border-color:var(--red);color:var(--red)}
+.check-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.check-row input{flex:1;min-width:180px;padding:9px 11px;border:1px solid var(--border);border-radius:6px;font-family:"JetBrains Mono",monospace;font-size:15px}
+.btn{background:var(--teal);color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit}
+.feedback{margin-top:8px;font-size:15.5px;min-height:1em}
+.feedback.ok{color:var(--teal);font-weight:600}
+.feedback.no{color:var(--red)}
+textarea{width:100%;min-height:110px;margin-top:10px;padding:10px;border:1px solid var(--border);border-radius:6px;font-family:"JetBrains Mono",monospace;font-size:14px}
+details.model{margin-top:10px;background:var(--teal-light);border-radius:8px;padding:8px 12px}
+details.model summary{cursor:pointer;font-weight:700;color:var(--navy)}
+details.model ul{margin:6px 0;padding-left:20px}
+.task{border-left:4px solid var(--purple)}
+.task-tag{display:inline-block;background:var(--purple-light);color:var(--purple);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:2px 8px;margin-bottom:4px}
+.tip,.warn{border-radius:8px;padding:12px 16px;margin:14px 0}
+.tip{background:var(--teal-light);border-left:4px solid var(--teal)}
+.warn{background:var(--amber-light);border-left:4px solid var(--amber)}
+.tip>strong:first-child,.warn>strong:first-child{display:block;margin-bottom:2px;color:var(--navy)}
+ol.do{margin:6px 0;padding-left:22px}
+a{color:var(--teal)}
+footer.lesson-foot{border-top:1px solid var(--border);padding-top:20px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+footer.lesson-foot a{color:var(--navy);font-weight:600;text-decoration:none;background:var(--panel);border:1px solid var(--border);padding:10px 14px;border-radius:8px}
+@media (max-width:900px){
+ .layout{display:block;padding-top:16px}
+ nav.toc{display:none}
+ details.toc-mobile{display:block;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:22px}
+ details.toc-mobile summary{font-weight:700;cursor:pointer;color:var(--navy)}
+ details.toc-mobile a{display:block;padding:5px 0;color:var(--text);text-decoration:none}
+ h1{font-size:28px}
+}
+
+.syl-toggle{display:flex;align-items:center;gap:8px;margin:16px 0 4px;flex-wrap:wrap}
+.syl-toggle .syl-lbl{font-size:14px;color:#dfe4f3}
+.syl-btn{background:transparent;color:#dfe4f3;border:1px solid #6d7cb3;border-radius:18px;padding:4px 13px;font-size:14px;cursor:pointer;font-family:inherit}
+.syl-btn.on{background:#0D9488;border-color:#0D9488;color:#fff;font-weight:600}
+.syl-label{font-style:italic}
+table.ref{width:100%;border-collapse:collapse;margin:14px 0;background:var(--panel);font-size:15.5px}
+table.ref th{background:var(--navy);color:#fff;text-align:left;padding:8px 10px}
+table.ref td{border:1px solid var(--border);padding:8px 10px;vertical-align:top}
+.level{background:var(--purple-light);border-left:4px solid var(--purple);border-radius:8px;padding:12px 16px;margin:14px 0}
+.level>strong:first-child{display:block;margin-bottom:2px;color:var(--navy)}
+
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/foundations-p02-data-types-practice.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<header class="hero">
+ <div class="hero-inner">
+  <div class="eyebrow">Cambridge Pseudocode · Foundations · Topic 2 · Practice</div>
+  <h1>Data Types, Variables &amp; Constants: Practice</h1>
+  <p class="lede">Choose data types, spot badly written values, work with constants, then fix and write programs in Pseudocode Pro.</p>
+  <div class="syl-toggle"><span class="syl-lbl">My course:</span><button type="button" class="syl-btn" data-syl="igcse">IGCSE 0478</button><button type="button" class="syl-btn" data-syl="as">AS 9618</button></div>
+  <div class="progress-row">
+   <div class="progress"><div class="progress-fill" id="progFill"></div></div>
+   <span class="progress-text" id="progText">0 of 16 checkable questions correct</span>
+   <button class="reset-btn" type="button" id="resetBtn">Reset</button>
+  </div>
+ </div>
+</header>
+
+<div class="layout">
+ <nav class="toc" id="toc">
+  <h2>Sections</h2>
+  <a href="#secA">A Choose the data type</a>
+  <a href="#secB">B Correct or incorrect?</a>
+  <a href="#secC">C Constants</a>
+  <a href="#secD">D Pseudocode Pro tasks</a>
+  <a href="#secE">E Exam-style questions</a>
+ </nav>
+
+ <article>
+  <details class="toc-mobile">
+   <summary>Sections</summary>
+   <a href="#secA">A Choose the data type</a>
+   <a href="#secB">B Correct or incorrect?</a>
+   <a href="#secC">C Constants</a>
+   <a href="#secD">D Pseudocode Pro tasks</a>
+   <a href="#secE">E Exam-style questions</a>
+  </details>
+
+  <!-- A -->
+  <section id="secA">
+   <div class="section-kicker">A</div>
+   <h2 class="sec">Choose the data type</h2>
+   <p class="intro">Choose the most appropriate data type for each data item. See <a href="explainer.html#types">section 02 of the explainer</a>.</p>
+   <div class="q"><div class="q-head">A1. The number of people on a bus</div>
+    <div class="pills" data-q="a1"><button class="pill" type="button" data-opt="INTEGER">INTEGER</button><button class="pill" type="button" data-opt="REAL">REAL</button><button class="pill" type="button" data-opt="CHAR">CHAR</button><button class="pill" type="button" data-opt="STRING">STRING</button><button class="pill" type="button" data-opt="BOOLEAN">BOOLEAN</button></div><div class="feedback" id="fb-a1"></div></div>
+   <div class="q"><div class="q-head">A2. The average daily temperature</div>
+    <div class="pills" data-q="a2"><button class="pill" type="button" data-opt="INTEGER">INTEGER</button><button class="pill" type="button" data-opt="REAL">REAL</button><button class="pill" type="button" data-opt="CHAR">CHAR</button><button class="pill" type="button" data-opt="STRING">STRING</button><button class="pill" type="button" data-opt="BOOLEAN">BOOLEAN</button></div><div class="feedback" id="fb-a2"></div></div>
+   <div class="q"><div class="q-head">A3. Whether a door is locked</div>
+    <div class="pills" data-q="a3"><button class="pill" type="button" data-opt="INTEGER">INTEGER</button><button class="pill" type="button" data-opt="REAL">REAL</button><button class="pill" type="button" data-opt="CHAR">CHAR</button><button class="pill" type="button" data-opt="STRING">STRING</button><button class="pill" type="button" data-opt="BOOLEAN">BOOLEAN</button></div><div class="feedback" id="fb-a3"></div></div>
+   <div class="q"><div class="q-head">A4. A product code such as <code>AX-2041</code></div>
+    <div class="pills" data-q="a4"><button class="pill" type="button" data-opt="INTEGER">INTEGER</button><button class="pill" type="button" data-opt="REAL">REAL</button><button class="pill" type="button" data-opt="CHAR">CHAR</button><button class="pill" type="button" data-opt="STRING">STRING</button><button class="pill" type="button" data-opt="BOOLEAN">BOOLEAN</button></div><div class="feedback" id="fb-a4"></div></div>
+   <div class="q"><div class="q-head">A5. A mobile phone number such as <code>0812345678</code></div>
+    <div class="pills" data-q="a5"><button class="pill" type="button" data-opt="INTEGER">INTEGER</button><button class="pill" type="button" data-opt="REAL">REAL</button><button class="pill" type="button" data-opt="CHAR">CHAR</button><button class="pill" type="button" data-opt="STRING">STRING</button><button class="pill" type="button" data-opt="BOOLEAN">BOOLEAN</button></div><div class="feedback" id="fb-a5"></div></div>
+   <div class="q"><div class="q-head">A6. A student’s answer to a multiple-choice question: A, B, C or D</div>
+    <div class="pills" data-q="a6"><button class="pill" type="button" data-opt="INTEGER">INTEGER</button><button class="pill" type="button" data-opt="REAL">REAL</button><button class="pill" type="button" data-opt="CHAR">CHAR</button><button class="pill" type="button" data-opt="STRING">STRING</button><button class="pill" type="button" data-opt="BOOLEAN">BOOLEAN</button></div><div class="feedback" id="fb-a6"></div></div>
+   
+  </section>
+
+  <!-- B -->
+  <section id="secB">
+   <div class="section-kicker">B</div>
+   <h2 class="sec">Correct or incorrect?</h2>
+   <p class="intro">Each variable below has been declared with the type shown. Is the assignment written correctly?</p>
+   <div class="q"><div class="q-head">B1. <code>DECLARE Price : REAL</code></div>
+    <div class="code-wrap"><pre>Price ← .75</pre></div>
+    <div class="pills" data-q="b1"><button class="pill" type="button" data-opt="ok">Correct</button><button class="pill" type="button" data-opt="x">Incorrect</button></div><div class="feedback" id="fb-b1"></div></div>
+   <div class="q"><div class="q-head">B2. <code>DECLARE Initial : CHAR</code></div>
+    <div class="code-wrap"><pre>Initial ← "J"</pre></div>
+    <div class="pills" data-q="b2"><button class="pill" type="button" data-opt="ok">Correct</button><button class="pill" type="button" data-opt="x">Incorrect</button></div><div class="feedback" id="fb-b2"></div></div>
+   <div class="q"><div class="q-head">B3. <code>DECLARE Nickname : STRING</code></div>
+    <div class="code-wrap"><pre>Nickname ← ""</pre></div>
+    <div class="pills" data-q="b3"><button class="pill" type="button" data-opt="ok">Correct</button><button class="pill" type="button" data-opt="x">Incorrect</button></div><div class="feedback" id="fb-b3"></div></div>
+   <div class="q"><div class="q-head">B4. <code>DECLARE Passed : BOOLEAN</code></div>
+    <div class="code-wrap"><pre>Passed ← "TRUE"</pre></div>
+    <div class="pills" data-q="b4"><button class="pill" type="button" data-opt="ok">Correct</button><button class="pill" type="button" data-opt="x">Incorrect</button></div><div class="feedback" id="fb-b4"></div></div>
+   <div class="q"><div class="q-head">B5. <code>DECLARE LowestFloor : INTEGER</code></div>
+    <div class="code-wrap"><pre>LowestFloor ← -3</pre></div>
+    <div class="pills" data-q="b5"><button class="pill" type="button" data-opt="ok">Correct</button><button class="pill" type="button" data-opt="x">Incorrect</button></div><div class="feedback" id="fb-b5"></div></div>
+   
+  </section>
+
+  <!-- C -->
+  <section id="secC">
+   <div class="section-kicker">C</div>
+   <h2 class="sec">Constants</h2>
+   <p class="intro">Use the switch at the top to show constants in your course’s form.</p>
+
+   <div class="q"><div class="q-head">C1. Which of these can <em>not</em> be the value of a constant?</div>
+    <div class="pills" data-q="c1">
+     <button class="pill" type="button" data-opt="a">3.142</button>
+     <button class="pill" type="button" data-opt="b">"N/A"</button>
+     <button class="pill" type="button" data-opt="c">'Y'</button>
+     <button class="pill" type="button" data-opt="d">Radius * 2</button>
+    </div><div class="feedback" id="fb-c1"></div></div>
+
+   <div class="q"><div class="q-head">C2. What is output?<span class="marks">[1]</span></div>
+    <div class="code-wrap"><div class="code-label"><span>pseudocode</span><span class="syl-label"></span></div>
+<pre>CONSTANT Bonus <span class="c-op">←</span> 50
+DECLARE Score : INTEGER
+Score ← 120
+Score ← Score + Bonus
+OUTPUT Score</pre></div>
+    <div class="check-row"><input type="text" id="in-c2" autocomplete="off" spellcheck="false"><button class="btn" type="button" data-check="c2">Check</button></div>
+    <div class="feedback" id="fb-c2"></div></div>
+
+   <div class="q"><div class="q-head">C3. A game declares <code>CONSTANT MaxLives <span class="c-op">←</span> 3</code>. Later it contains the line <code>MaxLives ← MaxLives - 1</code>. What happens?</div>
+    <div class="pills" data-q="c3">
+     <button class="pill" type="button" data-opt="a">MaxLives becomes 2</button>
+     <button class="pill" type="button" data-opt="b">It is an error: a constant can’t be changed</button>
+     <button class="pill" type="button" data-opt="c">MaxLives becomes 0</button>
+     <button class="pill" type="button" data-opt="d">Nothing: the line is ignored</button>
+    </div><div class="feedback" id="fb-c3"></div></div>
+  </section>
+
+  <!-- D -->
+  <section id="secD">
+   <div class="section-kicker">D</div>
+   <h2 class="sec">Pseudocode Pro tasks</h2>
+   <p class="intro">Open <a href="https://pseudocode.pro/editor" target="_blank" rel="noopener">pseudocode.pro/editor</a> in a new tab. Set its <em>Syllabus</em> menu to your course, and set the switch at the top of this page to match, so the starter code runs.</p>
+
+   <div class="q task"><span class="task-tag">Task D1 · Debugging</span>
+    <div class="q-head">Fix the student record<span class="marks">checkable</span></div>
+    <p>This program contains <strong>three</strong> mistakes with data types and literals. Paste it into the editor and fix it until it runs with no errors. Read every line: one mistake breaks the Cambridge rules even if the editor happens to accept it.</p>
+    <div class="code-wrap"><div class="code-label"><span>buggy code</span><button class="copy-btn" type="button" data-copy="code-d1">Copy</button></div>
+<pre id="code-d1">DECLARE StudentName : STRING
+DECLARE Age : INTEGER
+DECLARE Height : REAL
+DECLARE Initial : CHAR
+StudentName ← Sam
+Age ← "15"
+Height ← 1.62
+Initial ← "S"
+OUTPUT StudentName, " is ", Age, " years old and ", Height, "m tall"</pre></div>
+    <p><strong>What does your fixed program output?</strong></p>
+    <div class="check-row"><input type="text" id="in-d1" autocomplete="off" spellcheck="false"><button class="btn" type="button" data-check="d1">Check</button></div>
+    <div class="feedback" id="fb-d1"></div>
+    <details class="model"><summary>Show the three mistakes</summary>
+     <ul>
+      <li><code>StudentName ← Sam</code>: a STRING literal needs double quotes, <code>"Sam"</code>. Without them, Sam looks like an undeclared variable.</li>
+      <li><code>Age ← "15"</code>: the quotes make it a STRING; an INTEGER needs <code>15</code>.</li>
+      <li><code>Initial ← "S"</code>: a CHAR literal uses single quotes, <code>'S'</code>.</li>
+     </ul>
+    </details>
+   </div>
+
+   <div class="q task"><span class="task-tag">Task D2 · Constants</span>
+    <div class="q-head">The online shop<span class="marks">checkable</span></div>
+    <ol class="do">
+     <li>Copy the starter code into the editor. Complete the missing line so that <code>TotalCost</code> is the cost of the items plus the delivery charge. Run it.</li>
+     <li>The shop raises its delivery charge to 6.0. Change <strong>one line</strong> so the program uses the new charge, and run it again.</li>
+     <li>Finally, add the line <code>DeliveryCharge ← 1.0</code> just before the OUTPUT line and run it. Read the error message: this is the constant protecting itself. Delete the line again.</li>
+    </ol>
+    <div class="code-wrap"><div class="code-label"><span>starter code</span><button class="copy-btn" type="button" data-copy="code-d2">Copy</button></div>
+<pre id="code-d2">CONSTANT DeliveryCharge <span class="c-op">←</span> 4.5
+DECLARE ItemPrice : REAL
+DECLARE Quantity : INTEGER
+DECLARE TotalCost : REAL
+ItemPrice ← 12.5
+Quantity ← 3
+// complete this line: TotalCost ← ...
+
+OUTPUT "Total: ", TotalCost</pre></div>
+    <p><strong>What did your program output in step 1, with the original delivery charge?</strong></p>
+    <div class="check-row"><input type="text" id="in-d2" autocomplete="off" spellcheck="false"><button class="btn" type="button" data-check="d2">Check</button></div>
+    <div class="feedback" id="fb-d2"></div>
+    <details class="model"><summary>Show a model solution</summary>
+     <div class="code-wrap"><div class="code-label"><span>pseudocode</span></div>
+<pre>TotalCost ← ItemPrice * Quantity + DeliveryCharge</pre></div>
+     <p>12.5 × 3 = 37.5, plus 4.5 = 42. For step 2, only the CONSTANT line changes, and the total becomes 43.5. That is the point of a constant: one place to update.</p>
+    </details>
+   </div>
+
+   <div class="q task"><span class="task-tag">Task D3 · Extension</span>
+    <div class="q-head">Write your own: a library book</div>
+    <p>Write a program from scratch that stores details of a library book and outputs them. It must include:</p>
+    <ul>
+     <li>a constant <code>LoanDays</code> with the value 14;</li>
+     <li>variables for the title (STRING), number of pages (INTEGER), price (REAL), shelf letter (CHAR) and whether it is on loan (BOOLEAN);</li>
+     <li>an OUTPUT line for the title, number of pages, price and shelf letter, and one for the loan period.</li>
+    </ul>
+    <details class="model"><summary>Show a model solution</summary>
+     <div class="code-wrap"><div class="code-label"><span>pseudocode</span><span class="syl-label"></span></div>
+<pre>// Stores and displays details of a library book
+CONSTANT LoanDays <span class="c-op">←</span> 14
+DECLARE Title : STRING
+DECLARE Pages : INTEGER
+DECLARE Price : REAL
+DECLARE Shelf : CHAR
+DECLARE OnLoan : BOOLEAN
+Title ← "The Hidden Code"
+Pages ← 320
+Price ← 9.99
+Shelf ← 'K'
+OnLoan ← FALSE
+OUTPUT Title, ": ", Pages, " pages, price ", Price, ", shelf ", Shelf
+OUTPUT "Loan period: ", LoanDays, " days"</pre></div>
+    </details>
+   </div>
+  </section>
+
+  <!-- E -->
+  <section id="secE">
+   <div class="section-kicker">E</div>
+   <h2 class="sec">Exam-style questions</h2>
+   <p class="intro">Write your answer first, then reveal the mark scheme and mark yourself honestly.</p>
+
+   <div class="q"><div class="q-head">E1. A program stores details about books in a shop. State the most appropriate data type for each item.<span class="marks">[4]</span></div>
+    <table class="ref">
+     <tr><th>Data item</th><th>Example value</th></tr>
+     <tr><td>Number of copies in stock</td><td>12</td></tr>
+     <tr><td>Selling price</td><td>7.99</td></tr>
+     <tr><td>Whether the book is a bestseller</td><td>TRUE</td></tr>
+     <tr><td>ISBN</td><td>978-0-14-103614-4</td></tr>
+    </table>
+    <textarea id="ta-e1" placeholder="Your answers…"></textarea>
+    <details class="model"><summary>Show mark scheme</summary>
+     <p>One mark each: INTEGER; REAL; BOOLEAN; STRING (it contains hyphens and is never used in calculations).</p>
+    </details>
+   </div>
+
+   <div class="q"><div class="q-head">E2. A program calculates the tax on a sale. Explain why the tax rate should be stored as a constant rather than a variable.<span class="marks">[2]</span></div>
+    <textarea id="ta-e2" placeholder="Your answer…"></textarea>
+    <details class="model"><summary>Show mark scheme</summary>
+     <p>Any two points, one mark each:</p>
+     <ul>
+      <li>The tax rate does not change while the program is running.</li>
+      <li>It cannot be changed accidentally by another part of the program.</li>
+      <li>If the rate changes in future, it only needs updating in one place.</li>
+      <li>The name makes the code easier to read than a number on its own.</li>
+     </ul>
+    </details>
+   </div>
+
+   <div class="q"><div class="q-head">E3. Write pseudocode to declare: a constant <code>MaxPlayers</code> with the value 4; a variable <code>PlayerName</code> to store a player’s name; a variable <code>HighScore</code> to store a whole-number score.<span class="marks">[3]</span></div>
+    <textarea id="ta-e3" placeholder="Your pseudocode…"></textarea>
+    <details class="model"><summary>Show mark scheme</summary>
+     <div class="code-wrap"><div class="code-label"><span>model answer</span><span class="syl-label"></span></div>
+<pre>CONSTANT MaxPlayers <span class="c-op">←</span> 4
+DECLARE PlayerName : STRING
+DECLARE HighScore : INTEGER</pre></div>
+     <p>One mark per line. The constant uses your course’s form: <code>←</code> for IGCSE, <code>=</code> for AS.</p>
+    </details>
+   </div>
+  </section>
+
+  <footer class="lesson-foot">
+   <a href="explainer.html">← Back to the explainer</a>
+   <a href="../p03-input-output/explainer.html">Next: Input &amp; output →</a>
+  </footer>
+ </article>
+</div>
+
+<script>
+/* ---------- Syllabus switch (constant syntax) ---------- */
+var SYL_KEY = "cp-syllabus";
+var syllabus = "igcse";
+try { syllabus = window.localStorage.getItem(SYL_KEY) || "igcse"; } catch(e) {}
+function sylApply(){
+  var spans = document.getElementsByTagName("span");
+  for(var i=0;i<spans.length;i++){
+    if((" " + spans[i].className + " ").indexOf(" c-op ") !== -1){ spans[i].textContent = (syllabus === "as") ? "=" : "←"; }
+    if((" " + spans[i].className + " ").indexOf(" syl-label ") !== -1){ spans[i].textContent = (syllabus === "as") ? "AS form" : "IGCSE form"; }
+  }
+  var btns = document.getElementsByTagName("button");
+  for(var b=0;b<btns.length;b++){
+    var s = btns[b].getAttribute("data-syl");
+    if(s){ btns[b].className = "syl-btn" + (s === syllabus ? " on" : ""); }
+  }
+}
+(function(){
+  var btns = document.getElementsByTagName("button");
+  for(var b=0;b<btns.length;b++){
+    if(btns[b].getAttribute("data-syl")){
+      btns[b].onclick = function(){
+        syllabus = this.getAttribute("data-syl");
+        try { window.localStorage.setItem(SYL_KEY, syllabus); } catch(e) {}
+        sylApply();
+      };
+    }
+  }
+  sylApply();
+})();
+
+var STORAGE_KEY = "pseudo-datatypes-practice-v1";
+var ANSWERS = {
+  a1:{type:"mcq", correct:"INTEGER", ok:"Correct. You count whole people.", no:"Not quite. Can you have part of a person?"},
+  a2:{type:"mcq", correct:"REAL", ok:"Correct. Temperatures can have a fractional part, e.g. 31.5.", no:"Not quite. An average temperature can be something like 31.5."},
+  a3:{type:"mcq", correct:"BOOLEAN", ok:"Correct. It is either locked or not.", no:"Not quite. There are only two possible answers."},
+  a4:{type:"mcq", correct:"STRING", ok:"Correct. It mixes letters, digits and a hyphen.", no:"Not quite. It contains letters and a hyphen."},
+  a5:{type:"mcq", correct:"STRING", ok:"Correct. It is never used in arithmetic, and an INTEGER would lose the leading zero.", no:"Not quite. Would you ever add two phone numbers together? What happens to the leading 0?"},
+  a6:{type:"mcq", correct:"CHAR", ok:"Correct. Exactly one character.", no:"Not quite. The answer is always exactly one letter."},
+  b1:{type:"mcq", correct:"x", ok:"Correct. A REAL needs a digit before the decimal point: 0.75.", no:"Not quite. Look at the left of the decimal point."},
+  b2:{type:"mcq", correct:"x", ok:"Correct. A CHAR literal uses single quotes: 'J'.", no:"Not quite. Check which quotes a CHAR uses."},
+  b3:{type:"mcq", correct:"ok", ok:"Correct. \"\" is the empty string, a valid STRING.", no:"Not quite. A STRING can contain zero characters."},
+  b4:{type:"mcq", correct:"x", ok:"Correct. The quotes make it a STRING. Write TRUE without quotes.", no:"Not quite. What do the quotes do?"},
+  b5:{type:"mcq", correct:"ok", ok:"Correct. -3 is a valid INTEGER.", no:"Not quite. Integers can be negative."},
+  c1:{type:"mcq", correct:"d", ok:"Correct. A constant’s value must be a literal, never an expression.", no:"Not quite. Three of these are literals. Which one is a calculation?"},
+  c2:{type:"text", accept:["170"], ok:"Correct. 120 + 50 = 170.", no:"Not quite. Score starts at 120, then the Bonus constant is added."},
+  c3:{type:"mcq", correct:"b", ok:"Correct. Assigning to a constant is an error.", no:"Not quite. What is the one thing a constant must never do?"},
+  d1:{type:"text", accept:["sam is 15 years old and 1.62m tall"], ok:"Correct. All three mistakes fixed.", no:"Not quite. Fix all three mistakes, run it, and type the whole output line."},
+  d2:{type:"text", accept:["total: 42","total: 42.0","total: 42.00"], ok:"Correct. 12.5 × 3 + 4.5 = 42.", no:"Not quite. Work out ItemPrice × Quantity, then add DeliveryCharge. Type the whole output line."}
+};
+var CHECKABLE_IDS = ["a1","a2","a3","a4","a5","a6","b1","b2","b3","b4","b5","c1","c2","c3","d1","d2"];
+
+var state = {};
+function load(){ try{ var s = window.localStorage.getItem(STORAGE_KEY); state = s ? JSON.parse(s) : {}; }catch(e){ state = {}; } }
+function save(){ try{ window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){} }
+
+function norm(s){
+  s = String(s).replace(/^\s+|\s+$/g,"").replace(/\s+/g," ").toLowerCase();
+  if(s.length >= 2 && (s.charAt(0) === '"' || s.charAt(0) === "'") && s.charAt(s.length-1) === s.charAt(0)){ s = s.substring(1, s.length-1); }
+  return s;
+}
+
+function updateProgress(){
+  var n = 0;
+  for(var i=0;i<CHECKABLE_IDS.length;i++){ if(state[CHECKABLE_IDS[i]] && state[CHECKABLE_IDS[i]].correct){ n++; } }
+  document.getElementById("progFill").style.width = (100 * n / CHECKABLE_IDS.length) + "%";
+  document.getElementById("progText").innerHTML = n + " of " + CHECKABLE_IDS.length + " checkable questions correct";
+}
+
+function showFeedback(id, correct){
+  var fb = document.getElementById("fb-" + id);
+  fb.className = "feedback " + (correct ? "ok" : "no");
+  fb.innerHTML = (correct ? "✓ " : "✗ ") + (correct ? ANSWERS[id].ok : ANSWERS[id].no);
+}
+
+/* MCQ */
+function paintPills(group, chosen){
+  var id = group.getAttribute("data-q");
+  var pills = group.getElementsByTagName("button");
+  for(var i=0;i<pills.length;i++){
+    var opt = pills[i].getAttribute("data-opt");
+    pills[i].className = "pill";
+    if(opt === chosen){ pills[i].className = "pill " + (opt === ANSWERS[id].correct ? "right" : "wrong"); }
+  }
+}
+var groups = [];
+var divs = document.getElementsByTagName("div");
+for(var d=0; d<divs.length; d++){ if(divs[d].className === "pills" && divs[d].getAttribute("data-q")){ groups.push(divs[d]); } }
+for(var g=0; g<groups.length; g++){
+  (function(group){
+    var id = group.getAttribute("data-q");
+    var pills = group.getElementsByTagName("button");
+    for(var p=0;p<pills.length;p++){
+      pills[p].onclick = function(){
+        var opt = this.getAttribute("data-opt");
+        var correct = (opt === ANSWERS[id].correct);
+        state[id] = {answer:opt, correct:correct};
+        paintPills(group, opt); showFeedback(id, correct); save(); updateProgress();
+      };
+    }
+  })(groups[g]);
+}
+
+/* Text checks */
+function checkText(id){
+  var val = document.getElementById("in-" + id).value;
+  var n = norm(val);
+  var correct = false;
+  for(var i=0;i<ANSWERS[id].accept.length;i++){ if(n === ANSWERS[id].accept[i]){ correct = true; } }
+  state[id] = {answer:val, correct:correct};
+  showFeedback(id, correct); save(); updateProgress();
+}
+var allButtons = document.getElementsByTagName("button");
+for(var b=0;b<allButtons.length;b++){
+  if(allButtons[b].getAttribute("data-check")){
+    allButtons[b].onclick = function(){ checkText(this.getAttribute("data-check")); };
+  }
+  if(allButtons[b].getAttribute("data-copy")){
+    allButtons[b].onclick = function(){ copyCode(this); };
+  }
+}
+var inputs = document.getElementsByTagName("input");
+for(var k=0;k<inputs.length;k++){
+  if(inputs[k].id && inputs[k].id.indexOf("in-") === 0){
+    inputs[k].onkeydown = function(e){ e = e || window.event; if(e.keyCode === 13){ checkText(this.id.substring(3)); } };
+  }
+}
+
+/* Textareas persist too */
+var tas = document.getElementsByTagName("textarea");
+for(var t=0;t<tas.length;t++){
+  tas[t].oninput = function(){ state[this.id] = {text:this.value}; save(); };
+}
+
+/* Copy buttons */
+function copyCode(btn){
+  var text = document.getElementById(btn.getAttribute("data-copy")).textContent;
+  function done(){ btn.innerHTML = "Copied ✓"; setTimeout(function(){ btn.innerHTML = "Copy"; }, 1600); }
+  function fallback(){
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); done(); }catch(e){ btn.innerHTML = "Select & copy manually"; }
+    document.body.removeChild(ta);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done, fallback);
+  } else { fallback(); }
+}
+
+/* Restore */
+function restore(){
+  for(var g2=0; g2<groups.length; g2++){
+    var id = groups[g2].getAttribute("data-q");
+    if(state[id]){ paintPills(groups[g2], state[id].answer); showFeedback(id, state[id].correct); }
+  }
+  for(var i=0;i<CHECKABLE_IDS.length;i++){
+    var cid = CHECKABLE_IDS[i];
+    var inp = document.getElementById("in-" + cid);
+    if(inp && state[cid]){ inp.value = state[cid].answer; showFeedback(cid, state[cid].correct); }
+  }
+  for(var t2=0;t2<tas.length;t2++){ if(state[tas[t2].id]){ tas[t2].value = state[tas[t2].id].text; } }
+  updateProgress();
+}
+
+document.getElementById("resetBtn").onclick = function(){
+  if(!window.confirm("Clear all your answers on this page?")){ return; }
+  state = {}; save();
+  for(var g3=0; g3<groups.length; g3++){ paintPills(groups[g3], null); }
+  for(var i=0;i<CHECKABLE_IDS.length;i++){
+    var f = document.getElementById("fb-" + CHECKABLE_IDS[i]); f.innerHTML = ""; f.className = "feedback";
+    var inp = document.getElementById("in-" + CHECKABLE_IDS[i]); if(inp){ inp.value = ""; }
+  }
+  for(var t3=0;t3<tas.length;t3++){ tas[t3].value = ""; }
+  updateProgress();
+};
+
+load(); restore();
+
+/* TOC scroll-spy */
+(function(){
+  var links = document.getElementById("toc").getElementsByTagName("a");
+  function spy(){
+    var current = null;
+    for(var i=0;i<links.length;i++){
+      var sec = document.getElementById(links[i].getAttribute("href").substring(1));
+      if(sec && sec.getBoundingClientRect().top < 140){ current = i; }
+    }
+    for(var j=0;j<links.length;j++){ links[j].className = (j === current) ? "active" : ""; }
+  }
+  window.addEventListener("scroll", spy);
+  spy();
+})();
+
+</script>
+</body>
+</html>

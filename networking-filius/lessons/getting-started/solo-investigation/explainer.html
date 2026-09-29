@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "getting-started/solo-investigation";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Session 1: Solo Investigation";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Session 1: Solo Investigation — Networking Lab Sequence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:'Source Sans 3',Arial,sans-serif; line-height:1.6}
+  header{background:var(--navy); color:#fff; padding:40px 24px 48px}
+  .eyebrow{font-size:14px; letter-spacing:1.5px; text-transform:uppercase; color:#8fd8d0; font-weight:600; max-width:900px; margin:0 auto}
+  h1{font-family:'Source Serif 4',Georgia,serif; font-size:38px; margin:10px auto 8px; max-width:900px}
+  .lede{max-width:900px; margin:0 auto; color:#c7ccdc; font-size:18px}
+  .layout{display:flex; max-width:1100px; margin:0 auto; gap:40px; padding:32px 24px 80px; align-items:flex-start}
+  nav.toc{position:sticky; top:24px; width:220px; flex-shrink:0; font-size:14px}
+  nav.toc a{display:block; color:var(--muted); text-decoration:none; padding:6px 0; border-left:3px solid transparent}
+  nav.toc a.active, nav.toc a:hover{color:var(--navy); border-left-color:var(--teal); padding-left:10px}
+  article{max-width:740px}
+  .section-kicker{display:inline-block; background:var(--teal); color:#fff; font-size:12px; font-weight:700; padding:3px 10px; border-radius:4px; margin-bottom:8px}
+  h2{font-family:'Source Serif 4',Georgia,serif; font-size:28px; color:var(--navy); margin-top:52px}
+  h3{font-size:19px; color:var(--navy); margin-top:28px}
+  p{font-size:17px}
+  .tip, .warn{border-radius:8px; padding:18px 20px; margin:20px 0; font-size:16px}
+  .tip{background:var(--teal-light); border-left:4px solid var(--teal)}
+  .warn{background:var(--amber-light); border-left:4px solid var(--amber)}
+  .tip strong:first-child, .warn strong:first-child{display:block; margin-bottom:4px}
+  code, .code-inline{font-family:'JetBrains Mono',monospace; background:var(--panel-alt); padding:2px 6px; border-radius:4px; font-size:15px}
+  .code-block{background:var(--navy-deep); color:#e3e8ff; border-radius:8px; overflow:hidden; margin:20px 0}
+  .code-label{background:#0b1330; color:#8fa0d8; font-size:12px; font-weight:600; padding:8px 16px; font-family:'JetBrains Mono',monospace; letter-spacing:0.5px}
+  .code-block pre{margin:0; padding:18px 20px; font-family:'JetBrains Mono',monospace; font-size:14.5px; overflow-x:auto; line-height:1.7}
+  table{width:100%; border-collapse:collapse; margin:20px 0; font-size:15.5px}
+  th, td{padding:10px 14px; border:1px solid var(--border); text-align:left}
+  th{background:var(--navy); color:#fff}
+  tr:nth-child(even) td{background:var(--panel-alt)}
+  .playground{background:var(--navy-deep); border-radius:10px; padding:24px; margin:24px 0; color:#e3e8ff}
+  .playground h3{color:#8fd8d0; margin-top:0}
+  .field-btn{font-family:'JetBrains Mono',monospace; background:#1c2b5c; color:#e3e8ff; border:1px solid #33447f; border-radius:6px; padding:8px 12px; margin:4px 6px 4px 0; cursor:pointer; font-size:14px}
+  .field-btn:hover, .field-btn.active{background:var(--teal); border-color:var(--teal); color:#00251f}
+  .field-explain{margin-top:16px; background:#0b1330; border-radius:8px; padding:16px 18px; font-size:15px; min-height:24px; color:#c7ccdc}
+  footer{background:var(--navy-deep); color:#c7ccdc; padding:28px 24px; text-align:center; font-size:14px}
+  footer a{color:#8fd8d0}
+  details.toc-mobile{display:none}
+  @media (max-width:900px){
+    .layout{flex-direction:column}
+    nav.toc{display:none}
+    details.toc-mobile{display:block; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:12px 16px; margin-bottom:24px; max-width:740px}
+    details.toc-mobile a{display:block; padding:6px 0; color:var(--navy); text-decoration:none}
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+</div>
+
+<header>
+  <p class="eyebrow">Y12 AS Computer Science (9618) &middot; Networking Lab Sequence</p>
+  <h1>Session 1: Solo Investigation</h1>
+  <p class="lede">Before we connect two machines together, let's find out what your own machine is already telling you.</p>
+</header>
+
+<div class="layout">
+  <nav class="toc" id="toc">
+    <a href="#s1">01 &middot; What is an IP address?</a>
+    <a href="#s2">02 &middot; The NIC</a>
+    <a href="#s3">03 &middot; Reading ipconfig /all</a>
+    <a href="#s4">04 &middot; ping and ARP</a>
+    <a href="#s5">05 &middot; Static vs dynamic</a>
+    <a href="#s6">06 &middot; Practical lab steps</a>
+  </nav>
+
+  <article>
+    <details class="toc-mobile"><summary>Contents</summary>
+      <a href="#s1">01 What is an IP address?</a>
+      <a href="#s2">02 The NIC</a>
+      <a href="#s3">03 Reading ipconfig /all</a>
+      <a href="#s4">04 ping and ARP</a>
+      <a href="#s5">05 Static vs dynamic</a>
+      <a href="#s6">06 Practical lab steps</a>
+    </details>
+
+    <section id="s1">
+      <span class="section-kicker">01</span>
+      <h2>What is an IP address?</h2>
+      <p>An <strong>IP address</strong> is a numerical label assigned to a device on a network. It does two jobs: it identifies the device, and it gives other devices somewhere to send data back to.</p>
+      <div class="tip"><strong>Real-world analogy</strong>An IP address works like a postal address — it doesn't describe <em>who</em> you are, only <em>where</em> to find you on the network right now.</div>
+      <p>IPv4 addresses (the kind you'll see today) are written as four numbers separated by dots — e.g. <code>192.168.1.14</code> — each number between 0 and 255.</p>
+    </section>
+
+    <section id="s2">
+      <span class="section-kicker">02</span>
+      <h2>The Network Interface Card (NIC)</h2>
+      <p>The <strong>NIC</strong> is the piece of hardware — built into your laptop or added as a separate card — that actually connects a device to a network. Every NIC has a unique <strong>physical (MAC) address</strong> burned in at manufacture, which is different from the IP address it's assigned.</p>
+      <table>
+        <tr><th>&nbsp;</th><th>IP address</th><th>MAC address</th></tr>
+        <tr><td><strong>Assigned by</strong></td><td>A network (can change)</td><td>The manufacturer (fixed)</td></tr>
+        <tr><td><strong>Format</strong></td><td>192.168.1.14</td><td>3C:E9:F7:1A:0B:22</td></tr>
+        <tr><td><strong>Purpose</strong></td><td>Where you are on <em>this</em> network</td><td>Which physical device this is</td></tr>
+      </table>
+    </section>
+
+    <section id="s3">
+      <span class="section-kicker">03</span>
+      <h2>Reading ipconfig /all</h2>
+      <p>Open Command Prompt and run:</p>
+      <div class="code-block"><div class="code-label">CMD</div><pre>C:\&gt; ipconfig /all</pre></div>
+      <p>Click each field below to see what it means:</p>
+      <div class="playground">
+        <h3>ipconfig /all — click a field</h3>
+        <div id="fieldButtons">
+          <button class="field-btn" data-field="ipv4">IPv4 Address</button>
+          <button class="field-btn" data-field="mask">Subnet Mask</button>
+          <button class="field-btn" data-field="gateway">Default Gateway</button>
+          <button class="field-btn" data-field="mac">Physical Address</button>
+          <button class="field-btn" data-field="dhcp">DHCP Enabled</button>
+        </div>
+        <div class="field-explain" id="fieldExplain">Click a field above to see its explanation here.</div>
+      </div>
+    </section>
+
+    <section id="s4">
+      <span class="section-kicker">04</span>
+      <h2>ping and ARP</h2>
+      <p><code>ping</code> sends a small test message to another device and waits for a reply — a quick way to check whether two devices can reach each other.</p>
+      <div class="code-block"><div class="code-label">CMD</div><pre>C:\&gt; ping 192.168.1.22
+
+Reply from 192.168.1.22: bytes=32 time&lt;1ms TTL=128
+Reply from 192.168.1.22: bytes=32 time&lt;1ms TTL=128</pre></div>
+      <p>Before your device can send that ping, it needs to know the destination's <strong>MAC address</strong> — that's what ARP (Address Resolution Protocol) resolves. Run <code>arp -a</code> before and after a ping and you'll see a new entry appear.</p>
+      <div class="warn"><strong>Watch for this</strong>An empty ARP table doesn't mean nothing is connected — it means your device simply hasn't needed to talk to that device yet.</div>
+    </section>
+
+    <section id="s5">
+      <span class="section-kicker">05</span>
+      <h2>Static vs dynamic addressing</h2>
+      <table>
+        <tr><th>&nbsp;</th><th>Static</th><th>Dynamic</th></tr>
+        <tr><td><strong>Assigned by</strong></td><td>A network admin, manually</td><td>A DHCP server, automatically</td></tr>
+        <tr><td><strong>Changes?</strong></td><td>No — fixed</td><td>Can change over time</td></tr>
+        <tr><td><strong>Typical use</strong></td><td>Servers, printers, routers</td><td>Everyday client devices</td></tr>
+      </table>
+      <p>We'll come back to this properly in Session 12 when we build a full DHCP setup — for now, just recognise that both exist and why a server usually gets the fixed option.</p>
+    </section>
+
+    <section id="s6">
+      <span class="section-kicker">06</span>
+      <h2>Practical lab steps</h2>
+      <ol>
+        <li>Run <code>ipconfig</code> on your own machine — note the IPv4 address, subnet mask, default gateway, and physical (MAC) address.</li>
+        <li>Run <code>ipconfig /all</code> for full adapter detail.</li>
+        <li>Pair up, exchange IP addresses, and <code>ping</code> your partner's machine.</li>
+        <li>Run <code>arp -a</code> before and after the ping — what changed?</li>
+        <li>Find the same settings via Windows Settings &gt; Network &amp; Internet.</li>
+        <li>Watch the demo: configuring a static IP address via the GUI.</li>
+      </ol>
+      <div class="tip"><strong>Next up</strong>Head to the practice page to complete the checkable questions and the independent annotation task.</div>
+    </section>
+  </article>
+</div>
+
+<footer>
+  Session 1 of 16 &middot; Networking Lab Sequence &middot; <a href="networking-s1-solo-investigation-practice.html">Go to practice questions →</a>
+</footer>
+
+<script>
+(function(){
+  var explanations = {
+    ipv4: "Your device's own address on this network — the number other devices use to send data to you.",
+    mask: "Defines which part of the IP address is the 'network' portion and which part identifies your device within it.",
+    gateway: "The address of the router your device sends traffic to when the destination isn't on your local network.",
+    mac: "The NIC's fixed physical address, unique to that piece of hardware — different from the IP address.",
+    dhcp: "Shows whether this address was assigned automatically (Enabled) or set manually as a static address."
+  };
+  var buttons = document.querySelectorAll('.field-btn');
+  var out = document.getElementById('fieldExplain');
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener('click', function(){
+      for (var j = 0; j < buttons.length; j++) { buttons[j].classList.remove('active'); }
+      this.classList.add('active');
+      out.textContent = explanations[this.getAttribute('data-field')];
+    });
+  }
+
+  var links = document.querySelectorAll('nav.toc a');
+  var sections = document.querySelectorAll('article section');
+  function onScroll(){
+    var pos = window.scrollY + 120;
+    var current = null;
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].offsetTop <= pos) { current = sections[i].id; }
+    }
+    for (var j = 0; j < links.length; j++) {
+      links[j].classList.toggle('active', links[j].getAttribute('href') === '#' + current);
+    }
+  }
+  window.addEventListener('scroll', onScroll);
+  onScroll();
+})();
+</script>
+</body>
+</html>

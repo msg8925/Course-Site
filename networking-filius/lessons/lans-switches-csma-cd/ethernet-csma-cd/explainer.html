@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "lans-switches-csma-cd/ethernet-csma-cd";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Session 4: Ethernet & CSMA/CD";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Session 4: Ethernet & CSMA/CD — Networking Lab Sequence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:'Source Sans 3',Arial,sans-serif; line-height:1.6}
+  header{background:var(--navy); color:#fff; padding:40px 24px 48px}
+  .eyebrow{font-size:14px; letter-spacing:1.5px; text-transform:uppercase; color:#8fd8d0; font-weight:600; max-width:900px; margin:0 auto}
+  h1{font-family:'Source Serif 4',Georgia,serif; font-size:38px; margin:10px auto 8px; max-width:900px}
+  .lede{max-width:900px; margin:0 auto; color:#c7ccdc; font-size:18px}
+  .layout{display:flex; max-width:1100px; margin:0 auto; gap:40px; padding:32px 24px 80px; align-items:flex-start}
+  nav.toc{position:sticky; top:24px; width:220px; flex-shrink:0; font-size:14px}
+  nav.toc a{display:block; color:var(--muted); text-decoration:none; padding:6px 0; border-left:3px solid transparent}
+  nav.toc a.active, nav.toc a:hover{color:var(--navy); border-left-color:var(--teal); padding-left:10px}
+  article{max-width:740px}
+  .section-kicker{display:inline-block; background:var(--teal); color:#fff; font-size:12px; font-weight:700; padding:3px 10px; border-radius:4px; margin-bottom:8px}
+  h2{font-family:'Source Serif 4',Georgia,serif; font-size:28px; color:var(--navy); margin-top:52px}
+  h3{font-size:19px; color:var(--navy); margin-top:28px}
+  p{font-size:17px}
+  .tip, .warn{border-radius:8px; padding:18px 20px; margin:20px 0; font-size:16px}
+  .tip{background:var(--teal-light); border-left:4px solid var(--teal)}
+  .warn{background:var(--amber-light); border-left:4px solid var(--amber)}
+  .tip strong:first-child, .warn strong:first-child{display:block; margin-bottom:4px}
+  code, .code-inline{font-family:'JetBrains Mono',monospace; background:var(--panel-alt); padding:2px 6px; border-radius:4px; font-size:15px}
+  .stage-row{display:flex; gap:14px; margin:20px 0; flex-wrap:wrap}
+  .stage-card{flex:1; min-width:140px; border-radius:10px; padding:18px 16px; color:#fff}
+  .stage-card .num{font-size:12px; font-weight:700; letter-spacing:1px; opacity:0.85; margin:0 0 6px}
+  .stage-card p.desc{font-size:14.5px; margin:0; color:#fff}
+  table{width:100%; border-collapse:collapse; margin:20px 0; font-size:15.5px}
+  th, td{padding:10px 14px; border:1px solid var(--border); text-align:left}
+  th{background:var(--navy); color:#fff}
+  tr:nth-child(even) td{background:var(--panel-alt)}
+  .playground{background:var(--navy-deep); border-radius:10px; padding:24px; margin:24px 0; color:#e3e8ff}
+  .playground h3{color:#8fd8d0; margin-top:0}
+  .sim-btn{font-family:'JetBrains Mono',monospace; background:#1c2b5c; color:#e3e8ff; border:1px solid #33447f; border-radius:6px; padding:10px 18px; margin:0 8px 0 0; cursor:pointer; font-size:14px}
+  .sim-btn:hover{background:var(--teal); border-color:var(--teal); color:#00251f}
+  .sim-cable{margin-top:20px; height:10px; background:#33447f; border-radius:5px; position:relative}
+  .sim-device{display:inline-block; width:90px; text-align:center; font-size:13px; color:#c7ccdc; margin-right:8px}
+  .sim-devices{display:flex; justify-content:space-between; margin-top:12px}
+  #simLog{margin-top:16px; background:#0b1330; border-radius:8px; padding:16px 18px; font-size:15px; min-height:28px; color:#c7ccdc}
+  footer{background:var(--navy-deep); color:#c7ccdc; padding:28px 24px; text-align:center; font-size:14px}
+  footer a{color:#8fd8d0}
+  details.toc-mobile{display:none}
+  @media (max-width:900px){
+    .layout{flex-direction:column}
+    nav.toc{display:none}
+    details.toc-mobile{display:block; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:12px 16px; margin-bottom:24px; max-width:740px}
+    details.toc-mobile a{display:block; padding:6px 0; color:var(--navy); text-decoration:none}
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+</div>
+
+<header>
+  <p class="eyebrow">Y12 AS Computer Science (9618) &middot; Networking Lab Sequence</p>
+  <h1>Session 4: Ethernet &amp; CSMA/CD</h1>
+  <p class="lede">What happens when two devices try to talk on the same cable at once.</p>
+</header>
+
+<div class="layout">
+  <nav class="toc" id="toc">
+    <a href="#s1">01 &middot; What is Ethernet?</a>
+    <a href="#s2">02 &middot; CSMA/CD, stage by stage</a>
+    <a href="#s3">03 &middot; Simulate a collision</a>
+    <a href="#s4">04 &middot; The role-play</a>
+  </nav>
+
+  <article>
+    <details class="toc-mobile"><summary>Contents</summary>
+      <a href="#s1">01 What is Ethernet?</a>
+      <a href="#s2">02 CSMA/CD, stage by stage</a>
+      <a href="#s3">03 Simulate a collision</a>
+      <a href="#s4">04 The role-play</a>
+    </details>
+
+    <section id="s1">
+      <span class="section-kicker">01</span>
+      <h2>What is Ethernet?</h2>
+      <p><strong>Ethernet</strong> is the dominant LAN standard. It defines how devices frame and address data for transmission — and, critically, how devices sharing one physical cable take turns without constantly talking over each other.</p>
+      <div class="tip"><strong>Why this matters</strong>Modern switched networks (like the one you built in Session 3) have far fewer collisions than the old shared-cable networks Ethernet was originally designed for — but the underlying rules are still worth understanding.</div>
+    </section>
+
+    <section id="s2">
+      <span class="section-kicker">02</span>
+      <h2>CSMA/CD, stage by stage</h2>
+      <p><strong>CSMA/CD</strong> stands for Carrier Sense Multiple Access with Collision Detection. It's the set of rules that let multiple devices share one cable.</p>
+      <div class="stage-row">
+        <div class="stage-card" style="background:#1B2B5E"><p class="num">1 &middot; CARRIER SENSE</p><p class="desc">Listen to the cable before sending anything.</p></div>
+        <div class="stage-card" style="background:#1B2B5E"><p class="num">2 &middot; MULTIPLE ACCESS</p><p class="desc">Many devices share the same cable — nobody owns it.</p></div>
+        <div class="stage-card" style="background:#a4342a"><p class="num">3 &middot; COLLISION DETECTION</p><p class="desc">Two devices sent at once — both detect the clash.</p></div>
+        <div class="stage-card" style="background:#0D9488"><p class="num">4 &middot; RANDOM BACKOFF</p><p class="desc">Both wait a random short time, then try again.</p></div>
+      </div>
+    </section>
+
+    <section id="s3">
+      <span class="section-kicker">03</span>
+      <h2>Simulate a collision</h2>
+      <p>Four devices share one cable. Click "Run round" a few times and watch what happens when two devices happen to send at the same moment.</p>
+      <div class="playground">
+        <h3>Shared cable simulator</h3>
+        <div class="sim-devices">
+          <span class="sim-device">Device A</span>
+          <span class="sim-device">Device B</span>
+          <span class="sim-device">Device C</span>
+          <span class="sim-device">Device D</span>
+        </div>
+        <div class="sim-cable"></div>
+        <button class="sim-btn" id="runRound">Run round</button>
+        <button class="sim-btn" id="resetSim">Reset</button>
+        <div id="simLog">Click "Run round" to simulate devices trying to send.</div>
+      </div>
+      <div class="warn"><strong>Watch for this</strong>The more devices sharing one cable, the more often collisions happen — this is exactly why switches (which give each device its own dedicated link) are such an improvement.</div>
+    </section>
+
+    <section id="s4">
+      <span class="section-kicker">04</span>
+      <h2>The role-play</h2>
+      <ol>
+        <li>5&ndash;6 students represent devices on a shared "cable" (a length of string or a marked line on the floor).</li>
+        <li>Each holds a card with a message to "send"; check whether anyone else is already sending before you do.</li>
+        <li>A simultaneous send is a collision — both students stop, roll a die, wait that many seconds, then retry.</li>
+        <li>Repeat with more "devices" and watch collisions become more frequent.</li>
+      </ol>
+      <div class="tip"><strong>Next up</strong>Head to the practice page to complete the checkable questions and the independent step-by-step task.</div>
+    </section>
+  </article>
+</div>
+
+<footer>
+  Session 4 of 16 &middot; Networking Lab Sequence &middot; <a href="networking-s4-ethernet-csma-cd-practice.html">Go to practice questions →</a>
+</footer>
+
+<script>
+(function(){
+  var round = 0;
+  var log = document.getElementById("simLog");
+
+  function runRound(){
+    round = round + 1;
+    var devices = ["Device A", "Device B", "Device C", "Device D"];
+    var numSending = 1 + Math.floor(Math.random() * 3);
+    var senders = [];
+    var pool = devices.slice();
+    for (var i = 0; i < numSending; i++) {
+      var idx = Math.floor(Math.random() * pool.length);
+      senders.push(pool[idx]);
+      pool.splice(idx, 1);
+    }
+    var html = "<p><b>Round " + round + ":</b> " + senders.join(" and ") + " tried to send.</p>";
+    if (senders.length > 1) {
+      var backoff = 1 + Math.floor(Math.random() * 6);
+      html += "<p style=\"color:#f5c8c3\">Collision detected! Both stop, wait " + backoff + " second(s), then retry.</p>";
+    } else {
+      html += "<p style=\"color:#8fd8d0\">No collision — the cable was free, so the send succeeded.</p>";
+    }
+    log.innerHTML = html;
+  }
+
+  document.getElementById("runRound").addEventListener("click", runRound);
+  document.getElementById("resetSim").addEventListener("click", function(){
+    round = 0;
+    log.textContent = "Click \"Run round\" to simulate devices trying to send.";
+  });
+
+  var links = document.querySelectorAll('nav.toc a');
+  var sections = document.querySelectorAll('article section');
+  function onScroll(){
+    var pos = window.scrollY + 120;
+    var current = null;
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].offsetTop <= pos) { current = sections[i].id; }
+    }
+    for (var j = 0; j < links.length; j++) {
+      links[j].classList.toggle('active', links[j].getAttribute('href') === '#' + current);
+    }
+  }
+  window.addEventListener('scroll', onScroll);
+  onScroll();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "lans-switches-csma-cd/client-server-architecture";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Session 6 Practical Worksheet: Client-Server Architecture";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Session 6 Practical Worksheet: Client-Server Architecture &mdash; Networking Lab Sequence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:'Source Sans 3',Arial,sans-serif; line-height:1.6}
+  header{background:var(--navy); color:#fff; padding:40px 24px 30px}
+  .eyebrow{font-size:14px; letter-spacing:1.5px; text-transform:uppercase; color:#8fd8d0; font-weight:600; max-width:900px; margin:0 auto}
+  h1{font-family:'Source Serif 4',Georgia,serif; font-size:34px; margin:10px auto 8px; max-width:900px}
+  .lede{max-width:900px; margin:0 auto; color:#c7ccdc; font-size:17px}
+  .save-line{max-width:900px; margin:14px auto 0; display:flex; align-items:center; gap:14px; font-size:13px; color:#9db3e0}
+  .save-line #saveStatus{color:#8fd8d0; font-weight:600}
+  .save-line button{background:transparent; border:1px solid #33447f; color:#c7ccdc; border-radius:6px; padding:6px 14px; font-size:13px; cursor:pointer; font-family:'Source Sans 3',Arial,sans-serif}
+  .save-line button:hover{background:#1c2b5c}
+  .layout{display:flex; max-width:1100px; margin:0 auto; gap:40px; padding:32px 24px 80px; align-items:flex-start}
+  nav.toc{position:sticky; top:24px; width:220px; flex-shrink:0; font-size:14px}
+  nav.toc a{display:block; color:var(--muted); text-decoration:none; padding:6px 0; border-left:3px solid transparent}
+  nav.toc a.active, nav.toc a:hover{color:var(--navy); border-left-color:var(--teal); padding-left:10px}
+  article{max-width:740px; width:100%}
+  .section-kicker{display:inline-block; background:var(--teal); color:#fff; font-size:12px; font-weight:700; padding:3px 10px; border-radius:4px; margin-bottom:8px}
+  h2{font-family:'Source Serif 4',Georgia,serif; font-size:26px; color:var(--navy); margin-top:52px}
+  h3{font-size:18px; color:var(--navy); margin-top:24px}
+  p{font-size:16.5px}
+  .tip, .warn{border-radius:8px; padding:18px 20px; margin:20px 0; font-size:16px}
+  .tip{background:var(--teal-light); border-left:4px solid var(--teal)}
+  .warn{background:var(--amber-light); border-left:4px solid var(--amber)}
+  .tip strong:first-child, .warn strong:first-child{display:block; margin-bottom:4px}
+  code, .code-inline{font-family:'JetBrains Mono',monospace; background:var(--panel-alt); padding:2px 6px; border-radius:4px; font-size:15px}
+  table{width:100%; border-collapse:collapse; margin:14px 0; font-size:15.5px}
+  th, td{padding:10px 14px; border:1px solid var(--border); text-align:left; vertical-align:top}
+  th{background:var(--navy); color:#fff}
+  tr:nth-child(even) td{background:var(--panel-alt)}
+  .field-block{margin:16px 0 28px}
+  .field-block .q{font-weight:600; color:var(--navy); margin-bottom:8px; display:block}
+  .field-block input[type=text], .field-block textarea{
+    width:100%; border:1px solid var(--border); border-radius:6px; padding:10px 12px;
+    font-family:'Source Sans 3',Arial,sans-serif; font-size:15.5px; color:var(--text); background:#fff;
+  }
+  .field-block textarea{resize:vertical; min-height:70px}
+  .field-block input[type=text]:focus, .field-block textarea:focus, table input:focus{outline:2px solid var(--teal); outline-offset:1px}
+  table input[type=text]{width:100%; border:none; background:transparent; font-size:15.5px; font-family:'Source Sans 3',Arial,sans-serif; color:var(--text); padding:2px}
+  .two-col{display:flex; gap:16px; flex-wrap:wrap; margin:14px 0}
+  .two-col .field-block{flex:1; min-width:220px; margin:0}
+  .name-strip{max-width:900px; margin:18px auto 0; color:#c7ccdc; font-size:14px; display:flex; gap:28px; flex-wrap:wrap}
+  .name-strip input{background:rgba(255,255,255,0.08); border:1px solid #33447f; border-radius:6px; color:#fff; padding:5px 10px; font-size:14px; font-family:'Source Sans 3',Arial,sans-serif}
+  footer{background:var(--navy-deep); color:#c7ccdc; padding:28px 24px; text-align:center; font-size:14px}
+  footer a{color:#8fd8d0}
+  details.toc-mobile{display:none}
+  @media (max-width:900px){
+    .layout{flex-direction:column}
+    nav.toc{display:none}
+    details.toc-mobile{display:block; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:12px 16px; margin-bottom:24px; max-width:740px}
+    details.toc-mobile a{display:block; padding:6px 0; color:var(--navy); text-decoration:none}
+  }
+  @media print {
+    nav.toc, .save-line, footer, .toc-mobile { display:none !important; }
+    header{background:#fff !important; color:#000 !important}
+    header h1, .eyebrow{color:#000 !important}
+    .lede{color:#333 !important}
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+</div>
+
+<header>
+  <p class="eyebrow">Networking Lab Sequence &middot; Session 6</p>
+  <h1>Session 6 Practical Worksheet</h1>
+  <p class="lede">Client-Server Architecture &mdash; work through this alongside your Filius build. </p>
+  <div class="name-strip">
+    <label>Name <input type="text" data-save="student-name" placeholder="Your name"></label>
+    <label>Class <input type="text" data-save="student-class" placeholder="Class"></label>
+  </div>
+  <div class="save-line">
+    <span id="saveStatus">Your answers save automatically in this browser</span>
+    <button id="printBtn">Print / save as PDF</button>
+    <button id="resetBtn">Clear worksheet</button>
+  </div>
+</header>
+
+<div class="layout">
+  <details class="toc-mobile">
+    <summary>Contents</summary>
+        <a href="#partA">Build the setup</a>
+        <a href="#partB">Inspect the exchange</a>
+        <a href="#partC">Server offline</a>
+        <a href="#partD">Independent task</a>
+        <a href="#stretch">Stretch task</a>
+  </details>
+  <nav class="toc" id="toc">
+      <a href="#partA">Build the setup</a>
+      <a href="#partB">Inspect the exchange</a>
+      <a href="#partC">Server offline</a>
+      <a href="#partD">Independent task</a>
+      <a href="#stretch">Stretch task</a>
+  </nav>
+  <article>
+    <section id="partA">
+      <div class="section-kicker">PART A</div>
+      <h2>Build the client-server setup</h2>
+      
+      <p>Reuse your Session 5 switched network. Configure one node as a web server and keep the others as clients. Send an HTTP request from a client to the server.</p>
+      
+    </section>
+    <section id="partB">
+      <div class="section-kicker">PART B</div>
+      <h2>Inspect the exchange</h2>
+      
+      <div class="field-block"><span class="q">Slow the simulation speed right down and step through the packet exchange. What are the two main things you can identify — one from the client, one from the server?</span><textarea data-save="s6-q1" rows="3" placeholder=""></textarea></div>
+    </section>
+    <section id="partC">
+      <div class="section-kicker">PART C</div>
+      <h2>Take the server offline</h2>
+      
+      <div class="field-block"><span class="q">Take the server offline and have a client try to send its request again. What happens? Which disadvantage of client-server does this demonstrate?</span><textarea data-save="s6-q2" rows="3" placeholder=""></textarea></div>
+    </section>
+    <section id="partD">
+      <div class="section-kicker">PART D</div>
+      <h2>Independent task: comparison table</h2>
+      
+      <p>Complete the table below, comparing client-server and peer-to-peer models.</p>
+      <table>
+        <tr><th></th><th>Client-server</th><th>Peer-to-peer</th></tr>
+        <tr><td>Control</td><td><input type="text" data-save="s6-cs-control"></td><td><input type="text" data-save="s6-p2p-control"></td></tr>
+        <tr><td>Cost</td><td><input type="text" data-save="s6-cs-cost"></td><td><input type="text" data-save="s6-p2p-cost"></td></tr>
+        <tr><td>Fault tolerance</td><td><input type="text" data-save="s6-cs-fault"></td><td><input type="text" data-save="s6-p2p-fault"></td></tr>
+        <tr><td>Real-world example</td><td><input type="text" data-save="s6-cs-example"></td><td><input type="text" data-save="s6-p2p-example"></td></tr>
+      </table>
+      
+    </section>
+    <section id="stretch">
+      <div class="section-kicker">STRETCH</div>
+      <h2>Stretch task</h2>
+      
+      <div class="tip"><strong>Optional challenge</strong>Some real systems combine both models &mdash; for example, using a central server just to help devices find each other, but then transferring the actual data directly, peer-to-peer. Can you think of a system that might work this way, and why this hybrid approach could be useful?</div>
+      <div class="field-block"><textarea data-save="s6-stretch" rows="3" placeholder=""></textarea></div>
+    </section>
+  </article>
+</div>
+
+<footer>
+  Session 6 of 16 &middot; Networking Lab Sequence &middot; <a href="explainer.html">&larr; Back to explainer</a>
+</footer>
+
+<script>
+(function(){
+  var STORAGE_KEY = "networking-practical-s6-client-server-architecture";
+  function load(){ try { return JSON.parse(window.localStorage.getItem(STORAGE_KEY)) || {}; } catch (e) { return {}; } }
+  function save(data){ try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e) {} }
+  var data = load();
+  var fields = document.querySelectorAll("[data-save]");
+  for (var i = 0; i < fields.length; i++) {
+    (function(el){
+      var key = el.getAttribute("data-save");
+      if (data[key] !== undefined) { el.value = data[key]; }
+      el.addEventListener("input", function(){
+        data[key] = el.value;
+        save(data);
+        var st = document.getElementById("saveStatus");
+        if (st) { st.textContent = "Saved just now"; }
+      });
+    })(fields[i]);
+  }
+  var resetBtn = document.getElementById("resetBtn");
+  if (resetBtn) {
+    resetBtn.addEventListener("click", function(){
+      if (!window.confirm("Clear all your answers on this worksheet? This can't be undone.")) return;
+      data = {};
+      save(data);
+      for (var i = 0; i < fields.length; i++) { fields[i].value = ""; }
+      var st = document.getElementById("saveStatus");
+      if (st) { st.textContent = "Cleared"; }
+    });
+  }
+  var printBtn = document.getElementById("printBtn");
+  if (printBtn) {
+    printBtn.addEventListener("click", function(){ window.print(); });
+  }
+
+  // scroll-spy for TOC
+  var navLinks = document.querySelectorAll("nav.toc a");
+  var sections = document.querySelectorAll("article section[id]");
+  function onScroll(){
+    var y = window.scrollY + 120;
+    var current = null;
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].offsetTop <= y) { current = sections[i].id; }
+    }
+    for (var i = 0; i < navLinks.length; i++) {
+      navLinks[i].classList.toggle("active", navLinks[i].getAttribute("href") === "#" + current);
+    }
+  }
+  window.addEventListener("scroll", onScroll);
+  onScroll();
+})();
+</script>
+
+</body>
+</html>

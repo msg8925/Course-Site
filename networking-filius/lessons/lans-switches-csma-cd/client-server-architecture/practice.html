@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "lans-switches-csma-cd/client-server-architecture";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Session 6 Practice: Client-Server Architecture";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Session 6 Practice — Client-Server Architecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --amber:#a8560c; --amber-light:#fbeee0; --red:#a4342a; --red-light:#fbeae8;
+    --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8; --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:'Source Sans 3',Arial,sans-serif; line-height:1.6}
+  header{background:var(--navy); color:#fff; padding:32px 24px}
+  .eyebrow{font-size:14px; letter-spacing:1.5px; text-transform:uppercase; color:#8fd8d0; font-weight:600; max-width:900px; margin:0 auto}
+  h1{font-family:'Source Serif 4',Georgia,serif; font-size:32px; margin:8px auto 16px; max-width:900px}
+  .progress-wrap{max-width:900px; margin:0 auto; display:flex; align-items:center; gap:16px}
+  .progress-bar{flex:1; height:10px; background:#33447f; border-radius:6px; overflow:hidden}
+  .progress-fill{height:100%; background:var(--teal); width:0%; transition:width .3s}
+  #resetBtn{background:transparent; border:1px solid #5ec9bd; color:#8fd8d0; padding:6px 14px; border-radius:6px; cursor:pointer; font-size:13px}
+  .layout{display:flex; max-width:1100px; margin:0 auto; gap:40px; padding:32px 24px 80px; align-items:flex-start}
+  nav.toc{position:sticky; top:24px; width:220px; flex-shrink:0; font-size:14px}
+  nav.toc a{display:block; color:var(--muted); text-decoration:none; padding:6px 0; border-left:3px solid transparent}
+  nav.toc a:hover{color:var(--navy); border-left-color:var(--teal); padding-left:10px}
+  article{max-width:740px}
+  .section-kicker{display:inline-block; background:var(--teal); color:#fff; font-size:12px; font-weight:700; padding:3px 10px; border-radius:4px; margin-bottom:8px}
+  h2{font-family:'Source Serif 4',Georgia,serif; font-size:26px; color:var(--navy); margin-top:48px}
+  .q{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:22px 24px; margin:18px 0}
+  .q p.prompt{font-weight:600; margin-top:0}
+  input.text-check{font-family:'JetBrains Mono',monospace; padding:8px 10px; border:1px solid var(--border); border-radius:6px; font-size:15px; width:280px}
+  button.check-btn{background:var(--teal); color:#fff; border:none; padding:8px 16px; border-radius:6px; cursor:pointer; font-size:14px; margin-left:8px}
+  .feedback{margin-top:10px; font-size:15px; font-weight:600}
+  .feedback.correct{color:var(--teal)}
+  .feedback.incorrect{color:var(--red)}
+  .pill{display:inline-block; background:var(--panel-alt); border:1px solid var(--border); padding:8px 16px; border-radius:20px; margin:4px 6px 4px 0; cursor:pointer; font-size:15px}
+  .pill.correct{background:var(--teal); color:#fff; border-color:var(--teal)}
+  .pill.wrong{background:var(--red-light); border-color:var(--red); color:var(--red)}
+  textarea{width:100%; min-height:90px; font-family:'Source Sans 3',Arial,sans-serif; font-size:15px; padding:10px; border:1px solid var(--border); border-radius:6px}
+  details.reveal{margin-top:12px}
+  details.reveal summary{cursor:pointer; color:var(--navy); font-weight:600; font-size:14px}
+  details.reveal .model{background:var(--teal-light); border-radius:8px; padding:14px 16px; margin-top:8px; font-size:15px}
+  footer{background:var(--navy-deep); color:#c7ccdc; padding:28px 24px; text-align:center; font-size:14px}
+  footer a{color:#8fd8d0}
+  details.toc-mobile{display:none}
+  @media (max-width:900px){
+    .layout{flex-direction:column}
+    nav.toc{display:none}
+    details.toc-mobile{display:block; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:12px 16px; margin-bottom:24px; max-width:740px}
+    details.toc-mobile a{display:block; padding:6px 0; color:var(--navy); text-decoration:none}
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+</div>
+
+<header>
+  <p class="eyebrow">Y12 AS Computer Science (9618) &middot; Networking Lab Sequence</p>
+  <h1>Session 6 Practice: Client-Server Architecture</h1>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span id="progressText" style="font-size:13px; color:#c7ccdc">0 / 12 checked</span>
+    <button id="resetBtn">Reset</button>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="toc">
+    <a href="#a">A &middot; The model</a>
+    <a href="#b">B &middot; Advantages/disadvantages</a>
+    <a href="#c">C &middot; Comparing to P2P</a>
+    <a href="#d">D &middot; The lab</a>
+    <a href="#e">E &middot; Exam-style</a>
+  </nav>
+
+  <article>
+    <details class="toc-mobile"><summary>Contents</summary>
+      <a href="#a">A The model</a>
+      <a href="#b">B Advantages/disadvantages</a>
+      <a href="#c">C Comparing to P2P</a>
+      <a href="#d">D The lab</a>
+      <a href="#e">E Exam-style</a>
+    </details>
+
+    <section id="a">
+      <span class="section-kicker">A</span>
+      <h2>The client-server model</h2>
+
+      <div class="q">
+        <p class="prompt">1. In client-server, what does the server do?</p>
+        <div class="pill-group" data-qid="q1" data-answer="Provides a service that clients request">
+          <span class="pill" data-value="Provides a service that clients request">Provides a service that clients request</span>
+          <span class="pill" data-value="Requests services from clients">Requests services from clients</span>
+          <span class="pill" data-value="Acts as both client and server equally">Acts as both client and server equally</span>
+        </div>
+      </div>
+
+      <div class="q">
+        <p class="prompt">2. Give two real-world examples of client-server applications.</p>
+        <textarea data-qid="q2" placeholder="Type your answer..."></textarea>
+        <details class="reveal"><summary>Reveal model answer</summary>
+          <div class="model">Web browsing (browser as client, web server as server) and email (email client, mail server).</div>
+        </details>
+      </div>
+    </section>
+
+    <section id="b">
+      <span class="section-kicker">B</span>
+      <h2>Advantages and disadvantages</h2>
+
+      <div class="q">
+        <p class="prompt">3. Give one advantage of client-server over P2P.</p>
+        <input type="text" class="text-check" data-qid="q3" data-answer="centralised control" placeholder="Type your answer">
+        <button class="check-btn" data-check="q3">Check</button>
+        <div class="feedback" id="fb-q3"></div>
+      </div>
+
+      <div class="q">
+        <p class="prompt">4. What is the main disadvantage of relying on a single server?</p>
+        <div class="pill-group" data-qid="q4" data-answer="It's a single point of failure">
+          <span class="pill" data-value="It's harder to secure">It's harder to secure</span>
+          <span class="pill" data-value="It's a single point of failure">It's a single point of failure</span>
+          <span class="pill" data-value="It requires more client devices">It requires more client devices</span>
+        </div>
+      </div>
+
+      <div class="q">
+        <p class="prompt">5. Explain why centralised control makes backups easier in a client-server system.</p>
+        <textarea data-qid="q5" placeholder="Type your answer..."></textarea>
+        <details class="reveal"><summary>Reveal model answer</summary>
+          <div class="model">All the important data lives in one known location (the server), so it can be backed up from a single point, rather than needing to gather copies scattered across many independent devices.</div>
+        </details>
+      </div>
+    </section>
+
+    <section id="c">
+      <span class="section-kicker">C</span>
+      <h2>Comparing to P2P</h2>
+
+      <div class="q">
+        <p class="prompt">6. Which model gives distributed rather than centralised control?</p>
+        <div class="pill-group" data-qid="q6" data-answer="Peer-to-peer">
+          <span class="pill" data-value="Client-server">Client-server</span>
+          <span class="pill" data-value="Peer-to-peer">Peer-to-peer</span>
+        </div>
+      </div>
+
+      <div class="q">
+        <p class="prompt">7. Compare fault tolerance between client-server and P2P.</p>
+        <textarea data-qid="q7" placeholder="Type your answer..."></textarea>
+        <details class="reveal"><summary>Reveal model answer</summary>
+          <div class="model">Client-server has a single point of failure — if the server goes down, nobody can access the service. P2P has no single point of failure for the data itself, since multiple nodes can hold copies.</div>
+        </details>
+      </div>
+
+      <div class="q">
+        <p class="prompt">8. Give one scenario better suited to P2P than client-server.</p>
+        <textarea data-qid="q8" placeholder="Type your answer..."></textarea>
+        <details class="reveal"><summary>Reveal model answer</summary>
+          <div class="model">Sharing large files directly between devices without needing to maintain and pay for a dedicated central server (e.g. distributing a large public file to many users).</div>
+        </details>
+      </div>
+    </section>
+
+    <section id="d">
+      <span class="section-kicker">D</span>
+      <h2>The lab</h2>
+
+      <div class="q">
+        <p class="prompt">9. In the lab, what did you send from the client to the server?</p>
+        <input type="text" class="text-check" data-qid="q9" data-answer="http request" placeholder="Type your answer">
+        <button class="check-btn" data-check="q9">Check</button>
+        <div class="feedback" id="fb-q9"></div>
+      </div>
+
+      <div class="q">
+        <p class="prompt">10. What happened when the client tried to request from the server after it was taken offline?</p>
+        <div class="pill-group" data-qid="q10" data-answer="The request failed">
+          <span class="pill" data-value="The request failed">The request failed</span>
+          <span class="pill" data-value="Another client automatically responded">Another client automatically responded</span>
+          <span class="pill" data-value="Nothing changed">Nothing changed</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="e">
+      <span class="section-kicker">E</span>
+      <h2>Exam-style question</h2>
+
+      <div class="q">
+        <p class="prompt">11. A company is choosing between a client-server system and a P2P system for internal document sharing. Explain one advantage and one disadvantage of each, and recommend an approach.</p>
+        <textarea data-qid="q11" placeholder="Type your answer..." style="min-height:130px"></textarea>
+        <details class="reveal"><summary>Reveal model answer</summary>
+          <div class="model">Client-server advantage: centralised control makes access permissions, backups, and version control straightforward. Client-server disadvantage: if the server fails, nobody can access any documents until it's restored. P2P advantage: no reliance on one central machine staying online. P2P disadvantage: harder to enforce consistent access control and ensure everyone has the latest version. For a company needing reliable, controlled access to shared documents, client-server is usually more appropriate, provided the server is properly maintained and backed up.</div>
+        </details>
+      </div>
+
+      <div class="q">
+        <p class="prompt">12. Explain why the disadvantage demonstrated in the lab (server offline, client request fails) does not apply in the same way to a P2P network.</p>
+        <textarea data-qid="q12" placeholder="Type your answer..." style="min-height:110px"></textarea>
+        <details class="reveal"><summary>Reveal model answer</summary>
+          <div class="model">In client-server, only one machine (the server) can fulfil requests, so its failure blocks everyone. In P2P, any node that holds the relevant data can respond to a request, so one node going offline doesn't necessarily prevent others from getting what they need — as long as the data has spread to more than one node.</div>
+        </details>
+      </div>
+    </section>
+  </article>
+</div>
+
+<footer>
+  Session 6 of 16 &middot; Networking Lab Sequence &middot; <a href="explainer.html">&larr; Back to explainer</a>
+</footer>
+
+<script>
+(function(){
+  var STORAGE_KEY = "netlab-s6-client-server-architecture-progress";
+  var CHECKABLE_IDS = ["q1","q2","q3","q4","q5","q6","q7","q8","q9","q10","q11","q12"];
+
+  function loadProgress(){
+    try { return JSON.parse(window.localStorage.getItem(STORAGE_KEY)) || {}; }
+    catch (e) { return {}; }
+  }
+  function saveProgress(p){
+    try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); } catch (e) {}
+  }
+  var progress = loadProgress();
+
+  function updateProgressBar(){
+    var done = 0;
+    for (var i = 0; i < CHECKABLE_IDS.length; i++) { if (progress[CHECKABLE_IDS[i]]) { done++; } }
+    var pct = Math.round((done / CHECKABLE_IDS.length) * 100);
+    document.getElementById("progressFill").style.width = pct + "%";
+    document.getElementById("progressText").textContent = done + " / " + CHECKABLE_IDS.length + " checked";
+  }
+
+  function markDone(qid){
+    progress[qid] = true;
+    saveProgress(progress);
+    updateProgressBar();
+  }
+
+  var groups = document.querySelectorAll(".pill-group");
+  for (var g = 0; g < groups.length; g++) {
+    (function(group){
+      var qid = group.getAttribute("data-qid");
+      var answer = group.getAttribute("data-answer");
+      var pills = group.querySelectorAll(".pill");
+      for (var p = 0; p < pills.length; p++) {
+        pills[p].addEventListener("click", function(){
+          var value = this.getAttribute("data-value");
+          for (var k = 0; k < pills.length; k++) {
+            pills[k].classList.remove("correct", "wrong");
+          }
+          if (value === answer) {
+            this.classList.add("correct");
+          } else {
+            this.classList.add("wrong");
+            for (var m = 0; m < pills.length; m++) {
+              if (pills[m].getAttribute("data-value") === answer) { pills[m].classList.add("correct"); }
+            }
+          }
+          markDone(qid);
+        });
+      }
+      if (progress[qid]) {
+        for (var q = 0; q < pills.length; q++) {
+          if (pills[q].getAttribute("data-value") === answer) { pills[q].classList.add("correct"); }
+        }
+      }
+    })(groups[g]);
+  }
+
+  var checkButtons = document.querySelectorAll("[data-check]");
+  for (var c = 0; c < checkButtons.length; c++) {
+    checkButtons[c].addEventListener("click", function(){
+      var qid = this.getAttribute("data-check");
+      var input = document.querySelector('input[data-qid="' + qid + '"]');
+      var answer = input.getAttribute("data-answer");
+      var fb = document.getElementById("fb-" + qid);
+      var given = input.value.trim().toLowerCase().replace(/\s+/g, " ");
+      var expected = answer.toLowerCase().replace(/\s+/g, " ");
+      if (given === expected) {
+        fb.textContent = "Correct.";
+        fb.className = "feedback correct";
+      } else {
+        fb.textContent = "Not quite — expected: " + answer;
+        fb.className = "feedback incorrect";
+      }
+      markDone(qid);
+    });
+  }
+
+  var textareas = document.querySelectorAll("textarea[data-qid]");
+  for (var t = 0; t < textareas.length; t++) {
+    textareas[t].addEventListener("blur", function(){
+      if (this.value.trim().length > 0) { markDone(this.getAttribute("data-qid")); }
+    });
+  }
+
+  document.getElementById("resetBtn").addEventListener("click", function(){
+    progress = {};
+    saveProgress(progress);
+    updateProgressBar();
+    var pills = document.querySelectorAll(".pill");
+    for (var i = 0; i < pills.length; i++) { pills[i].classList.remove("correct", "wrong"); }
+    var inputs = document.querySelectorAll("input.text-check");
+    for (var j = 0; j < inputs.length; j++) { inputs[j].value = ""; }
+    var feedbacks = document.querySelectorAll(".feedback");
+    for (var k = 0; k < feedbacks.length; k++) { feedbacks[k].textContent = ""; }
+    var areas = document.querySelectorAll("textarea");
+    for (var m = 0; m < areas.length; m++) { areas[m].value = ""; }
+  });
+
+  updateProgressBar();
+})();
+</script>
+</body>
+</html>

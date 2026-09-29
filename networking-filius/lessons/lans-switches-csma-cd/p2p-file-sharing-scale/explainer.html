@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "lans-switches-csma-cd/p2p-file-sharing-scale";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Session 5: P2P File Sharing at Scale";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Session 5: P2P File Sharing at Scale — Networking Lab Sequence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:'Source Sans 3',Arial,sans-serif; line-height:1.6}
+  header{background:var(--navy); color:#fff; padding:40px 24px 48px}
+  .eyebrow{font-size:14px; letter-spacing:1.5px; text-transform:uppercase; color:#8fd8d0; font-weight:600; max-width:900px; margin:0 auto}
+  h1{font-family:'Source Serif 4',Georgia,serif; font-size:38px; margin:10px auto 8px; max-width:900px}
+  .lede{max-width:900px; margin:0 auto; color:#c7ccdc; font-size:18px}
+  .layout{display:flex; max-width:1100px; margin:0 auto; gap:40px; padding:32px 24px 80px; align-items:flex-start}
+  nav.toc{position:sticky; top:24px; width:220px; flex-shrink:0; font-size:14px}
+  nav.toc a{display:block; color:var(--muted); text-decoration:none; padding:6px 0; border-left:3px solid transparent}
+  nav.toc a.active, nav.toc a:hover{color:var(--navy); border-left-color:var(--teal); padding-left:10px}
+  article{max-width:740px}
+  .section-kicker{display:inline-block; background:var(--teal); color:#fff; font-size:12px; font-weight:700; padding:3px 10px; border-radius:4px; margin-bottom:8px}
+  h2{font-family:'Source Serif 4',Georgia,serif; font-size:28px; color:var(--navy); margin-top:52px}
+  h3{font-size:19px; color:var(--navy); margin-top:28px}
+  p{font-size:17px}
+  .tip, .warn{border-radius:8px; padding:18px 20px; margin:20px 0; font-size:16px}
+  .tip{background:var(--teal-light); border-left:4px solid var(--teal)}
+  .warn{background:var(--amber-light); border-left:4px solid var(--amber)}
+  .tip strong:first-child, .warn strong:first-child{display:block; margin-bottom:4px}
+  code, .code-inline{font-family:'JetBrains Mono',monospace; background:var(--panel-alt); padding:2px 6px; border-radius:4px; font-size:15px}
+  table{width:100%; border-collapse:collapse; margin:20px 0; font-size:15.5px}
+  th, td{padding:10px 14px; border:1px solid var(--border); text-align:left}
+  th{background:var(--navy); color:#fff}
+  tr:nth-child(even) td{background:var(--panel-alt)}
+  .playground{background:var(--navy-deep); border-radius:10px; padding:24px; margin:24px 0; color:#e3e8ff}
+  .playground h3{color:#8fd8d0; margin-top:0}
+  .node-row{display:flex; gap:14px; margin:16px 0}
+  .node{flex:1; text-align:center; border-radius:8px; padding:16px 10px; font-size:14px; cursor:pointer; border:2px solid transparent; user-select:none}
+  .node.has-file{background:#0D9488; color:#00251f; font-weight:600}
+  .node.no-file{background:#1c2b5c; color:#8fa0d8}
+  .node.offline{background:#0b1330; color:#5b6472; text-decoration:line-through; opacity:0.6}
+  .sim-btn{font-family:'JetBrains Mono',monospace; background:#1c2b5c; color:#e3e8ff; border:1px solid #33447f; border-radius:6px; padding:10px 18px; margin:0 8px 0 0; cursor:pointer; font-size:14px}
+  .sim-btn:hover{background:var(--teal); border-color:var(--teal); color:#00251f}
+  #p2pResult{margin-top:16px; background:#0b1330; border-radius:8px; padding:16px 18px; font-size:15px; min-height:24px; color:#c7ccdc}
+  footer{background:var(--navy-deep); color:#c7ccdc; padding:28px 24px; text-align:center; font-size:14px}
+  footer a{color:#8fd8d0}
+  details.toc-mobile{display:none}
+  @media (max-width:900px){
+    .layout{flex-direction:column}
+    nav.toc{display:none}
+    details.toc-mobile{display:block; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:12px 16px; margin-bottom:24px; max-width:740px}
+    details.toc-mobile a{display:block; padding:6px 0; color:var(--navy); text-decoration:none}
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+</div>
+
+<header>
+  <p class="eyebrow">Y12 AS Computer Science (9618) &middot; Networking Lab Sequence</p>
+  <h1>Session 5: P2P File Sharing at Scale</h1>
+  <p class="lede">Three laptops, one switch, and a file that doesn't live on any single machine.</p>
+</header>
+
+<div class="layout">
+  <nav class="toc" id="toc">
+    <a href="#s1">01 &middot; The P2P file-sharing model</a>
+    <a href="#s2">02 &middot; Try it: who has the file?</a>
+    <a href="#s3">03 &middot; P2P vs client-server</a>
+    <a href="#s4">04 &middot; Practical lab steps</a>
+  </nav>
+
+  <article>
+    <details class="toc-mobile"><summary>Contents</summary>
+      <a href="#s1">01 The P2P file-sharing model</a>
+      <a href="#s2">02 Try it: who has the file?</a>
+      <a href="#s3">03 P2P vs client-server</a>
+      <a href="#s4">04 Practical lab steps</a>
+    </details>
+
+    <section id="s1">
+      <span class="section-kicker">01</span>
+      <h2>The P2P file-sharing model</h2>
+      <p>In a P2P file-sharing network, every node can share and request files at the same time. There's no single point of failure for the file itself — but finding <em>who currently has</em> a file (discovery) can still be a challenge.</p>
+      <div class="tip"><strong>Gnutella</strong>A historical P2P file-sharing protocol — one of the earliest real examples of this model at scale. Today's practical uses Filius's equivalent file-sharing service.</div>
+    </section>
+
+    <section id="s2">
+      <span class="section-kicker">02</span>
+      <h2>Try it: who has the file?</h2>
+      <p>Three laptops share a file between them. Click a laptop to take it offline, then see if the file is still reachable.</p>
+      <div class="playground">
+        <h3>P2P network: click a laptop to toggle it offline</h3>
+        <div class="node-row" id="nodeRow">
+          <div class="node has-file" data-node="L1">Laptop 1<br>Has the file</div>
+          <div class="node no-file" data-node="L2">Laptop 2<br>No file yet</div>
+          <div class="node no-file" data-node="L3">Laptop 3<br>No file yet</div>
+        </div>
+        <button class="sim-btn" id="downloadBtn">Laptop 2 downloads</button>
+        <button class="sim-btn" id="resetP2p">Reset</button>
+        <div id="p2pResult">Laptop 1 currently holds the only copy. Try downloading, then take Laptop 1 offline.</div>
+      </div>
+    </section>
+
+    <section id="s3">
+      <span class="section-kicker">03</span>
+      <h2>P2P vs client-server: what if a device goes offline?</h2>
+      <table>
+        <tr><th>&nbsp;</th><th>P2P file sharing</th><th>Client-server</th></tr>
+        <tr><td><strong>One node offline</strong></td><td>Other nodes may still have the file</td><td>If it's the server, nobody can access anything</td></tr>
+        <tr><td><strong>Single point of failure?</strong></td><td>No single point for the file itself</td><td>Yes — the server</td></tr>
+      </table>
+      <div class="warn"><strong>Watch for this</strong>P2P isn't automatically "better" — if only ONE node ever had a file and it goes offline before anyone else downloads it, that file is gone. Redundancy in P2P depends on the file having actually spread to multiple nodes.</div>
+    </section>
+
+    <section id="s4">
+      <span class="section-kicker">04</span>
+      <h2>Practical lab steps</h2>
+      <ol>
+        <li>Build a 3-laptop network connected via a switch.</li>
+        <li>Configure the file-sharing service on the nodes.</li>
+        <li>Share a file from one laptop; have another search for and download it.</li>
+        <li>Slow the simulation speed to observe the request/transfer traffic on the switch.</li>
+        <li>Add a third laptop mid-transfer and discuss how a P2P network could route around a node going offline, contrasting with what happens if a switch itself fails.</li>
+      </ol>
+      <div class="tip"><strong>Next up</strong>Head to the practice page to complete the checkable questions and the independent advantages/disadvantages task.</div>
+    </section>
+  </article>
+</div>
+
+<footer>
+  Session 5 of 16 &middot; Networking Lab Sequence &middot; <a href="networking-s5-p2p-file-sharing-scale-practice.html">Go to practice questions →</a>
+</footer>
+
+<script>
+(function(){
+  var state = { L1: true, L2: false, L3: false };
+  var offline = { L1: false, L2: false, L3: false };
+  var result = document.getElementById("p2pResult");
+
+  function render(){
+    var nodes = document.querySelectorAll(".node");
+    for (var i = 0; i < nodes.length; i++) {
+      var id = nodes[i].getAttribute("data-node");
+      nodes[i].classList.remove("has-file", "no-file", "offline");
+      if (offline[id]) {
+        nodes[i].classList.add("offline");
+        nodes[i].innerHTML = "Laptop " + id.slice(1) + "<br>Offline";
+      } else if (state[id]) {
+        nodes[i].classList.add("has-file");
+        nodes[i].innerHTML = "Laptop " + id.slice(1) + "<br>Has the file";
+      } else {
+        nodes[i].classList.add("no-file");
+        nodes[i].innerHTML = "Laptop " + id.slice(1) + "<br>No file yet";
+      }
+    }
+  }
+
+  var nodeEls = document.querySelectorAll(".node");
+  for (var n = 0; n < nodeEls.length; n++) {
+    nodeEls[n].addEventListener("click", function(){
+      var id = this.getAttribute("data-node");
+      offline[id] = !offline[id];
+      render();
+      var anyOnlineWithFile = false;
+      for (var key in state) {
+        if (state[key] && !offline[key]) { anyOnlineWithFile = true; }
+      }
+      if (anyOnlineWithFile) {
+        result.textContent = "The file is still reachable from at least one online laptop.";
+      } else {
+        result.textContent = "No online laptop currently holds the file — it's unreachable right now.";
+      }
+    });
+  }
+
+  document.getElementById("downloadBtn").addEventListener("click", function(){
+    if (state.L1 && !offline.L1 && !state.L2) {
+      state.L2 = true;
+      render();
+      result.textContent = "Laptop 2 downloaded the file from Laptop 1 — now two laptops hold a copy.";
+    } else if (state.L2) {
+      result.textContent = "Laptop 2 already has the file.";
+    } else {
+      result.textContent = "Laptop 1 needs to be online and hold the file for this download to work.";
+    }
+  });
+
+  document.getElementById("resetP2p").addEventListener("click", function(){
+    state = { L1: true, L2: false, L3: false };
+    offline = { L1: false, L2: false, L3: false };
+    render();
+    result.textContent = "Laptop 1 currently holds the only copy. Try downloading, then take Laptop 1 offline.";
+  });
+
+  var links = document.querySelectorAll('nav.toc a');
+  var sections = document.querySelectorAll('article section');
+  function onScroll(){
+    var pos = window.scrollY + 120;
+    var current = null;
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].offsetTop <= pos) { current = sections[i].id; }
+    }
+    for (var j = 0; j < links.length; j++) {
+      links[j].classList.toggle('active', links[j].getAttribute('href') === '#' + current);
+    }
+  }
+  window.addEventListener('scroll', onScroll);
+  onScroll();
+})();
+</script>
+</body>
+</html>

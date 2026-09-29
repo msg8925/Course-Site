@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "topologies-media/network-topologies";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Session 7 Practice: Network Topologies";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Session 7 Practice — Network Topologies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --amber:#a8560c; --amber-light:#fbeee0; --red:#a4342a; --red-light:#fbeae8;
+    --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8; --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:'Source Sans 3',Arial,sans-serif; line-height:1.6}
+  header{background:var(--navy); color:#fff; padding:32px 24px}
+  .eyebrow{font-size:14px; letter-spacing:1.5px; text-transform:uppercase; color:#8fd8d0; font-weight:600; max-width:900px; margin:0 auto}
+  h1{font-family:'Source Serif 4',Georgia,serif; font-size:32px; margin:8px auto 16px; max-width:900px}
+  .progress-wrap{max-width:900px; margin:0 auto; display:flex; align-items:center; gap:16px}
+  .progress-bar{flex:1; height:10px; background:#33447f; border-radius:6px; overflow:hidden}
+  .progress-fill{height:100%; background:var(--teal); width:0%; transition:width .3s}
+  #resetBtn{background:transparent; border:1px solid #5ec9bd; color:#8fd8d0; padding:6px 14px; border-radius:6px; cursor:pointer; font-size:13px}
+  .layout{display:flex; max-width:1100px; margin:0 auto; gap:40px; padding:32px 24px 80px; align-items:flex-start}
+  nav.toc{position:sticky; top:24px; width:220px; flex-shrink:0; font-size:14px}
+  nav.toc a{display:block; color:var(--muted); text-decoration:none; padding:6px 0; border-left:3px solid transparent}
+  nav.toc a:hover{color:var(--navy); border-left-color:var(--teal); padding-left:10px}
+  article{max-width:740px}
+  .section-kicker{display:inline-block; background:var(--teal); color:#fff; font-size:12px; font-weight:700; padding:3px 10px; border-radius:4px; margin-bottom:8px}
+  h2{font-family:'Source Serif 4',Georgia,serif; font-size:26px; color:var(--navy); margin-top:48px}
+  .q{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:22px 24px; margin:18px 0}
+  .q p.prompt{font-weight:600; margin-top:0}
+  input.text-check{font-family:'JetBrains Mono',monospace; padding:8px 10px; border:1px solid var(--border); border-radius:6px; font-size:15px; width:260px}
+  button.check-btn{background:var(--teal); color:#fff; border:none; padding:8px 16px; border-radius:6px; cursor:pointer; font-size:14px; margin-left:8px}
+  .feedback{margin-top:10px; font-size:15px; font-weight:600}
+  .feedback.correct{color:var(--teal)}
+  .feedback.incorrect{color:var(--red)}
+  .pill{display:inline-block; background:var(--panel-alt); border:1px solid var(--border); padding:8px 16px; border-radius:20px; margin:4px 6px 4px 0; cursor:pointer; font-size:15px}
+  .pill.correct{background:var(--teal); color:#fff; border-color:var(--teal)}
+  .pill.wrong{background:var(--red-light); border-color:var(--red); color:var(--red)}
+  textarea{width:100%; min-height:90px; font-family:'Source Sans 3',Arial,sans-serif; font-size:15px; padding:10px; border:1px solid var(--border); border-radius:6px}
+  details.reveal{margin-top:12px}
+  details.reveal summary{cursor:pointer; color:var(--navy); font-weight:600; font-size:14px}
+  details.reveal .model{background:var(--teal-light); border-radius:8px; padding:14px 16px; margin-top:8px; font-size:15px}
+  .drag-list{list-style:none; padding:0; margin:10px 0}
+  .drag-item{background:var(--panel-alt); border:1px solid var(--border); border-radius:8px; padding:10px 14px; margin:6px 0; cursor:grab; font-size:15px}
+  .drag-item.dragging{opacity:0.5}
+  footer{background:var(--navy-deep); color:#c7ccdc; padding:28px 24px; text-align:center; font-size:14px}
+  footer a{color:#8fd8d0}
+  details.toc-mobile{display:none}
+  @media (max-width:900px){
+    .layout{flex-direction:column}
+    nav.toc{display:none}
+    details.toc-mobile{display:block; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:12px 16px; margin-bottom:24px; max-width:740px}
+    details.toc-mobile a{display:block; padding:6px 0; color:var(--navy); text-decoration:none}
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+</div>
+
+<header>
+  <p class="eyebrow">Networking Lab Sequence &middot; Session 7</p>
+  <h1>Session 7 Practice: Network Topologies</h1>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span id="progressText" style="font-size:13px; color:#c7ccdc">0 / 12 checked</span>
+    <button id="resetBtn">Reset</button>
+  </div>
+</header>
+
+<div class="layout">
+  <details class="toc-mobile"><summary>Contents</summary>
+    <a href="#a">A Topology basics</a>
+    <a href="#b">B Star</a>
+    <a href="#c">C Bus</a>
+    <a href="#d">D Mesh</a>
+    <a href="#e">E Exam-style</a>
+  </details>
+  <nav class="toc">
+    <a href="#a">A &middot; Topology basics</a>
+    <a href="#b">B &middot; Star</a>
+    <a href="#c">C &middot; Bus</a>
+    <a href="#d">D &middot; Mesh</a>
+    <a href="#e">E &middot; Exam-style</a>
+  </nav>
+
+  <article>
+    <section id="a">
+      <span class="section-kicker">A</span>
+      <h2>Topology basics</h2>
+
+      <div class="q">
+        <p class="prompt">1. What does a network's "topology" describe?</p>
+        <div class="pill-group" data-qid="q1" data-answer="The pattern in which devices are connected">
+          <span class="pill" data-value="What each device does on the network">What each device does on the network</span>
+          <span class="pill" data-value="The pattern in which devices are connected">The pattern in which devices are connected</span>
+          <span class="pill" data-value="The speed of the network">The speed of the network</span>
+        </div>
+      </div>
+
+      <div class="q">
+        <p class="prompt">2. True or false: topology and network model (client-server vs P2P) are the same thing.</p>
+        <div class="pill-group" data-qid="q2" data-answer="False">
+          <span class="pill" data-value="True">True</span>
+          <span class="pill" data-value="False">False</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="b">
+      <span class="section-kicker">B</span>
+      <h2>Star</h2>
+
+      <div class="q">
+        <p class="prompt">3. In a star topology, what does every device connect directly to?</p>
+        <input type="text" class="text-check" data-qid="q3" data-answer="a central switch" placeholder="Type your answer">
+        <button class="check-btn" data-check="q3">Check</button>
+        <div class="feedback" id="fb-q3"></div>
+      </div>
+
+      <div class="q">
+        <p class="prompt">4. What is the single point of failure in a star topology?</p>
+        <div class="pill-group" data-qid="q4" data-answer="The central switch">
+          <span class="pill" data-value="Any one PC">Any one PC</span>
+          <span class="pill" data-value="The central switch">The central switch</span>
+          <span class="pill" data-value="The cable between two PCs">The cable between two PCs</span>
+        </div>
+      </div>
+
+      <div class="q">
+        <p class="prompt">5. If one PC's cable to the switch fails in a star network, what happens to the rest of the network?</p>
+        <textarea data-qid="q5" placeholder="Type your answer..."></textarea>
+        <details class="reveal"><summary>Reveal model answer</summary>
+          <div class="model">Nothing &mdash; every other PC still has its own separate link to the switch, so only the one PC with the broken cable loses connectivity.</div>
+        </details>
+      </div>
+    </section>
+
+    <section id="c">
+      <span class="section-kicker">C</span>
+      <h2>Bus</h2>
+
+      <div class="q">
+        <p class="prompt">6. In a bus topology, what do all devices connect to?</p>
+        <div class="pill-group" data-qid="q6" data-answer="One shared cable">
+          <span class="pill" data-value="A central switch">A central switch</span>
+          <span class="pill" data-value="One shared cable">One shared cable</span>
+          <span class="pill" data-value="Every other device individually">Every other device individually</span>
+        </div>
+      </div>
+
+      <div class="q">
+        <p class="prompt">7. What is fitted at each end of an older coaxial bus cable, and why?</p>
+        <textarea data-qid="q7" placeholder="Type your answer..."></textarea>
+        <details class="reveal"><summary>Reveal model answer</summary>
+          <div class="model">A terminator, which absorbs the signal at the end of the cable and stops it reflecting back down the wire and causing interference.</div>
+        </details>
+      </div>
+
+      <div class="q">
+        <p class="prompt">8. Why does a single cable break affect a whole bus segment, unlike a star?</p>
+        <textarea data-qid="q8" placeholder="Type your answer..."></textarea>
+        <details class="reveal"><summary>Reveal model answer</summary>
+          <div class="model">Every device shares the same physical cable rather than having its own separate link, so a break anywhere along that shared cable can stop signals reaching devices on the other side of the break.</div>
+        </details>
+      </div>
+    </section>
+
+    <section id="d">
+      <span class="section-kicker">D</span>
+      <h2>Mesh</h2>
+
+      <div class="q">
+        <p class="prompt">9. What is the key difference between a full mesh and a partial mesh?</p>
+        <textarea data-qid="q9" placeholder="Type your answer..."></textarea>
+        <details class="reveal"><summary>Reveal model answer</summary>
+          <div class="model">In a full mesh, every device has a direct link to every other device. In a partial mesh, devices only connect directly to some of the others, not all.</div>
+        </details>
+      </div>
+
+      <div class="q">
+        <p class="prompt">10. Why is mesh generally the most fault-tolerant topology?</p>
+        <div class="pill-group" data-qid="q10" data-answer="There are usually multiple routes between any two devices">
+          <span class="pill" data-value="It uses the least cable">It uses the least cable</span>
+          <span class="pill" data-value="There are usually multiple routes between any two devices">There are usually multiple routes between any two devices</span>
+          <span class="pill" data-value="It only needs one central device">It only needs one central device</span>
+        </div>
+      </div>
+
+      <div class="q">
+        <p class="prompt">11. Why can't Filius easily build a full mesh of more than 3&ndash;4 PCs?</p>
+        <textarea data-qid="q11" placeholder="Type your answer..."></textarea>
+        <details class="reveal"><summary>Reveal model answer</summary>
+          <div class="model">Filius limits how many network connections a single node can have, and a full mesh needs every device to connect directly to every other device &mdash; so the number of connections per device grows quickly as more devices are added.</div>
+        </details>
+      </div>
+    </section>
+
+    <section id="e">
+      <span class="section-kicker">E</span>
+      <h2>Exam-style</h2>
+
+      <div class="q">
+        <p class="prompt">12. A small data centre wants the highest possible resilience between its core routers and is prepared to pay for extra cabling. Which topology should it choose, and why?</p>
+        <textarea data-qid="q12" placeholder="Type your answer..."></textarea>
+        <details class="reveal"><summary>Reveal model answer</summary>
+          <div class="model">Mesh (full or partial) &mdash; because it provides multiple routes between devices, so a single failed link is unlikely to disconnect any device, which is worth the extra cabling cost for critical infrastructure.</div>
+        </details>
+      </div>
+    </section>
+  </article>
+</div>
+
+<footer>
+  Session 7 of 16 &middot; Networking Lab Sequence &middot; <a href="explainer.html">&larr; Back to explainer</a>
+</footer>
+
+<script>
+(function(){
+  var STORAGE_KEY = "networking-practical-s7-network-topologies-progress";
+  var CHECKABLE_IDS = ["q1","q2","q3","q4","q5","q6","q7","q8","q9","q10","q11","q12"];
+
+  function loadProgress(){
+    try { return JSON.parse(window.localStorage.getItem(STORAGE_KEY)) || {}; }
+    catch (e) { return {}; }
+  }
+  function saveProgress(p){
+    try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); } catch (e) {}
+  }
+  var progress = loadProgress();
+
+  function updateProgressBar(){
+    var done = 0;
+    for (var i = 0; i < CHECKABLE_IDS.length; i++) { if (progress[CHECKABLE_IDS[i]]) { done++; } }
+    var pct = Math.round((done / CHECKABLE_IDS.length) * 100);
+    document.getElementById("progressFill").style.width = pct + "%";
+    document.getElementById("progressText").textContent = done + " / " + CHECKABLE_IDS.length + " checked";
+  }
+
+  function markDone(qid){
+    progress[qid] = true;
+    saveProgress(progress);
+    updateProgressBar();
+  }
+
+  var groups = document.querySelectorAll(".pill-group");
+  for (var g = 0; g < groups.length; g++) {
+    (function(group){
+      var qid = group.getAttribute("data-qid");
+      var answer = group.getAttribute("data-answer");
+      var pills = group.querySelectorAll(".pill");
+      for (var p = 0; p < pills.length; p++) {
+        pills[p].addEventListener("click", function(){
+          var value = this.getAttribute("data-value");
+          for (var k = 0; k < pills.length; k++) {
+            pills[k].classList.remove("correct", "wrong");
+          }
+          if (value === answer) {
+            this.classList.add("correct");
+          } else {
+            this.classList.add("wrong");
+            for (var m = 0; m < pills.length; m++) {
+              if (pills[m].getAttribute("data-value") === answer) { pills[m].classList.add("correct"); }
+            }
+          }
+          markDone(qid);
+        });
+      }
+      if (progress[qid]) {
+        for (var q = 0; q < pills.length; q++) {
+          if (pills[q].getAttribute("data-value") === answer) { pills[q].classList.add("correct"); }
+        }
+      }
+    })(groups[g]);
+  }
+
+  var checkButtons = document.querySelectorAll("[data-check]");
+  for (var c = 0; c < checkButtons.length; c++) {
+    checkButtons[c].addEventListener("click", function(){
+      var qid = this.getAttribute("data-check");
+      var input = document.querySelector('input[data-qid="' + qid + '"]');
+      var answer = input.getAttribute("data-answer");
+      var fb = document.getElementById("fb-" + qid);
+      var given = input.value.trim().toLowerCase().replace(/\s+/g, " ");
+      var expected = answer.toLowerCase().replace(/\s+/g, " ");
+      if (given === expected) {
+        fb.textContent = "Correct.";
+        fb.className = "feedback correct";
+      } else {
+        fb.textContent = "Not quite — expected: " + answer;
+        fb.className = "feedback incorrect";
+      }
+      markDone(qid);
+    });
+  }
+
+  var textareas = document.querySelectorAll("textarea[data-qid]");
+  for (var t = 0; t < textareas.length; t++) {
+    textareas[t].addEventListener("blur", function(){
+      if (this.value.trim().length > 0) { markDone(this.getAttribute("data-qid")); }
+    });
+  }
+
+  document.getElementById("resetBtn").addEventListener("click", function(){
+    progress = {};
+    saveProgress(progress);
+    updateProgressBar();
+    var pills = document.querySelectorAll(".pill");
+    for (var i = 0; i < pills.length; i++) { pills[i].classList.remove("correct", "wrong"); }
+    var inputs = document.querySelectorAll("input.text-check");
+    for (var j = 0; j < inputs.length; j++) { inputs[j].value = ""; }
+    var feedbacks = document.querySelectorAll(".feedback");
+    for (var k = 0; k < feedbacks.length; k++) { feedbacks[k].textContent = ""; }
+    var areas = document.querySelectorAll("textarea");
+    for (var m = 0; m < areas.length; m++) { areas[m].value = ""; }
+  });
+
+  updateProgressBar();
+})();
+</script>
+</body>
+</html>

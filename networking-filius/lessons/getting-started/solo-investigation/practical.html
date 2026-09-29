@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "getting-started/solo-investigation";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Session 1 Practical Worksheet: Solo Investigation";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Session 1 Practical Worksheet: Solo Investigation &mdash; Networking Lab Sequence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:'Source Sans 3',Arial,sans-serif; line-height:1.6}
+  header{background:var(--navy); color:#fff; padding:40px 24px 30px}
+  .eyebrow{font-size:14px; letter-spacing:1.5px; text-transform:uppercase; color:#8fd8d0; font-weight:600; max-width:900px; margin:0 auto}
+  h1{font-family:'Source Serif 4',Georgia,serif; font-size:34px; margin:10px auto 8px; max-width:900px}
+  .lede{max-width:900px; margin:0 auto; color:#c7ccdc; font-size:17px}
+  .save-line{max-width:900px; margin:14px auto 0; display:flex; align-items:center; gap:14px; font-size:13px; color:#9db3e0}
+  .save-line #saveStatus{color:#8fd8d0; font-weight:600}
+  .save-line button{background:transparent; border:1px solid #33447f; color:#c7ccdc; border-radius:6px; padding:6px 14px; font-size:13px; cursor:pointer; font-family:'Source Sans 3',Arial,sans-serif}
+  .save-line button:hover{background:#1c2b5c}
+  .layout{display:flex; max-width:1100px; margin:0 auto; gap:40px; padding:32px 24px 80px; align-items:flex-start}
+  nav.toc{position:sticky; top:24px; width:220px; flex-shrink:0; font-size:14px}
+  nav.toc a{display:block; color:var(--muted); text-decoration:none; padding:6px 0; border-left:3px solid transparent}
+  nav.toc a.active, nav.toc a:hover{color:var(--navy); border-left-color:var(--teal); padding-left:10px}
+  article{max-width:740px; width:100%}
+  .section-kicker{display:inline-block; background:var(--teal); color:#fff; font-size:12px; font-weight:700; padding:3px 10px; border-radius:4px; margin-bottom:8px}
+  h2{font-family:'Source Serif 4',Georgia,serif; font-size:26px; color:var(--navy); margin-top:52px}
+  h3{font-size:18px; color:var(--navy); margin-top:24px}
+  p{font-size:16.5px}
+  .tip, .warn{border-radius:8px; padding:18px 20px; margin:20px 0; font-size:16px}
+  .tip{background:var(--teal-light); border-left:4px solid var(--teal)}
+  .warn{background:var(--amber-light); border-left:4px solid var(--amber)}
+  .tip strong:first-child, .warn strong:first-child{display:block; margin-bottom:4px}
+  code, .code-inline{font-family:'JetBrains Mono',monospace; background:var(--panel-alt); padding:2px 6px; border-radius:4px; font-size:15px}
+  table{width:100%; border-collapse:collapse; margin:14px 0; font-size:15.5px}
+  th, td{padding:10px 14px; border:1px solid var(--border); text-align:left; vertical-align:top}
+  th{background:var(--navy); color:#fff}
+  tr:nth-child(even) td{background:var(--panel-alt)}
+  .field-block{margin:16px 0 28px}
+  .field-block .q{font-weight:600; color:var(--navy); margin-bottom:8px; display:block}
+  .field-block input[type=text], .field-block textarea{
+    width:100%; border:1px solid var(--border); border-radius:6px; padding:10px 12px;
+    font-family:'Source Sans 3',Arial,sans-serif; font-size:15.5px; color:var(--text); background:#fff;
+  }
+  .field-block textarea{resize:vertical; min-height:70px}
+  .field-block input[type=text]:focus, .field-block textarea:focus, table input:focus{outline:2px solid var(--teal); outline-offset:1px}
+  table input[type=text]{width:100%; border:none; background:transparent; font-size:15.5px; font-family:'Source Sans 3',Arial,sans-serif; color:var(--text); padding:2px}
+  .two-col{display:flex; gap:16px; flex-wrap:wrap; margin:14px 0}
+  .two-col .field-block{flex:1; min-width:220px; margin:0}
+  .name-strip{max-width:900px; margin:18px auto 0; color:#c7ccdc; font-size:14px; display:flex; gap:28px; flex-wrap:wrap}
+  .name-strip input{background:rgba(255,255,255,0.08); border:1px solid #33447f; border-radius:6px; color:#fff; padding:5px 10px; font-size:14px; font-family:'Source Sans 3',Arial,sans-serif}
+  footer{background:var(--navy-deep); color:#c7ccdc; padding:28px 24px; text-align:center; font-size:14px}
+  footer a{color:#8fd8d0}
+  details.toc-mobile{display:none}
+  @media (max-width:900px){
+    .layout{flex-direction:column}
+    nav.toc{display:none}
+    details.toc-mobile{display:block; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:12px 16px; margin-bottom:24px; max-width:740px}
+    details.toc-mobile a{display:block; padding:6px 0; color:var(--navy); text-decoration:none}
+  }
+  @media print {
+    nav.toc, .save-line, footer, .toc-mobile { display:none !important; }
+    header{background:#fff !important; color:#000 !important}
+    header h1, .eyebrow{color:#000 !important}
+    .lede{color:#333 !important}
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+</div>
+
+<header>
+  <p class="eyebrow">Networking Lab Sequence &middot; Session 1</p>
+  <h1>Session 1 Practical Worksheet</h1>
+  <p class="lede">Solo Investigation &mdash; work through this alongside your Filius build. Keep Command Prompt (and Filius, from Session 2 onward) open in another window as you go.</p>
+  <div class="name-strip">
+    <label>Name <input type="text" data-save="student-name" placeholder="Your name"></label>
+    <label>Class <input type="text" data-save="student-class" placeholder="Class"></label>
+  </div>
+  <div class="save-line">
+    <span id="saveStatus">Your answers save automatically in this browser</span>
+    <button id="printBtn">Print / save as PDF</button>
+    <button id="resetBtn">Clear worksheet</button>
+  </div>
+</header>
+
+<div class="layout">
+  <details class="toc-mobile">
+    <summary>Contents</summary>
+        <a href="#partA">ipconfig</a>
+        <a href="#partB">ping &amp; ARP</a>
+        <a href="#partC">GUI vs CMD</a>
+        <a href="#partD">Independent task</a>
+        <a href="#stretch">Stretch task</a>
+  </details>
+  <nav class="toc" id="toc">
+      <a href="#partA">ipconfig</a>
+      <a href="#partB">ping &amp; ARP</a>
+      <a href="#partC">GUI vs CMD</a>
+      <a href="#partD">Independent task</a>
+      <a href="#stretch">Stretch task</a>
+  </nav>
+  <article>
+    <section id="partA">
+      <div class="section-kicker">PART A</div>
+      <h2>ipconfig investigation</h2>
+      
+      <p>Open Command Prompt and run <code>ipconfig /all</code> on your own machine. Fill in your results below.</p>
+      <table>
+        <tr><th>Field (from ipconfig /all)</th><th>What you found</th></tr>
+        <tr><td>IPv4 Address</td><td><input type="text" data-save="s1-t-ip"></td></tr>
+        <tr><td>Subnet Mask</td><td><input type="text" data-save="s1-t-mask"></td></tr>
+        <tr><td>Default Gateway</td><td><input type="text" data-save="s1-t-gw"></td></tr>
+        <tr><td>Physical (MAC) Address</td><td><input type="text" data-save="s1-t-mac"></td></tr>
+        <tr><td>DHCP Enabled</td><td><input type="text" data-save="s1-t-dhcp"></td></tr>
+      </table>
+      
+    </section>
+    <section id="partB">
+      <div class="section-kicker">PART B</div>
+      <h2>ping and ARP</h2>
+      
+      <p>Pair up with a partner. Exchange IP addresses, then run <code>ping &lt;partner's IP address&gt;</code>.</p>
+      <div class="field-block"><span class="q">1. How many replies did you receive, and were any packets lost?</span><textarea data-save="s1-q1" rows="3" placeholder=""></textarea></div><div class="field-block"><span class="q">2. What does the TTL (Time To Live) value tell you?</span><textarea data-save="s1-q2" rows="3" placeholder=""></textarea></div><div class="field-block"><span class="q">3. Run arp -a before and after the ping. What new entry appeared, and why?</span><textarea data-save="s1-q3" rows="3" placeholder=""></textarea></div>
+    </section>
+    <section id="partC">
+      <div class="section-kicker">PART C</div>
+      <h2>GUI vs CMD</h2>
+      
+      <p>Find your IP settings via Windows Settings &gt; Network &amp; Internet. Compare what you see here to your <code>ipconfig /all</code> output.</p>
+      <div class="field-block"><span class="q">Which is easier to read quickly, and which gives more detail? Give one reason for your answer.</span><textarea data-save="s1-q4" rows="3" placeholder=""></textarea></div>
+    </section>
+    <section id="partD">
+      <div class="section-kicker">PART D</div>
+      <h2>Independent task: annotate your findings</h2>
+      
+      <p>On a blank sheet (or below), sketch or paste a screenshot of your <code>ipconfig /all</code> output. Label each field in your own words &mdash; don't just copy the textbook definition, explain what it tells you about your device.</p>
+      <div class="field-block"><span class="q">Your annotation:</span><textarea data-save="s1-q5" rows="6" placeholder=""></textarea></div>
+    </section>
+    <section id="stretch">
+      <div class="section-kicker">STRETCH</div>
+      <h2>Stretch task</h2>
+      
+      <div class="tip"><strong>Optional challenge</strong>Research the difference between an IPv4 address's format (dotted decimal) and a MAC address's format. Write two sentences comparing them.</div>
+      <div class="field-block"><textarea data-save="s1-stretch" rows="3" placeholder=""></textarea></div>
+    </section>
+  </article>
+</div>
+
+<footer>
+  Session 1 of 16 &middot; Networking Lab Sequence &middot; <a href="explainer.html">&larr; Back to explainer</a>
+</footer>
+
+<script>
+(function(){
+  var STORAGE_KEY = "networking-practical-s1-solo-investigation";
+  function load(){ try { return JSON.parse(window.localStorage.getItem(STORAGE_KEY)) || {}; } catch (e) { return {}; } }
+  function save(data){ try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e) {} }
+  var data = load();
+  var fields = document.querySelectorAll("[data-save]");
+  for (var i = 0; i < fields.length; i++) {
+    (function(el){
+      var key = el.getAttribute("data-save");
+      if (data[key] !== undefined) { el.value = data[key]; }
+      el.addEventListener("input", function(){
+        data[key] = el.value;
+        save(data);
+        var st = document.getElementById("saveStatus");
+        if (st) { st.textContent = "Saved just now"; }
+      });
+    })(fields[i]);
+  }
+  var resetBtn = document.getElementById("resetBtn");
+  if (resetBtn) {
+    resetBtn.addEventListener("click", function(){
+      if (!window.confirm("Clear all your answers on this worksheet? This can't be undone.")) return;
+      data = {};
+      save(data);
+      for (var i = 0; i < fields.length; i++) { fields[i].value = ""; }
+      var st = document.getElementById("saveStatus");
+      if (st) { st.textContent = "Cleared"; }
+    });
+  }
+  var printBtn = document.getElementById("printBtn");
+  if (printBtn) {
+    printBtn.addEventListener("click", function(){ window.print(); });
+  }
+
+  // scroll-spy for TOC
+  var navLinks = document.querySelectorAll("nav.toc a");
+  var sections = document.querySelectorAll("article section[id]");
+  function onScroll(){
+    var y = window.scrollY + 120;
+    var current = null;
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].offsetTop <= y) { current = sections[i].id; }
+    }
+    for (var i = 0; i < navLinks.length; i++) {
+      navLinks[i].classList.toggle("active", navLinks[i].getAttribute("href") === "#" + current);
+    }
+  }
+  window.addEventListener("scroll", onScroll);
+  onScroll();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "lans-switches-csma-cd/p2p-file-sharing-scale";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Session 5 Practice: P2P File Sharing at Scale";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Session 5 Practice — P2P File Sharing at Scale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --amber:#a8560c; --amber-light:#fbeee0; --red:#a4342a; --red-light:#fbeae8;
+    --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8; --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:'Source Sans 3',Arial,sans-serif; line-height:1.6}
+  header{background:var(--navy); color:#fff; padding:32px 24px}
+  .eyebrow{font-size:14px; letter-spacing:1.5px; text-transform:uppercase; color:#8fd8d0; font-weight:600; max-width:900px; margin:0 auto}
+  h1{font-family:'Source Serif 4',Georgia,serif; font-size:32px; margin:8px auto 16px; max-width:900px}
+  .progress-wrap{max-width:900px; margin:0 auto; display:flex; align-items:center; gap:16px}
+  .progress-bar{flex:1; height:10px; background:#33447f; border-radius:6px; overflow:hidden}
+  .progress-fill{height:100%; background:var(--teal); width:0%; transition:width .3s}
+  #resetBtn{background:transparent; border:1px solid #5ec9bd; color:#8fd8d0; padding:6px 14px; border-radius:6px; cursor:pointer; font-size:13px}
+  .layout{display:flex; max-width:1100px; margin:0 auto; gap:40px; padding:32px 24px 80px; align-items:flex-start}
+  nav.toc{position:sticky; top:24px; width:220px; flex-shrink:0; font-size:14px}
+  nav.toc a{display:block; color:var(--muted); text-decoration:none; padding:6px 0; border-left:3px solid transparent}
+  nav.toc a:hover{color:var(--navy); border-left-color:var(--teal); padding-left:10px}
+  article{max-width:740px}
+  .section-kicker{display:inline-block; background:var(--teal); color:#fff; font-size:12px; font-weight:700; padding:3px 10px; border-radius:4px; margin-bottom:8px}
+  h2{font-family:'Source Serif 4',Georgia,serif; font-size:26px; color:var(--navy); margin-top:48px}
+  .q{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:22px 24px; margin:18px 0}
+  .q p.prompt{font-weight:600; margin-top:0}
+  input.text-check{font-family:'JetBrains Mono',monospace; padding:8px 10px; border:1px solid var(--border); border-radius:6px; font-size:15px; width:280px}
+  button.check-btn{background:var(--teal); color:#fff; border:none; padding:8px 16px; border-radius:6px; cursor:pointer; font-size:14px; margin-left:8px}
+  .feedback{margin-top:10px; font-size:15px; font-weight:600}
+  .feedback.correct{color:var(--teal)}
+  .feedback.incorrect{color:var(--red)}
+  .pill{display:inline-block; background:var(--panel-alt); border:1px solid var(--border); padding:8px 16px; border-radius:20px; margin:4px 6px 4px 0; cursor:pointer; font-size:15px}
+  .pill.correct{background:var(--teal); color:#fff; border-color:var(--teal)}
+  .pill.wrong{background:var(--red-light); border-color:var(--red); color:var(--red)}
+  textarea{width:100%; min-height:90px; font-family:'Source Sans 3',Arial,sans-serif; font-size:15px; padding:10px; border:1px solid var(--border); border-radius:6px}
+  details.reveal{margin-top:12px}
+  details.reveal summary{cursor:pointer; color:var(--navy); font-weight:600; font-size:14px}
+  details.reveal .model{background:var(--teal-light); border-radius:8px; padding:14px 16px; margin-top:8px; font-size:15px}
+  footer{background:var(--navy-deep); color:#c7ccdc; padding:28px 24px; text-align:center; font-size:14px}
+  footer a{color:#8fd8d0}
+  details.toc-mobile{display:none}
+  @media (max-width:900px){
+    .layout{flex-direction:column}
+    nav.toc{display:none}
+    details.toc-mobile{display:block; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:12px 16px; margin-bottom:24px; max-width:740px}
+    details.toc-mobile a{display:block; padding:6px 0; color:var(--navy); text-decoration:none}
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+</div>
+
+<header>
+  <p class="eyebrow">Y12 AS Computer Science (9618) &middot; Networking Lab Sequence</p>
+  <h1>Session 5 Practice: P2P File Sharing at Scale</h1>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span id="progressText" style="font-size:13px; color:#c7ccdc">0 / 11 checked</span>
+    <button id="resetBtn">Reset</button>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="toc">
+    <a href="#a">A &middot; The model</a>
+    <a href="#b">B &middot; Discovery and resilience</a>
+    <a href="#c">C &middot; P2P vs client-server</a>
+    <a href="#d">D &middot; The lab</a>
+    <a href="#e">E &middot; Exam-style</a>
+  </nav>
+
+  <article>
+    <details class="toc-mobile"><summary>Contents</summary>
+      <a href="#a">A The model</a>
+      <a href="#b">B Discovery and resilience</a>
+      <a href="#c">C P2P vs client-server</a>
+      <a href="#d">D The lab</a>
+      <a href="#e">E Exam-style</a>
+    </details>
+
+    <section id="a">
+      <span class="section-kicker">A</span>
+      <h2>The P2P file-sharing model</h2>
+
+      <div class="q">
+        <p class="prompt">1. In P2P file sharing, what can every node do at once?</p>
+        <div class="pill-group" data-qid="q1" data-answer="Share and request files">
+          <span class="pill" data-value="Only share files">Only share files</span>
+          <span class="pill" data-value="Only request files">Only request files</span>
+          <span class="pill" data-value="Share and request files">Share and request files</span>
+        </div>
+      </div>
+
+      <div class="q">
+        <p class="prompt">2. Name a historical P2P file-sharing protocol mentioned in this session.</p>
+        <input type="text" class="text-check" data-qid="q2" data-answer="gnutella" placeholder="Type your answer">
+        <button class="check-btn" data-check="q2">Check</button>
+        <div class="feedback" id="fb-q2"></div>
+      </div>
+    </section>
+
+    <section id="b">
+      <span class="section-kicker">B</span>
+      <h2>Discovery and resilience</h2>
+
+      <div class="q">
+        <p class="prompt">3. What can still be a challenge in a P2P network, even though there's no single point of failure for a file?</p>
+        <textarea data-qid="q3" placeholder="Type your answer..."></textarea>
+        <details class="reveal"><summary>Reveal model answer</summary>
+          <div class="model">Discovery — finding out which node(s) currently hold a copy of the file you want.</div>
+        </details>
+      </div>
+
+      <div class="q">
+        <p class="prompt">4. Only ONE laptop has ever held a particular file, and no one else has downloaded it yet. If that laptop goes offline, what happens to the file?</p>
+        <div class="pill-group" data-qid="q4" data-answer="It becomes unreachable">
+          <span class="pill" data-value="It automatically copies to another laptop">It automatically copies to another laptop</span>
+          <span class="pill" data-value="It becomes unreachable">It becomes unreachable</span>
+          <span class="pill" data-value="Nothing changes">Nothing changes</span>
+        </div>
+      </div>
+
+      <div class="q">
+        <p class="prompt">5. Explain why P2P redundancy depends on a file having actually "spread" to multiple nodes.</p>
+        <textarea data-qid="q5" placeholder="Type your answer..."></textarea>
+        <details class="reveal"><summary>Reveal model answer</summary>
+          <div class="model">If only one node has ever held the file, there is no backup copy elsewhere — the resilience of P2P only comes from multiple nodes actually holding copies, which only happens once other nodes have downloaded it.</div>
+        </details>
+      </div>
+    </section>
+
+    <section id="c">
+      <span class="section-kicker">C</span>
+      <h2>P2P vs client-server</h2>
+
+      <div class="q">
+        <p class="prompt">6. In a client-server setup, what happens if the server goes offline?</p>
+        <div class="pill-group" data-qid="q6" data-answer="Nobody can access anything">
+          <span class="pill" data-value="Nobody can access anything">Nobody can access anything</span>
+          <span class="pill" data-value="Clients automatically become servers">Clients automatically become servers</span>
+          <span class="pill" data-value="Nothing changes">Nothing changes</span>
+        </div>
+      </div>
+
+      <div class="q">
+        <p class="prompt">7. Give one advantage of P2P file sharing over a single central server.</p>
+        <textarea data-qid="q7" placeholder="Type your answer..."></textarea>
+        <details class="reveal"><summary>Reveal model answer</summary>
+          <div class="model">No single point of failure for the file itself — the network doesn't depend on one central machine staying online.</div>
+        </details>
+      </div>
+
+      <div class="q">
+        <p class="prompt">8. Give one disadvantage of P2P file sharing compared with a single central server.</p>
+        <textarea data-qid="q8" placeholder="Type your answer..."></textarea>
+        <details class="reveal"><summary>Reveal model answer</summary>
+          <div class="model">Harder to control or guarantee availability — a file's availability depends on which nodes happen to be online and whether they've downloaded a copy, rather than one reliably maintained server.</div>
+        </details>
+      </div>
+    </section>
+
+    <section id="d">
+      <span class="section-kicker">D</span>
+      <h2>The lab</h2>
+
+      <div class="q">
+        <p class="prompt">9. In the lab, what did slowing the simulation speed let you observe?</p>
+        <textarea data-qid="q9" placeholder="Type your answer..."></textarea>
+        <details class="reveal"><summary>Reveal model answer</summary>
+          <div class="model">The request/transfer traffic passing through the switch as the file was shared between laptops.</div>
+        </details>
+      </div>
+
+      <div class="q">
+        <p class="prompt">10. If the switch itself failed during the lab (rather than one laptop), what would happen?</p>
+        <div class="pill-group" data-qid="q10" data-answer="The whole LAN would lose connectivity">
+          <span class="pill" data-value="Only the file-sharing laptop would be affected">Only the file-sharing laptop would be affected</span>
+          <span class="pill" data-value="The whole LAN would lose connectivity">The whole LAN would lose connectivity</span>
+          <span class="pill" data-value="Nothing — P2P networks don't need switches">Nothing — P2P networks don't need switches</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="e">
+      <span class="section-kicker">E</span>
+      <h2>Exam-style question</h2>
+
+      <div class="q">
+        <p class="prompt">11. A small business is deciding between a P2P file-sharing setup and a single central file server for sharing documents between 5 employees' laptops. Discuss one advantage and one disadvantage of each approach, and recommend which is more appropriate.</p>
+        <textarea data-qid="q11" placeholder="Type your answer..." style="min-height:140px"></textarea>
+        <details class="reveal"><summary>Reveal model answer</summary>
+          <div class="model">P2P advantage: no single point of failure — if one laptop is offline, files that have spread to other laptops remain accessible. P2P disadvantage: harder to guarantee a file is available, and no central point for backups or access control. Client-server advantage: centralised control, easier backups, and predictable access. Client-server disadvantage: if the server goes down, nobody can access any files. For a small business needing reliable access and control over shared documents, a central file server is likely more appropriate, provided it is properly backed up — the P2P model's resilience matters more at a larger scale where any single machine failing is a smaller proportion of the whole network.</div>
+        </details>
+      </div>
+    </section>
+  </article>
+</div>
+
+<footer>
+  Session 5 of 16 &middot; Networking Lab Sequence &middot; <a href="explainer.html">&larr; Back to explainer</a>
+</footer>
+
+<script>
+(function(){
+  var STORAGE_KEY = "netlab-s5-p2p-file-sharing-scale-progress";
+  var CHECKABLE_IDS = ["q1","q2","q3","q4","q5","q6","q7","q8","q9","q10","q11"];
+
+  function loadProgress(){
+    try { return JSON.parse(window.localStorage.getItem(STORAGE_KEY)) || {}; }
+    catch (e) { return {}; }
+  }
+  function saveProgress(p){
+    try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); } catch (e) {}
+  }
+  var progress = loadProgress();
+
+  function updateProgressBar(){
+    var done = 0;
+    for (var i = 0; i < CHECKABLE_IDS.length; i++) { if (progress[CHECKABLE_IDS[i]]) { done++; } }
+    var pct = Math.round((done / CHECKABLE_IDS.length) * 100);
+    document.getElementById("progressFill").style.width = pct + "%";
+    document.getElementById("progressText").textContent = done + " / " + CHECKABLE_IDS.length + " checked";
+  }
+
+  function markDone(qid){
+    progress[qid] = true;
+    saveProgress(progress);
+    updateProgressBar();
+  }
+
+  var groups = document.querySelectorAll(".pill-group");
+  for (var g = 0; g < groups.length; g++) {
+    (function(group){
+      var qid = group.getAttribute("data-qid");
+      var answer = group.getAttribute("data-answer");
+      var pills = group.querySelectorAll(".pill");
+      for (var p = 0; p < pills.length; p++) {
+        pills[p].addEventListener("click", function(){
+          var value = this.getAttribute("data-value");
+          for (var k = 0; k < pills.length; k++) {
+            pills[k].classList.remove("correct", "wrong");
+          }
+          if (value === answer) {
+            this.classList.add("correct");
+          } else {
+            this.classList.add("wrong");
+            for (var m = 0; m < pills.length; m++) {
+              if (pills[m].getAttribute("data-value") === answer) { pills[m].classList.add("correct"); }
+            }
+          }
+          markDone(qid);
+        });
+      }
+      if (progress[qid]) {
+        for (var q = 0; q < pills.length; q++) {
+          if (pills[q].getAttribute("data-value") === answer) { pills[q].classList.add("correct"); }
+        }
+      }
+    })(groups[g]);
+  }
+
+  var checkButtons = document.querySelectorAll("[data-check]");
+  for (var c = 0; c < checkButtons.length; c++) {
+    checkButtons[c].addEventListener("click", function(){
+      var qid = this.getAttribute("data-check");
+      var input = document.querySelector('input[data-qid="' + qid + '"]');
+      var answer = input.getAttribute("data-answer");
+      var fb = document.getElementById("fb-" + qid);
+      var given = input.value.trim().toLowerCase().replace(/\s+/g, " ");
+      var expected = answer.toLowerCase().replace(/\s+/g, " ");
+      if (given === expected) {
+        fb.textContent = "Correct.";
+        fb.className = "feedback correct";
+      } else {
+        fb.textContent = "Not quite — expected: " + answer;
+        fb.className = "feedback incorrect";
+      }
+      markDone(qid);
+    });
+  }
+
+  var textareas = document.querySelectorAll("textarea[data-qid]");
+  for (var t = 0; t < textareas.length; t++) {
+    textareas[t].addEventListener("blur", function(){
+      if (this.value.trim().length > 0) { markDone(this.getAttribute("data-qid")); }
+    });
+  }
+
+  document.getElementById("resetBtn").addEventListener("click", function(){
+    progress = {};
+    saveProgress(progress);
+    updateProgressBar();
+    var pills = document.querySelectorAll(".pill");
+    for (var i = 0; i < pills.length; i++) { pills[i].classList.remove("correct", "wrong"); }
+    var inputs = document.querySelectorAll("input.text-check");
+    for (var j = 0; j < inputs.length; j++) { inputs[j].value = ""; }
+    var feedbacks = document.querySelectorAll(".feedback");
+    for (var k = 0; k < feedbacks.length; k++) { feedbacks[k].textContent = ""; }
+    var areas = document.querySelectorAll("textarea");
+    for (var m = 0; m < areas.length; m++) { areas[m].value = ""; }
+  });
+
+  updateProgressBar();
+})();
+</script>
+</body>
+</html>

@@ -1,7 +1,7 @@
-// Programming, Robotics & Electronics Club — Site Structure
-//
-// This file defines every section, subsection, and lesson shown on this
-// course's homepage. Edit it via the central admin page.
+// Site Structure — now with per-lesson "resources" (one or more files/links
+// per lesson, each with its own title + href). The lock in lessons-config.js
+// still applies at the LESSON level — all resources inside a lesson share
+// that one lock state.
 
 window.SITE_STRUCTURE = {
   "sections": [

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "lans-switches-csma-cd/basic-lan-switch";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Session 3: Basic LAN with a Switch";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Session 3: Basic LAN with a Switch — Networking Lab Sequence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:'Source Sans 3',Arial,sans-serif; line-height:1.6}
+  header{background:var(--navy); color:#fff; padding:40px 24px 48px}
+  .eyebrow{font-size:14px; letter-spacing:1.5px; text-transform:uppercase; color:#8fd8d0; font-weight:600; max-width:900px; margin:0 auto}
+  h1{font-family:'Source Serif 4',Georgia,serif; font-size:38px; margin:10px auto 8px; max-width:900px}
+  .lede{max-width:900px; margin:0 auto; color:#c7ccdc; font-size:18px}
+  .layout{display:flex; max-width:1100px; margin:0 auto; gap:40px; padding:32px 24px 80px; align-items:flex-start}
+  nav.toc{position:sticky; top:24px; width:220px; flex-shrink:0; font-size:14px}
+  nav.toc a{display:block; color:var(--muted); text-decoration:none; padding:6px 0; border-left:3px solid transparent}
+  nav.toc a.active, nav.toc a:hover{color:var(--navy); border-left-color:var(--teal); padding-left:10px}
+  article{max-width:740px}
+  .section-kicker{display:inline-block; background:var(--teal); color:#fff; font-size:12px; font-weight:700; padding:3px 10px; border-radius:4px; margin-bottom:8px}
+  h2{font-family:'Source Serif 4',Georgia,serif; font-size:28px; color:var(--navy); margin-top:52px}
+  h3{font-size:19px; color:var(--navy); margin-top:28px}
+  p{font-size:17px}
+  .tip, .warn{border-radius:8px; padding:18px 20px; margin:20px 0; font-size:16px}
+  .tip{background:var(--teal-light); border-left:4px solid var(--teal)}
+  .warn{background:var(--amber-light); border-left:4px solid var(--amber)}
+  .tip strong:first-child, .warn strong:first-child{display:block; margin-bottom:4px}
+  code, .code-inline{font-family:'JetBrains Mono',monospace; background:var(--panel-alt); padding:2px 6px; border-radius:4px; font-size:15px}
+  .code-block{background:var(--navy-deep); color:#e3e8ff; border-radius:8px; overflow:hidden; margin:20px 0}
+  .code-label{background:#0b1330; color:#8fa0d8; font-size:12px; font-weight:600; padding:8px 16px; font-family:'JetBrains Mono',monospace; letter-spacing:0.5px}
+  .code-block pre{margin:0; padding:18px 20px; font-family:'JetBrains Mono',monospace; font-size:14.5px; overflow-x:auto; line-height:1.7}
+  table{width:100%; border-collapse:collapse; margin:20px 0; font-size:15.5px}
+  th, td{padding:10px 14px; border:1px solid var(--border); text-align:left}
+  th{background:var(--navy); color:#fff}
+  tr:nth-child(even) td{background:var(--panel-alt)}
+  .playground{background:var(--navy-deep); border-radius:10px; padding:24px; margin:24px 0; color:#e3e8ff}
+  .playground h3{color:#8fd8d0; margin-top:0}
+  .pc-btn{font-family:'JetBrains Mono',monospace; background:#1c2b5c; color:#e3e8ff; border:1px solid #33447f; border-radius:6px; padding:10px 16px; margin:4px 8px 4px 0; cursor:pointer; font-size:14px}
+  .pc-btn:hover, .pc-btn.active{background:var(--teal); border-color:var(--teal); color:#00251f}
+  #labResult{margin-top:16px; background:#0b1330; border-radius:8px; padding:16px 18px; font-size:15px; min-height:24px; color:#c7ccdc}
+  #labResult table{width:100%; font-size:14px; margin-top:10px; border-collapse:collapse}
+  #labResult th, #labResult td{border:1px solid #33447f; padding:6px 10px; text-align:left; color:#e3e8ff; background:#0b1330}
+  #labResult th{background:#1c2b5c}
+  footer{background:var(--navy-deep); color:#c7ccdc; padding:28px 24px; text-align:center; font-size:14px}
+  footer a{color:#8fd8d0}
+  details.toc-mobile{display:none}
+  @media (max-width:900px){
+    .layout{flex-direction:column}
+    nav.toc{display:none}
+    details.toc-mobile{display:block; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:12px 16px; margin-bottom:24px; max-width:740px}
+    details.toc-mobile a{display:block; padding:6px 0; color:var(--navy); text-decoration:none}
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+</div>
+
+<header>
+  <p class="eyebrow">Y12 AS Computer Science (9618) &middot; Networking Lab Sequence</p>
+  <h1>Session 3: Basic LAN with a Switch</h1>
+  <p class="lede">From two machines to four — and a switch that makes it all work.</p>
+</header>
+
+<div class="layout">
+  <nav class="toc" id="toc">
+    <a href="#s1">01 &middot; What is a LAN?</a>
+    <a href="#s2">02 &middot; What does a switch do?</a>
+    <a href="#s3">03 &middot; ARP tables stay separate</a>
+    <a href="#s4">04 &middot; Practical lab steps</a>
+  </nav>
+
+  <article>
+    <details class="toc-mobile"><summary>Contents</summary>
+      <a href="#s1">01 What is a LAN?</a>
+      <a href="#s2">02 What does a switch do?</a>
+      <a href="#s3">03 ARP tables stay separate</a>
+      <a href="#s4">04 Practical lab steps</a>
+    </details>
+
+    <section id="s1">
+      <span class="section-kicker">01</span>
+      <h2>What is a LAN?</h2>
+      <p>A <strong>LAN (Local Area Network)</strong> is a network confined to a small geographic area — a classroom, a building, a school site — typically owned and controlled by one organisation, and offering high-speed connections between its devices.</p>
+      <div class="tip"><strong>Compare to Session 2</strong>Two directly-cabled PCs technically formed a tiny LAN already. Today we just make it bigger, and add the hardware that makes "bigger" practical.</div>
+    </section>
+
+    <section id="s2">
+      <span class="section-kicker">02</span>
+      <h2>What does a switch do?</h2>
+      <p>A <strong>switch</strong> connects multiple devices on a LAN. Instead of every device needing a direct cable to every other device, each device connects to the switch — and the switch works out where each piece of data needs to go.</p>
+      <p>The switch does this by building its own <strong>MAC address table</strong> — a record of which device is connected to which physical port. This is completely separate from any individual PC's ARP table.</p>
+      <table>
+        <tr><th>&nbsp;</th><th>A PC's ARP table</th><th>A switch's MAC table</th></tr>
+        <tr><td><strong>Maps</strong></td><td>IP address &rarr; MAC address</td><td>MAC address &rarr; physical port</td></tr>
+        <tr><td><strong>Purpose</strong></td><td>So the PC knows who to send to</td><td>So the switch knows where to forward frames</td></tr>
+      </table>
+    </section>
+
+    <section id="s3">
+      <span class="section-kicker">03</span>
+      <h2>ARP tables stay separate</h2>
+      <p>Adding more PCs to the switch doesn't mean every PC suddenly knows about every other PC. Each PC only builds ARP entries for devices <em>it has actually contacted</em>.</p>
+      <div class="playground">
+        <h3>Try it: who has PC3's MAC address?</h3>
+        <p style="margin-top:0; color:#c7ccdc">Only PC1 has pinged PC3 so far. Click a PC to check its ARP table.</p>
+        <div id="pcButtons">
+          <button class="pc-btn" data-pc="PC1">PC1</button>
+          <button class="pc-btn" data-pc="PC2">PC2</button>
+          <button class="pc-btn" data-pc="PC3">PC3</button>
+          <button class="pc-btn" data-pc="PC4">PC4</button>
+        </div>
+        <div id="labResult">Click a PC above to check its ARP table.</div>
+      </div>
+      <div class="warn"><strong>Watch for this</strong>Even though all four PCs are on the same switch and could reach each other, only devices that have actually exchanged traffic appear in each other's ARP tables.</div>
+    </section>
+
+    <section id="s4">
+      <span class="section-kicker">04</span>
+      <h2>Practical lab steps</h2>
+      <ol>
+        <li>Build a switch-based LAN with 2 PCs; check each PC's <code>arp -a</code> (still empty).</li>
+        <li>Ping between them; recheck ARP tables — entries appear as in Session 2.</li>
+        <li>Add a third and fourth PC to the switch; ping in different pairs and predict/check how each PC's ARP table grows.</li>
+        <li>Use Filius's data-exchange view to inspect a ping's ARP request/reply and ICMP echo request/reply as separate stages.</li>
+        <li>Discuss what the switch itself is doing at each step.</li>
+      </ol>
+      <div class="tip"><strong>Next up</strong>Head to the practice page to complete the checkable questions and the independent annotation task.</div>
+    </section>
+  </article>
+</div>
+
+<footer>
+  Session 3 of 16 &middot; Networking Lab Sequence &middot; <a href="networking-s3-basic-lan-switch-practice.html">Go to practice questions →</a>
+</footer>
+
+<script>
+(function(){
+  var arpData = {
+    PC1: [["192.168.1.3", "C2:19:AA:5D:0E:41 (PC3)"]],
+    PC2: [],
+    PC3: [["192.168.1.1", "3C:E9:F7:1A:0B:22 (PC1)"]],
+    PC4: []
+  };
+  var buttons = document.querySelectorAll('.pc-btn');
+  var result = document.getElementById('labResult');
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener('click', function(){
+      for (var j = 0; j < buttons.length; j++) { buttons[j].classList.remove('active'); }
+      this.classList.add('active');
+      var pc = this.getAttribute('data-pc');
+      var entries = arpData[pc];
+      if (entries.length === 0) {
+        result.innerHTML = "<p><b>" + pc + "'s ARP table:</b> empty &mdash; this PC hasn't contacted anyone yet.</p>";
+      } else {
+        var html = "<p><b>" + pc + "'s ARP table:</b></p><table><tr><th>IP Address</th><th>MAC Address</th></tr>";
+        for (var k = 0; k < entries.length; k++) {
+          html += "<tr><td>" + entries[k][0] + "</td><td>" + entries[k][1] + "</td></tr>";
+        }
+        html += "</table>";
+        result.innerHTML = html;
+      }
+    });
+  }
+
+  var links = document.querySelectorAll('nav.toc a');
+  var sections = document.querySelectorAll('article section');
+  function onScroll(){
+    var pos = window.scrollY + 120;
+    var current = null;
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].offsetTop <= pos) { current = sections[i].id; }
+    }
+    for (var j = 0; j < links.length; j++) {
+      links[j].classList.toggle('active', links[j].getAttribute('href') === '#' + current);
+    }
+  }
+  window.addEventListener('scroll', onScroll);
+  onScroll();
+})();
+</script>
+</body>
+</html>

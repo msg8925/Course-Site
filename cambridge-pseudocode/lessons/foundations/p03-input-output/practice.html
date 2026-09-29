@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "foundations/p03-input-output";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Input & Output";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Input &amp; Output Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1B2B5E;--navy-deep:#101a3a;--teal:#0D9488;--teal-light:#e6f5f3;--purple:#7C4DA0;--purple-light:#f1e9f6;--amber:#a8560c;--amber-light:#fbeee0;--red:#a4342a;--red-light:#fbeae8;--bg:#f5f6fa;--panel:#ffffff;--panel-alt:#eef1f8;--border:#dde1ee;--text:#1c2340;--muted:#5b6472}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Source Sans 3",Arial,sans-serif;font-size:17px;line-height:1.6}
+header.hero{background:var(--navy);color:#fff;padding:32px 20px 26px}
+.hero-inner{max-width:1100px;margin:0 auto}
+.eyebrow{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#9fe3dc;font-weight:700}
+h1{font-family:"Source Serif 4",Georgia,serif;font-size:34px;line-height:1.2;margin:8px 0 10px}
+.lede{max-width:720px;color:#dfe4f3;margin:0 0 16px;font-size:17px}
+.progress-row{display:flex;align-items:center;gap:14px;max-width:720px;flex-wrap:wrap}
+.progress{flex:1;min-width:200px;height:12px;background:#33447a;border-radius:10px;overflow:hidden}
+.progress-fill{height:12px;width:0;background:var(--teal);transition:width .3s}
+.progress-text{font-size:15px;color:#dfe4f3}
+.reset-btn{background:transparent;color:#fff;border:1px solid #6d7cb3;border-radius:6px;padding:5px 12px;cursor:pointer;font-family:inherit;font-size:14px}
+.layout{max-width:1100px;margin:0 auto;padding:28px 20px 60px;display:flex;gap:40px;align-items:flex-start}
+nav.toc{width:230px;flex-shrink:0;position:sticky;top:20px;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px}
+nav.toc h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 8px}
+nav.toc a{display:block;color:var(--text);text-decoration:none;font-size:15px;padding:5px 8px;border-radius:6px;border-left:3px solid transparent}
+nav.toc a:hover{background:var(--panel-alt)}
+nav.toc a.active{border-left-color:var(--teal);background:var(--teal-light);color:var(--navy);font-weight:600}
+details.toc-mobile{display:none}
+article{max-width:740px;min-width:0;flex:1}
+section{margin-bottom:44px}
+.section-kicker{font-family:"JetBrains Mono",monospace;color:var(--teal);font-weight:600;font-size:14px}
+h2.sec{font-family:"Source Serif 4",Georgia,serif;font-size:26px;color:var(--navy);margin:2px 0 8px}
+.intro{color:var(--muted);margin-top:0}
+.q{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin:14px 0}
+.q-head{display:flex;justify-content:space-between;gap:10px;font-weight:700;color:var(--navy)}
+.marks{font-weight:400;color:var(--muted);font-size:14px;white-space:nowrap}
+.q p{margin:6px 0}
+code{font-family:"JetBrains Mono",monospace;font-size:.88em;background:var(--panel-alt);padding:1px 5px;border-radius:4px}
+.code-wrap{margin:12px 0;border-radius:8px;overflow:hidden;background:var(--navy-deep)}
+.code-label{background:#1f2c55;color:#b8c2e0;font-family:"JetBrains Mono",monospace;font-size:12px;padding:6px 12px;display:flex;justify-content:space-between;align-items:center}
+.copy-btn{background:var(--teal);color:#fff;border:none;border-radius:5px;padding:3px 10px;font-size:12px;cursor:pointer;font-family:"Source Sans 3",Arial,sans-serif;font-weight:600}
+pre{margin:0;padding:12px 16px;color:#e8ecf8;font-family:"JetBrains Mono",monospace;font-size:14px;line-height:1.6;overflow-x:auto;white-space:pre}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.pill{background:var(--panel-alt);border:1px solid var(--border);border-radius:22px;padding:7px 14px;cursor:pointer;font-family:"JetBrains Mono",monospace;font-size:14px;color:var(--text)}
+.pill:hover{border-color:var(--teal)}
+.pill.right{background:var(--teal-light);border-color:var(--teal);color:#07544d;font-weight:600}
+.pill.wrong{background:var(--red-light);border-color:var(--red);color:var(--red)}
+.check-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.check-row input{flex:1;min-width:180px;padding:9px 11px;border:1px solid var(--border);border-radius:6px;font-family:"JetBrains Mono",monospace;font-size:15px}
+.btn{background:var(--teal);color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit}
+.feedback{margin-top:8px;font-size:15.5px;min-height:1em}
+.feedback.ok{color:var(--teal);font-weight:600}
+.feedback.no{color:var(--red)}
+textarea{width:100%;min-height:110px;margin-top:10px;padding:10px;border:1px solid var(--border);border-radius:6px;font-family:"JetBrains Mono",monospace;font-size:14px}
+details.model{margin-top:10px;background:var(--teal-light);border-radius:8px;padding:8px 12px}
+details.model summary{cursor:pointer;font-weight:700;color:var(--navy)}
+details.model ul{margin:6px 0;padding-left:20px}
+.task{border-left:4px solid var(--purple)}
+.task-tag{display:inline-block;background:var(--purple-light);color:var(--purple);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:2px 8px;margin-bottom:4px}
+.tip,.warn{border-radius:8px;padding:12px 16px;margin:14px 0}
+.tip{background:var(--teal-light);border-left:4px solid var(--teal)}
+.warn{background:var(--amber-light);border-left:4px solid var(--amber)}
+.tip>strong:first-child,.warn>strong:first-child{display:block;margin-bottom:2px;color:var(--navy)}
+ol.do{margin:6px 0;padding-left:22px}
+a{color:var(--teal)}
+footer.lesson-foot{border-top:1px solid var(--border);padding-top:20px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+footer.lesson-foot a{color:var(--navy);font-weight:600;text-decoration:none;background:var(--panel);border:1px solid var(--border);padding:10px 14px;border-radius:8px}
+@media (max-width:900px){
+ .layout{display:block;padding-top:16px}
+ nav.toc{display:none}
+ details.toc-mobile{display:block;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:22px}
+ details.toc-mobile summary{font-weight:700;cursor:pointer;color:var(--navy)}
+ details.toc-mobile a{display:block;padding:5px 0;color:var(--text);text-decoration:none}
+ h1{font-size:28px}
+}
+
+.syl-toggle{display:flex;align-items:center;gap:8px;margin:16px 0 4px;flex-wrap:wrap}
+.syl-toggle .syl-lbl{font-size:14px;color:#dfe4f3}
+.syl-btn{background:transparent;color:#dfe4f3;border:1px solid #6d7cb3;border-radius:18px;padding:4px 13px;font-size:14px;cursor:pointer;font-family:inherit}
+.syl-btn.on{background:#0D9488;border-color:#0D9488;color:#fff;font-weight:600}
+.syl-label{font-style:italic}
+table.ref{width:100%;border-collapse:collapse;margin:14px 0;background:var(--panel);font-size:15.5px}
+table.ref th{background:var(--navy);color:#fff;text-align:left;padding:8px 10px}
+table.ref td{border:1px solid var(--border);padding:8px 10px;vertical-align:top}
+.level{background:var(--purple-light);border-left:4px solid var(--purple);border-radius:8px;padding:12px 16px;margin:14px 0}
+.level>strong:first-child{display:block;margin-bottom:2px;color:var(--navy)}
+
+
+.pills-col{flex-direction:column;align-items:flex-start}
+
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/foundations-p03-input-output-practice.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<header class="hero">
+ <div class="hero-inner">
+  <div class="eyebrow">Cambridge Pseudocode · Foundations · Topic 3 · Practice</div>
+  <h1>Input &amp; Output: Practice</h1>
+  <p class="lede">Predict exactly what OUTPUT prints, get INPUT right, trace programs that take input, then write interactive programs in Pseudocode Pro.</p>
+  <div class="progress-row">
+   <div class="progress"><div class="progress-fill" id="progFill"></div></div>
+   <span class="progress-text" id="progText">0 of 12 checkable questions correct</span>
+   <button class="reset-btn" type="button" id="resetBtn">Reset</button>
+  </div>
+ </div>
+</header>
+
+<div class="layout">
+ <nav class="toc" id="toc">
+  <h2>Sections</h2>
+  <a href="#secA">A Predict the OUTPUT</a>
+  <a href="#secB">B INPUT and OUTPUT rules</a>
+  <a href="#secC">C Trace with input</a>
+  <a href="#secD">D Pseudocode Pro tasks</a>
+  <a href="#secE">E Exam-style questions</a>
+ </nav>
+
+ <article>
+  <details class="toc-mobile">
+   <summary>Sections</summary>
+   <a href="#secA">A Predict the OUTPUT</a>
+   <a href="#secB">B INPUT and OUTPUT rules</a>
+   <a href="#secC">C Trace with input</a>
+   <a href="#secD">D Pseudocode Pro tasks</a>
+   <a href="#secE">E Exam-style questions</a>
+  </details>
+
+  <!-- A -->
+  <section id="secA">
+   <div class="section-kicker">A</div>
+   <h2 class="sec">Predict the OUTPUT</h2>
+   <p class="intro">The variables hold <code>Name ← "Priya"</code>, <code>Score ← 42</code> and <code>Lives ← 3</code>. Type <strong>exactly</strong> what each statement prints, including spaces (or the lack of them). You can test ideas in the <a href="explainer.html#output">OUTPUT tester</a>.</p>
+
+   <div class="q"><div class="q-head">A1. <code>OUTPUT "Score: ", Score</code></div>
+    <div class="check-row"><input type="text" id="in-a1" autocomplete="off" spellcheck="false"><button class="btn" type="button" data-check="a1">Check</button></div>
+    <div class="feedback" id="fb-a1"></div></div>
+   <div class="q"><div class="q-head">A2. <code>OUTPUT Name, "has", Lives, "lives"</code></div>
+    <div class="check-row"><input type="text" id="in-a2" autocomplete="off" spellcheck="false"><button class="btn" type="button" data-check="a2">Check</button></div>
+    <div class="feedback" id="fb-a2"></div></div>
+   <div class="q"><div class="q-head">A3. <code>OUTPUT "Name"</code></div>
+    <div class="check-row"><input type="text" id="in-a3" autocomplete="off" spellcheck="false"><button class="btn" type="button" data-check="a3">Check</button></div>
+    <div class="feedback" id="fb-a3"></div></div>
+   <div class="q"><div class="q-head">A4. <code>OUTPUT Score + Lives</code></div>
+    <div class="check-row"><input type="text" id="in-a4" autocomplete="off" spellcheck="false"><button class="btn" type="button" data-check="a4">Check</button></div>
+    <div class="feedback" id="fb-a4"></div></div>
+  </section>
+
+  <!-- B -->
+  <section id="secB">
+   <div class="section-kicker">B</div>
+   <h2 class="sec">INPUT and OUTPUT rules</h2>
+   <p class="intro">Choose the one correct answer.</p>
+
+   <div class="q"><div class="q-head">B1. <code>Age</code> has been declared as an INTEGER. Which line lets the user type in a value for it?</div>
+    <div class="pills" data-q="b1">
+     <button class="pill" type="button" data-opt="a">INPUT "Age"</button>
+     <button class="pill" type="button" data-opt="b">Age ← INPUT</button>
+     <button class="pill" type="button" data-opt="c">INPUT Age</button>
+     <button class="pill" type="button" data-opt="d">OUTPUT Age</button>
+    </div><div class="feedback" id="fb-b1"></div></div>
+
+   <div class="q"><div class="q-head">B2. Which pair of lines gives the user the clearest experience?</div>
+    <div class="pills" style="flex-direction:column;align-items:flex-start" data-q="b2">
+     <button class="pill" type="button" data-opt="a">INPUT Price, then OUTPUT "Enter the price:"</button>
+     <button class="pill" type="button" data-opt="b">OUTPUT "Enter the price in dollars:", then INPUT Price</button>
+     <button class="pill" type="button" data-opt="c">INPUT Price on its own</button>
+     <button class="pill" type="button" data-opt="d">OUTPUT "Price", then INPUT "Price"</button>
+    </div><div class="feedback" id="fb-b2"></div></div>
+
+   <div class="q"><div class="q-head">B3. <code>Total</code> holds 10. Which line outputs exactly <code>Total: 10</code>?</div>
+    <div class="pills" style="flex-direction:column;align-items:flex-start" data-q="b3">
+     <button class="pill" type="button" data-opt="a">OUTPUT "Total: " Total</button>
+     <button class="pill" type="button" data-opt="b">OUTPUT "Total:", Total</button>
+     <button class="pill" type="button" data-opt="c">OUTPUT "Total: Total"</button>
+     <button class="pill" type="button" data-opt="d">OUTPUT "Total: ", Total</button>
+    </div><div class="feedback" id="fb-b3"></div></div>
+
+   <div class="q"><div class="q-head">B4. A program inputs the price of a meal and adds a tip. What is the best data type for the variable that stores the price?</div>
+    <div class="pills" data-q="b4">
+     <button class="pill" type="button" data-opt="a">INTEGER</button>
+     <button class="pill" type="button" data-opt="b">REAL</button>
+     <button class="pill" type="button" data-opt="c">STRING</button>
+     <button class="pill" type="button" data-opt="d">CHAR</button>
+    </div><div class="feedback" id="fb-b4"></div></div>
+  </section>
+
+  <!-- C -->
+  <section id="secC">
+   <div class="section-kicker">C</div>
+   <h2 class="sec">Trace with input</h2>
+   <p class="intro">Work out what the <strong>last line</strong> of output would be for the inputs given.</p>
+
+   <div class="q"><div class="q-head">C1. The user enters <code>6</code> and then <code>4</code>.<span class="marks">[1]</span></div>
+    <div class="code-wrap"><div class="code-label"><span>pseudocode</span></div>
+<pre>DECLARE Width : INTEGER
+DECLARE Height : INTEGER
+OUTPUT "Enter the width:"
+INPUT Width
+OUTPUT "Enter the height:"
+INPUT Height
+OUTPUT "Area = ", Width * Height</pre></div>
+    <div class="check-row"><input type="text" id="in-c1" autocomplete="off" spellcheck="false"><button class="btn" type="button" data-check="c1">Check</button></div>
+    <div class="feedback" id="fb-c1"></div></div>
+
+   <div class="q"><div class="q-head">C2. The user enters <code>5</code> and then <code>9</code>.<span class="marks">[1]</span></div>
+    <div class="code-wrap"><div class="code-label"><span>pseudocode</span></div>
+<pre>DECLARE First : INTEGER
+DECLARE Second : INTEGER
+OUTPUT "Enter two numbers:"
+INPUT First
+INPUT Second
+OUTPUT Second, " then ", First</pre></div>
+    <div class="check-row"><input type="text" id="in-c2" autocomplete="off" spellcheck="false"><button class="btn" type="button" data-check="c2">Check</button></div>
+    <div class="feedback" id="fb-c2"></div></div>
+  </section>
+
+  <!-- D -->
+  <section id="secD">
+   <div class="section-kicker">D</div>
+   <h2 class="sec">Pseudocode Pro tasks</h2>
+   <p class="intro">Open <a href="https://pseudocode.pro/editor" target="_blank" rel="noopener">pseudocode.pro/editor</a> in a new tab, with its Syllabus menu set to your course. When a program reaches INPUT, it waits for you to type a value.</p>
+
+   <div class="q task"><span class="task-tag">Task D1 · Debugging</span>
+    <div class="q-head">Fix the birthday program<span class="marks">checkable</span></div>
+    <p>This program has <strong>three</strong> mistakes. Fix them, then run it and enter <code>Sam</code> and <code>15</code>. One mistake is about data types, so think about what <code>Age + 1</code> needs.</p>
+    <div class="code-wrap"><div class="code-label"><span>buggy code</span><button class="copy-btn" type="button" data-copy="code-d1">Copy</button></div>
+<pre id="code-d1">DECLARE Name : STRING
+DECLARE Age : STRING
+OUTPUT "Enter your name:"
+INPUT "Name"
+OUTPUT "Enter your age:"
+INPUT Age
+OUTPUT "Hello " Name, ", next year you will be ", Age + 1</pre></div>
+    <p><strong>What is the last line your fixed program outputs?</strong></p>
+    <div class="check-row"><input type="text" id="in-d1" autocomplete="off" spellcheck="false"><button class="btn" type="button" data-check="d1">Check</button></div>
+    <div class="feedback" id="fb-d1"></div>
+    <details class="model"><summary>Show the three mistakes</summary>
+     <ul>
+      <li><code>DECLARE Age : STRING</code> should be <code>INTEGER</code>: the program adds 1 to it.</li>
+      <li><code>INPUT "Name"</code> should be <code>INPUT Name</code>: INPUT takes a variable name, not a string.</li>
+      <li>A comma is missing between <code>"Hello "</code> and <code>Name</code>.</li>
+     </ul>
+    </details>
+   </div>
+
+   <div class="q task"><span class="task-tag">Task D2 · Write it</span>
+    <div class="q-head">Fahrenheit to Celsius<span class="marks">checkable</span></div>
+    <p>The explainer converted Celsius to Fahrenheit. Write the reverse program from scratch. It should prompt for a temperature in Fahrenheit, input it, calculate the Celsius value with the formula below, and output the answer with a message.</p>
+    <div class="code-wrap"><div class="code-label"><span>formula</span></div>
+<pre>Celsius ← (Fahrenheit - 32) * 5 / 9</pre></div>
+    <ol class="do">
+     <li>Test it with <code>32</code>. You should get 0 (water freezes).</li>
+     <li>Test it with <code>212</code>.</li>
+     <li>Run it once more and type <code>hot</code> instead of a number. What does Pseudocode Pro do? That is why the validation topic comes later in the course.</li>
+    </ol>
+    <p><strong>What Celsius value does your program calculate for 212?</strong> (just the number)</p>
+    <div class="check-row"><input type="text" id="in-d2" autocomplete="off" spellcheck="false"><button class="btn" type="button" data-check="d2">Check</button></div>
+    <div class="feedback" id="fb-d2"></div>
+    <details class="model"><summary>Show a model solution</summary>
+     <div class="code-wrap"><div class="code-label"><span>pseudocode</span></div>
+<pre>// Converts a temperature from Fahrenheit to Celsius
+DECLARE Fahrenheit : REAL
+DECLARE Celsius : REAL
+OUTPUT "Enter a temperature in Fahrenheit:"
+INPUT Fahrenheit
+Celsius ← (Fahrenheit - 32) * 5 / 9
+OUTPUT Fahrenheit, " F is ", Celsius, " C"</pre></div>
+    </details>
+   </div>
+
+   <div class="q task"><span class="task-tag">Task D3 · Extension</span>
+    <div class="q-head">Write your own: a receipt line</div>
+    <p>Plan first: fill in an input / process / output table for a program that asks for an item’s name, its price and the quantity bought, and outputs one receipt line such as:</p>
+    <div class="code-wrap"><div class="code-label"><span>example output</span></div>
+<pre>3 x Notebook = 7.5</pre></div>
+    <p>Then write the program in Pseudocode Pro, with a clear prompt before each input. Test it with at least two different sets of inputs.</p>
+    <details class="model"><summary>Show a model solution</summary>
+     <div class="code-wrap"><div class="code-label"><span>pseudocode</span></div>
+<pre>// Outputs one line of a receipt
+DECLARE ItemName : STRING
+DECLARE Price : REAL
+DECLARE Quantity : INTEGER
+DECLARE LineTotal : REAL
+OUTPUT "Enter the item name:"
+INPUT ItemName
+OUTPUT "Enter the price of one item:"
+INPUT Price
+OUTPUT "Enter the quantity:"
+INPUT Quantity
+LineTotal ← Price * Quantity
+OUTPUT Quantity, " x ", ItemName, " = ", LineTotal</pre></div>
+     <p>IPO: <strong>input</strong> the item name, price and quantity; <strong>process</strong> LineTotal = Price × Quantity; <strong>output</strong> the receipt line.</p>
+    </details>
+   </div>
+  </section>
+
+  <!-- E -->
+  <section id="secE">
+   <div class="section-kicker">E</div>
+   <h2 class="sec">Exam-style questions</h2>
+   <p class="intro">Write your answer first, then reveal the mark scheme and mark yourself honestly.</p>
+
+   <div class="q"><div class="q-head">E1. Write pseudocode that asks the user to input two whole numbers, then outputs their sum with a suitable message.<span class="marks">[4]</span></div>
+    <textarea id="ta-e1" placeholder="Your pseudocode…"></textarea>
+    <details class="model"><summary>Show mark scheme</summary>
+     <div class="code-wrap"><div class="code-label"><span>model answer</span></div>
+<pre>DECLARE Number1 : INTEGER
+DECLARE Number2 : INTEGER
+OUTPUT "Enter the first number:"
+INPUT Number1
+OUTPUT "Enter the second number:"
+INPUT Number2
+OUTPUT "The sum is ", Number1 + Number2</pre></div>
+     <p>One mark each:</p>
+     <ul>
+      <li>Both variables declared as INTEGER.</li>
+      <li>A prompt output before each input.</li>
+      <li>Two separate INPUT statements, each into a variable.</li>
+      <li>Output of the sum with a message.</li>
+     </ul>
+    </details>
+   </div>
+
+   <div class="q"><div class="q-head">E2. Explain why a program should output a prompt before each INPUT statement.<span class="marks">[2]</span></div>
+    <textarea id="ta-e2" placeholder="Your answer…"></textarea>
+    <details class="model"><summary>Show mark scheme</summary>
+     <ul>
+      <li>INPUT on its own gives the user no message: the program just waits. [1]</li>
+      <li>The prompt tells the user what data to enter / in what format, so they enter valid data. [1]</li>
+     </ul>
+    </details>
+   </div>
+
+   <div class="q"><div class="q-head">E3. A program calculates the cost of filling a car with fuel. The user enters the number of litres and the price per litre. Identify the input(s), the process and the output.<span class="marks">[3]</span></div>
+    <textarea id="ta-e3" placeholder="Input: …&#10;Process: …&#10;Output: …"></textarea>
+    <details class="model"><summary>Show mark scheme</summary>
+     <ul>
+      <li>Input: the number of litres and the price per litre. [1]</li>
+      <li>Process: cost = litres × price per litre. [1]</li>
+      <li>Output: the total cost (with a message). [1]</li>
+     </ul>
+    </details>
+   </div>
+  </section>
+
+  <footer class="lesson-foot">
+   <a href="explainer.html">← Back to the explainer</a>
+   <a href="#" onclick="return false" title="Coming next">Next: Arithmetic operators</a>
+  </footer>
+ </article>
+</div>
+
+<script>
+var STORAGE_KEY = "pseudo-inputoutput-practice-v1";
+var ANSWERS = {
+  a1:{type:"text", exact:true, accept:["Score: 42"], ok:"Correct. The space inside the quotes separates the colon from the number.", no:"Not quite. The text is printed as written, then the value of Score is joined on with no extra space."},
+  a2:{type:"text", exact:true, accept:["Priyahas3lives"], ok:"Correct. No spaces were put inside the quotes, so everything runs together.", no:"Not quite. OUTPUT adds no spaces of its own. Look for spaces inside the quotes: there are none."},
+  a3:{type:"text", exact:true, accept:["Name"], ok:"Correct. In quotes, it is just text: the word Name.", no:"Not quite. The quotes make it text, so the value of the variable is not used."},
+  a4:{type:"text", exact:true, accept:["45"], ok:"Correct. 42 + 3 = 45.", no:"Not quite. Both are INTEGER variables, so this is a calculation."},
+  b1:{type:"mcq", correct:"c", ok:"Correct. INPUT is followed by the variable name.", no:"Not quite. INPUT takes a variable name, with no quotes."},
+  b2:{type:"mcq", correct:"b", ok:"Correct. A clear prompt first, then the input.", no:"Not quite. The prompt must come before the program waits, and INPUT takes a variable name."},
+  b3:{type:"mcq", correct:"d", ok:"Correct. A comma between the items, and a space inside the quotes.", no:"Not quite. Check for the comma, the space after the colon, and whether Total is inside the quotes."},
+  b4:{type:"mcq", correct:"b", ok:"Correct. Prices have a fractional part, and you calculate with them.", no:"Not quite. A price such as 12.50 has a fractional part and is used in a calculation."},
+  c1:{type:"text", exact:true, accept:["Area = 24"], ok:"Correct. Width = 6, Height = 4, and 6 × 4 = 24.", no:"Not quite. The first input goes into Width, the second into Height. Include the text before the number."},
+  c2:{type:"text", exact:true, accept:["9 then 5"], ok:"Correct. First = 5 and Second = 9, but they are output in reverse order.", no:"Not quite. Which variable gets the first input? Which is output first?"},
+  d1:{type:"text", exact:true, accept:["Hello Sam, next year you will be 16"], ok:"Correct. All three mistakes fixed.", no:"Not quite. Fix all three mistakes, run it with Sam and 15, and type the whole last line."},
+  d2:{type:"text", accept:["100","100.0"], ok:"Correct. (212 - 32) × 5 ÷ 9 = 100, water’s boiling point.", no:"Not quite. Check your formula: subtract 32 first (brackets), then × 5 ÷ 9."}
+};
+var CHECKABLE_IDS = ["a1","a2","a3","a4","b1","b2","b3","b4","c1","c2","d1","d2"];
+
+var state = {};
+function load(){ try{ var s = window.localStorage.getItem(STORAGE_KEY); state = s ? JSON.parse(s) : {}; }catch(e){ state = {}; } }
+function save(){ try{ window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){} }
+
+function norm(s){
+  s = String(s).replace(/^\s+|\s+$/g,"").replace(/\s+/g," ").toLowerCase();
+  if(s.length >= 2 && (s.charAt(0) === '"' || s.charAt(0) === "'") && s.charAt(s.length-1) === s.charAt(0)){ s = s.substring(1, s.length-1); }
+  return s;
+}
+
+function exactNorm(s){
+  s = String(s).replace(/^\s+|\s+$/g,"");
+  if(s.length >= 2 && (s.charAt(0) === '"' || s.charAt(0) === "'") && s.charAt(s.length-1) === s.charAt(0)){ s = s.substring(1, s.length-1); }
+  return s;
+}
+
+function updateProgress(){
+  var n = 0;
+  for(var i=0;i<CHECKABLE_IDS.length;i++){ if(state[CHECKABLE_IDS[i]] && state[CHECKABLE_IDS[i]].correct){ n++; } }
+  document.getElementById("progFill").style.width = (100 * n / CHECKABLE_IDS.length) + "%";
+  document.getElementById("progText").innerHTML = n + " of " + CHECKABLE_IDS.length + " checkable questions correct";
+}
+
+function showFeedback(id, correct){
+  var fb = document.getElementById("fb-" + id);
+  fb.className = "feedback " + (correct ? "ok" : "no");
+  fb.innerHTML = (correct ? "✓ " : "✗ ") + (correct ? ANSWERS[id].ok : ANSWERS[id].no);
+}
+
+/* MCQ */
+function paintPills(group, chosen){
+  var id = group.getAttribute("data-q");
+  var pills = group.getElementsByTagName("button");
+  for(var i=0;i<pills.length;i++){
+    var opt = pills[i].getAttribute("data-opt");
+    pills[i].className = "pill";
+    if(opt === chosen){ pills[i].className = "pill " + (opt === ANSWERS[id].correct ? "right" : "wrong"); }
+  }
+}
+var groups = [];
+var divs = document.getElementsByTagName("div");
+for(var d=0; d<divs.length; d++){ if(divs[d].className === "pills" && divs[d].getAttribute("data-q")){ groups.push(divs[d]); } }
+for(var g=0; g<groups.length; g++){
+  (function(group){
+    var id = group.getAttribute("data-q");
+    var pills = group.getElementsByTagName("button");
+    for(var p=0;p<pills.length;p++){
+      pills[p].onclick = function(){
+        var opt = this.getAttribute("data-opt");
+        var correct = (opt === ANSWERS[id].correct);
+        state[id] = {answer:opt, correct:correct};
+        paintPills(group, opt); showFeedback(id, correct); save(); updateProgress();
+      };
+    }
+  })(groups[g]);
+}
+
+/* Text checks */
+function checkText(id){
+  var val = document.getElementById("in-" + id).value;
+  var n = ANSWERS[id].exact ? exactNorm(val) : norm(val);
+  var correct = false;
+  for(var i=0;i<ANSWERS[id].accept.length;i++){ if(n === ANSWERS[id].accept[i]){ correct = true; } }
+  state[id] = {answer:val, correct:correct};
+  showFeedback(id, correct); save(); updateProgress();
+}
+var allButtons = document.getElementsByTagName("button");
+for(var b=0;b<allButtons.length;b++){
+  if(allButtons[b].getAttribute("data-check")){
+    allButtons[b].onclick = function(){ checkText(this.getAttribute("data-check")); };
+  }
+  if(allButtons[b].getAttribute("data-copy")){
+    allButtons[b].onclick = function(){ copyCode(this); };
+  }
+}
+var inputs = document.getElementsByTagName("input");
+for(var k=0;k<inputs.length;k++){
+  if(inputs[k].id && inputs[k].id.indexOf("in-") === 0){
+    inputs[k].onkeydown = function(e){ e = e || window.event; if(e.keyCode === 13){ checkText(this.id.substring(3)); } };
+  }
+}
+
+/* Textareas persist too */
+var tas = document.getElementsByTagName("textarea");
+for(var t=0;t<tas.length;t++){
+  tas[t].oninput = function(){ state[this.id] = {text:this.value}; save(); };
+}
+
+/* Copy buttons */
+function copyCode(btn){
+  var text = document.getElementById(btn.getAttribute("data-copy")).textContent;
+  function done(){ btn.innerHTML = "Copied ✓"; setTimeout(function(){ btn.innerHTML = "Copy"; }, 1600); }
+  function fallback(){
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); done(); }catch(e){ btn.innerHTML = "Select & copy manually"; }
+    document.body.removeChild(ta);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done, fallback);
+  } else { fallback(); }
+}
+
+/* Restore */
+function restore(){
+  for(var g2=0; g2<groups.length; g2++){
+    var id = groups[g2].getAttribute("data-q");
+    if(state[id]){ paintPills(groups[g2], state[id].answer); showFeedback(id, state[id].correct); }
+  }
+  for(var i=0;i<CHECKABLE_IDS.length;i++){
+    var cid = CHECKABLE_IDS[i];
+    var inp = document.getElementById("in-" + cid);
+    if(inp && state[cid]){ inp.value = state[cid].answer; showFeedback(cid, state[cid].correct); }
+  }
+  for(var t2=0;t2<tas.length;t2++){ if(state[tas[t2].id]){ tas[t2].value = state[tas[t2].id].text; } }
+  updateProgress();
+}
+
+document.getElementById("resetBtn").onclick = function(){
+  if(!window.confirm("Clear all your answers on this page?")){ return; }
+  state = {}; save();
+  for(var g3=0; g3<groups.length; g3++){ paintPills(groups[g3], null); }
+  for(var i=0;i<CHECKABLE_IDS.length;i++){
+    var f = document.getElementById("fb-" + CHECKABLE_IDS[i]); f.innerHTML = ""; f.className = "feedback";
+    var inp = document.getElementById("in-" + CHECKABLE_IDS[i]); if(inp){ inp.value = ""; }
+  }
+  for(var t3=0;t3<tas.length;t3++){ tas[t3].value = ""; }
+  updateProgress();
+};
+
+load(); restore();
+
+/* TOC scroll-spy */
+(function(){
+  var links = document.getElementById("toc").getElementsByTagName("a");
+  function spy(){
+    var current = null;
+    for(var i=0;i<links.length;i++){
+      var sec = document.getElementById(links[i].getAttribute("href").substring(1));
+      if(sec && sec.getBoundingClientRect().top < 140){ current = i; }
+    }
+    for(var j=0;j<links.length;j++){ links[j].className = (j === current) ? "active" : ""; }
+  }
+  window.addEventListener("scroll", spy);
+  spy();
+})();
+
+</script>
+</body>
+</html>

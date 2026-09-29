@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "lans-switches-csma-cd/client-server-architecture";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Session 6: Client-Server Architecture";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Session 6: Client-Server Architecture — Networking Lab Sequence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:'Source Sans 3',Arial,sans-serif; line-height:1.6}
+  header{background:var(--navy); color:#fff; padding:40px 24px 48px}
+  .eyebrow{font-size:14px; letter-spacing:1.5px; text-transform:uppercase; color:#8fd8d0; font-weight:600; max-width:900px; margin:0 auto}
+  h1{font-family:'Source Serif 4',Georgia,serif; font-size:38px; margin:10px auto 8px; max-width:900px}
+  .lede{max-width:900px; margin:0 auto; color:#c7ccdc; font-size:18px}
+  .layout{display:flex; max-width:1100px; margin:0 auto; gap:40px; padding:32px 24px 80px; align-items:flex-start}
+  nav.toc{position:sticky; top:24px; width:220px; flex-shrink:0; font-size:14px}
+  nav.toc a{display:block; color:var(--muted); text-decoration:none; padding:6px 0; border-left:3px solid transparent}
+  nav.toc a.active, nav.toc a:hover{color:var(--navy); border-left-color:var(--teal); padding-left:10px}
+  article{max-width:740px}
+  .section-kicker{display:inline-block; background:var(--teal); color:#fff; font-size:12px; font-weight:700; padding:3px 10px; border-radius:4px; margin-bottom:8px}
+  h2{font-family:'Source Serif 4',Georgia,serif; font-size:28px; color:var(--navy); margin-top:52px}
+  h3{font-size:19px; color:var(--navy); margin-top:28px}
+  p{font-size:17px}
+  .tip, .warn{border-radius:8px; padding:18px 20px; margin:20px 0; font-size:16px}
+  .tip{background:var(--teal-light); border-left:4px solid var(--teal)}
+  .warn{background:var(--amber-light); border-left:4px solid var(--amber)}
+  .tip strong:first-child, .warn strong:first-child{display:block; margin-bottom:4px}
+  code, .code-inline{font-family:'JetBrains Mono',monospace; background:var(--panel-alt); padding:2px 6px; border-radius:4px; font-size:15px}
+  table{width:100%; border-collapse:collapse; margin:20px 0; font-size:15.5px}
+  th, td{padding:10px 14px; border:1px solid var(--border); text-align:left}
+  th{background:var(--navy); color:#fff}
+  tr:nth-child(even) td{background:var(--panel-alt)}
+  .playground{background:var(--navy-deep); border-radius:10px; padding:24px; margin:24px 0; color:#e3e8ff}
+  .playground h3{color:#8fd8d0; margin-top:0}
+  .net-row{display:flex; align-items:center; justify-content:center; gap:40px; margin:20px 0}
+  .net-node{border-radius:8px; padding:18px 22px; font-size:14px; text-align:center; cursor:pointer; user-select:none; min-width:110px}
+  .net-node.server.online{background:#0D9488; color:#00251f; font-weight:600}
+  .net-node.server.offline{background:#0b1330; color:#5b6472; text-decoration:line-through; opacity:0.6}
+  .net-node.client{background:#1c2b5c; color:#c7ccdc}
+  .sim-btn{font-family:'JetBrains Mono',monospace; background:#1c2b5c; color:#e3e8ff; border:1px solid #33447f; border-radius:6px; padding:10px 18px; margin:0 8px 0 0; cursor:pointer; font-size:14px}
+  .sim-btn:hover{background:var(--teal); border-color:var(--teal); color:#00251f}
+  #csResult{margin-top:16px; background:#0b1330; border-radius:8px; padding:16px 18px; font-size:15px; min-height:24px; color:#c7ccdc}
+  footer{background:var(--navy-deep); color:#c7ccdc; padding:28px 24px; text-align:center; font-size:14px}
+  footer a{color:#8fd8d0}
+  details.toc-mobile{display:none}
+  @media (max-width:900px){
+    .layout{flex-direction:column}
+    nav.toc{display:none}
+    details.toc-mobile{display:block; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:12px 16px; margin-bottom:24px; max-width:740px}
+    details.toc-mobile a{display:block; padding:6px 0; color:var(--navy); text-decoration:none}
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+</div>
+
+<header>
+  <p class="eyebrow">Y12 AS Computer Science (9618) &middot; Networking Lab Sequence</p>
+  <h1>Session 6: Client-Server Architecture</h1>
+  <p class="lede">A single server, and what happens to everyone else when it goes down.</p>
+</header>
+
+<div class="layout">
+  <nav class="toc" id="toc">
+    <a href="#s1">01 &middot; The client-server model</a>
+    <a href="#s2">02 &middot; Try it: server offline</a>
+    <a href="#s3">03 &middot; Client-server vs P2P</a>
+    <a href="#s4">04 &middot; Practical lab steps</a>
+  </nav>
+
+  <article>
+    <details class="toc-mobile"><summary>Contents</summary>
+      <a href="#s1">01 The client-server model</a>
+      <a href="#s2">02 Try it: server offline</a>
+      <a href="#s3">03 Client-server vs P2P</a>
+      <a href="#s4">04 Practical lab steps</a>
+    </details>
+
+    <section id="s1">
+      <span class="section-kicker">01</span>
+      <h2>The client-server model</h2>
+      <p>A dedicated <strong>server</strong> provides a service; <strong>clients</strong> request it. Web browsing, email, and file servers all work this way.</p>
+      <div class="tip"><strong>Compare to Session 5</strong>P2P had every node acting as both client and server. Here, the roles are fixed: one machine serves, the rest only request.</div>
+      <table>
+        <tr><th>&nbsp;</th><th>Advantages</th><th>Disadvantages</th></tr>
+        <tr><td><strong>Client-server</strong></td><td>Centralised control, better security, easier backup</td><td>Single point of failure, cost, potential bottleneck</td></tr>
+      </table>
+    </section>
+
+    <section id="s2">
+      <span class="section-kicker">02</span>
+      <h2>Try it: what happens when the server goes offline?</h2>
+      <p>Click the server to take it offline, then try sending a request from a client.</p>
+      <div class="playground">
+        <h3>Click the server to toggle it</h3>
+        <div class="net-row">
+          <div class="net-node client" data-node="client">Client</div>
+          <div class="net-node server online" id="serverNode" data-node="server">Web Server</div>
+        </div>
+        <button class="sim-btn" id="sendRequest">Client sends request</button>
+        <button class="sim-btn" id="resetCs">Reset</button>
+        <div id="csResult">The server is online. Try sending a request, then take the server offline and try again.</div>
+      </div>
+      <div class="warn"><strong>Watch for this</strong>This is exactly the single-point-of-failure disadvantage: however many clients exist, none of them can get a response once the one server is down.</div>
+    </section>
+
+    <section id="s3">
+      <span class="section-kicker">03</span>
+      <h2>Client-server vs peer-to-peer</h2>
+      <table>
+        <tr><th>&nbsp;</th><th>Client-server</th><th>Peer-to-peer</th></tr>
+        <tr><td><strong>Control</strong></td><td>Centralised</td><td>Distributed</td></tr>
+        <tr><td><strong>Fault tolerance</strong></td><td>Single point of failure</td><td>No single point for the file</td></tr>
+        <tr><td><strong>Example</strong></td><td>Web browsing, email</td><td>File sharing, some VoIP</td></tr>
+      </table>
+    </section>
+
+    <section id="s4">
+      <span class="section-kicker">04</span>
+      <h2>Practical lab steps</h2>
+      <ol>
+        <li>Reuse the Session 5 switch-based network; configure one node as a web server, others as clients.</li>
+        <li>Have a client send an HTTP request to the server.</li>
+        <li>Slow the simulation speed right down and step through the packet exchange, identifying the request and response.</li>
+        <li>Open the data exchange view and interpret the basic contents.</li>
+        <li>Take the server offline and have a client try again — observe the failure.</li>
+      </ol>
+      <div class="tip"><strong>Next up</strong>Head to the practice page to complete the checkable questions and the independent comparison-table task.</div>
+    </section>
+  </article>
+</div>
+
+<footer>
+  Session 6 of 16 &middot; Networking Lab Sequence &middot; <a href="networking-s6-client-server-architecture-practice.html">Go to practice questions →</a>
+</footer>
+
+<script>
+(function(){
+  var serverOnline = true;
+  var serverNode = document.getElementById("serverNode");
+  var result = document.getElementById("csResult");
+
+  serverNode.addEventListener("click", function(){
+    serverOnline = !serverOnline;
+    serverNode.classList.toggle("online", serverOnline);
+    serverNode.classList.toggle("offline", !serverOnline);
+    result.textContent = serverOnline ? "The server is back online." : "The server is now offline.";
+  });
+
+  document.getElementById("sendRequest").addEventListener("click", function(){
+    if (serverOnline) {
+      result.textContent = "Request sent — the server responds successfully.";
+    } else {
+      result.textContent = "Request sent — no response. The server is offline, so the request fails.";
+    }
+  });
+
+  document.getElementById("resetCs").addEventListener("click", function(){
+    serverOnline = true;
+    serverNode.classList.add("online");
+    serverNode.classList.remove("offline");
+    result.textContent = "The server is online. Try sending a request, then take the server offline and try again.";
+  });
+
+  var links = document.querySelectorAll('nav.toc a');
+  var sections = document.querySelectorAll('article section');
+  function onScroll(){
+    var pos = window.scrollY + 120;
+    var current = null;
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].offsetTop <= pos) { current = sections[i].id; }
+    }
+    for (var j = 0; j < links.length; j++) {
+      links[j].classList.toggle('active', links[j].getAttribute('href') === '#' + current);
+    }
+  }
+  window.addEventListener('scroll', onScroll);
+  onScroll();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "getting-started/peer-to-peer-basics";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Session 2: Peer-to-Peer Basics";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Session 2: Peer-to-Peer Basics — Networking Lab Sequence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:'Source Sans 3',Arial,sans-serif; line-height:1.6}
+  header{background:var(--navy); color:#fff; padding:40px 24px 48px}
+  .eyebrow{font-size:14px; letter-spacing:1.5px; text-transform:uppercase; color:#8fd8d0; font-weight:600; max-width:900px; margin:0 auto}
+  h1{font-family:'Source Serif 4',Georgia,serif; font-size:38px; margin:10px auto 8px; max-width:900px}
+  .lede{max-width:900px; margin:0 auto; color:#c7ccdc; font-size:18px}
+  .layout{display:flex; max-width:1100px; margin:0 auto; gap:40px; padding:32px 24px 80px; align-items:flex-start}
+  nav.toc{position:sticky; top:24px; width:220px; flex-shrink:0; font-size:14px}
+  nav.toc a{display:block; color:var(--muted); text-decoration:none; padding:6px 0; border-left:3px solid transparent}
+  nav.toc a.active, nav.toc a:hover{color:var(--navy); border-left-color:var(--teal); padding-left:10px}
+  article{max-width:740px}
+  .section-kicker{display:inline-block; background:var(--teal); color:#fff; font-size:12px; font-weight:700; padding:3px 10px; border-radius:4px; margin-bottom:8px}
+  h2{font-family:'Source Serif 4',Georgia,serif; font-size:28px; color:var(--navy); margin-top:52px}
+  h3{font-size:19px; color:var(--navy); margin-top:28px}
+  p{font-size:17px}
+  .tip, .warn{border-radius:8px; padding:18px 20px; margin:20px 0; font-size:16px}
+  .tip{background:var(--teal-light); border-left:4px solid var(--teal)}
+  .warn{background:var(--amber-light); border-left:4px solid var(--amber)}
+  .tip strong:first-child, .warn strong:first-child{display:block; margin-bottom:4px}
+  code, .code-inline{font-family:'JetBrains Mono',monospace; background:var(--panel-alt); padding:2px 6px; border-radius:4px; font-size:15px}
+  .code-block{background:var(--navy-deep); color:#e3e8ff; border-radius:8px; overflow:hidden; margin:20px 0}
+  .code-label{background:#0b1330; color:#8fa0d8; font-size:12px; font-weight:600; padding:8px 16px; font-family:'JetBrains Mono',monospace; letter-spacing:0.5px}
+  .code-block pre{margin:0; padding:18px 20px; font-family:'JetBrains Mono',monospace; font-size:14.5px; overflow-x:auto; line-height:1.7}
+  table{width:100%; border-collapse:collapse; margin:20px 0; font-size:15.5px}
+  th, td{padding:10px 14px; border:1px solid var(--border); text-align:left}
+  th{background:var(--navy); color:#fff}
+  tr:nth-child(even) td{background:var(--panel-alt)}
+  .playground{background:var(--navy-deep); border-radius:10px; padding:24px; margin:24px 0; color:#e3e8ff}
+  .playground h3{color:#8fd8d0; margin-top:0}
+  .step-btn{font-family:'JetBrains Mono',monospace; background:#1c2b5c; color:#e3e8ff; border:1px solid #33447f; border-radius:6px; padding:10px 16px; margin:0 8px 0 0; cursor:pointer; font-size:14px}
+  .step-btn:hover{background:var(--teal); border-color:var(--teal); color:#00251f}
+  #stepDisplay{margin-top:18px; background:#0b1330; border-radius:8px; padding:18px 20px; font-size:15px; min-height:80px; color:#c7ccdc}
+  #stepDisplay .arp-table{width:100%; font-size:14px; margin-top:10px; border-collapse:collapse}
+  #stepDisplay .arp-table th, #stepDisplay .arp-table td{border:1px solid #33447f; padding:6px 10px; text-align:left; color:#e3e8ff; background:#0b1330}
+  #stepDisplay .arp-table th{background:#1c2b5c}
+  footer{background:var(--navy-deep); color:#c7ccdc; padding:28px 24px; text-align:center; font-size:14px}
+  footer a{color:#8fd8d0}
+  details.toc-mobile{display:none}
+  @media (max-width:900px){
+    .layout{flex-direction:column}
+    nav.toc{display:none}
+    details.toc-mobile{display:block; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:12px 16px; margin-bottom:24px; max-width:740px}
+    details.toc-mobile a{display:block; padding:6px 0; color:var(--navy); text-decoration:none}
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+</div>
+
+<header>
+  <p class="eyebrow">Y12 AS Computer Science (9618) &middot; Networking Lab Sequence</p>
+  <h1>Session 2: Peer-to-Peer Basics</h1>
+  <p class="lede">Two machines, one cable — and a first look at ARP resolving an IP address to a MAC address.</p>
+</header>
+
+<div class="layout">
+  <nav class="toc" id="toc">
+    <a href="#s1">01 &middot; What is peer-to-peer?</a>
+    <a href="#s2">02 &middot; A recap: NIC and IP</a>
+    <a href="#s3">03 &middot; ARP, step by step</a>
+    <a href="#s4">04 &middot; Practical lab steps</a>
+  </nav>
+
+  <article>
+    <details class="toc-mobile"><summary>Contents</summary>
+      <a href="#s1">01 What is peer-to-peer?</a>
+      <a href="#s2">02 A recap: NIC and IP</a>
+      <a href="#s3">03 ARP, step by step</a>
+      <a href="#s4">04 Practical lab steps</a>
+    </details>
+
+    <section id="s1">
+      <span class="section-kicker">01</span>
+      <h2>What is peer-to-peer (P2P)?</h2>
+      <p>In a <strong>peer-to-peer</strong> network, there's no central server. Every device can act as both a client (requesting data) and a server (providing data) at the same time.</p>
+      <div class="tip"><strong>Real-world analogy</strong>Think of a P2P network like a group of friends lending each other books directly, rather than everyone borrowing from one library.</div>
+      <p>Today's network is the simplest possible P2P setup: just two PCs, cabled directly together. Later (Session 5) we'll scale this up to a proper file-sharing example with Gnutella.</p>
+    </section>
+
+    <section id="s2">
+      <span class="section-kicker">02</span>
+      <h2>A quick recap: NIC and IP address</h2>
+      <p>From Session 1: every device has an <strong>IP address</strong> (its identity on this network) and a <strong>NIC</strong> with a fixed <strong>MAC address</strong> (its physical hardware identity). Today we find out how one gets linked to the other.</p>
+    </section>
+
+    <section id="s3">
+      <span class="section-kicker">03</span>
+      <h2>ARP, step by step</h2>
+      <p><strong>ARP (Address Resolution Protocol)</strong> is what links an IP address to a MAC address on the local network. Your device knows the IP address it wants to reach, but the actual delivery needs the MAC address — that's ARP's job to find out.</p>
+      <div class="playground">
+        <h3>Walk through a ping between two PCs</h3>
+        <button class="step-btn" id="prevStep">&larr; Back</button>
+        <button class="step-btn" id="nextStep">Next &rarr;</button>
+        <div id="stepDisplay"></div>
+      </div>
+      <div class="warn"><strong>Watch for this</strong>ARP resolves addresses on the <em>local</em> network only. Once a router gets involved (Session 11), the process changes.</div>
+    </section>
+
+    <section id="s4">
+      <span class="section-kicker">04</span>
+      <h2>Practical lab steps</h2>
+      <ol>
+        <li>Build a 2-PC direct-connected network in Filius.</li>
+        <li>Run <code>ipconfig</code> on each PC — confirm addressing.</li>
+        <li>Run <code>arp -a</code> on PC1 <em>before</em> any contact with PC2.</li>
+        <li><code>ping</code> PC2 from PC1.</li>
+        <li>Run <code>arp -a</code> again — what's new, and why?</li>
+        <li>Repeat in reverse: ping PC1 from PC2, and check PC2's ARP table.</li>
+      </ol>
+      <div class="tip"><strong>Next up</strong>Head to the practice page to complete the checkable questions and the independent explanation task.</div>
+    </section>
+  </article>
+</div>
+
+<footer>
+  Session 2 of 16 &middot; Networking Lab Sequence &middot; <a href="networking-s2-peer-to-peer-basics-practice.html">Go to practice questions →</a>
+</footer>
+
+<script>
+(function(){
+  var steps = [
+    { text: "PC1 wants to ping PC2 (192.168.1.2). PC1 checks its ARP cache first.", table: [["IP Address","MAC Address"],["(empty)","(empty)"]] },
+    { text: "No entry found. PC1 broadcasts an ARP request: \"Who has 192.168.1.2? Tell 192.168.1.1.\"", table: [["IP Address","MAC Address"],["(empty)","(empty)"]] },
+    { text: "PC2 recognises its own IP address and replies directly to PC1 with its MAC address.", table: [["IP Address","MAC Address"],["192.168.1.2","B4:2E:11:AA:03:9F"]] },
+    { text: "PC1 stores this in its ARP cache, then sends the actual ping (ICMP echo request) to that MAC address.", table: [["IP Address","MAC Address"],["192.168.1.2","B4:2E:11:AA:03:9F"]] },
+    { text: "PC2 replies with an ICMP echo reply. Future pings skip the ARP step, since the entry is now cached.", table: [["IP Address","MAC Address"],["192.168.1.2","B4:2E:11:AA:03:9F"]] }
+  ];
+  var idx = 0;
+  var display = document.getElementById("stepDisplay");
+  function render(){
+    var s = steps[idx];
+    var html = "<p><b>Step " + (idx + 1) + " of " + steps.length + ":</b> " + s.text + "</p>";
+    html += "<table class=\"arp-table\"><tr><th>" + s.table[0][0] + "</th><th>" + s.table[0][1] + "</th></tr>";
+    html += "<tr><td>" + s.table[1][0] + "</td><td>" + s.table[1][1] + "</td></tr></table>";
+    display.innerHTML = html;
+  }
+  document.getElementById("nextStep").addEventListener("click", function(){
+    if (idx < steps.length - 1) { idx = idx + 1; render(); }
+  });
+  document.getElementById("prevStep").addEventListener("click", function(){
+    if (idx > 0) { idx = idx - 1; render(); }
+  });
+  render();
+
+  var links = document.querySelectorAll('nav.toc a');
+  var sections = document.querySelectorAll('article section');
+  function onScroll(){
+    var pos = window.scrollY + 120;
+    var current = null;
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].offsetTop <= pos) { current = sections[i].id; }
+    }
+    for (var j = 0; j < links.length; j++) {
+      links[j].classList.toggle('active', links[j].getAttribute('href') === '#' + current);
+    }
+  }
+  window.addEventListener('scroll', onScroll);
+  onScroll();
+})();
+</script>
+</body>
+</html>

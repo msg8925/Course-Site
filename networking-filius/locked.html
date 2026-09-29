@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson Not Yet Available</title>
+<style>
+  :root { --navy: #1B2B5E; --teal: #0D9488; --teal-light: #e6f7f5; --navy-light: #eef0f8; }
+  body {
+    font-family: Calibri, Arial, sans-serif;
+    color: #1a1a1a;
+    margin: 0;
+    background: #fbfbfa;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+  }
+  .card {
+    background: white;
+    border: 1px solid #e2e2e2;
+    border-radius: 12px;
+    padding: 44px 40px;
+    max-width: 480px;
+    text-align: center;
+    box-shadow: 0 4px 18px rgba(27,43,94,0.08);
+  }
+  .icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background: var(--navy-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+  }
+  h1 {
+    font-family: 'Bookman Old Style', Cambria, Georgia, serif;
+    color: var(--navy);
+    font-size: 22px;
+    margin: 0 0 12px;
+  }
+  p { color: #555; font-size: 15px; line-height: 1.55; margin: 0 0 8px; }
+  .lesson-name {
+    display: inline-block;
+    background: var(--teal-light);
+    color: var(--teal);
+    font-weight: bold;
+    padding: 4px 12px;
+    border-radius: 6px;
+    margin: 10px 0 20px;
+    font-size: 14px;
+  }
+  a.button {
+    display: inline-block;
+    margin-top: 10px;
+    background: var(--navy);
+    color: white;
+    text-decoration: none;
+    padding: 12px 26px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 14px;
+  }
+  a.button:hover { background: #24316b; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="icon">🔒</div>
+  <h1>This lesson isn't available yet</h1>
+  <div class="lesson-name" id="lessonName">Lesson</div>
+  <p>Your teacher hasn't unlocked this one for your class yet — check back once you reach this point in the course.</p>
+  <p>In the meantime, you can revisit any lesson you've already unlocked from the library.</p>
+  <a class="button" href="index.html">Back to Lesson Library</a>
+</div>
+
+<script>
+  var params = new URLSearchParams(window.location.search);
+  var title = params.get("title");
+  if (title) {
+    document.getElementById("lessonName").textContent = title;
+    document.title = title + " — Not Yet Available";
+  } else {
+    document.getElementById("lessonName").style.display = "none";
+  }
+</script>
+
+</body>
+</html>

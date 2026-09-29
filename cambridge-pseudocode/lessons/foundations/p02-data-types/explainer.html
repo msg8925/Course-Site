@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "foundations/p02-data-types";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Data Types, Variables & Constants";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Types, Variables &amp; Constants</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1B2B5E;--navy-deep:#101a3a;--teal:#0D9488;--teal-light:#e6f5f3;--purple:#7C4DA0;--purple-light:#f1e9f6;--amber:#a8560c;--amber-light:#fbeee0;--red:#a4342a;--red-light:#fbeae8;--bg:#f5f6fa;--panel:#ffffff;--panel-alt:#eef1f8;--border:#dde1ee;--text:#1c2340;--muted:#5b6472}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Source Sans 3",Arial,sans-serif;font-size:17px;line-height:1.6}
+header.hero{background:var(--navy);color:#fff;padding:36px 20px 32px}
+.hero-inner{max-width:1100px;margin:0 auto}
+.eyebrow{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#9fe3dc;font-weight:700}
+h1{font-family:"Source Serif 4",Georgia,serif;font-size:36px;line-height:1.2;margin:8px 0 10px}
+.lede{max-width:720px;color:#dfe4f3;margin:0;font-size:18px}
+.layout{max-width:1100px;margin:0 auto;padding:28px 20px 60px;display:flex;gap:40px;align-items:flex-start}
+nav.toc{width:230px;flex-shrink:0;position:sticky;top:20px;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px}
+nav.toc h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 8px;font-family:"Source Sans 3",Arial,sans-serif}
+nav.toc a{display:block;color:var(--text);text-decoration:none;font-size:15px;padding:5px 8px;border-radius:6px;border-left:3px solid transparent}
+nav.toc a:hover{background:var(--panel-alt)}
+nav.toc a.active{border-left-color:var(--teal);background:var(--teal-light);color:var(--navy);font-weight:600}
+details.toc-mobile{display:none}
+article{max-width:740px;min-width:0;flex:1}
+section{margin-bottom:44px}
+.section-kicker{font-family:"JetBrains Mono",monospace;color:var(--teal);font-weight:600;font-size:14px}
+h2.sec{font-family:"Source Serif 4",Georgia,serif;font-size:27px;color:var(--navy);margin:2px 0 12px}
+h3{font-family:"Source Serif 4",Georgia,serif;color:var(--navy);font-size:20px;margin:24px 0 8px}
+code{font-family:"JetBrains Mono",monospace;font-size:.88em;background:var(--panel-alt);padding:1px 5px;border-radius:4px}
+.tip,.warn,.level{border-radius:8px;padding:14px 16px;margin:18px 0}
+.tip{background:var(--teal-light);border-left:4px solid var(--teal)}
+.warn{background:var(--amber-light);border-left:4px solid var(--amber)}
+.level{background:var(--purple-light);border-left:4px solid var(--purple)}
+.tip>strong:first-child,.warn>strong:first-child,.level>strong:first-child{display:block;margin-bottom:4px;color:var(--navy)}
+.code-wrap{margin:16px 0;border-radius:8px;overflow:hidden;background:var(--navy-deep)}
+.code-label{background:#1f2c55;color:#b8c2e0;font-family:"JetBrains Mono",monospace;font-size:12px;padding:6px 12px;display:flex;justify-content:space-between}
+pre{margin:0;padding:14px 16px;color:#e8ecf8;font-family:"JetBrains Mono",monospace;font-size:14.5px;line-height:1.65;overflow-x:auto;white-space:pre}
+.kw{color:#7fd3ff;font-weight:600}.id{color:#ffe08a}.op{color:#ff9fb8}.lit{color:#a6e3a1}.cm{color:#8b95b8;font-style:italic}.ty{color:#d2a8ff}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
+.legend span{font-size:14px;padding:3px 10px;border-radius:20px;background:var(--navy-deep);font-family:"JetBrains Mono",monospace}
+table.ref{width:100%;border-collapse:collapse;margin:14px 0;background:var(--panel);font-size:15.5px}
+table.ref th{background:var(--navy);color:#fff;text-align:left;padding:8px 10px}
+table.ref td{border:1px solid var(--border);padding:8px 10px;vertical-align:top}
+.good{color:var(--teal);font-weight:700}.bad{color:var(--red);font-weight:700}
+.playground{background:var(--navy-deep);color:#e8ecf8;border-radius:10px;padding:18px;margin:20px 0}
+.playground h4{margin:0 0 10px;font-family:"Source Serif 4",Georgia,serif;font-size:18px;color:#fff}
+.playground input[type=text]{width:100%;padding:10px 12px;font-family:"JetBrains Mono",monospace;font-size:16px;border-radius:6px;border:1px solid #3a4a80;background:#0b1330;color:#fff}
+.chips{margin-top:10px}
+.chip{display:inline-block;background:#223266;color:#cfe0ff;border:none;border-radius:20px;padding:4px 11px;margin:3px 3px 0 0;font-family:"JetBrains Mono",monospace;font-size:13px;cursor:pointer}
+.chip:hover{background:#2e4488}
+.verdict{margin-top:14px;padding:12px 14px;border-radius:8px;background:#0b1330;min-height:48px}
+.verdict .v-title{font-weight:700;font-size:17px}
+.v-ok{color:#5eead4}.v-bad{color:#ff9f93}.v-meh{color:#ffd28a}
+.verdict ul{margin:6px 0 0;padding-left:20px}
+.tracer{display:flex;gap:14px;flex-wrap:wrap}
+.tr-code{flex:1 1 330px;background:#0b1330;border-radius:8px;padding:10px 0;font-family:"JetBrains Mono",monospace;font-size:13.5px}
+.tr-line{padding:2px 12px;white-space:pre;border-left:3px solid transparent}
+.tr-line .ln{color:#5b6a99;display:inline-block;width:22px}
+.tr-line.cur{background:#1d3a6b;border-left-color:#5eead4}
+.tr-line.done{opacity:.55}
+.tr-side{flex:1 1 220px;min-width:200px}
+.tr-box{background:#0b1330;border-radius:8px;padding:10px 12px;margin-bottom:10px}
+.tr-box h5{margin:0 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#9fb0dd}
+.var-row{display:flex;justify-content:space-between;font-family:"JetBrains Mono",monospace;font-size:14px;padding:2px 0;border-bottom:1px dashed #243463}
+.var-row.flash{color:#5eead4;font-weight:600}
+.out{font-family:"JetBrains Mono",monospace;font-size:14px;white-space:pre-wrap;min-height:44px;color:#a6e3a1}
+.tr-note{background:#132552;border-radius:8px;padding:10px 12px;font-size:15px;margin-top:10px;min-height:48px}
+.btns{margin-top:12px}
+.btn{background:var(--teal);color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:15px;font-weight:600;cursor:pointer;margin-right:8px;font-family:inherit}
+.btn.ghost{background:#2a3a6e}
+.btn[disabled]{opacity:.45;cursor:default}
+ol.steps{padding-left:0;list-style:none;counter-reset:st}
+ol.steps li{counter-increment:st;position:relative;padding:10px 12px 10px 52px;background:var(--panel);border:1px solid var(--border);border-radius:8px;margin-bottom:8px}
+ol.steps li:before{content:counter(st);position:absolute;left:12px;top:10px;width:28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;font-weight:700;text-align:center;line-height:28px;font-size:14px}
+.kbd{font-family:"JetBrains Mono",monospace;font-size:13px;background:#fff;border:1px solid var(--border);border-bottom-width:2px;border-radius:4px;padding:0 5px}
+footer.lesson-foot{border-top:1px solid var(--border);padding-top:20px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+footer.lesson-foot a{color:var(--navy);font-weight:600;text-decoration:none;background:var(--panel);border:1px solid var(--border);padding:10px 14px;border-radius:8px}
+footer.lesson-foot a.primary{background:var(--teal);color:#fff;border-color:var(--teal)}
+a{color:var(--teal)}
+@media (max-width:900px){
+ .layout{display:block;padding-top:16px}
+ nav.toc{display:none}
+ details.toc-mobile{display:block;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:22px}
+ details.toc-mobile summary{font-weight:700;cursor:pointer;color:var(--navy)}
+ details.toc-mobile a{display:block;padding:5px 0;color:var(--text);text-decoration:none}
+ h1{font-size:29px}
+}
+
+.syl-toggle{display:flex;align-items:center;gap:8px;margin:16px 0 4px;flex-wrap:wrap}
+.syl-toggle .syl-lbl{font-size:14px;color:#dfe4f3}
+.syl-btn{background:transparent;color:#dfe4f3;border:1px solid #6d7cb3;border-radius:18px;padding:4px 13px;font-size:14px;cursor:pointer;font-family:inherit}
+.syl-btn.on{background:#0D9488;border-color:#0D9488;color:#fff;font-weight:600}
+.syl-label{font-style:italic}
+table.ref{width:100%;border-collapse:collapse;margin:14px 0;background:var(--panel);font-size:15.5px}
+table.ref th{background:var(--navy);color:#fff;text-align:left;padding:8px 10px}
+table.ref td{border:1px solid var(--border);padding:8px 10px;vertical-align:top}
+.level{background:var(--purple-light);border-left:4px solid var(--purple);border-radius:8px;padding:12px 16px;margin:14px 0}
+.level>strong:first-child{display:block;margin-bottom:2px;color:var(--navy)}
+
+.pg-intro{margin:0 0 12px;color:#c9d2ee;font-size:15px}
+.muted{color:#9fb0dd}
+.small-note{font-size:15px;color:var(--muted)}
+code.dark{background:#0b1330;color:#ffe08a;padding:2px 7px}
+.srt-item{background:#0b1330;border-radius:8px;padding:10px 12px;margin-bottom:8px}
+.srt-q{font-size:15.5px;margin-bottom:6px}
+.srt-opts{display:flex;flex-wrap:wrap;gap:6px}
+.srt-btn{background:#223266;color:#cfe0ff;border:1px solid #33447a;border-radius:16px;padding:3px 10px;font-family:"JetBrains Mono",monospace;font-size:12.5px;cursor:pointer}
+.srt-btn:hover{border-color:#5eead4}
+.srt-btn.right{background:#0D9488;border-color:#5eead4;color:#fff}
+.srt-btn.wrong{background:#6b2620;border-color:#ff9f93;color:#fff}
+.srt-fb{font-size:14.5px;margin-top:6px}
+.sorter-score{margin-top:8px;font-weight:700;color:#5eead4}
+.ck-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.ck-row label{font-size:14px;color:#9fb0dd;text-transform:uppercase;letter-spacing:.06em}
+.ck-code{font-family:"JetBrains Mono",monospace;font-size:15px}
+.kw2{color:#7fd3ff;font-weight:600}
+.ck-row select{font-family:"JetBrains Mono",monospace;font-size:15px;padding:5px 8px;border-radius:6px;background:#0b1330;color:#d2a8ff;border:1px solid #3a4a80}
+.chip.on{background:#0D9488;color:#fff}
+.ck-stmt{font-family:"JetBrains Mono",monospace;font-size:15px;color:#ffe08a;margin-bottom:6px}
+.ck-msg{margin-top:4px;color:#dfe4f3;font-size:15.5px}
+
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/foundations-p02-data-types-explainer.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<header class="hero">
+ <div class="hero-inner">
+  <div class="eyebrow">Cambridge Pseudocode · Foundations · Topic 2</div>
+  <h1>Data Types, Variables &amp; Constants</h1>
+  <p class="lede">How a program stores data: choosing the right data type, declaring variables, writing values correctly, and using constants for values that never change.</p>
+  <div class="syl-toggle"><span class="syl-lbl">My course:</span><button type="button" class="syl-btn" data-syl="igcse">IGCSE 0478</button><button type="button" class="syl-btn" data-syl="as">AS 9618</button></div>
+ </div>
+</header>
+
+<div class="layout">
+ <nav class="toc" id="toc">
+  <h2>On this page</h2>
+  <a href="#variables">01 What is a variable?</a>
+  <a href="#types">02 The data types</a>
+  <a href="#declare">03 Declaring variables</a>
+  <a href="#matching">04 Types must match</a>
+  <a href="#constants">05 Constants</a>
+  <a href="#worked">06 Putting it together</a>
+  <a href="#exam">07 Exam tips</a>
+ </nav>
+
+ <article>
+  <div class="lesson-video" data-lesson="foundations/p02-data-types"></div>
+  <details class="toc-mobile">
+   <summary>On this page</summary>
+   <a href="#variables">01 What is a variable?</a>
+   <a href="#types">02 The data types</a>
+   <a href="#declare">03 Declaring variables</a>
+   <a href="#matching">04 Types must match</a>
+   <a href="#constants">05 Constants</a>
+   <a href="#worked">06 Putting it together</a>
+   <a href="#exam">07 Exam tips</a>
+  </details>
+
+  <!-- 01 -->
+  <section id="variables">
+   <div class="section-kicker">01</div>
+   <h2 class="sec">What is a variable?</h2>
+   <p>A <strong>variable</strong> is a named location in memory that stores one value, and that value can <em>change</em> while the program runs.</p>
+   <p>Think of a set of labelled storage boxes. The label on the front is the <strong>identifier</strong> (such as <code>Score</code>), and the box holds exactly one thing at a time. Put something new in, and whatever was there before is thrown away. You met this in Topic 1, when <code>Price</code> changed from 4 to 5.</p>
+   <p>Each box is also a particular <strong>shape</strong>. A box for whole numbers can’t hold a sentence, and a box for a single letter can’t hold a whole name. That shape is the variable’s <strong>data type</strong>.</p>
+   <div class="tip"><strong>Key idea</strong>Every variable has three things: an identifier (its name), a data type (what kind of value it holds), and a value (what it holds right now).</div>
+  </section>
+
+  <!-- 02 -->
+  <section id="types">
+   <div class="section-kicker">02</div>
+   <h2 class="sec">The data types</h2>
+   <p>Cambridge pseudocode has five basic data types that both IGCSE and AS use. The <strong>literal</strong> column shows how a value of each type is written in code.</p>
+   <table class="ref">
+    <tr><th style="width:17%">Data type</th><th style="width:33%">Holds</th><th>Literal examples</th><th>Typical use</th></tr>
+    <tr><td><code>INTEGER</code></td><td>A whole number, positive, negative or zero</td><td><code>5</code>, <code>-3</code>, <code>0</code></td><td>Counts, ages, scores</td></tr>
+    <tr><td><code>REAL</code></td><td>A number that can have a fractional part</td><td><code>4.7</code>, <code>0.3</code>, <code>-4.0</code>, <code>0.0</code></td><td>Prices, measurements, averages</td></tr>
+    <tr><td><code>CHAR</code></td><td>Exactly one character</td><td><code>'x'</code>, <code>'C'</code>, <code>'@'</code></td><td>A grade letter, a Y/N answer</td></tr>
+    <tr><td><code>STRING</code></td><td>Zero or more characters</td><td><code>"Hello"</code>, <code>"A"</code>, <code>""</code></td><td>Names, messages, codes</td></tr>
+    <tr><td><code>BOOLEAN</code></td><td>One of two values</td><td><code>TRUE</code>, <code>FALSE</code></td><td>Yes/no facts, flags</td></tr>
+   </table>
+   <h3>Writing literals correctly</h3>
+   <ul>
+    <li><strong>REAL</strong> values always have at least one digit on <em>each</em> side of the decimal point. Write <code>0.5</code>, never <code>.5</code>, and <code>4.0</code> when you mean a REAL four.</li>
+    <li><strong>CHAR</strong> values go in <strong>single</strong> quotes and hold exactly one character.</li>
+    <li><strong>STRING</strong> values go in <strong>double</strong> quotes. <code>""</code> is the <em>empty string</em>: a string with no characters in it.</li>
+    <li><strong>BOOLEAN</strong> values are written <code>TRUE</code> and <code>FALSE</code> with <strong>no</strong> quotes. <code>"TRUE"</code> in quotes is a STRING that just happens to spell a word.</li>
+   </ul>
+   <div class="level"><strong>AS (9618) only: DATE</strong>AS pseudocode adds a sixth type, <code>DATE</code>, for a valid calendar date. Date values are normally written in the format <code>dd/mm/yyyy</code>, e.g. <code>23/06/1912</code>. IGCSE does not use DATE.</div>
+   <h3>Looks can deceive</h3>
+   <p>The same characters can be different types depending on how they are written: <code>7</code> is an INTEGER, <code>7.0</code> is a REAL, <code>'7'</code> is a CHAR and <code>"7"</code> is a STRING. Only the first two can be used in arithmetic.</p>
+   <div class="warn"><strong>Phone numbers are strings</strong>A phone number such as <code>"0812345678"</code> is made of digits, but it is a STRING. You never do arithmetic on it, and storing it as an INTEGER would lose the leading zero. The same goes for product codes, postcodes and ID numbers with letters or leading zeros.</div>
+
+   <div class="playground">
+    <h4>Data type sorter</h4>
+    <p class="pg-intro">Choose the most appropriate data type for each value or data item.</p>
+    <div id="sorter"></div>
+    <div class="sorter-score" id="sorterScore"></div>
+    <div class="btns"><button class="btn ghost" type="button" id="sorterReset">Start again</button></div>
+   </div>
+  </section>
+
+  <!-- 03 -->
+  <section id="declare">
+   <div class="section-kicker">03</div>
+   <h2 class="sec">Declaring variables</h2>
+   <p>Before a variable can be used, it is <strong>declared</strong>: the program is told its identifier and its data type. The format is:</p>
+   <div class="code-wrap"><div class="code-label"><span>syntax</span></div>
+<pre><span class="kw">DECLARE</span> <span class="id">&lt;identifier&gt;</span> : <span class="ty">&lt;data type&gt;</span></pre></div>
+   <p>For example:</p>
+   <div class="code-wrap"><div class="code-label"><span>pseudocode</span></div>
+<pre><span class="kw">DECLARE</span> <span class="id">Counter</span> : <span class="ty">INTEGER</span>
+<span class="kw">DECLARE</span> <span class="id">TotalToPay</span> : <span class="ty">REAL</span>
+<span class="kw">DECLARE</span> <span class="id">GameOver</span> : <span class="ty">BOOLEAN</span></pre></div>
+   <p>Declaring a variable creates the box but puts nothing in it. Give it a value with an assignment before you use it; the first assignment is called <strong>initialising</strong> the variable:</p>
+   <div class="code-wrap"><div class="code-label"><span>pseudocode</span></div>
+<pre><span class="kw">DECLARE</span> <span class="id">Counter</span> : <span class="ty">INTEGER</span>
+<span class="id">Counter</span> <span class="op">←</span> <span class="lit">0</span>          <span class="cm">// initialise before use</span></pre></div>
+   <div class="tip"><strong>Good habits</strong>Put all your declarations at the top of the program, one per line, each with a meaningful PascalCase identifier (Topic 1). A reader can then see every variable and its type at a glance.</div>
+  </section>
+
+  <!-- 04 -->
+  <section id="matching">
+   <div class="section-kicker">04</div>
+   <h2 class="sec">Types must match</h2>
+   <p>The value you assign must be the same data type as the variable. A box for whole numbers can’t take <code>"fifteen"</code>. Pseudocode Pro enforces this: a mismatch is an error, and the program will not run.</p>
+   <p>Pseudocode Pro allows two safe exceptions, because no information is lost:</p>
+   <ul>
+    <li>an <strong>INTEGER</strong> value into a <strong>REAL</strong> variable (5 becomes 5.0);</li>
+    <li>a <strong>CHAR</strong> value into a <strong>STRING</strong> variable (a one-character string).</li>
+   </ul>
+   <p>In exam answers, match the type exactly, e.g. <code>Total ← 0.0</code> for a REAL, so there is no room for doubt.</p>
+
+   <div class="playground">
+    <h4>Assignment checker</h4>
+    <p class="pg-intro">Pick a variable’s data type, then a value to assign to it.</p>
+    <div class="ck-row">
+     <span class="ck-code"><span class="kw2">DECLARE</span> Box : </span>
+     <select id="ckType" aria-label="Variable data type">
+      <option>INTEGER</option><option>REAL</option><option>CHAR</option><option>STRING</option><option>BOOLEAN</option>
+     </select>
+    </div>
+    <div class="chips" id="ckChips"></div>
+    <div class="verdict" id="ckVerdict"><span class="muted">Choose a value…</span></div>
+   </div>
+  </section>
+
+  <!-- 05 -->
+  <section id="constants">
+   <div class="section-kicker">05</div>
+   <h2 class="sec">Constants</h2>
+   <p>A <strong>constant</strong> is a named value that <strong>cannot change</strong> while the program runs. It is declared once, with its value, and the program then uses its name.</p>
+   <div class="code-wrap"><div class="code-label"><span>pseudocode</span><span class="syl-label"></span></div>
+<pre><span class="kw">CONSTANT</span> <span class="id">HourlyRate</span> <span class="op c-op">←</span> <span class="lit">6.50</span>
+<span class="kw">CONSTANT</span> <span class="id">DefaultText</span> <span class="op c-op">←</span> <span class="lit">"N/A"</span></pre></div>
+   <div class="level"><strong>IGCSE (0478) and AS (9618) write constants differently</strong>IGCSE uses the arrow: <code>CONSTANT HourlyRate ← 6.50</code>. AS uses an equals sign: <code>CONSTANT HourlyRate = 6.50</code>. Use your own course’s form in exams. Pseudocode Pro checks for your syllabus’s form, and the switch at the top of this page changes the code examples to match.</div>
+   <h3>Rules</h3>
+   <ul>
+    <li>The value must be a <strong>literal</strong>, such as <code>6.50</code> or <code>"N/A"</code>. It can never be a variable, another constant or a calculation like <code>Rate * 2</code>.</li>
+    <li>A constant cannot be given a new value later. <code>HourlyRate ← 7.00</code> anywhere in the program is an error.</li>
+    <li>A constant has no <code>DECLARE</code> line and no data type written: the type comes from the literal.</li>
+   </ul>
+   <h3>Why use a constant?</h3>
+   <ul>
+    <li><strong>Readability:</strong> <code>Pay ← Hours * HourlyRate</code> explains itself; <code>Pay ← Hours * 6.50</code> leaves the reader guessing what 6.50 is.</li>
+    <li><strong>Easy to update:</strong> if the rate changes, you edit one line at the top rather than hunting for every 6.50.</li>
+    <li><strong>Safety:</strong> the value can’t be changed by mistake somewhere else in the program.</li>
+   </ul>
+   <p class="small-note">Naming: the Cambridge guides name constants in PascalCase, like variables (<code>HourlyRate</code>). You will also see ALL-CAPS names such as <code>PI</code> in other resources. Both follow the identifier rules; this course uses PascalCase.</p>
+  </section>
+
+  <!-- 06 -->
+  <section id="worked">
+   <div class="section-kicker">06</div>
+   <h2 class="sec">Putting it together</h2>
+   <p>This cinema-booking program uses a constant and all five data types.</p>
+   <div class="code-wrap"><div class="code-label"><span>pseudocode</span><span>Cinema booking</span></div>
+<pre><span class="cm">// Works out the cost of a cinema booking</span>
+<span class="kw">CONSTANT</span> <span class="id">TicketPrice</span> <span class="op c-op">←</span> <span class="lit">8.50</span>
+<span class="kw">DECLARE</span> <span class="id">FilmTitle</span> : <span class="ty">STRING</span>
+<span class="kw">DECLARE</span> <span class="id">Tickets</span> : <span class="ty">INTEGER</span>
+<span class="kw">DECLARE</span> <span class="id">SeatRow</span> : <span class="ty">CHAR</span>
+<span class="kw">DECLARE</span> <span class="id">IsMember</span> : <span class="ty">BOOLEAN</span>
+<span class="kw">DECLARE</span> <span class="id">TotalCost</span> : <span class="ty">REAL</span>
+<span class="id">FilmTitle</span> <span class="op">←</span> <span class="lit">"Space Race"</span>
+<span class="id">Tickets</span> <span class="op">←</span> <span class="lit">3</span>
+<span class="id">SeatRow</span> <span class="op">←</span> <span class="lit">'F'</span>
+<span class="id">IsMember</span> <span class="op">←</span> <span class="lit">FALSE</span>
+<span class="id">TotalCost</span> <span class="op">←</span> <span class="id">Tickets</span> * <span class="id">TicketPrice</span>
+<span class="kw">OUTPUT</span> <span class="lit">"Film: "</span>, <span class="id">FilmTitle</span>
+<span class="kw">OUTPUT</span> <span class="id">Tickets</span>, <span class="lit">" tickets in row "</span>, <span class="id">SeatRow</span>
+<span class="kw">OUTPUT</span> <span class="lit">"Total: "</span>, <span class="id">TotalCost</span></pre></div>
+   <p>It outputs:</p>
+   <div class="code-wrap"><div class="code-label"><span>output</span></div>
+<pre>Film: Space Race
+3 tickets in row F
+Total: 25.5</pre></div>
+   <table class="ref">
+    <tr><th style="width:26%">Item</th><th style="width:18%">Type</th><th>Why</th></tr>
+    <tr><td><code>TicketPrice</code></td><td>constant (REAL)</td><td>Fixed for the whole program, and a price needs a fractional part.</td></tr>
+    <tr><td><code>FilmTitle</code></td><td>STRING</td><td>Several characters of text.</td></tr>
+    <tr><td><code>Tickets</code></td><td>INTEGER</td><td>You can’t buy half a ticket.</td></tr>
+    <tr><td><code>SeatRow</code></td><td>CHAR</td><td>Exactly one letter.</td></tr>
+    <tr><td><code>IsMember</code></td><td>BOOLEAN</td><td>Either a member or not. Later topics use this to decide on a discount.</td></tr>
+    <tr><td><code>TotalCost</code></td><td>REAL</td><td>INTEGER × REAL gives a REAL: 3 × 8.50 = 25.5.</td></tr>
+   </table>
+  </section>
+
+  <!-- 07 -->
+  <section id="exam">
+   <div class="section-kicker">07</div>
+   <h2 class="sec">Exam tips</h2>
+   <ul>
+    <li>“State the most appropriate data type” questions are common. Give the exact keyword (<code>REAL</code>, not “decimal” or “float”).</li>
+    <li>Money and measurements are <code>REAL</code>. Counts of whole things are <code>INTEGER</code>.</li>
+    <li>Anything made of digits that you never calculate with (phone numbers, ID codes) is a <code>STRING</code>.</li>
+    <li>Write every declaration as <code>DECLARE Name : TYPE</code> with the colon.</li>
+    <li>Use your course’s constant syntax: <code>←</code> for IGCSE, <code>=</code> for AS. A constant’s value must be a literal.</li>
+    <li>Quotes matter: single for CHAR, double for STRING, none for BOOLEAN and numbers.</li>
+   </ul>
+  </section>
+
+  <footer class="lesson-foot">
+   <a href="../p01-intro/explainer.html">← Topic 1: Introduction</a>
+   <a href="practice.html" class="primary">Practise this topic →</a>
+   <a href="../p03-input-output/explainer.html">Next: Input &amp; output →</a>
+  </footer>
+ </article>
+</div>
+
+<script>
+/* ---------- Syllabus switch (constant syntax) ---------- */
+var SYL_KEY = "cp-syllabus";
+var syllabus = "igcse";
+try { syllabus = window.localStorage.getItem(SYL_KEY) || "igcse"; } catch(e) {}
+function sylApply(){
+  var spans = document.getElementsByTagName("span");
+  for(var i=0;i<spans.length;i++){
+    if((" " + spans[i].className + " ").indexOf(" c-op ") !== -1){ spans[i].textContent = (syllabus === "as") ? "=" : "←"; }
+    if((" " + spans[i].className + " ").indexOf(" syl-label ") !== -1){ spans[i].textContent = (syllabus === "as") ? "AS form" : "IGCSE form"; }
+  }
+  var btns = document.getElementsByTagName("button");
+  for(var b=0;b<btns.length;b++){
+    var s = btns[b].getAttribute("data-syl");
+    if(s){ btns[b].className = "syl-btn" + (s === syllabus ? " on" : ""); }
+  }
+}
+(function(){
+  var btns = document.getElementsByTagName("button");
+  for(var b=0;b<btns.length;b++){
+    if(btns[b].getAttribute("data-syl")){
+      btns[b].onclick = function(){
+        syllabus = this.getAttribute("data-syl");
+        try { window.localStorage.setItem(SYL_KEY, syllabus); } catch(e) {}
+        sylApply();
+      };
+    }
+  }
+  sylApply();
+})();
+
+/* ---------- Data type sorter ---------- */
+var SORT_ITEMS = [
+  {q:"42", code:true, a:"INTEGER", why:"A whole number with no decimal point."},
+  {q:"3.75", code:true, a:"REAL", why:"It has a fractional part."},
+  {q:"'Y'", code:true, a:"CHAR", why:"Single quotes and exactly one character."},
+  {q:"\"Y\"", code:true, a:"STRING", why:"Double quotes make it a STRING, even with one character."},
+  {q:"TRUE", code:true, a:"BOOLEAN", why:"TRUE without quotes is a BOOLEAN value."},
+  {q:"\"FALSE\"", code:true, a:"STRING", why:"In quotes, so it is text that spells a word, not a BOOLEAN."},
+  {q:"The number of students in a class", code:false, a:"INTEGER", why:"You count whole students."},
+  {q:"The price of a sandwich", code:false, a:"REAL", why:"Money has a fractional part (e.g. 3.50)."},
+  {q:"A mobile phone number, e.g. 0812345678", code:false, a:"STRING", why:"Never used in arithmetic, and an INTEGER would lose the leading zero."},
+  {q:"Whether a user is logged in", code:false, a:"BOOLEAN", why:"Only two possibilities: TRUE or FALSE."}
+];
+var TYPES = ["INTEGER","REAL","CHAR","STRING","BOOLEAN"];
+var sortState = {};
+
+function sorterRender(){
+  var html = "";
+  for(var i=0;i<SORT_ITEMS.length;i++){
+    var it = SORT_ITEMS[i];
+    var label = it.code ? '<code class="dark">' + it.q.replace(/</g,"&lt;") + '</code>' : it.q;
+    html += '<div class="srt-item"><div class="srt-q">' + (i+1) + '. ' + label + '</div><div class="srt-opts">';
+    for(var t=0;t<TYPES.length;t++){
+      var cls = "srt-btn";
+      if(sortState[i] === TYPES[t]){ cls += (TYPES[t] === it.a) ? " right" : " wrong"; }
+      html += '<button type="button" class="' + cls + '" data-i="' + i + '" data-t="' + TYPES[t] + '">' + TYPES[t] + '</button>';
+    }
+    html += '</div>';
+    if(sortState[i] !== undefined){
+      var ok = sortState[i] === it.a;
+      html += '<div class="srt-fb ' + (ok ? 'v-ok' : 'v-bad') + '">' + (ok ? '✓ ' : '✗ Not quite. ') + (ok ? it.why : 'Think about how it is written or used.') + '</div>';
+    }
+    html += '</div>';
+  }
+  document.getElementById("sorter").innerHTML = html;
+  var btns = document.getElementById("sorter").getElementsByTagName("button");
+  for(var b=0;b<btns.length;b++){
+    btns[b].onclick = function(){ sortState[parseInt(this.getAttribute("data-i"),10)] = this.getAttribute("data-t"); sorterRender(); };
+  }
+  var right = 0, done = 0;
+  for(var k in sortState){ if(sortState.hasOwnProperty(k)){ done++; if(sortState[k] === SORT_ITEMS[k].a){ right++; } } }
+  document.getElementById("sorterScore").innerHTML = done ? (right + " of " + SORT_ITEMS.length + " correct") : "";
+}
+document.getElementById("sorterReset").onclick = function(){ sortState = {}; sorterRender(); };
+sorterRender();
+
+/* ---------- Assignment checker ---------- */
+var CK_VALUES = [
+  {v:"42", t:"INTEGER"}, {v:"3.5", t:"REAL"}, {v:"7.0", t:"REAL"}, {v:".5", t:"BAD_REAL"},
+  {v:"'A'", t:"CHAR"}, {v:"\"A\"", t:"STRING"}, {v:"\"Hello\"", t:"STRING"}, {v:"\"\"", t:"STRING"},
+  {v:"TRUE", t:"BOOLEAN"}, {v:"\"TRUE\"", t:"STRING"}
+];
+var ckChosen = null;
+
+function ckJudge(varType, val){
+  var vt = val.t;
+  if(vt === "BAD_REAL"){ return {ok:false, msg:".5 is not a valid literal at all: a REAL needs a digit before the decimal point. Write 0.5."}; }
+  if(vt === varType){ return {ok:true, msg:"The value " + val.v + " is a " + vt + ", which matches the variable’s type."}; }
+  if(vt === "INTEGER" && varType === "REAL"){ return {ok:true, allowed:true, msg:"Allowed in Pseudocode Pro: the INTEGER " + val.v + " becomes the REAL " + val.v + ".0, and nothing is lost. In an exam, writing " + val.v + ".0 is the safest match."}; }
+  if(vt === "CHAR" && varType === "STRING"){ return {ok:true, allowed:true, msg:"Allowed in Pseudocode Pro: a single CHAR becomes a one-character STRING."}; }
+  var hint = "";
+  if(varType === "INTEGER" && vt === "REAL"){ hint = " An INTEGER can’t hold a fractional part."; }
+  else if(varType === "CHAR" && vt === "STRING" && val.v === "\"A\""){ hint = " Double quotes make \"A\" a STRING. For a CHAR, write 'A' with single quotes."; }
+  else if(varType === "CHAR" && vt === "STRING"){ hint = " A CHAR holds exactly one character, in single quotes."; }
+  else if(varType === "BOOLEAN" && val.v === "\"TRUE\""){ hint = " The quotes make it a STRING. Write TRUE without quotes."; }
+  else if(varType === "STRING" && (vt === "INTEGER" || vt === "REAL")){ hint = " To store it as text, put it in double quotes: \"" + val.v + "\"."; }
+  return {ok:false, msg:"Type mismatch: " + val.v + " is a " + vt + ", but the variable is a " + varType + "." + hint};
+}
+function ckRender(){
+  var chips = "";
+  for(var i=0;i<CK_VALUES.length;i++){
+    chips += '<button type="button" class="chip' + (ckChosen === i ? ' on' : '') + '" data-i="' + i + '">' + CK_VALUES[i].v.replace(/</g,"&lt;") + '</button>';
+  }
+  document.getElementById("ckChips").innerHTML = chips;
+  var cb = document.getElementById("ckChips").getElementsByTagName("button");
+  for(var c=0;c<cb.length;c++){ cb[c].onclick = function(){ ckChosen = parseInt(this.getAttribute("data-i"),10); ckRender(); }; }
+  var box = document.getElementById("ckVerdict");
+  if(ckChosen === null){ box.innerHTML = '<span class="muted">Choose a value…</span>'; return; }
+  var varType = document.getElementById("ckType").value;
+  var val = CK_VALUES[ckChosen];
+  var r = ckJudge(varType, val);
+  var stmt = '<div class="ck-stmt">Box ← ' + val.v.replace(/</g,"&lt;") + '</div>';
+  var title = r.ok ? (r.allowed ? '<div class="v-title v-meh">✓ Allowed (a safe conversion)</div>' : '<div class="v-title v-ok">✓ Types match</div>') : '<div class="v-title v-bad">✗ Error</div>';
+  box.innerHTML = stmt + title + '<div class="ck-msg">' + r.msg + '</div>';
+}
+document.getElementById("ckType").onchange = ckRender;
+ckRender();
+
+/* ---------- TOC scroll-spy ---------- */
+(function(){
+  var links = document.getElementById("toc").getElementsByTagName("a");
+  function spy(){
+    var current = null;
+    for(var i=0;i<links.length;i++){
+      var sec = document.getElementById(links[i].getAttribute("href").substring(1));
+      if(sec && sec.getBoundingClientRect().top < 140){ current = i; }
+    }
+    for(var j=0;j<links.length;j++){ links[j].className = (j === current) ? "active" : ""; }
+  }
+  window.addEventListener("scroll", spy);
+  spy();
+})();
+</script>
+<script src="../../../videos-config.js"></script>
+<script src="../../../../video-embed.js"></script>
+</body>
+</html>

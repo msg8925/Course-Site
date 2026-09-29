@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "foundations/p03-input-output";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Input & Output";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Input &amp; Output</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1B2B5E;--navy-deep:#101a3a;--teal:#0D9488;--teal-light:#e6f5f3;--purple:#7C4DA0;--purple-light:#f1e9f6;--amber:#a8560c;--amber-light:#fbeee0;--red:#a4342a;--red-light:#fbeae8;--bg:#f5f6fa;--panel:#ffffff;--panel-alt:#eef1f8;--border:#dde1ee;--text:#1c2340;--muted:#5b6472}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Source Sans 3",Arial,sans-serif;font-size:17px;line-height:1.6}
+header.hero{background:var(--navy);color:#fff;padding:36px 20px 32px}
+.hero-inner{max-width:1100px;margin:0 auto}
+.eyebrow{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#9fe3dc;font-weight:700}
+h1{font-family:"Source Serif 4",Georgia,serif;font-size:36px;line-height:1.2;margin:8px 0 10px}
+.lede{max-width:720px;color:#dfe4f3;margin:0;font-size:18px}
+.layout{max-width:1100px;margin:0 auto;padding:28px 20px 60px;display:flex;gap:40px;align-items:flex-start}
+nav.toc{width:230px;flex-shrink:0;position:sticky;top:20px;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px}
+nav.toc h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 8px;font-family:"Source Sans 3",Arial,sans-serif}
+nav.toc a{display:block;color:var(--text);text-decoration:none;font-size:15px;padding:5px 8px;border-radius:6px;border-left:3px solid transparent}
+nav.toc a:hover{background:var(--panel-alt)}
+nav.toc a.active{border-left-color:var(--teal);background:var(--teal-light);color:var(--navy);font-weight:600}
+details.toc-mobile{display:none}
+article{max-width:740px;min-width:0;flex:1}
+section{margin-bottom:44px}
+.section-kicker{font-family:"JetBrains Mono",monospace;color:var(--teal);font-weight:600;font-size:14px}
+h2.sec{font-family:"Source Serif 4",Georgia,serif;font-size:27px;color:var(--navy);margin:2px 0 12px}
+h3{font-family:"Source Serif 4",Georgia,serif;color:var(--navy);font-size:20px;margin:24px 0 8px}
+code{font-family:"JetBrains Mono",monospace;font-size:.88em;background:var(--panel-alt);padding:1px 5px;border-radius:4px}
+.tip,.warn,.level{border-radius:8px;padding:14px 16px;margin:18px 0}
+.tip{background:var(--teal-light);border-left:4px solid var(--teal)}
+.warn{background:var(--amber-light);border-left:4px solid var(--amber)}
+.level{background:var(--purple-light);border-left:4px solid var(--purple)}
+.tip>strong:first-child,.warn>strong:first-child,.level>strong:first-child{display:block;margin-bottom:4px;color:var(--navy)}
+.code-wrap{margin:16px 0;border-radius:8px;overflow:hidden;background:var(--navy-deep)}
+.code-label{background:#1f2c55;color:#b8c2e0;font-family:"JetBrains Mono",monospace;font-size:12px;padding:6px 12px;display:flex;justify-content:space-between}
+pre{margin:0;padding:14px 16px;color:#e8ecf8;font-family:"JetBrains Mono",monospace;font-size:14.5px;line-height:1.65;overflow-x:auto;white-space:pre}
+.kw{color:#7fd3ff;font-weight:600}.id{color:#ffe08a}.op{color:#ff9fb8}.lit{color:#a6e3a1}.cm{color:#8b95b8;font-style:italic}.ty{color:#d2a8ff}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
+.legend span{font-size:14px;padding:3px 10px;border-radius:20px;background:var(--navy-deep);font-family:"JetBrains Mono",monospace}
+table.ref{width:100%;border-collapse:collapse;margin:14px 0;background:var(--panel);font-size:15.5px}
+table.ref th{background:var(--navy);color:#fff;text-align:left;padding:8px 10px}
+table.ref td{border:1px solid var(--border);padding:8px 10px;vertical-align:top}
+.good{color:var(--teal);font-weight:700}.bad{color:var(--red);font-weight:700}
+.playground{background:var(--navy-deep);color:#e8ecf8;border-radius:10px;padding:18px;margin:20px 0}
+.playground h4{margin:0 0 10px;font-family:"Source Serif 4",Georgia,serif;font-size:18px;color:#fff}
+.playground input[type=text]{width:100%;padding:10px 12px;font-family:"JetBrains Mono",monospace;font-size:16px;border-radius:6px;border:1px solid #3a4a80;background:#0b1330;color:#fff}
+.chips{margin-top:10px}
+.chip{display:inline-block;background:#223266;color:#cfe0ff;border:none;border-radius:20px;padding:4px 11px;margin:3px 3px 0 0;font-family:"JetBrains Mono",monospace;font-size:13px;cursor:pointer}
+.chip:hover{background:#2e4488}
+.verdict{margin-top:14px;padding:12px 14px;border-radius:8px;background:#0b1330;min-height:48px}
+.verdict .v-title{font-weight:700;font-size:17px}
+.v-ok{color:#5eead4}.v-bad{color:#ff9f93}.v-meh{color:#ffd28a}
+.verdict ul{margin:6px 0 0;padding-left:20px}
+.tracer{display:flex;gap:14px;flex-wrap:wrap}
+.tr-code{flex:1 1 330px;background:#0b1330;border-radius:8px;padding:10px 0;font-family:"JetBrains Mono",monospace;font-size:13.5px}
+.tr-line{padding:2px 12px;white-space:pre;border-left:3px solid transparent}
+.tr-line .ln{color:#5b6a99;display:inline-block;width:22px}
+.tr-line.cur{background:#1d3a6b;border-left-color:#5eead4}
+.tr-line.done{opacity:.55}
+.tr-side{flex:1 1 220px;min-width:200px}
+.tr-box{background:#0b1330;border-radius:8px;padding:10px 12px;margin-bottom:10px}
+.tr-box h5{margin:0 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#9fb0dd}
+.var-row{display:flex;justify-content:space-between;font-family:"JetBrains Mono",monospace;font-size:14px;padding:2px 0;border-bottom:1px dashed #243463}
+.var-row.flash{color:#5eead4;font-weight:600}
+.out{font-family:"JetBrains Mono",monospace;font-size:14px;white-space:pre-wrap;min-height:44px;color:#a6e3a1}
+.tr-note{background:#132552;border-radius:8px;padding:10px 12px;font-size:15px;margin-top:10px;min-height:48px}
+.btns{margin-top:12px}
+.btn{background:var(--teal);color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:15px;font-weight:600;cursor:pointer;margin-right:8px;font-family:inherit}
+.btn.ghost{background:#2a3a6e}
+.btn[disabled]{opacity:.45;cursor:default}
+ol.steps{padding-left:0;list-style:none;counter-reset:st}
+ol.steps li{counter-increment:st;position:relative;padding:10px 12px 10px 52px;background:var(--panel);border:1px solid var(--border);border-radius:8px;margin-bottom:8px}
+ol.steps li:before{content:counter(st);position:absolute;left:12px;top:10px;width:28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;font-weight:700;text-align:center;line-height:28px;font-size:14px}
+.kbd{font-family:"JetBrains Mono",monospace;font-size:13px;background:#fff;border:1px solid var(--border);border-bottom-width:2px;border-radius:4px;padding:0 5px}
+footer.lesson-foot{border-top:1px solid var(--border);padding-top:20px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+footer.lesson-foot a{color:var(--navy);font-weight:600;text-decoration:none;background:var(--panel);border:1px solid var(--border);padding:10px 14px;border-radius:8px}
+footer.lesson-foot a.primary{background:var(--teal);color:#fff;border-color:var(--teal)}
+a{color:var(--teal)}
+@media (max-width:900px){
+ .layout{display:block;padding-top:16px}
+ nav.toc{display:none}
+ details.toc-mobile{display:block;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:22px}
+ details.toc-mobile summary{font-weight:700;cursor:pointer;color:var(--navy)}
+ details.toc-mobile a{display:block;padding:5px 0;color:var(--text);text-decoration:none}
+ h1{font-size:29px}
+}
+
+.syl-toggle{display:flex;align-items:center;gap:8px;margin:16px 0 4px;flex-wrap:wrap}
+.syl-toggle .syl-lbl{font-size:14px;color:#dfe4f3}
+.syl-btn{background:transparent;color:#dfe4f3;border:1px solid #6d7cb3;border-radius:18px;padding:4px 13px;font-size:14px;cursor:pointer;font-family:inherit}
+.syl-btn.on{background:#0D9488;border-color:#0D9488;color:#fff;font-weight:600}
+.syl-label{font-style:italic}
+table.ref{width:100%;border-collapse:collapse;margin:14px 0;background:var(--panel);font-size:15.5px}
+table.ref th{background:var(--navy);color:#fff;text-align:left;padding:8px 10px}
+table.ref td{border:1px solid var(--border);padding:8px 10px;vertical-align:top}
+.level{background:var(--purple-light);border-left:4px solid var(--purple);border-radius:8px;padding:12px 16px;margin:14px 0}
+.level>strong:first-child{display:block;margin-bottom:2px;color:var(--navy)}
+
+.pg-intro{margin:0 0 12px;color:#c9d2ee;font-size:15px}
+.muted{color:#9fb0dd}
+.small-note{font-size:15px;color:var(--muted)}
+code.dark{background:#0b1330;color:#ffe08a;padding:2px 7px}
+.srt-item{background:#0b1330;border-radius:8px;padding:10px 12px;margin-bottom:8px}
+.srt-q{font-size:15.5px;margin-bottom:6px}
+.srt-opts{display:flex;flex-wrap:wrap;gap:6px}
+.srt-btn{background:#223266;color:#cfe0ff;border:1px solid #33447a;border-radius:16px;padding:3px 10px;font-family:"JetBrains Mono",monospace;font-size:12.5px;cursor:pointer}
+.srt-btn:hover{border-color:#5eead4}
+.srt-btn.right{background:#0D9488;border-color:#5eead4;color:#fff}
+.srt-btn.wrong{background:#6b2620;border-color:#ff9f93;color:#fff}
+.srt-fb{font-size:14.5px;margin-top:6px}
+.sorter-score{margin-top:8px;font-weight:700;color:#5eead4}
+.ck-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.ck-row label{font-size:14px;color:#9fb0dd;text-transform:uppercase;letter-spacing:.06em}
+.ck-code{font-family:"JetBrains Mono",monospace;font-size:15px}
+.kw2{color:#7fd3ff;font-weight:600}
+.ck-row select{font-family:"JetBrains Mono",monospace;font-size:15px;padding:5px 8px;border-radius:6px;background:#0b1330;color:#d2a8ff;border:1px solid #3a4a80}
+.chip.on{background:#0D9488;color:#fff}
+.ck-stmt{font-family:"JetBrains Mono",monospace;font-size:15px;color:#ffe08a;margin-bottom:6px}
+.ck-msg{margin-top:4px;color:#dfe4f3;font-size:15.5px}
+
+
+.ot-row{display:flex;gap:8px;flex-wrap:wrap}
+.ot-row input{flex:1;min-width:220px;padding:10px 12px;font-family:"JetBrains Mono",monospace;font-size:15px;border-radius:6px;border:1px solid #3a4a80;background:#0b1330;color:#fff}
+.ot-out{font-family:"JetBrains Mono",monospace;font-size:16px;color:#a6e3a1;margin-top:6px;white-space:pre-wrap;word-break:break-all}
+.sp,.sp-demo{color:#ffd28a;font-weight:600}
+.ot-note{margin-top:6px;color:#dfe4f3;font-size:15px}
+.ot-note code,.verdict code{background:#1f2c55;color:#ffe08a}
+.sim{display:flex;gap:14px;flex-wrap:wrap}
+.sim-code{flex:1 1 330px;min-width:0;overflow-x:auto;background:#0b1330;border-radius:8px;padding:10px 0;font-family:"JetBrains Mono",monospace;font-size:13px}
+.sim-side{flex:1 1 230px;min-width:210px}
+.sim-screen{font-family:"JetBrains Mono",monospace;font-size:13.5px;color:#a6e3a1;min-height:60px;white-space:pre-wrap}
+.sim-user{color:#ffe08a}
+.sim-in{display:none;gap:6px;margin-top:8px}
+.sim-in input{flex:1;min-width:0;padding:6px 8px;font-family:"JetBrains Mono",monospace;font-size:14px;border-radius:6px;border:1px solid #5eead4;background:#0b1330;color:#fff}
+.sim-in .btn{padding:6px 12px;font-size:14px}
+
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/foundations-p03-input-output-explainer.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+<header class="hero">
+ <div class="hero-inner">
+  <div class="eyebrow">Cambridge Pseudocode · Foundations · Topic 3</div>
+  <h1>Input &amp; Output</h1>
+  <p class="lede">How a program talks to its user: displaying results with OUTPUT, collecting data with INPUT, and writing clear prompts so the user knows what to type.</p>
+ </div>
+</header>
+
+<div class="layout">
+ <nav class="toc" id="toc">
+  <h2>On this page</h2>
+  <a href="#ipo">01 Input, process, output</a>
+  <a href="#output">02 OUTPUT in detail</a>
+  <a href="#input">03 INPUT</a>
+  <a href="#types">04 Input and data types</a>
+  <a href="#worked">05 A complete program</a>
+  <a href="#exam">06 Exam tips</a>
+ </nav>
+
+ <article>
+  <div class="lesson-video" data-lesson="foundations/p03-input-output"></div>
+  <details class="toc-mobile">
+   <summary>On this page</summary>
+   <a href="#ipo">01 Input, process, output</a>
+   <a href="#output">02 OUTPUT in detail</a>
+   <a href="#input">03 INPUT</a>
+   <a href="#types">04 Input and data types</a>
+   <a href="#worked">05 A complete program</a>
+   <a href="#exam">06 Exam tips</a>
+  </details>
+
+  <!-- 01 -->
+  <section id="ipo">
+   <div class="section-kicker">01</div>
+   <h2 class="sec">Input, process, output</h2>
+   <p>So far, every value in our programs was typed into the code itself. That program gives the same result every time it runs. Real programs work with data from the <strong>user</strong>, so they can give a different result each time.</p>
+   <p>Almost every program follows the same pattern, often called <strong>IPO</strong>:</p>
+   <table class="ref">
+    <tr><th style="width:18%">Stage</th><th>What happens</th><th style="width:34%">Cash machine example</th></tr>
+    <tr><td><strong>Input</strong></td><td>Data comes into the program, usually typed by the user.</td><td>You type the amount to withdraw.</td></tr>
+    <tr><td><strong>Process</strong></td><td>The program works with the data: calculations and decisions.</td><td>It checks your balance and subtracts the amount.</td></tr>
+    <tr><td><strong>Output</strong></td><td>Results go back out, usually displayed on screen.</td><td>It shows your new balance.</td></tr>
+   </table>
+   <div class="tip"><strong>Key idea</strong><code>INPUT</code> brings data into the program and stores it in a variable. <code>OUTPUT</code> sends data out to the screen. Everything in between is processing.</div>
+  </section>
+
+  <!-- 02 -->
+  <section id="output">
+   <div class="section-kicker">02</div>
+   <h2 class="sec">OUTPUT in detail</h2>
+   <p>You have used <code>OUTPUT</code> since Topic 1. The format is:</p>
+   <div class="code-wrap"><div class="code-label"><span>syntax</span></div>
+<pre><span class="kw">OUTPUT</span> <span class="id">&lt;value(s)&gt;</span></pre></div>
+   <p>The values can be literals, variables, or calculations, and several values are separated by <strong>commas</strong>:</p>
+   <div class="code-wrap"><div class="code-label"><span>pseudocode</span><span>Lives = 3, Score = 42</span></div>
+<pre><span class="kw">OUTPUT</span> <span class="lit">"Game over"</span>
+<span class="kw">OUTPUT</span> <span class="id">Score</span>
+<span class="kw">OUTPUT</span> <span class="lit">"You have "</span>, <span class="id">Lives</span>, <span class="lit">" lives left"</span>
+<span class="kw">OUTPUT</span> <span class="lit">"Double score: "</span>, <span class="id">Score</span> * <span class="lit">2</span></pre></div>
+   <div class="code-wrap"><div class="code-label"><span>output</span></div>
+<pre>Game over
+42
+You have 3 lives left
+Double score: 84</pre></div>
+   <h3>Three rules to remember</h3>
+   <ul>
+    <li><strong>Each OUTPUT statement starts a new line.</strong></li>
+    <li><strong>The values are joined with no spaces added.</strong> Put any spaces you need inside the quotes, e.g. <code>"You have "</code>.</li>
+    <li><strong>Quotes decide what is printed.</strong> <code>OUTPUT Score</code> prints the value, 42. <code>OUTPUT "Score"</code> prints the word Score.</li>
+   </ul>
+   <div class="warn"><strong>The three most common OUTPUT mistakes</strong>A missing comma between items (<code>"Total: " Total</code>); a missing space inside the quotes, giving <code>Total:10</code>; and a variable name put in quotes, which prints its name instead of its value.</div>
+
+   <div class="playground">
+    <h4>OUTPUT tester</h4>
+    <p class="pg-intro">These variables already have values: <code class="dark">Name ← "Priya"</code>, <code class="dark">Score ← 42</code>, <code class="dark">Lives ← 3</code>. Type an OUTPUT statement and press <strong>Run</strong>. Spaces in the result are shown as <span class="sp-demo">·</span> so you can see them.</p>
+    <div class="ot-row">
+     <input type="text" id="otInput" value='OUTPUT "Well done ", Name, "! Score: ", Score' autocomplete="off" spellcheck="false" aria-label="OUTPUT statement">
+     <button class="btn" type="button" id="otRun">Run</button>
+    </div>
+    <div class="chips" id="otChips">
+     <button class="chip" type="button">OUTPUT Name, "has", Lives, "lives"</button>
+     <button class="chip" type="button">OUTPUT "Score: " Score</button>
+     <button class="chip" type="button">OUTPUT "Lives"</button>
+     <button class="chip" type="button">OUTPUT Score + Lives</button>
+     <button class="chip" type="button">OUTPUT Name + 1</button>
+    </div>
+    <div class="verdict" id="otResult"><span class="muted">Press Run…</span></div>
+   </div>
+  </section>
+
+  <!-- 03 -->
+  <section id="input">
+   <div class="section-kicker">03</div>
+   <h2 class="sec">INPUT</h2>
+   <p><code>INPUT</code> lets the user type a value while the program runs. The value is stored in a variable:</p>
+   <div class="code-wrap"><div class="code-label"><span>syntax</span></div>
+<pre><span class="kw">INPUT</span> <span class="id">&lt;identifier&gt;</span></pre></div>
+   <p>When the program reaches <code>INPUT</code>, it <strong>pauses and waits</strong>. Whatever the user types is stored in the variable, replacing any value it held before. Then the program carries on with the next line.</p>
+   <ul>
+    <li>The variable must be <strong>declared first</strong>, like any other (Topic 2).</li>
+    <li><code>INPUT</code> is followed by a variable name only, with no quotes. <code>INPUT "Age"</code> is wrong.</li>
+    <li>One <code>INPUT</code> statement collects one value. To collect two values, use two INPUT statements.</li>
+   </ul>
+   <h3>Always prompt first</h3>
+   <p>In Cambridge pseudocode, <code>INPUT</code> has no message of its own. Without one, the user sees the program stop, with no idea what it wants. So always <strong>OUTPUT a prompt</strong> on the line before:</p>
+   <div class="code-wrap"><div class="code-label"><span>pseudocode</span></div>
+<pre><span class="kw">DECLARE</span> <span class="id">Age</span> : <span class="ty">INTEGER</span>
+<span class="kw">OUTPUT</span> <span class="lit">"How old are you?"</span>     <span class="cm">// the prompt</span>
+<span class="kw">INPUT</span> <span class="id">Age</span>                    <span class="cm">// waits for the user</span></pre></div>
+   <div class="tip"><strong>Good prompts</strong>A good prompt says exactly what to type and in what form: <code>"Enter the price in dollars, e.g. 4.99:"</code> is clearer than <code>"Price?"</code>.</div>
+   <div class="level"><strong>IGCSE (0478) and AS (9618)</strong>INPUT and OUTPUT are written the same way in both courses.</div>
+  </section>
+
+  <!-- 04 -->
+  <section id="types">
+   <div class="section-kicker">04</div>
+   <h2 class="sec">Input and data types</h2>
+   <p>The value typed in is stored as the <strong>data type of the variable</strong>. That is why choosing the right type (Topic 2) matters so much here:</p>
+   <ul>
+    <li>If you will <strong>calculate</strong> with the value, input it into an <code>INTEGER</code> or <code>REAL</code> variable.</li>
+    <li>If it is text, or digits you never calculate with (a phone number), use a <code>STRING</code>.</li>
+    <li>If the user types something the variable can’t hold, such as <code>ten</code> into an INTEGER, the program can’t store it. You will see what Pseudocode Pro does in the practice tasks. Later, in the validation topic, you will learn to check input before using it.</li>
+   </ul>
+   <p>Try the program below. It prompts, waits for your input, and uses what you type.</p>
+
+   <div class="playground">
+    <h4>Program simulator</h4>
+    <div class="sim">
+     <div class="sim-code" id="simCode"></div>
+     <div class="sim-side">
+      <div class="tr-box"><h5>Screen</h5><div class="sim-screen" id="simScreen"></div>
+       <div class="sim-in" id="simInWrap"><input type="text" id="simIn" autocomplete="off" spellcheck="false" aria-label="Your input"><button class="btn" type="button" id="simEnter">Enter</button></div>
+      </div>
+      <div class="tr-box"><h5>Variables</h5><div id="simVars"></div></div>
+     </div>
+    </div>
+    <div class="tr-note" id="simNote">Press <strong>Run</strong> to start.</div>
+    <div class="btns"><button class="btn" type="button" id="simRun">Run</button></div>
+   </div>
+  </section>
+
+  <!-- 05 -->
+  <section id="worked">
+   <div class="section-kicker">05</div>
+   <h2 class="sec">A complete program</h2>
+   <p>This program converts a temperature from Celsius to Fahrenheit. Before writing code, it helps to plan it as input, process and output:</p>
+   <table class="ref">
+    <tr><th style="width:18%">Stage</th><th>For this program</th></tr>
+    <tr><td>Input</td><td>A temperature in Celsius (a REAL, since it may have a decimal part)</td></tr>
+    <tr><td>Process</td><td>Fahrenheit = Celsius × 9 ÷ 5 + 32</td></tr>
+    <tr><td>Output</td><td>Both temperatures, with a message</td></tr>
+   </table>
+   <div class="code-wrap"><div class="code-label"><span>pseudocode</span><span>Temperature converter</span></div>
+<pre><span class="cm">// Converts a temperature from Celsius to Fahrenheit</span>
+<span class="kw">DECLARE</span> <span class="id">Celsius</span> : <span class="ty">REAL</span>
+<span class="kw">DECLARE</span> <span class="id">Fahrenheit</span> : <span class="ty">REAL</span>
+<span class="kw">OUTPUT</span> <span class="lit">"Enter a temperature in Celsius:"</span>
+<span class="kw">INPUT</span> <span class="id">Celsius</span>
+<span class="id">Fahrenheit</span> <span class="op">←</span> <span class="id">Celsius</span> * <span class="lit">9</span> / <span class="lit">5</span> + <span class="lit">32</span>
+<span class="kw">OUTPUT</span> <span class="id">Celsius</span>, <span class="lit">" C is "</span>, <span class="id">Fahrenheit</span>, <span class="lit">" F"</span></pre></div>
+   <p>If the user types <code>37.5</code> when asked, the program outputs:</p>
+   <div class="code-wrap"><div class="code-label"><span>output</span></div>
+<pre>Enter a temperature in Celsius:
+37.5 C is 99.5 F</pre></div>
+   <p>Line by line: the prompt appears; the program waits and stores 37.5 in <code>Celsius</code>; it calculates 37.5 × 9 ÷ 5 + 32 = 99.5 and stores it in <code>Fahrenheit</code>; then it outputs the result, with spaces inside the quotes so the words don’t run together.</p>
+   <div class="tip"><strong>Test with different inputs</strong>A program that uses input should be tried with several values. Here, 100 should give 212 and 0 should give 32, which are water’s boiling and freezing points. If those are right, the formula is probably right.</div>
+  </section>
+
+  <!-- 06 -->
+  <section id="exam">
+   <div class="section-kicker">06</div>
+   <h2 class="sec">Exam tips</h2>
+   <ul>
+    <li>Questions often say “Write pseudocode to input… and output…”. Plan the input, process and output before writing.</li>
+    <li>Put a meaningful prompt before every <code>INPUT</code>. Many mark schemes give credit for it.</li>
+    <li><code>INPUT</code> takes a variable name only: <code>INPUT Age</code>, never <code>INPUT "Age"</code>.</li>
+    <li>Separate OUTPUT items with commas, and put spaces inside the quotes.</li>
+    <li>Declare input variables with the right type: numbers you calculate with as INTEGER or REAL.</li>
+   </ul>
+  </section>
+
+  <footer class="lesson-foot">
+   <a href="../p02-data-types/explainer.html">← Topic 2: Data types</a>
+   <a href="practice.html" class="primary">Practise this topic →</a>
+   <a href="#" onclick="return false" title="Coming next">Next: Arithmetic operators</a>
+  </footer>
+ </article>
+</div>
+
+<script>
+/* ---------- OUTPUT tester ---------- */
+var OT_VARS = { NAME:{name:"Name", type:"STRING", value:"Priya"}, SCORE:{name:"Score", type:"INTEGER", value:42}, LIVES:{name:"Lives", type:"INTEGER", value:3} };
+
+function otEsc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+function otSplit(s){
+  /* split on commas that are not inside double quotes; return null if a quote is unclosed */
+  var items = [], cur = "", inQ = false;
+  for(var i=0;i<s.length;i++){
+    var ch = s.charAt(i);
+    if(ch === '"'){ inQ = !inQ; cur += ch; }
+    else if(ch === "," && !inQ){ items.push(cur); cur = ""; }
+    else { cur += ch; }
+  }
+  if(inQ){ return null; }
+  items.push(cur);
+  return items;
+}
+
+function otEvalItem(raw){
+  var item = raw.replace(/^\s+|\s+$/g,"");
+  if(item === ""){ return {err:"There is an empty item: check for a doubled or trailing comma."}; }
+  if(/^"[^"]*"$/.test(item)){ return {val:item.substring(1,item.length-1)}; }
+  if(item.indexOf('"') !== -1){ return {err:"<code>" + otEsc(item) + "</code> mixes text in quotes with something outside the quotes. Is a comma missing between them?"}; }
+  if(/^-?\d+$/.test(item)){ return {val:String(parseInt(item,10))}; }
+  /* arithmetic on known INTEGER variables and whole numbers */
+  var tokens = item.match(/[A-Za-z_][A-Za-z0-9_]*|\d+|[+\-*()]|\S/g) || [];
+  var expr = "", usedString = null;
+  for(var t=0;t<tokens.length;t++){
+    var tok = tokens[t];
+    if(/^[A-Za-z_]/.test(tok)){
+      var v = OT_VARS[tok.toUpperCase()];
+      if(!v){ return {err:"<code>" + otEsc(tok) + "</code> is not one of the variables here. If you meant it as text, put it in double quotes."}; }
+      if(v.type === "STRING"){
+        if(tokens.length === 1){ return {val:v.value}; }
+        usedString = v.name;
+      }
+      expr += String(v.value);
+    } else if(/^\d+$/.test(tok) || /^[+\-*()]$/.test(tok)){ expr += tok; }
+    else { return {err:"This tester doesn’t understand <code>" + otEsc(tok) + "</code>."}; }
+  }
+  if(usedString){ return {err:"<code>" + usedString + "</code> is a STRING, so it can’t be used in arithmetic."}; }
+  try {
+    var r = Function('"use strict";return (' + expr + ');')();
+    if(typeof r !== "number" || !isFinite(r)){ throw new Error("bad"); }
+    return {val:String(r)};
+  } catch(e){ return {err:"<code>" + otEsc(item) + "</code> isn’t a complete calculation."}; }
+}
+
+function otRun(){
+  var src = document.getElementById("otInput").value.replace(/^\s+|\s+$/g,"");
+  var box = document.getElementById("otResult");
+  var m = src.match(/^(output)\s+(.*)$/i);
+  if(!m){ box.innerHTML = '<div class="v-title v-bad">✗ Start the statement with OUTPUT</div>'; return; }
+  var note = (m[1] !== "OUTPUT") ? '<div class="ot-note">Style: keywords are written in capitals, <code>OUTPUT</code>.</div>' : "";
+  var items = otSplit(m[2]);
+  if(items === null){ box.innerHTML = '<div class="v-title v-bad">✗ A double quote is not closed</div><div class="ot-note">Every string needs an opening and a closing <code>"</code>.</div>'; return; }
+  var out = "";
+  for(var i=0;i<items.length;i++){
+    var r = otEvalItem(items[i]);
+    if(r.err){ box.innerHTML = '<div class="v-title v-bad">✗ Error</div><div class="ot-note">' + r.err + '</div>'; return; }
+    out += r.val;
+  }
+  var shown = otEsc(out).replace(/ /g,'<span class="sp">·</span>');
+  var warn = "";
+  if(items.length > 1 && /[A-Za-z0-9][A-Za-z0-9]/.test(out) && out.indexOf(" ") === -1){ warn = '<div class="ot-note">No spaces at all. Did you mean to add some inside the quotes?</div>'; }
+  box.innerHTML = '<div class="v-title v-ok">Screen shows:</div><div class="ot-out">' + (shown === "" ? '<span class="muted">(an empty line)</span>' : shown) + '</div>' + warn + note;
+}
+document.getElementById("otRun").onclick = otRun;
+document.getElementById("otInput").onkeydown = function(e){ e = e || window.event; if(e.keyCode === 13){ otRun(); } };
+(function(){
+  var chips = document.getElementById("otChips").getElementsByTagName("button");
+  for(var c=0;c<chips.length;c++){ chips[c].onclick = function(){ document.getElementById("otInput").value = this.textContent; otRun(); }; }
+})();
+
+/* ---------- Program simulator ---------- */
+var SIM_LINES = [
+  "DECLARE Name : STRING",
+  "DECLARE Age : INTEGER",
+  "OUTPUT \"What is your name?\"",
+  "INPUT Name",
+  "OUTPUT \"How old are you?\"",
+  "INPUT Age",
+  "OUTPUT \"Hello \", Name, \". Next year you will be \", Age + 1"
+];
+var sim = {pc:-1, vars:{}, screen:[], waiting:false, done:false};
+
+function simRender(){
+  var h = "";
+  for(var i=0;i<SIM_LINES.length;i++){
+    var cls = "tr-line" + (i === sim.pc ? " cur" : (i < sim.pc ? " done" : ""));
+    h += '<div class="' + cls + '"><span class="ln">' + (i+1) + '</span>' + otEsc(SIM_LINES[i]) + '</div>';
+  }
+  document.getElementById("simCode").innerHTML = h;
+  var s = "";
+  for(var j=0;j<sim.screen.length;j++){ s += '<div class="' + (sim.screen[j].user ? 'sim-user' : '') + '">' + otEsc(sim.screen[j].text) + '</div>'; }
+  document.getElementById("simScreen").innerHTML = s || '<span class="muted">(blank)</span>';
+  var v = "";
+  var order = ["Name","Age"];
+  for(var k=0;k<order.length;k++){
+    if(sim.vars.hasOwnProperty(order[k])){ v += '<div class="var-row"><span>' + order[k] + '</span><span>' + otEsc(sim.vars[order[k]] === null ? "–" : sim.vars[order[k]]) + '</span></div>'; }
+  }
+  document.getElementById("simVars").innerHTML = v || '<span class="muted">No variables yet</span>';
+  document.getElementById("simInWrap").style.display = sim.waiting ? "flex" : "none";
+  document.getElementById("simRun").innerHTML = (sim.pc === -1 || sim.done) ? "Run" : "Restart";
+}
+function simNote(t){ document.getElementById("simNote").innerHTML = t; }
+
+function simStep(){
+  /* run lines until the program needs input or ends */
+  while(true){
+    sim.pc++;
+    if(sim.pc >= SIM_LINES.length){ sim.done = true; sim.pc = SIM_LINES.length; simNote("The program has finished. Press <strong>Run</strong> to try different inputs, such as a name with a space, or an age like <code>ten</code>."); break; }
+    if(sim.pc === 0){ sim.vars.Name = null; continue; }
+    if(sim.pc === 1){ sim.vars.Age = null; continue; }
+    if(sim.pc === 2){ sim.screen.push({text:"What is your name?"}); continue; }
+    if(sim.pc === 3 || sim.pc === 5){
+      sim.waiting = true;
+      simNote("Line " + (sim.pc+1) + ": the program has <strong>paused</strong> and is waiting for you. Type " + (sim.pc === 3 ? "your name" : "your age") + " and press Enter.");
+      break;
+    }
+    if(sim.pc === 4){ sim.screen.push({text:"How old are you?"}); continue; }
+    if(sim.pc === 6){
+      sim.screen.push({text:"Hello " + sim.vars.Name + ". Next year you will be " + (parseInt(sim.vars.Age,10) + 1)});
+      continue;
+    }
+  }
+  simRender();
+}
+function simEnter(){
+  if(!sim.waiting){ return; }
+  var val = document.getElementById("simIn").value;
+  if(sim.pc === 5){
+    if(!/^\s*-?\d+\s*$/.test(val)){
+      simNote("<strong>Age is an INTEGER</strong>, so it can only store a whole number. <code>" + otEsc(val) + "</code> can’t be stored. Type a whole number such as 15.");
+      return;
+    }
+    val = String(parseInt(val,10));
+  }
+  sim.screen.push({text:val, user:true});
+  sim.vars[sim.pc === 3 ? "Name" : "Age"] = val;
+  sim.waiting = false;
+  document.getElementById("simIn").value = "";
+  simStep();
+  if(!sim.done && sim.waiting){ try { document.getElementById("simIn").focus(); } catch(e){} }
+}
+function simStart(){
+  sim = {pc:-1, vars:{}, screen:[], waiting:false, done:false};
+  simStep();
+}
+document.getElementById("simRun").onclick = simStart;
+document.getElementById("simEnter").onclick = simEnter;
+document.getElementById("simIn").onkeydown = function(e){ e = e || window.event; if(e.keyCode === 13){ simEnter(); } };
+simRender();
+
+/* ---------- TOC scroll-spy ---------- */
+(function(){
+  var links = document.getElementById("toc").getElementsByTagName("a");
+  function spy(){
+    var current = null;
+    for(var i=0;i<links.length;i++){
+      var sec = document.getElementById(links[i].getAttribute("href").substring(1));
+      if(sec && sec.getBoundingClientRect().top < 140){ current = i; }
+    }
+    for(var j=0;j<links.length;j++){ links[j].className = (j === current) ? "active" : ""; }
+  }
+  window.addEventListener("scroll", spy);
+  spy();
+})();
+</script>
+<script src="../../../videos-config.js"></script>
+<script src="../../../../video-embed.js"></script>
+</body>
+</html>

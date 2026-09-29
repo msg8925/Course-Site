@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "topologies-media/network-topologies";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Session 7: Network Topologies";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Session 7: Network Topologies — Networking Lab Sequence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:'Source Sans 3',Arial,sans-serif; line-height:1.6}
+  header{background:var(--navy); color:#fff; padding:40px 24px 48px}
+  .eyebrow{font-size:14px; letter-spacing:1.5px; text-transform:uppercase; color:#8fd8d0; font-weight:600; max-width:900px; margin:0 auto}
+  h1{font-family:'Source Serif 4',Georgia,serif; font-size:38px; margin:10px auto 8px; max-width:900px}
+  .lede{max-width:900px; margin:0 auto; color:#c7ccdc; font-size:18px}
+  .layout{display:flex; max-width:1100px; margin:0 auto; gap:40px; padding:32px 24px 80px; align-items:flex-start}
+  nav.toc{position:sticky; top:24px; width:220px; flex-shrink:0; font-size:14px}
+  nav.toc a{display:block; color:var(--muted); text-decoration:none; padding:6px 0; border-left:3px solid transparent}
+  nav.toc a.active, nav.toc a:hover{color:var(--navy); border-left-color:var(--teal); padding-left:10px}
+  article{max-width:740px}
+  .section-kicker{display:inline-block; background:var(--teal); color:#fff; font-size:12px; font-weight:700; padding:3px 10px; border-radius:4px; margin-bottom:8px}
+  h2{font-family:'Source Serif 4',Georgia,serif; font-size:28px; color:var(--navy); margin-top:52px}
+  h3{font-size:19px; color:var(--navy); margin-top:28px}
+  p{font-size:17px}
+  .tip, .warn{border-radius:8px; padding:18px 20px; margin:20px 0; font-size:16px}
+  .tip{background:var(--teal-light); border-left:4px solid var(--teal)}
+  .warn{background:var(--amber-light); border-left:4px solid var(--amber)}
+  .tip strong:first-child, .warn strong:first-child{display:block; margin-bottom:4px}
+  code, .code-inline{font-family:'JetBrains Mono',monospace; background:var(--panel-alt); padding:2px 6px; border-radius:4px; font-size:15px}
+  table{width:100%; border-collapse:collapse; margin:20px 0; font-size:15.5px}
+  th, td{padding:10px 14px; border:1px solid var(--border); text-align:left}
+  th{background:var(--navy); color:#fff}
+  tr:nth-child(even) td{background:var(--panel-alt)}
+  .playground{background:var(--navy-deep); border-radius:10px; padding:24px; margin:24px 0; color:#e3e8ff}
+  .playground h3{color:#8fd8d0; margin-top:0}
+  .topo-tabs{display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap}
+  .topo-tab{font-family:'Source Sans 3',Arial,sans-serif; background:#1c2b5c; color:#e3e8ff; border:1px solid #33447f; border-radius:6px; padding:8px 16px; cursor:pointer; font-size:14px; font-weight:600}
+  .topo-tab:hover, .topo-tab.active{background:var(--teal); border-color:var(--teal); color:#00251f}
+  .topo-stage{display:none}
+  .topo-stage.active{display:block}
+  .topo-svg-wrap{background:#0b1330; border-radius:8px; padding:16px; text-align:center}
+  .topo-svg-wrap svg{max-width:100%; height:auto}
+  .node-label{font-family:'Source Sans 3',Arial,sans-serif; font-size:13px; fill:#e3e8ff}
+  .node-circle{fill:#1c2b5c; stroke:#5ec9bd; stroke-width:2}
+  .node-circle.offline{fill:#3a1414; stroke:var(--red)}
+  .node-label.offline{fill:#e08a82}
+  .link-line{stroke:#5ec9bd; stroke-width:3}
+  .link-line.broken{stroke:var(--red); stroke-dasharray:6 6}
+  .topo-btn-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px}
+  .break-btn{font-family:'Source Sans 3',Arial,sans-serif; background:#1c2b5c; color:#e3e8ff; border:1px solid #33447f; border-radius:6px; padding:8px 14px; cursor:pointer; font-size:13.5px}
+  .break-btn:hover{background:var(--red); border-color:var(--red)}
+  .restore-btn{font-family:'Source Sans 3',Arial,sans-serif; background:transparent; color:#8fd8d0; border:1px solid #33447f; border-radius:6px; padding:8px 14px; cursor:pointer; font-size:13.5px}
+  #topoStatus{margin-top:16px; background:#0b1330; border-radius:8px; padding:14px 16px; font-size:14.5px; color:#c7ccdc; border:1px solid #33447f}
+  footer{background:var(--navy-deep); color:#c7ccdc; padding:28px 24px; text-align:center; font-size:14px}
+  footer a{color:#8fd8d0}
+  details.toc-mobile{display:none}
+  @media (max-width:900px){
+    .layout{flex-direction:column}
+    nav.toc{display:none}
+    details.toc-mobile{display:block; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:12px 16px; margin-bottom:24px; max-width:740px}
+    details.toc-mobile a{display:block; padding:6px 0; color:var(--navy); text-decoration:none}
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+</div>
+
+<header>
+  <p class="eyebrow">Networking Lab Sequence &middot; Session 7</p>
+  <h1>Session 7: Network Topologies</h1>
+  <p class="lede">Same devices, same switch, same cables &mdash; but arranged differently. The arrangement decides what happens when one link fails.</p>
+</header>
+
+<div class="layout">
+  <details class="toc-mobile"><summary>Contents</summary>
+    <a href="#s1">01 What is a topology?</a>
+    <a href="#s2">02 Star topology</a>
+    <a href="#s3">03 Bus topology</a>
+    <a href="#s4">04 Mesh topology</a>
+    <a href="#s5">05 Break a link: try it</a>
+    <a href="#s6">06 Choosing a topology</a>
+    <a href="#s7">07 Practical lab steps</a>
+  </details>
+  <nav class="toc" id="toc">
+    <a href="#s1">01 &middot; What is a topology?</a>
+    <a href="#s2">02 &middot; Star topology</a>
+    <a href="#s3">03 &middot; Bus topology</a>
+    <a href="#s4">04 &middot; Mesh topology</a>
+    <a href="#s5">05 &middot; Break a link: try it</a>
+    <a href="#s6">06 &middot; Choosing a topology</a>
+    <a href="#s7">07 &middot; Practical lab steps</a>
+  </nav>
+
+  <article>
+    <section id="s1">
+      <span class="section-kicker">01</span>
+      <h2>What is a topology?</h2>
+      <p>A network's <strong>topology</strong> is the pattern in which its devices are connected &mdash; who has a direct link to whom. It's a separate question from what the devices actually do (client-server vs peer-to-peer): topology is about wiring layout, not roles.</p>
+      <div class="tip"><strong>Why it matters</strong>The topology decides two practical things: how much cable you need, and what happens to the rest of the network when one link or one device fails.</div>
+    </section>
+
+    <section id="s2">
+      <span class="section-kicker">02</span>
+      <h2>Star topology</h2>
+      <p>Every device has its own direct link to a central point &mdash; almost always a <strong>switch</strong>. This is exactly what you built in Sessions 3&ndash;6, you just haven't named the shape until now.</p>
+      <table>
+        <tr><th>Advantages</th><th>Disadvantages</th></tr>
+        <tr><td>One faulty cable or device only knocks out that one device &mdash; everyone else keeps working</td><td>The central switch is a single point of failure for the <em>whole</em> network</td></tr>
+        <tr><td>Easy to add or remove a device &mdash; just plug/unplug at the switch</td><td>Needs more cable overall than a bus (one run per device)</td></tr>
+        <tr><td>Easy to spot which cable has failed</td><td>Depends on the switch having enough ports</td></tr>
+      </table>
+    </section>
+
+    <section id="s3">
+      <span class="section-kicker">03</span>
+      <h2>Bus topology</h2>
+      <p>Every device taps into <strong>one shared cable</strong> that runs the length of the network, rather than each device getting its own line to a central point. Older bus networks used coaxial cable with a <strong>terminator</strong> at each end to stop signals reflecting back down the wire.</p>
+      <div class="warn"><strong>Mostly historical</strong>Bus networks are rare in modern LANs &mdash; almost everything built today is switched (star). Filius, like most modern tools, is built around a switch/star model by default, which is itself a sign of how far bus has fallen out of use.</div>
+      <table>
+        <tr><th>Advantages</th><th>Disadvantages</th></tr>
+        <tr><td>Uses less cable than a star for a small, simple network</td><td>One break in the shared cable takes the <em>whole segment</em> down</td></tr>
+        <tr><td>No central device needed</td><td>Only one device can transmit at a time without collisions</td></tr>
+        <tr><td>Simple to set up for a handful of devices</td><td>Hard to fault-find &mdash; you have to check the whole cable run</td></tr>
+      </table>
+    </section>
+
+    <section id="s4">
+      <span class="section-kicker">04</span>
+      <h2>Mesh topology</h2>
+      <p>Every device has a direct link to <strong>every other device</strong> (a <strong>full mesh</strong>), or to several others (a <strong>partial mesh</strong>). There's no single central point at all.</p>
+      <table>
+        <tr><th>Advantages</th><th>Disadvantages</th></tr>
+        <tr><td>Extremely fault-tolerant &mdash; a link can fail and traffic can often still get through another route</td><td>Needs a huge amount of cable: a full mesh of <em>n</em> devices needs n(n&minus;1)/2 links</td></tr>
+        <tr><td>No single point of failure</td><td>Adding one new device means wiring it to every existing device</td></tr>
+        <tr><td>Can carry more total traffic at once (no shared bottleneck)</td><td>Expensive and complex to install and maintain at scale</td></tr>
+      </table>
+      <div class="tip"><strong>Tooling note</strong>Filius limits how many network connections a single node can have, so a full mesh of more than 3&ndash;4 devices usually can't be built directly in the simulator. That's a genuine limit of the tool, not a simplification of the concept &mdash; real mesh networks (e.g. some backbone links between data centres) really do use this many physical connections.</div>
+    </section>
+
+    <section id="s5">
+      <span class="section-kicker">05</span>
+      <h2>Break a link: try it</h2>
+      <p>The real test of a topology is what happens when something fails. Pick a topology below, then break a link and see what's still working.</p>
+      <div class="playground">
+        <h3>Break-a-link simulator</h3>
+        <div class="topo-tabs">
+          <button class="topo-tab active" data-topo="star">Star</button>
+          <button class="topo-tab" data-topo="bus">Bus</button>
+          <button class="topo-tab" data-topo="mesh">Mesh</button>
+        </div>
+
+        <div class="topo-stage active" id="stage-star">
+          <div class="topo-svg-wrap">
+            <svg viewBox="0 0 400 260" width="400">
+              <line class="link-line" id="star-link-1" x1="200" y1="130" x2="200" y2="40"/>
+              <line class="link-line" id="star-link-2" x1="200" y1="130" x2="340" y2="90"/>
+              <line class="link-line" id="star-link-3" x1="200" y1="130" x2="340" y2="190"/>
+              <line class="link-line" id="star-link-4" x1="200" y1="130" x2="60" y2="190"/>
+              <line class="link-line" id="star-link-5" x1="200" y1="130" x2="60" y2="90"/>
+              <rect x="178" y="112" width="44" height="36" rx="6" fill="#1c2b5c" stroke="#5ec9bd" stroke-width="2"/>
+              <text x="200" y="135" text-anchor="middle" class="node-label" font-weight="bold">SW</text>
+              <g id="star-node-1"><circle class="node-circle" cx="200" cy="30" r="22"/><text x="200" y="35" text-anchor="middle" class="node-label">PC1</text></g>
+              <g id="star-node-2"><circle class="node-circle" cx="360" cy="90" r="22"/><text x="360" y="95" text-anchor="middle" class="node-label">PC2</text></g>
+              <g id="star-node-3"><circle class="node-circle" cx="360" cy="190" r="22"/><text x="360" y="195" text-anchor="middle" class="node-label">PC3</text></g>
+              <g id="star-node-4"><circle class="node-circle" cx="40" cy="190" r="22"/><text x="40" y="195" text-anchor="middle" class="node-label">PC4</text></g>
+              <g id="star-node-5"><circle class="node-circle" cx="40" cy="90" r="22"/><text x="40" y="95" text-anchor="middle" class="node-label">PC5</text></g>
+            </svg>
+          </div>
+          <div class="topo-btn-row">
+            <button class="break-btn" data-break="star" data-target="2">Break PC2's link</button>
+            <button class="restore-btn" data-restore="star">Restore all links</button>
+          </div>
+        </div>
+
+        <div class="topo-stage" id="stage-bus">
+          <div class="topo-svg-wrap">
+            <svg viewBox="0 0 400 200" width="400">
+              <line class="link-line" id="bus-cable" x1="30" y1="60" x2="370" y2="60"/>
+              <line class="link-line" id="bus-drop-1" x1="70" y1="60" x2="70" y2="140"/>
+              <line class="link-line" id="bus-drop-2" x1="150" y1="60" x2="150" y2="140"/>
+              <line class="link-line" id="bus-drop-3" x1="230" y1="60" x2="230" y2="140"/>
+              <line class="link-line" id="bus-drop-4" x1="310" y1="60" x2="310" y2="140"/>
+              <g id="bus-node-1"><circle class="node-circle" cx="70" cy="160" r="22"/><text x="70" y="165" text-anchor="middle" class="node-label">PC1</text></g>
+              <g id="bus-node-2"><circle class="node-circle" cx="150" cy="160" r="22"/><text x="150" y="165" text-anchor="middle" class="node-label">PC2</text></g>
+              <g id="bus-node-3"><circle class="node-circle" cx="230" cy="160" r="22"/><text x="230" y="165" text-anchor="middle" class="node-label">PC3</text></g>
+              <g id="bus-node-4"><circle class="node-circle" cx="310" cy="160" r="22"/><text x="310" y="165" text-anchor="middle" class="node-label">PC4</text></g>
+            </svg>
+          </div>
+          <div class="topo-btn-row">
+            <button class="break-btn" data-break="bus" data-target="cable">Break the shared cable (between PC2 and PC3)</button>
+            <button class="restore-btn" data-restore="bus">Restore all links</button>
+          </div>
+        </div>
+
+        <div class="topo-stage" id="stage-mesh">
+          <div class="topo-svg-wrap">
+            <svg viewBox="0 0 400 260" width="400">
+              <line class="link-line" id="mesh-link-12" x1="200" y1="30" x2="360" y2="90"/>
+              <line class="link-line" id="mesh-link-13" x1="200" y1="30" x2="360" y2="190"/>
+              <line class="link-line" id="mesh-link-14" x1="200" y1="30" x2="40" y2="190"/>
+              <line class="link-line" id="mesh-link-23" x1="360" y1="90" x2="360" y2="190"/>
+              <line class="link-line" id="mesh-link-24" x1="360" y1="90" x2="40" y2="190"/>
+              <line class="link-line" id="mesh-link-34" x1="360" y1="190" x2="40" y2="190"/>
+              <g id="mesh-node-1"><circle class="node-circle" cx="200" cy="30" r="22"/><text x="200" y="35" text-anchor="middle" class="node-label">PC1</text></g>
+              <g id="mesh-node-2"><circle class="node-circle" cx="360" cy="90" r="22"/><text x="360" y="95" text-anchor="middle" class="node-label">PC2</text></g>
+              <g id="mesh-node-3"><circle class="node-circle" cx="360" cy="190" r="22"/><text x="360" y="195" text-anchor="middle" class="node-label">PC3</text></g>
+              <g id="mesh-node-4"><circle class="node-circle" cx="40" cy="190" r="22"/><text x="40" y="195" text-anchor="middle" class="node-label">PC4</text></g>
+            </svg>
+          </div>
+          <div class="topo-btn-row">
+            <button class="break-btn" data-break="mesh" data-target="12">Break the PC1&ndash;PC2 direct link</button>
+            <button class="restore-btn" data-restore="mesh">Restore all links</button>
+          </div>
+        </div>
+
+        <div id="topoStatus">Pick a topology tab, then try breaking a link.</div>
+      </div>
+      <div class="warn"><strong>Notice</strong>In the star, breaking one link only isolates that one PC. In the bus, breaking the shared cable splits &mdash; or takes down &mdash; the whole segment. In the mesh, breaking one direct link still leaves another route between those two PCs, via a third device.</div>
+    </section>
+
+    <section id="s6">
+      <span class="section-kicker">06</span>
+      <h2>Choosing a topology</h2>
+      <p>In practice, most modern LANs use star (it's what a switch gives you by default), but the choice still matters when you're weighing up cost, resilience and scale:</p>
+      <ul>
+        <li><strong>A school computer lab:</strong> star &mdash; cheap switches, easy to add machines, one dead cable doesn't stop the lesson.</li>
+        <li><strong>A data centre backbone connecting core routers:</strong> often partial mesh &mdash; the extra cost of redundant links is worth it, because those links carry huge amounts of traffic and downtime is very expensive.</li>
+      </ul>
+      <div class="tip"><strong>Next up</strong>Head to the practice page to complete the checkable questions, then the practical worksheet for today's Filius build.</div>
+    </section>
+
+    <section id="s7">
+      <span class="section-kicker">07</span>
+      <h2>Practical lab steps</h2>
+      <ol>
+        <li>Build the familiar star topology (switch + multiple PCs) and label it as "star" for the first time.</li>
+        <li>Break one link in the star &mdash; confirm only that one PC is affected.</li>
+        <li>If Filius's hub/shared-segment component supports it, build a bus-style network; otherwise, work through it as a diagram.</li>
+        <li>Break the shared bus cable (or reason it through on the diagram) and compare the result directly with the star.</li>
+        <li>Attempt a small mesh (3&ndash;4 nodes) if Filius's per-node connection limit allows; otherwise build a partial mesh and reason through the rest on a whiteboard.</li>
+      </ol>
+    </section>
+  </article>
+</div>
+
+<footer>
+  Session 7 of 16 &middot; Networking Lab Sequence &middot; <a href="practice.html">Go to practice questions &rarr;</a>
+</footer>
+
+<script>
+(function(){
+  var linkMap = {
+    star: { links: ["star-link-1","star-link-2","star-link-3","star-link-4","star-link-5"], nodes: ["star-node-1","star-node-2","star-node-3","star-node-4","star-node-5"] },
+    bus: { links: ["bus-cable","bus-drop-1","bus-drop-2","bus-drop-3","bus-drop-4"], nodes: ["bus-node-1","bus-node-2","bus-node-3","bus-node-4"] },
+    mesh: { links: ["mesh-link-12","mesh-link-13","mesh-link-14","mesh-link-23","mesh-link-24","mesh-link-34"], nodes: ["mesh-node-1","mesh-node-2","mesh-node-3","mesh-node-4"] }
+  };
+
+  var tabs = document.querySelectorAll(".topo-tab");
+  var stages = document.querySelectorAll(".topo-stage");
+  for (var i = 0; i < tabs.length; i++) {
+    tabs[i].addEventListener("click", function(){
+      var topo = this.getAttribute("data-topo");
+      for (var j = 0; j < tabs.length; j++) { tabs[j].classList.remove("active"); }
+      this.classList.add("active");
+      for (var k = 0; k < stages.length; k++) { stages[k].classList.remove("active"); }
+      document.getElementById("stage-" + topo).classList.add("active");
+      document.getElementById("topoStatus").textContent = "Pick a link to break in the " + topo + " topology.";
+    });
+  }
+
+  function setNodeOffline(id, offline){
+    var g = document.getElementById(id);
+    if (!g) return;
+    var circle = g.querySelector("circle");
+    var text = g.querySelector("text");
+    if (offline) { circle.classList.add("offline"); text.classList.add("offline"); }
+    else { circle.classList.remove("offline"); text.classList.remove("offline"); }
+  }
+  function setLinkBroken(id, broken){
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (broken) { el.classList.add("broken"); } else { el.classList.remove("broken"); }
+  }
+
+  var status = document.getElementById("topoStatus");
+
+  var breakButtons = document.querySelectorAll(".break-btn");
+  for (var b = 0; b < breakButtons.length; b++) {
+    breakButtons[b].addEventListener("click", function(){
+      var topo = this.getAttribute("data-break");
+      var target = this.getAttribute("data-target");
+      if (topo === "star") {
+        setLinkBroken("star-link-" + target, true);
+        setNodeOffline("star-node-" + target, true);
+        status.textContent = "PC2's link is broken. PC2 can no longer reach the switch — but PC1, PC3, PC4 and PC5 are all still connected to each other via the switch, completely unaffected.";
+      } else if (topo === "bus") {
+        setLinkBroken("bus-cable", true);
+        for (var n = 1; n <= 4; n++) { setNodeOffline("bus-node-" + n, true); }
+        status.textContent = "The shared cable is broken between PC2 and PC3. On a real bus segment this can bring down communication across the whole shared cable — shown here as the whole segment going offline, in contrast to the star.";
+      } else if (topo === "mesh") {
+        setLinkBroken("mesh-link-12", true);
+        status.textContent = "The direct PC1–PC2 link is broken. Both PCs are still online — they can still reach each other indirectly via PC3 or PC4, since a mesh has more than one route between most pairs of devices.";
+      }
+    });
+  }
+
+  var restoreButtons = document.querySelectorAll(".restore-btn");
+  for (var r = 0; r < restoreButtons.length; r++) {
+    restoreButtons[r].addEventListener("click", function(){
+      var topo = this.getAttribute("data-restore");
+      var map = linkMap[topo];
+      for (var l = 0; l < map.links.length; l++) { setLinkBroken(map.links[l], false); }
+      for (var n = 0; n < map.nodes.length; n++) { setNodeOffline(map.nodes[n], false); }
+      status.textContent = "All links restored. Pick a link to break in the " + topo + " topology.";
+    });
+  }
+
+  var links = document.querySelectorAll('nav.toc a');
+  var sections = document.querySelectorAll('article section');
+  function onScroll(){
+    var pos = window.scrollY + 120;
+    var current = null;
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].offsetTop <= pos) { current = sections[i].id; }
+    }
+    for (var j = 0; j < links.length; j++) {
+      links[j].classList.toggle('active', links[j].getAttribute('href') === '#' + current);
+    }
+  }
+  window.addEventListener('scroll', onScroll);
+  onScroll();
+})();
+</script>
+</body>
+</html>
