@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "strand-b/t11-arrays-1d";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Arrays: 1D Declaration and Use";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arrays: 1D Declaration &amp; Use — AS Level Computer Science (9618)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:"Source Sans 3", sans-serif; line-height:1.6; }
+  h1,h2,h3{ font-family:"Source Serif 4", serif; font-weight:600; color:var(--navy); }
+  code, .mono { font-family:"JetBrains Mono", monospace; }
+
+  header.page-head{ background:linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%); color:#eef1fb; padding:2.6rem 1.5rem 3.2rem; }
+  .head-inner{ max-width:1180px; margin:0 auto; }
+  .eyebrow{ color:#9fb0e6; font-size:0.95rem; margin-bottom:0.6rem; }
+  header.page-head h1{ color:#fff; font-size:2.1rem; margin:0 0 0.7rem; max-width:34ch; }
+  .lede{ color:#c7d0ee; max-width:62ch; font-size:1.05rem; }
+
+  .layout{ max-width:1180px; margin:0 auto; padding:2rem 1.5rem 4rem; display:grid; grid-template-columns:230px minmax(0,760px); gap:2.5rem; align-items:start; }
+
+  nav.toc{ position:sticky; top:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.1rem; }
+  nav.toc h2{ font-size:0.95rem; margin:0 0 0.7rem; color:var(--muted); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+  nav.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.45rem; }
+  nav.toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; display:block; padding:0.15rem 0; border-left:2px solid transparent; padding-left:0.6rem; }
+  nav.toc a:hover{ color:var(--teal); }
+  nav.toc a.active{ border-left-color:var(--teal); color:var(--teal); font-weight:600; }
+
+  article{ max-width:760px; }
+  section{ margin-bottom:2.8rem; }
+  .section-kicker{ font-family:"JetBrains Mono", monospace; color:var(--teal); font-size:0.85rem; margin-bottom:0.35rem; }
+  section h2{ font-size:1.5rem; margin:0 0 0.9rem; }
+  section p{ margin:0 0 1rem; }
+  section ul, section ol{ margin:0 0 1rem; padding-left:1.3rem; }
+  section li{ margin-bottom:0.4rem; }
+
+  .tip, .warn{ border-radius:8px; padding:0.9rem 1.1rem; margin:1.1rem 0; font-size:0.96rem; }
+  .tip{ background:var(--teal-light); border:1px solid #bfe4df; }
+  .warn{ background:var(--amber-light); border:1px solid #eccba0; }
+  .tip strong:first-child, .warn strong:first-child{ display:block; margin-bottom:0.25rem; }
+
+  .code-block{ background:var(--navy-deep); border-radius:10px; overflow:hidden; margin:1.1rem 0; }
+  .code-label{ background:#0a1330; color:#8fa0d6; font-size:0.78rem; padding:0.45rem 0.9rem; font-family:"JetBrains Mono",monospace; border-bottom:1px solid #223163; }
+  .code-block pre{ margin:0; padding:1rem 1.1rem; overflow-x:auto; }
+  .code-block code{ color:#e7ecfb; font-size:0.88rem; line-height:1.65; }
+  .code-block .kw{ color:#7ad4ff; }
+  .code-block .id{ color:#ffd479; }
+  .code-block .str{ color:#a8e6a1; }
+  .code-block .cm{ color:#7d89b0; font-style:italic; }
+
+  table.ref{ width:100%; border-collapse:collapse; margin:1.1rem 0; font-size:0.92rem; }
+  table.ref th, table.ref td{ text-align:left; padding:0.55rem 0.7rem; border-bottom:1px solid var(--border); }
+  table.ref th{ background:var(--panel-alt); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+
+  .playground{ background:var(--navy-deep); border-radius:12px; padding:1.3rem; margin:1.3rem 0; color:#e7ecfb; }
+  .playground h3{ color:#fff; font-size:1.05rem; margin:0 0 0.3rem; }
+  .playground .sub{ color:#9fb0e6; font-size:0.88rem; margin-bottom:1rem; }
+
+  .mode-toggle{ display:flex; gap:0.5rem; margin-bottom:1rem; flex-wrap:wrap; }
+  .mode-toggle button{ background:#1a2653; color:#c7d0ee; border:1px solid #2c3a72; border-radius:20px; padding:0.4rem 0.95rem; font-size:0.85rem; cursor:pointer; font-family:"Source Sans 3",sans-serif; }
+  .mode-toggle button.active{ background:var(--teal); border-color:var(--teal); color:#052c28; font-weight:600; }
+
+  .array-row{ display:flex; gap:0.5rem; margin:1rem 0; flex-wrap:wrap; }
+  .array-cell{ background:#182452; border:2px solid #2c3a72; border-radius:8px; min-width:56px; text-align:center; padding:0.7rem 0.4rem 0.4rem; transition:border-color 0.3s, background 0.3s; }
+  .array-cell .idx{ font-size:0.72rem; color:#9fb0e6; display:block; margin-bottom:0.3rem; font-family:"JetBrains Mono",monospace; }
+  .array-cell .val{ font-family:"JetBrains Mono",monospace; font-weight:600; color:#ffd479; font-size:1rem; }
+  .array-cell.filled{ border-color:var(--teal); }
+  .array-cell.checking{ border-color:#ffd479; background:#2a2410; }
+  .array-cell.found{ border-color:var(--teal); background:#123a34; }
+  .array-cell.found .val{ color:#7be0c9; }
+
+  .step-line{ background:#101a3a; border-radius:8px; padding:0.75rem 0.95rem; font-family:"JetBrains Mono",monospace; font-size:0.87rem; margin-bottom:1rem; color:#e7ecfb; min-height:2.4em; }
+  .step-controls{ display:flex; gap:0.6rem; align-items:center; }
+  .step-controls button{ background:var(--teal); color:#052c28; border:none; border-radius:6px; padding:0.5rem 1rem; font-weight:600; cursor:pointer; font-family:"Source Sans 3",sans-serif; }
+  .step-controls button:disabled{ opacity:0.4; cursor:default; }
+  .step-controls button.secondary{ background:#1a2653; color:#c7d0ee; border:1px solid #2c3a72; }
+  .step-count{ color:#9fb0e6; font-size:0.85rem; margin-left:auto; }
+
+  footer.page-foot{ max-width:1180px; margin:0 auto; padding:0 1.5rem 3rem; }
+  .foot-nav{ display:flex; justify-content:space-between; gap:1rem; border-top:1px solid var(--border); padding-top:1.5rem; flex-wrap:wrap; }
+  .foot-nav a{ text-decoration:none; color:var(--navy); font-weight:600; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:0.7rem 1.1rem; font-size:0.92rem; }
+  .foot-nav a:hover{ border-color:var(--teal); color:var(--teal); }
+  .foot-nav .next{ margin-left:auto; }
+
+  details.mobile-toc{ display:none; }
+  @media (max-width:900px){
+    .layout{ grid-template-columns:1fr; }
+    nav.toc{ display:none; }
+    details.mobile-toc{ display:block; margin-bottom:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.1rem; }
+    details.mobile-toc summary{ cursor:pointer; font-weight:600; color:var(--navy); }
+    details.mobile-toc ol{ list-style:none; padding:0; margin:0.8rem 0 0; display:flex; flex-direction:column; gap:0.5rem; }
+    details.mobile-toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; }
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/strand-b-t11-arrays-1d-explainer.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+
+<header class="page-head">
+  <div class="head-inner">
+    <div class="eyebrow">Year 12 AS Computer Science (9618) &middot; Topic 11.5, Programming</div>
+    <h1>Arrays: 1D Declaration &amp; Use</h1>
+    <p class="lede">One variable, holding many values — indexed, ordered, and ready to loop through.</p>
+  </div>
+</header>
+
+<div class="layout">
+  <details class="mobile-toc">
+    <summary>Contents</summary>
+    <ol>
+      <li><a href="#why">01 · Why arrays?</a></li>
+      <li><a href="#declaring">02 · Declaring a 1D array</a></li>
+      <li><a href="#access">03 · Accessing and assigning elements</a></li>
+      <li><a href="#populate">04 · Populating an array with a loop</a></li>
+      <li><a href="#search">05 · Searching an array</a></li>
+      <li><a href="#bounds">06 · Bounds and common mistakes</a></li>
+    </ol>
+  </details>
+
+  <nav class="toc" id="desktopToc">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#why">01 · Why arrays?</a></li>
+      <li><a href="#declaring">02 · Declaring</a></li>
+      <li><a href="#access">03 · Access &amp; assign</a></li>
+      <li><a href="#populate">04 · Populating</a></li>
+      <li><a href="#search">05 · Searching</a></li>
+      <li><a href="#bounds">06 · Bounds &amp; mistakes</a></li>
+    </ol>
+  </nav>
+
+  <article>
+
+    <section id="why">
+      <div class="section-kicker">01</div>
+      <h2>Why arrays?</h2>
+      <p>Imagine storing five test scores. Without arrays, you'd need five separate variables — <code>Score1</code>, <code>Score2</code>, <code>Score3</code>, <code>Score4</code>, <code>Score5</code> — and any loop that wanted to process "all the scores" would have no clean way to do it; you'd have to write out each variable by name.</p>
+      <p>An <strong>array</strong> solves this: it's a single named structure holding many values of the <em>same data type</em>, each one accessible by its position — its <strong>index</strong>. This means a loop can visit every element just by counting through the indices.</p>
+    </section>
+
+    <section id="declaring">
+      <div class="section-kicker">02</div>
+      <h2>Declaring a 1D array</h2>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">DECLARE</span> &lt;identifier&gt; : <span class="kw">ARRAY</span>[&lt;lower&gt;:&lt;upper&gt;] <span class="kw">OF</span> &lt;data type&gt;</code></pre>
+      </div>
+      <p>The <code>&lt;lower&gt;</code> and <code>&lt;upper&gt;</code> bounds are both fixed when the array is declared, and both are <strong>inclusive</strong> — every whole number from the lower bound to the upper bound, including both ends, is a valid index.</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">DECLARE</span> <span class="id">Scores</span> : <span class="kw">ARRAY</span>[1:5] <span class="kw">OF</span> INTEGER</code></pre>
+      </div>
+      <p>This declares <code>Scores</code> as an array of exactly 5 integers, indexed 1, 2, 3, 4, 5.</p>
+      <div class="tip">
+        <strong>Why state the lower bound explicitly?</strong>
+        Different languages and systems default to a lower bound of 0 or 1 — stating it explicitly in the declaration removes any doubt. Cambridge pseudocode generally uses a lower bound of 1, but 0 is equally valid pseudocode if a problem calls for it (a day-of-week array indexed 0 to 6, say).
+      </div>
+      <table class="ref">
+        <tr><th>Declaration</th><th>Valid indices</th><th>Number of elements</th></tr>
+        <tr><td><code>ARRAY[1:5]</code></td><td>1, 2, 3, 4, 5</td><td>5</td></tr>
+        <tr><td><code>ARRAY[0:6]</code></td><td>0, 1, 2, 3, 4, 5, 6</td><td>7</td></tr>
+      </table>
+      <div class="warn">
+        <strong>The element count isn't just "the upper bound"</strong>
+        For <code>ARRAY[0:6]</code>, there are <strong>7</strong> elements, not 6 — the formula is <code>upper − lower + 1</code>. Forgetting the <code>+ 1</code> is a very easy mistake to make when the lower bound isn't 1.
+      </div>
+    </section>
+
+    <section id="access">
+      <div class="section-kicker">03</div>
+      <h2>Accessing and assigning elements</h2>
+      <p>A specific element is referred to by writing the array's name followed by the index in square brackets. This works exactly like any other variable — it can appear on the left of an assignment, or be read as part of an expression.</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code>Scores[1] ← 95
+Scores[2] ← 82
+OUTPUT Scores[1]          <span class="cm">// outputs 95</span>
+OUTPUT Scores[1] + Scores[2]   <span class="cm">// outputs 177</span></code></pre>
+      </div>
+    </section>
+
+    <section id="populate">
+      <div class="section-kicker">04</div>
+      <h2>Populating an array with a loop</h2>
+      <p>Because indices are consecutive whole numbers, a <code>FOR</code> loop is a natural way to fill every element of an array — the loop counter <em>is</em> the index.</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">DECLARE</span> <span class="id">Scores</span> : <span class="kw">ARRAY</span>[1:5] <span class="kw">OF</span> INTEGER
+<span class="kw">FOR</span> Index ← 1 <span class="kw">TO</span> 5
+   Scores[Index] ← Index * 10
+<span class="kw">NEXT</span> Index</code></pre>
+      </div>
+      <p>Step through this loop below and watch the array fill in, one element per iteration.</p>
+      <div class="playground">
+        <h3>Populating Scores</h3>
+        <div class="sub">FOR Index ← 1 TO 5: Scores[Index] ← Index * 10</div>
+        <div class="array-row" id="populateRow"></div>
+        <div class="step-line" id="populateStepLine">Press Next to begin</div>
+        <div class="step-controls">
+          <button class="secondary" id="populateResetBtn">Reset</button>
+          <button id="populateNextBtn">Next step ▸</button>
+          <span class="step-count" id="populateStepCount">Step 0 / 5</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="search">
+      <div class="section-kicker">05</div>
+      <h2>Searching an array</h2>
+      <p>A <strong>linear search</strong> checks each element in turn, starting from the lower bound, until either a match is found or every element has been checked. Writing it as a function reuses exactly what you already know about <code>RETURN</code> ending execution immediately:</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">FUNCTION</span> <span class="id">LinearSearch</span>(Scores : <span class="kw">ARRAY</span>[1:5] <span class="kw">OF</span> INTEGER, Target : INTEGER) <span class="kw">RETURNS</span> INTEGER
+   <span class="kw">FOR</span> Index ← 1 <span class="kw">TO</span> 5
+      <span class="kw">IF</span> Scores[Index] = Target <span class="kw">THEN</span>
+         <span class="kw">RETURN</span> Index
+      <span class="kw">ENDIF</span>
+   <span class="kw">NEXT</span> Index
+   <span class="kw">RETURN</span> -1
+<span class="kw">ENDFUNCTION</span></code></pre>
+      </div>
+      <p>The moment a match is found, <code>RETURN Index</code> ends the function immediately — the remaining elements are never even checked. If the loop finishes without ever matching, <code>RETURN -1</code> signals "not found" (a value that could never be a valid index).</p>
+      <div class="playground">
+        <h3>Linear search simulator</h3>
+        <div class="sub">Searching the populated Scores array: 10, 20, 30, 40, 50</div>
+        <div class="mode-toggle" id="searchButtons">
+          <button class="active" data-target="30">Search for 30</button>
+          <button data-target="45">Search for 45</button>
+          <button data-target="10">Search for 10</button>
+        </div>
+        <div class="array-row" id="searchRow"></div>
+        <div class="step-line" id="searchStepLine">Press Next to begin the search</div>
+        <div class="step-controls">
+          <button class="secondary" id="searchResetBtn">Reset</button>
+          <button id="searchNextBtn">Next step ▸</button>
+          <span class="step-count" id="searchStepCount">Step 0</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="bounds">
+      <div class="section-kicker">06</div>
+      <h2>Bounds and common mistakes</h2>
+      <ul>
+        <li><strong>Arrays are fixed size.</strong> Once <code>DECLARE</code>d with bounds <code>[1:5]</code>, that array always holds exactly 5 elements — there's no way to add a sixth without declaring a new, bigger array.</li>
+        <li><strong>Out-of-bounds access is invalid.</strong> For <code>ARRAY[1:5]</code>, both <code>Scores[0]</code> and <code>Scores[6]</code> are outside the declared bounds and must not be used.</li>
+        <li><strong>Every element shares one data type.</strong> An array declared <code>OF INTEGER</code> cannot hold a <code>STRING</code> in any of its elements.</li>
+      </ul>
+      <div class="warn">
+        <strong>Off-by-one errors</strong>
+        The single most common array bug is a loop that runs one iteration too many or too few — for example, writing <code>FOR Index ← 1 TO 4</code> against an array declared <code>[1:5]</code>, which silently skips the last element. Always check a loop's range against the array's actual declared bounds, not against habit.
+      </div>
+    </section>
+
+  </article>
+</div>
+
+<script>
+(function(){
+  var sections = document.querySelectorAll('article section[id]');
+  var tocLinks = document.querySelectorAll('#desktopToc a');
+  function onScroll(){
+    var current = '';
+    for (var i = 0; i < sections.length; i++){
+      var rect = sections[i].getBoundingClientRect();
+      if (rect.top <= 140) current = sections[i].id;
+    }
+    for (var j = 0; j < tocLinks.length; j++){
+      var a = tocLinks[j];
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    }
+  }
+  document.addEventListener('scroll', onScroll);
+  onScroll();
+})();
+
+(function(){
+  // Populate widget
+  var step = 0;
+  var totalSteps = 5;
+  var row = document.getElementById('populateRow');
+  var stepLine = document.getElementById('populateStepLine');
+  var stepCount = document.getElementById('populateStepCount');
+  var nextBtn = document.getElementById('populateNextBtn');
+  var resetBtn = document.getElementById('populateResetBtn');
+
+  function buildRow(){
+    row.innerHTML = '';
+    for (var i = 1; i <= 5; i++){
+      var cell = document.createElement('div');
+      cell.className = 'array-cell';
+      cell.id = 'pcell-' + i;
+      cell.innerHTML = '<span class="idx">[' + i + ']</span><span class="val">—</span>';
+      row.appendChild(cell);
+    }
+  }
+
+  function render(){
+    buildRow();
+    if (step === 0){
+      stepLine.textContent = 'Step 0 — press Next to begin the loop (Index starts at 1)';
+    } else {
+      for (var i = 1; i <= step; i++){
+        var cell = document.getElementById('pcell-' + i);
+        cell.classList.add('filled');
+        cell.querySelector('.val').textContent = (i * 10);
+      }
+      stepLine.textContent = 'Step ' + step + ' — Index = ' + step + ': Scores[' + step + '] \u2190 ' + step + ' * 10 = ' + (step * 10);
+    }
+    stepCount.textContent = 'Step ' + step + ' / ' + totalSteps;
+    nextBtn.disabled = step >= totalSteps;
+  }
+
+  nextBtn.addEventListener('click', function(){ if (step < totalSteps){ step++; render(); } });
+  resetBtn.addEventListener('click', function(){ step = 0; render(); });
+
+  render();
+})();
+
+(function(){
+  // Linear search widget
+  var scoresArr = {1:10, 2:20, 3:30, 4:40, 5:50};
+  var target = 30;
+  var step = 0;
+  var foundAt = null;
+  var finished = false;
+
+  var row = document.getElementById('searchRow');
+  var stepLine = document.getElementById('searchStepLine');
+  var stepCount = document.getElementById('searchStepCount');
+  var nextBtn = document.getElementById('searchNextBtn');
+  var resetBtn = document.getElementById('searchResetBtn');
+  var targetButtons = document.querySelectorAll('#searchButtons button');
+
+  function buildRow(){
+    row.innerHTML = '';
+    for (var i = 1; i <= 5; i++){
+      var cell = document.createElement('div');
+      cell.className = 'array-cell filled';
+      cell.id = 'scell-' + i;
+      cell.innerHTML = '<span class="idx">[' + i + ']</span><span class="val">' + scoresArr[i] + '</span>';
+      row.appendChild(cell);
+    }
+  }
+
+  function clearHighlights(){
+    for (var i = 1; i <= 5; i++){
+      var cell = document.getElementById('scell-' + i);
+      if (cell){ cell.classList.remove('checking', 'found'); }
+    }
+  }
+
+  function render(){
+    buildRow();
+    clearHighlights();
+
+    if (step === 0){
+      stepLine.textContent = 'Step 0 — press Next to start searching for ' + target + ', from Index = 1';
+      stepCount.textContent = 'Step 0';
+      nextBtn.disabled = false;
+      return;
+    }
+
+    var index = step;
+    if (index <= 5){
+      var cell = document.getElementById('scell-' + index);
+      if (scoresArr[index] === target){
+        cell.classList.add('found');
+        stepLine.textContent = 'Step ' + step + ' — Scores[' + index + '] = ' + scoresArr[index] + ' matches ' + target + '. RETURN ' + index + ' — the function ends here.';
+        finished = true;
+        foundAt = index;
+      } else {
+        cell.classList.add('checking');
+        stepLine.textContent = 'Step ' + step + ' — Scores[' + index + '] = ' + scoresArr[index] + ', not equal to ' + target + '. Continue to the next index.';
+        if (index === 5){
+          finished = true;
+          foundAt = null;
+        }
+      }
+    }
+    stepCount.textContent = 'Step ' + step + (finished ? ' (finished)' : '');
+    nextBtn.disabled = finished;
+  }
+
+  function setTarget(t){
+    target = t;
+    step = 0;
+    finished = false;
+    foundAt = null;
+    render();
+  }
+
+  for (var b = 0; b < targetButtons.length; b++){
+    targetButtons[b].addEventListener('click', function(){
+      for (var k = 0; k < targetButtons.length; k++){ targetButtons[k].classList.remove('active'); }
+      this.classList.add('active');
+      setTarget(parseInt(this.getAttribute('data-target'), 10));
+    });
+  }
+
+  nextBtn.addEventListener('click', function(){
+    if (!finished){ step++; render(); }
+  });
+  resetBtn.addEventListener('click', function(){
+    step = 0; finished = false; foundAt = null; render();
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>

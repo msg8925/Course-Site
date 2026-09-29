@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "strand-a/t1-sound-representation";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Sound Representation — Practice Questions";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sound Representation: Practice Questions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E;
+    --navy-deep:#101a3a;
+    --teal:#0D9488;
+    --teal-light:#e6f5f3;
+    --red:#a4342a;
+    --red-light:#fbeae8;
+    --bg:#f5f6fa;
+    --panel:#ffffff;
+    --panel-alt:#eef1f8;
+    --border:#dde1ee;
+    --text:#1c2340;
+    --muted:#5b6472;
+    --serif:'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --sans:'Source Sans 3','Segoe UI',Arial,sans-serif;
+    --mono:'JetBrains Mono','Fira Code',Consolas,monospace;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.6; -webkit-font-smoothing:antialiased;}
+  a{color:var(--teal);}
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible{outline:3px solid var(--teal); outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;} }
+
+  header.page-head{background:var(--navy); color:#fff; padding:2.4rem 1.5rem 2.1rem;}
+  .head-inner{max-width:920px; margin:0 auto;}
+  .head-inner p.eyebrow{margin:0 0 0.6rem; color:#9fb0e0; font-size:0.98rem;}
+  .head-inner h1{font-family:var(--serif); font-weight:700; font-size:clamp(1.8rem, 4vw, 2.5rem); margin:0 0 0.7rem; line-height:1.15;}
+  .head-inner p.lede{margin:0; max-width:65ch; color:#dbe2f5; font-size:1.08rem;}
+
+  .progress-bar-wrap{max-width:920px; margin:1.3rem auto 0; background:#20295a; border-radius:999px; height:10px; overflow:hidden;}
+  .progress-bar-fill{height:100%; background:var(--teal); width:0%;}
+  .progress-caption{max-width:920px; margin:0.6rem auto 0; display:flex; justify-content:space-between; align-items:center; color:#c3cdea; font-size:0.88rem;}
+  .progress-caption button{background:none; border:none; color:#c3cdea; text-decoration:underline; cursor:pointer; font-size:0.85rem; padding:0; font-family:var(--sans);}
+
+  .layout{max-width:1120px; margin:0 auto; padding:2.4rem 1.5rem 5rem; display:flex; gap:2.8rem; align-items:flex-start;}
+  nav.toc{flex:0 0 230px; position:sticky; top:1.5rem; font-size:0.95rem;}
+  nav.toc h2{font-family:var(--serif); font-size:1rem; font-weight:600; margin:0 0 0.8rem; color:var(--navy);}
+  nav.toc ol{list-style:none; margin:0; padding:0; border-left:2px solid var(--border);}
+  nav.toc a{display:block; padding:0.4rem 0 0.4rem 0.9rem; margin-left:-2px; border-left:2px solid transparent; color:var(--muted); text-decoration:none;}
+  nav.toc a:hover{color:var(--navy);}
+  details.toc-mobile{display:none;}
+
+  main.article{flex:1 1 auto; min-width:0; max-width:760px;}
+  main.article section{margin-bottom:3rem; scroll-margin-top:1.4rem;}
+  .section-kicker{font-family:var(--mono); font-size:0.82rem; color:var(--teal); margin:0 0 0.35rem;}
+  main.article h2{font-family:var(--serif); font-weight:700; font-size:1.5rem; color:var(--navy); margin:0 0 0.5rem; line-height:1.25;}
+  main.article > section > p.section-intro{color:var(--muted); margin:0 0 1.2rem; max-width:65ch;}
+
+  .qcard{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:1.3rem 1.4rem 1.4rem; margin-bottom:1.1rem;}
+  .qcard-head{display:flex; align-items:flex-start; gap:0.7rem; margin-bottom:0.7rem;}
+  .qnum{flex:0 0 auto; width:2rem; height:2rem; border-radius:50%; background:var(--panel-alt); color:var(--navy); font-weight:700; font-family:var(--sans); display:flex; align-items:center; justify-content:center; font-size:0.92rem;}
+  .qnum.done{background:var(--teal); color:#fff;}
+  .qprompt{flex:1; margin:0; padding-top:0.15rem;}
+  .qprompt .binline{display:inline-block; font-family:var(--mono); background:var(--panel-alt); padding:0.15rem 0.5rem; border-radius:5px; margin:0.15rem 0.15rem 0.15rem 0;}
+
+  .step-list{margin:0.6rem 0; padding-left:0; list-style:none;}
+  .step-list li{
+    display:flex; gap:0.6rem; align-items:baseline; background:var(--panel-alt); border-radius:6px;
+    padding:0.45rem 0.7rem; margin-bottom:0.4rem; font-size:0.9rem;
+  }
+  .step-list li .tag{font-family:var(--mono); font-weight:700; color:var(--teal); flex-shrink:0;}
+
+  .check-row{display:flex; gap:0.6rem; align-items:center; margin:0.8rem 0 0.3rem; flex-wrap:wrap;}
+  .answer-input{font-family:var(--mono); font-size:0.95rem; padding:0.55rem 0.75rem; border-radius:7px; border:1.5px solid var(--border); min-width:160px; flex:0 1 220px;}
+  .check-btn{font-family:var(--sans); font-weight:600; font-size:0.9rem; padding:0.55rem 1.1rem; border-radius:7px; border:none; background:var(--navy); color:#fff; cursor:pointer;}
+  .check-btn:hover{background:var(--navy-deep);}
+  .feedback{font-size:0.92rem; font-weight:600; padding:0.3rem 0;}
+  .feedback.correct{color:var(--teal);}
+  .feedback.incorrect{color:var(--red);}
+
+  textarea.longanswer{width:100%; min-height:100px; font-family:var(--sans); font-size:0.95rem; padding:0.6rem 0.75rem; border-radius:7px; border:1.5px solid var(--border); margin:0.6rem 0 0.2rem; resize:vertical;}
+
+  details.solution{margin-top:0.7rem; border-top:1px dashed var(--border); padding-top:0.6rem;}
+  details.solution summary{cursor:pointer; font-weight:600; color:var(--navy); font-size:0.92rem;}
+  .solution-body{margin-top:0.8rem; font-size:0.94rem;}
+  .solution-body p{margin:0 0 0.6rem;}
+  .solution-body p:last-child{margin-bottom:0;}
+  .solution-body .steps{font-family:var(--mono); font-size:0.85rem; background:var(--panel-alt); border-radius:7px; padding:0.7rem 0.9rem; line-height:1.85; white-space:pre-wrap; margin:0.5rem 0;}
+
+  .next-step{margin-top:2rem; padding:1.6rem; background:var(--panel-alt); border-radius:var(--radius); display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;}
+  .next-step p{margin:0; color:var(--muted);}
+  .next-step a.button{background:var(--navy); color:#fff; text-decoration:none; padding:0.7rem 1.3rem; border-radius:8px; font-weight:600; white-space:nowrap;}
+  .next-step a.button:hover{background:var(--navy-deep);}
+
+  @media (max-width:900px){
+    .layout{flex-direction:column; gap:1.2rem;}
+    nav.toc{display:none;}
+    details.toc-mobile{display:block; background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:0.2rem 1rem; width:100%;}
+    details.toc-mobile summary{padding:0.9rem 0; font-weight:600; color:var(--navy); cursor:pointer; font-family:var(--serif);}
+    details.toc-mobile ol{list-style:none; margin:0; padding:0 0 0.8rem;}
+    details.toc-mobile a{display:block; padding:0.4rem 0; color:var(--muted); text-decoration:none;}
+    main.article{max-width:none;}
+    .answer-input{flex:1 1 auto;}
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/strand-a-t1-sound-representation-practice.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+
+<header class="page-head">
+  <div class="head-inner">
+    <p class="eyebrow">Year 12 AS Computer Science (9618) &middot; Topic 1.5, Data Representation</p>
+    <h1>Sound Representation: Practice Questions</h1>
+    <p class="lede">14 questions covering the ADC process, file-size calculations, and the sample-rate/bit-depth trade-offs. Type an answer to check it instantly, or open the full worked solution any time.</p>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill"></div></div>
+  <div class="progress-caption">
+    <span id="progress-text">0 of 9 checkable questions correct</span>
+    <button type="button" id="reset-progress">Reset progress</button>
+  </div>
+</header>
+
+<div class="layout">
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2>Sections</h2>
+    <ol>
+      <li><a href="#secA">The ADC process</a></li>
+      <li><a href="#secB">File size calculations</a></li>
+      <li><a href="#secC">Trade-offs</a></li>
+      <li><a href="#secD">Mixed &amp; applied</a></li>
+      <li><a href="#secE">Exam-style</a></li>
+    </ol>
+  </nav>
+
+  <details class="toc-mobile">
+    <summary>Sections</summary>
+    <ol>
+      <li><a href="#secA">The ADC process</a></li>
+      <li><a href="#secB">File size calculations</a></li>
+      <li><a href="#secC">Trade-offs</a></li>
+      <li><a href="#secD">Mixed &amp; applied</a></li>
+      <li><a href="#secE">Exam-style</a></li>
+    </ol>
+  </details>
+
+  <main class="article">
+
+    <section id="secA">
+      <p class="section-kicker">A</p>
+      <h2>The ADC process</h2>
+      <p class="section-intro">Recap the sampling and quantization vocabulary from the explainer.</p>
+
+      <div class="qcard" data-qid="a1">
+        <div class="qcard-head"><div class="qnum">1</div>
+          <p class="qprompt">What is the name for the process of measuring an analogue signal's amplitude at regular time intervals?</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="term">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p><strong>Sampling.</strong></p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="a2">
+        <div class="qcard-head"><div class="qnum">2</div>
+          <p class="qprompt">What is the name for the process of rounding a sampled amplitude value to the nearest level the bit depth can represent?</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="term">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p><strong>Quantization.</strong></p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="a3">
+        <div class="qcard-head"><div class="qnum">3</div>
+          <p class="qprompt">Put these four ADC steps into the correct order by typing the letters in order (e.g. "WXYZ").</p>
+        </div>
+        <ul class="step-list">
+          <li><span class="tag">W</span> Quantize each sample to the nearest available level</li>
+          <li><span class="tag">X</span> Sound enters as a continuous analogue signal</li>
+          <li><span class="tag">Y</span> Encode each quantized level as binary</li>
+          <li><span class="tag">Z</span> Sample the analogue signal at regular intervals</li>
+        </ul>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="e.g. WXYZ" style="min-width:140px; flex-basis:140px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>Correct order: <strong>X</strong> (sound arrives) &rarr; <strong>Z</strong> (sample it) &rarr; <strong>W</strong> (quantize each sample) &rarr; <strong>Y</strong> (encode as binary).</p></div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secB">
+      <p class="section-kicker">B</p>
+      <h2>File size calculations</h2>
+      <p class="section-intro">Use: file size (bits) = sample rate &times; bit depth &times; duration &times; channels.</p>
+
+      <div class="qcard" data-qid="b1">
+        <div class="qcard-head"><div class="qnum">4</div>
+          <p class="qprompt">Calculate the file size, in bytes, of a 5-second mono recording sampled at 8,000 Hz with 8-bit resolution.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="bytes">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="steps">8,000 &times; 8 &times; 5 &times; 1 = 320,000 bits
+320,000 \u00f7 8 = 40,000 bytes</div>
+            <p>Answer: <strong>40,000 bytes</strong>.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="b2">
+        <div class="qcard-head"><div class="qnum">5</div>
+          <p class="qprompt">Calculate the file size, in bytes, of a 3-second stereo recording sampled at 44,100 Hz with 16-bit resolution.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="bytes">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="steps">44,100 &times; 16 &times; 3 &times; 2 = 4,233,600 bits
+4,233,600 \u00f7 8 = 529,200 bytes</div>
+            <p>Answer: <strong>529,200 bytes</strong>.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="b3">
+        <div class="qcard-head"><div class="qnum">6</div>
+          <p class="qprompt">Calculate the file size, in bytes, of a 10-second mono recording sampled at 22,050 Hz with 8-bit resolution.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="bytes">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="steps">22,050 &times; 8 &times; 10 &times; 1 = 1,764,000 bits
+1,764,000 \u00f7 8 = 220,500 bytes</div>
+            <p>Answer: <strong>220,500 bytes</strong>.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="b4">
+        <div class="qcard-head"><div class="qnum">7</div>
+          <p class="qprompt">A mono recording at 16,000 Hz, 16-bit resolution lasts 30 seconds. Calculate the file size in KB, using 1 KB = 1,000 bytes.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="KB">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="steps">16,000 &times; 16 &times; 30 &times; 1 = 7,680,000 bits
+7,680,000 \u00f7 8 = 960,000 bytes
+960,000 \u00f7 1,000 = 960 KB</div>
+            <p>Answer: <strong>960 KB</strong>.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secC">
+      <p class="section-kicker">C</p>
+      <h2>Trade-offs</h2>
+      <p class="section-intro">Sample rate and bit depth each trade file size for a different kind of accuracy.</p>
+
+      <div class="qcard" data-qid="c1">
+        <div class="qcard-head"><div class="qnum">8</div>
+          <p class="qprompt">Explain the effect on both file size and accuracy of doubling the sample rate, keeping everything else the same.</p>
+        </div>
+        <textarea class="longanswer" placeholder="Write your explanation here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body">
+            <p>File size doubles, since file size is directly proportional to sample rate. Accuracy improves in terms of timing detail &mdash; the recording captures faster changes in the wave more faithfully, which particularly improves the reproduction of higher-pitched sounds.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="c2">
+        <div class="qcard-head"><div class="qnum">9</div>
+          <p class="qprompt">Explain the effect on both file size and accuracy of doubling the bit depth, keeping everything else the same.</p>
+        </div>
+        <textarea class="longanswer" placeholder="Write your explanation here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body">
+            <p>File size doubles, since file size is directly proportional to bit depth. Accuracy improves in terms of amplitude precision &mdash; more available levels means each sample is quantized more precisely, reducing quantization error and making the recorded volume/amplitude sound less "grainy."</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="c3">
+        <div class="qcard-head"><div class="qnum">10</div>
+          <p class="qprompt">True or false: doubling both the sample rate and the bit depth together doubles the file size.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="true or false" style="min-width:140px; flex-basis:140px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p><strong>False.</strong> File size depends on the product of sample rate and bit depth, so doubling both multiplies the file size by 2 &times; 2 = 4, not 2.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secD">
+      <p class="section-kicker">D</p>
+      <h2>Mixed &amp; applied</h2>
+      <p class="section-intro">Bringing calculation and trade-off reasoning together.</p>
+
+      <div class="qcard" data-qid="d1">
+        <div class="qcard-head"><div class="qnum">11</div>
+          <p class="qprompt">A sound engineer doubles both the sample rate and the bit depth of a recording, keeping duration and channels the same. By what factor does the file size increase?</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="factor" style="min-width:140px; flex-basis:140px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>Doubling the sample rate doubles the size; doubling the bit depth doubles it again: 2 &times; 2 = <strong>4</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="d2">
+        <div class="qcard-head"><div class="qnum">12</div>
+          <p class="qprompt">A student wants to reduce a recording's file size without changing its length or number of channels. Suggest two changes they could make, and state one downside of each.</p>
+        </div>
+        <textarea class="longanswer" placeholder="Write your answer here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body">
+            <p><strong>Reduce the sample rate</strong> &mdash; downside: faster changes in the wave (higher-pitched detail) are captured less accurately.</p>
+            <p><strong>Reduce the bit depth</strong> &mdash; downside: each sample is quantized less precisely, increasing quantization error and making amplitude sound more "grainy."</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secE">
+      <p class="section-kicker">E</p>
+      <h2>Exam-style question</h2>
+      <p class="section-intro">A longer, multi-part question.</p>
+
+      <div class="qcard" data-qid="e1">
+        <div class="qcard-head"><div class="qnum">13</div>
+          <p class="qprompt">
+            A voice memo app records mono audio at 16-bit resolution.<br><br>
+            (a) The app currently uses a sample rate of 8,000 Hz. Calculate the file size, in bytes, of a 45-second recording.<br>
+            (b) A user complains the recordings sound "muffled" and lack high-frequency detail. Suggest one change to the recording settings that would improve this, and explain your reasoning.<br>
+            (c) If your suggested change in (b) doubles the relevant setting, state the new file size, in bytes, for the same 45-second recording.
+          </p>
+        </div>
+        <textarea class="longanswer" placeholder="Write your full answer here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body">
+            <p><strong>(a)</strong></p>
+            <div class="steps">8,000 &times; 16 &times; 45 &times; 1 = 5,760,000 bits
+5,760,000 \u00f7 8 = 720,000 bytes</div>
+            <p><strong>(b)</strong> Increase the sample rate. "Muffled" and lacking high-frequency detail points specifically to sample rate rather than bit depth, since sample rate determines how well fast (high-pitched) changes in the wave are captured.</p>
+            <p><strong>(c)</strong> Doubling the sample rate to 16,000 Hz:</p>
+            <div class="steps">16,000 &times; 16 &times; 45 &times; 1 = 11,520,000 bits
+11,520,000 \u00f7 8 = 1,440,000 bytes</div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <div class="next-step">
+      <p>Want to revisit the explanations first?</p>
+      <a class="button" href="explainer.html">Back to the explainer</a>
+    </div>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  const STORAGE_KEY = "soundProgress_v1";
+  function loadProgress(){
+    try{ const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : {}; }
+    catch(e){ return {}; }
+  }
+  function saveProgress(p){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); }catch(e){} }
+  let progress = loadProgress();
+
+  const ANSWERS = {
+    a1: {type:"text", value:"sampling"},
+    a2: {type:"text", value:"quantization"},
+    a3: {type:"sequence", value:"XZWY"},
+    b1: {type:"decimal", value:40000},
+    b2: {type:"decimal", value:529200},
+    b3: {type:"decimal", value:220500},
+    b4: {type:"decimal", value:960},
+    c3: {type:"boolean", value:"false"},
+    d1: {type:"decimal", value:4}
+  };
+
+  function normalizeDecimal(str){
+    const s = str.trim().replace(/[,\s]+/g,"");
+    if(!/^-?\d+(\.\d+)?$/.test(s)) return null;
+    return parseFloat(s);
+  }
+  function normalizeText(str){
+    return str.trim().toLowerCase();
+  }
+  function normalizeBoolean(str){
+    const s = str.trim().toLowerCase();
+    if(["true","t","yes"].includes(s)) return "true";
+    if(["false","f","no"].includes(s)) return "false";
+    return null;
+  }
+  function normalizeSequence(str){
+    return str.trim().toUpperCase().replace(/[,\s]+/g,"");
+  }
+
+  function updateProgressUI(){
+    const total = Object.keys(ANSWERS).length;
+    const done = Object.keys(ANSWERS).filter(k => progress[k] === true).length;
+    document.getElementById("progress-text").textContent = done + " of " + total + " checkable questions correct";
+    document.getElementById("progress-fill").style.width = Math.round((done/total)*100) + "%";
+    Object.keys(ANSWERS).forEach(qid=>{
+      const numEl = document.querySelector('.qcard[data-qid="'+qid+'"] .qnum');
+      if(numEl){ numEl.classList.toggle("done", progress[qid]===true); }
+    });
+  }
+
+  function wireQuestion(qid){
+    const card = document.querySelector('.qcard[data-qid="'+qid+'"]');
+    if(!card) return;
+    const input = card.querySelector(".answer-input");
+    const btn = card.querySelector(".check-btn");
+    const feedback = card.querySelector(".feedback");
+    const answer = ANSWERS[qid];
+    if(!input || !btn || !answer) return;
+
+    function doCheck(){
+      const raw = input.value;
+      let given = null;
+      if(answer.type === "decimal") given = normalizeDecimal(raw);
+      else if(answer.type === "text") given = normalizeText(raw);
+      else if(answer.type === "boolean") given = normalizeBoolean(raw);
+      else if(answer.type === "sequence") given = normalizeSequence(raw);
+
+      if(given === null){
+        feedback.textContent = "Check the format of your answer.";
+        feedback.className = "feedback incorrect";
+        return;
+      }
+      const isCorrect = given === answer.value;
+      if(isCorrect){
+        feedback.textContent = "Correct.";
+        feedback.className = "feedback correct";
+        progress[qid] = true;
+      } else {
+        feedback.textContent = "Not quite \u2014 try again, or open the full working below.";
+        feedback.className = "feedback incorrect";
+      }
+      saveProgress(progress);
+      updateProgressUI();
+    }
+    btn.addEventListener("click", doCheck);
+    input.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ e.preventDefault(); doCheck(); } });
+  }
+  Object.keys(ANSWERS).forEach(wireQuestion);
+
+  document.getElementById("reset-progress").addEventListener("click", ()=>{
+    progress = {};
+    saveProgress(progress);
+    updateProgressUI();
+    document.querySelectorAll(".feedback").forEach(f=>{ f.textContent=""; f.className="feedback"; });
+    document.querySelectorAll(".answer-input").forEach(i=>{ i.value=""; });
+  });
+
+  updateProgressUI();
+
+})();
+</script>
+</body>
+</html>

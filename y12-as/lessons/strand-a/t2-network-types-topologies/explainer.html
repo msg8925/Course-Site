@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "strand-a/t2-network-types-topologies";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Network Types and Topologies";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Network Types &amp; Topologies — AS Level Computer Science (9618)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:"Source Sans 3", sans-serif; line-height:1.6; }
+  h1,h2,h3{ font-family:"Source Serif 4", serif; font-weight:600; color:var(--navy); }
+  code, .mono { font-family:"JetBrains Mono", monospace; }
+
+  header.page-head{ background:linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%); color:#eef1fb; padding:2.6rem 1.5rem 3.2rem; }
+  .head-inner{ max-width:1180px; margin:0 auto; }
+  .eyebrow{ color:#9fb0e6; font-size:0.95rem; margin-bottom:0.6rem; }
+  header.page-head h1{ color:#fff; font-size:2.1rem; margin:0 0 0.7rem; max-width:34ch; }
+  .lede{ color:#c7d0ee; max-width:62ch; font-size:1.05rem; }
+
+  .layout{ max-width:1180px; margin:0 auto; padding:2rem 1.5rem 4rem; display:grid; grid-template-columns:230px minmax(0,760px); gap:2.5rem; align-items:start; }
+
+  nav.toc{ position:sticky; top:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.1rem; }
+  nav.toc h2{ font-size:0.95rem; margin:0 0 0.7rem; color:var(--muted); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+  nav.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.45rem; }
+  nav.toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; display:block; padding:0.15rem 0; border-left:2px solid transparent; padding-left:0.6rem; }
+  nav.toc a:hover{ color:var(--teal); }
+  nav.toc a.active{ border-left-color:var(--teal); color:var(--teal); font-weight:600; }
+
+  article{ max-width:760px; }
+  section{ margin-bottom:2.8rem; }
+  .section-kicker{ font-family:"JetBrains Mono", monospace; color:var(--teal); font-size:0.85rem; margin-bottom:0.35rem; }
+  section h2{ font-size:1.5rem; margin:0 0 0.9rem; }
+  section p{ margin:0 0 1rem; }
+  section ul, section ol{ margin:0 0 1rem; padding-left:1.3rem; }
+  section li{ margin-bottom:0.4rem; }
+
+  .tip, .warn{ border-radius:8px; padding:0.9rem 1.1rem; margin:1.1rem 0; font-size:0.96rem; }
+  .tip{ background:var(--teal-light); border:1px solid #bfe4df; }
+  .warn{ background:var(--amber-light); border:1px solid #eccba0; }
+  .tip strong:first-child, .warn strong:first-child{ display:block; margin-bottom:0.25rem; }
+
+  table.ref{ width:100%; border-collapse:collapse; margin:1.1rem 0; font-size:0.92rem; }
+  table.ref th, table.ref td{ text-align:left; padding:0.55rem 0.7rem; border-bottom:1px solid var(--border); }
+  table.ref th{ background:var(--panel-alt); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+
+  .playground{ background:var(--navy-deep); border-radius:12px; padding:1.3rem; margin:1.3rem 0; color:#e7ecfb; }
+  .playground h3{ color:#fff; font-size:1.05rem; margin:0 0 0.3rem; }
+  .playground .sub{ color:#9fb0e6; font-size:0.88rem; margin-bottom:1rem; }
+
+  .mode-toggle{ display:flex; gap:0.5rem; margin-bottom:1rem; flex-wrap:wrap; }
+  .mode-toggle button{ background:#1a2653; color:#c7d0ee; border:1px solid #2c3a72; border-radius:20px; padding:0.4rem 0.95rem; font-size:0.85rem; cursor:pointer; font-family:"Source Sans 3",sans-serif; }
+  .mode-toggle button.active{ background:var(--teal); border-color:var(--teal); color:#052c28; font-weight:600; }
+
+  .topo-svg-wrap{ background:#101a3a; border-radius:10px; padding:0.6rem; }
+  .topo-svg-wrap svg{ width:100%; height:auto; display:block; }
+  .topo-status{ margin-top:0.8rem; font-size:0.88rem; color:#c7d0ee; }
+  .topo-status .connected{ color:#7be0c9; font-weight:600; }
+  .topo-status .disconnected{ color:#ff9a8a; font-weight:600; }
+  .topo-controls{ display:flex; gap:0.6rem; margin-top:0.8rem; }
+  .topo-controls button{ background:#1a2653; color:#c7d0ee; border:1px solid #2c3a72; border-radius:6px; padding:0.5rem 1rem; cursor:pointer; font-size:0.85rem; font-family:"Source Sans 3",sans-serif; }
+
+  .calc-row{ display:flex; align-items:center; gap:1rem; margin:1rem 0; flex-wrap:wrap; }
+  .calc-row input[type=range]{ flex:1; min-width:150px; }
+  .calc-readout{ font-family:"JetBrains Mono",monospace; font-size:0.95rem; }
+  .result-box{ background:#182452; border:1px solid #2c3a72; border-radius:10px; padding:1rem 1.1rem; margin-top:0.5rem; }
+  .result-row{ display:flex; justify-content:space-between; padding:0.3rem 0; font-family:"JetBrains Mono",monospace; font-size:0.95rem; }
+  .result-row .name{ color:#9fb0e6; }
+  .result-row .val{ color:#ffd479; font-weight:600; }
+
+  footer.page-foot{ max-width:1180px; margin:0 auto; padding:0 1.5rem 3rem; }
+  .foot-nav{ display:flex; justify-content:space-between; gap:1rem; border-top:1px solid var(--border); padding-top:1.5rem; flex-wrap:wrap; }
+  .foot-nav a{ text-decoration:none; color:var(--navy); font-weight:600; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:0.7rem 1.1rem; font-size:0.92rem; }
+  .foot-nav a:hover{ border-color:var(--teal); color:var(--teal); }
+  .foot-nav .next{ margin-left:auto; }
+
+  details.mobile-toc{ display:none; }
+  @media (max-width:900px){
+    .layout{ grid-template-columns:1fr; }
+    nav.toc{ display:none; }
+    details.mobile-toc{ display:block; margin-bottom:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.1rem; }
+    details.mobile-toc summary{ cursor:pointer; font-weight:600; color:var(--navy); }
+    details.mobile-toc ol{ list-style:none; padding:0; margin:0.8rem 0 0; display:flex; flex-direction:column; gap:0.5rem; }
+    details.mobile-toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; }
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/strand-a-t2-network-types-topologies-explainer.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+
+<header class="page-head">
+  <div class="head-inner">
+    <div class="eyebrow">Year 12 AS Computer Science (9618) &middot; Topic 2.3, Communication and Internet Technologies</div>
+    <h1>Network Types &amp; Topologies</h1>
+    <p class="lede">How big is the network, and how are its devices wired together? Both questions shape how reliable and how fast it turns out to be.</p>
+  </div>
+</header>
+
+<div class="layout">
+  <details class="mobile-toc">
+    <summary>Contents</summary>
+    <ol>
+      <li><a href="#lanwan">01 · LAN vs WAN</a></li>
+      <li><a href="#topology">02 · What is a topology?</a></li>
+      <li><a href="#star">03 · Star topology</a></li>
+      <li><a href="#bus">04 · Bus topology</a></li>
+      <li><a href="#mesh">05 · Mesh topology</a></li>
+      <li><a href="#hybrid">06 · Hybrid topology</a></li>
+      <li><a href="#explorer">07 · Topology explorer: what if a link fails?</a></li>
+      <li><a href="#cables">08 · Counting the cables</a></li>
+    </ol>
+  </details>
+
+  <nav class="toc" id="desktopToc">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#lanwan">01 · LAN vs WAN</a></li>
+      <li><a href="#topology">02 · Topologies</a></li>
+      <li><a href="#star">03 · Star</a></li>
+      <li><a href="#bus">04 · Bus</a></li>
+      <li><a href="#mesh">05 · Mesh</a></li>
+      <li><a href="#hybrid">06 · Hybrid</a></li>
+      <li><a href="#explorer">07 · Explorer</a></li>
+      <li><a href="#cables">08 · Counting cables</a></li>
+    </ol>
+  </nav>
+
+  <article>
+
+    <section id="lanwan">
+      <div class="section-kicker">01</div>
+      <h2>LAN vs WAN</h2>
+      <p>Networks are classified by how far they physically reach:</p>
+      <table class="ref">
+        <tr><th></th><th>LAN (Local Area Network)</th><th>WAN (Wide Area Network)</th></tr>
+        <tr><td>Geographic scope</td><td>A single site — one building or campus</td><td>Spans multiple sites, cities, or countries</td></tr>
+        <tr><td>Typically owned by</td><td>The organisation itself</td><td>Made up of infrastructure leased from telecoms providers, connecting separate LANs together</td></tr>
+        <tr><td>Example</td><td>All the computers in one school building</td><td>That school's network connected to a sister school in another country, via the internet</td></tr>
+      </table>
+      <div class="tip">
+        <strong>A WAN is often just several LANs, joined up</strong>
+        The internet itself is the largest WAN of all — a network of interconnected networks, each of which might itself be a LAN.
+      </div>
+    </section>
+
+    <section id="topology">
+      <div class="section-kicker">02</div>
+      <h2>What is a topology?</h2>
+      <p>A <strong>network topology</strong> is the pattern in which devices on a network are physically or logically connected to one another. The topology chosen affects three practical things: how the network behaves when a single cable or device fails, how much cabling it needs, and how easily it can be extended.</p>
+    </section>
+
+    <section id="star">
+      <div class="section-kicker">03</div>
+      <h2>Star topology</h2>
+      <p>Every device connects with its own individual cable to one central device — usually a switch. All data passes through that central point on its way to anywhere else on the network.</p>
+      <ul>
+        <li><strong>Advantage:</strong> if one cable fails, only the single device on that cable is affected — the rest of the network keeps working normally.</li>
+        <li><strong>Disadvantage:</strong> if the central switch itself fails, the entire network goes down at once, since every device's only route runs through it.</li>
+        <li><strong>Disadvantage:</strong> needs more cable overall than a bus topology, since every device needs its own run back to the centre.</li>
+      </ul>
+    </section>
+
+    <section id="bus">
+      <div class="section-kicker">04</div>
+      <h2>Bus topology</h2>
+      <p>Every device connects to a single shared cable — the <strong>backbone</strong> — that runs the length of the network. Data travels along this shared backbone to reach its destination.</p>
+      <ul>
+        <li><strong>Advantage:</strong> uses comparatively little cable, since there's only one backbone rather than a separate cable to a central point for every device.</li>
+        <li><strong>Disadvantage:</strong> if the backbone cable itself is cut, the network is split into two disconnected segments — devices on the wrong side of the break can no longer reach each other.</li>
+        <li><strong>Disadvantage:</strong> every device shares the same backbone, so heavy traffic from one device can slow things down for everyone else on it.</li>
+      </ul>
+    </section>
+
+    <section id="mesh">
+      <div class="section-kicker">05</div>
+      <h2>Mesh topology</h2>
+      <p>In a <strong>full mesh</strong>, every device is connected directly to every other device. (A <strong>partial mesh</strong> connects only some pairs directly, relying on other devices to forward data the rest of the way — a middle ground between full mesh and the other topologies.)</p>
+      <ul>
+        <li><strong>Advantage:</strong> extremely resilient — if one cable fails, data can simply be rerouted via a different device, and the network keeps working.</li>
+        <li><strong>Disadvantage:</strong> needs far more cable than any other topology, and that requirement grows very quickly as devices are added (section 08 puts a number on this).</li>
+      </ul>
+    </section>
+
+    <section id="hybrid">
+      <div class="section-kicker">06</div>
+      <h2>Hybrid topology</h2>
+      <p>A <strong>hybrid topology</strong> combines two or more of the basic topologies together — for example, several separate star networks (each with its own switch), with those switches themselves connected to each other along a shared backbone. This lets a design take advantage of the strengths of each part: star's fault isolation within each local cluster, combined with a simpler backbone connecting the clusters, rather than needing every single device wired directly back to one central point.</p>
+    </section>
+
+    <section id="explorer">
+      <div class="section-kicker">07</div>
+      <h2>Topology explorer: what if a link fails?</h2>
+      <p>Click any cable (or the central switch, in star) to simulate it failing, and watch which devices stay connected to <strong>Server</strong> — highlighted below — and which don't.</p>
+      <div class="playground">
+        <h3>Topology explorer</h3>
+        <div class="sub">Click a link to break it. Click it again to repair it.</div>
+        <div class="mode-toggle" id="topoButtons">
+          <button class="active" data-topo="star">Star</button>
+          <button data-topo="bus">Bus</button>
+          <button data-topo="mesh">Full mesh</button>
+        </div>
+        <div class="topo-svg-wrap">
+          <svg id="topoSvg" viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+        <div class="topo-status" id="topoStatus"></div>
+        <div class="topo-controls">
+          <button id="topoResetBtn">Repair all links</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="cables">
+      <div class="section-kicker">08</div>
+      <h2>Counting the cables</h2>
+      <p>Star needs exactly one cable per device. Full mesh needs one cable for <em>every pair</em> of devices — which grows far faster as the network gets bigger.</p>
+      <div class="playground">
+        <h3>Cable count calculator</h3>
+        <div class="sub">Drag to change the number of devices</div>
+        <div class="calc-row">
+          <input type="range" id="cableSlider" min="2" max="10" value="4">
+          <span class="calc-readout">Devices: <span id="cableDeviceCount">4</span></span>
+        </div>
+        <div class="result-box">
+          <div class="result-row"><span class="name">Star (1 cable per device)</span><span class="val" id="starCableResult">—</span></div>
+          <div class="result-row"><span class="name">Full mesh (1 cable per pair)</span><span class="val" id="meshCableResult">—</span></div>
+        </div>
+      </div>
+      <div class="warn">
+        <strong>The formula for full mesh</strong>
+        For <code>n</code> devices, full mesh needs <code>n(n − 1) / 2</code> cables — one for every distinct pair. At just 10 devices, that's already 45 cables, versus 10 for a star.
+      </div>
+    </section>
+
+  </article>
+</div>
+
+<script>
+(function(){
+  var sections = document.querySelectorAll('article section[id]');
+  var tocLinks = document.querySelectorAll('#desktopToc a');
+  function onScroll(){
+    var current = '';
+    for (var i = 0; i < sections.length; i++){
+      var rect = sections[i].getBoundingClientRect();
+      if (rect.top <= 140) current = sections[i].id;
+    }
+    for (var j = 0; j < tocLinks.length; j++){
+      var a = tocLinks[j];
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    }
+  }
+  document.addEventListener('scroll', onScroll);
+  onScroll();
+})();
+
+(function(){
+  // Topology explorer
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  var svg = document.getElementById('topoSvg');
+  var statusEl = document.getElementById('topoStatus');
+  var buttons = document.querySelectorAll('#topoButtons button');
+  var resetBtn = document.getElementById('topoResetBtn');
+
+  var currentTopo = 'star';
+
+  var topologies = {
+    star: {
+      nodes: [
+        {id: 'hub', x: 250, y: 150, label: 'Switch', isHub: true},
+        {id: 'D1', x: 250, y: 40, label: 'Server'},
+        {id: 'D2', x: 140, y: 150, label: 'D2'},
+        {id: 'D3', x: 250, y: 260, label: 'D3'},
+        {id: 'D4', x: 360, y: 150, label: 'D4'}
+      ],
+      edges: [
+        {id: 'e1', a: 'hub', b: 'D1'},
+        {id: 'e2', a: 'hub', b: 'D2'},
+        {id: 'e3', a: 'hub', b: 'D3'},
+        {id: 'e4', a: 'hub', b: 'D4'}
+      ],
+      source: 'D1',
+      hubNode: 'hub'
+    },
+    bus: {
+      nodes: [
+        {id: 'P1', x: 110, y: 150, label: '', isJoint: true},
+        {id: 'P2', x: 210, y: 150, label: '', isJoint: true},
+        {id: 'P3', x: 310, y: 150, label: '', isJoint: true},
+        {id: 'P4', x: 410, y: 150, label: '', isJoint: true},
+        {id: 'D1', x: 110, y: 60, label: 'Server'},
+        {id: 'D2', x: 210, y: 60, label: 'D2'},
+        {id: 'D3', x: 310, y: 60, label: 'D3'},
+        {id: 'D4', x: 410, y: 60, label: 'D4'}
+      ],
+      edges: [
+        {id: 'drop1', a: 'P1', b: 'D1', fixed: true},
+        {id: 'drop2', a: 'P2', b: 'D2', fixed: true},
+        {id: 'drop3', a: 'P3', b: 'D3', fixed: true},
+        {id: 'drop4', a: 'P4', b: 'D4', fixed: true},
+        {id: 'seg1', a: 'P1', b: 'P2'},
+        {id: 'seg2', a: 'P2', b: 'P3'},
+        {id: 'seg3', a: 'P3', b: 'P4'}
+      ],
+      source: 'D1'
+    },
+    mesh: {
+      nodes: [
+        {id: 'D1', x: 150, y: 80, label: 'Server'},
+        {id: 'D2', x: 350, y: 80, label: 'D2'},
+        {id: 'D3', x: 350, y: 220, label: 'D3'},
+        {id: 'D4', x: 150, y: 220, label: 'D4'}
+      ],
+      edges: [
+        {id: 'm1', a: 'D1', b: 'D2'},
+        {id: 'm2', a: 'D2', b: 'D3'},
+        {id: 'm3', a: 'D3', b: 'D4'},
+        {id: 'm4', a: 'D4', b: 'D1'},
+        {id: 'm5', a: 'D1', b: 'D3'},
+        {id: 'm6', a: 'D2', b: 'D4'}
+      ],
+      source: 'D1'
+    }
+  };
+
+  var brokenEdges = {};
+  var hubFailed = {};
+
+  function findNode(topo, id){
+    for (var i = 0; i < topo.nodes.length; i++){
+      if (topo.nodes[i].id === id) return topo.nodes[i];
+    }
+    return null;
+  }
+
+  function computeReachable(topo){
+    var broken = brokenEdges[currentTopo] || {};
+    var hubDown = hubFailed[currentTopo];
+    var adjacency = {};
+    for (var i = 0; i < topo.nodes.length; i++){ adjacency[topo.nodes[i].id] = []; }
+    for (var e = 0; e < topo.edges.length; e++){
+      var edge = topo.edges[e];
+      if (broken[edge.id]) continue;
+      if (hubDown && (edge.a === topo.hubNode || edge.b === topo.hubNode)) continue;
+      adjacency[edge.a].push(edge.b);
+      adjacency[edge.b].push(edge.a);
+    }
+    var visited = {};
+    var queue = [topo.source];
+    visited[topo.source] = true;
+    while (queue.length > 0){
+      var current = queue.shift();
+      var neighbours = adjacency[current] || [];
+      for (var n = 0; n < neighbours.length; n++){
+        if (!visited[neighbours[n]]){
+          visited[neighbours[n]] = true;
+          queue.push(neighbours[n]);
+        }
+      }
+    }
+    return visited;
+  }
+
+  function clearSvg(){
+    while (svg.firstChild){ svg.removeChild(svg.firstChild); }
+  }
+
+  function makeEl(tag, attrs){
+    var el = document.createElementNS(SVGNS, tag);
+    for (var k in attrs){ el.setAttribute(k, attrs[k]); }
+    return el;
+  }
+
+  function render(){
+    var topo = topologies[currentTopo];
+    clearSvg();
+    var reachable = computeReachable(topo);
+    var broken = brokenEdges[currentTopo] || {};
+    var hubDown = hubFailed[currentTopo];
+
+    // Draw edges first (so nodes sit on top)
+    for (var e = 0; e < topo.edges.length; e++){
+      var edge = topo.edges[e];
+      var a = findNode(topo, edge.a);
+      var b = findNode(topo, edge.b);
+      var isBroken = !!broken[edge.id];
+      var line = makeEl('line', {
+        x1: a.x, y1: a.y, x2: b.x, y2: b.y,
+        stroke: isBroken ? '#ff9a8a' : '#4a5c99',
+        'stroke-width': edge.fixed ? 3 : 4,
+        'stroke-dasharray': isBroken ? '6,5' : 'none',
+        style: edge.fixed ? '' : 'cursor:pointer;'
+      });
+      if (!edge.fixed){
+        (function(edgeId){
+          line.addEventListener('click', function(){
+            var b2 = brokenEdges[currentTopo] || {};
+            b2[edgeId] = !b2[edgeId];
+            brokenEdges[currentTopo] = b2;
+            render();
+          });
+        })(edge.id);
+      }
+      svg.appendChild(line);
+    }
+
+    // Draw nodes
+    for (var i = 0; i < topo.nodes.length; i++){
+      var node = topo.nodes[i];
+      if (node.isJoint){
+        svg.appendChild(makeEl('circle', {cx: node.x, cy: node.y, r: 4, fill: '#4a5c99'}));
+        continue;
+      }
+      var isReachable = !!reachable[node.id];
+      var isHub = node.isHub;
+      var isSource = node.id === topo.source;
+      var fillColor = isHub ? (hubDown ? '#ff9a8a' : '#ffd479') : (isSource ? '#7ad4ff' : (isReachable ? '#7be0c9' : '#ff9a8a'));
+      var circle = makeEl('circle', {
+        cx: node.x, cy: node.y, r: isHub ? 22 : 20,
+        fill: fillColor,
+        stroke: '#101a3a', 'stroke-width': 2,
+        style: isHub ? 'cursor:pointer;' : ''
+      });
+      if (isHub){
+        circle.addEventListener('click', function(){
+          hubFailed[currentTopo] = !hubFailed[currentTopo];
+          render();
+        });
+      }
+      svg.appendChild(circle);
+      var label = makeEl('text', {
+        x: node.x, y: node.y + (isHub ? 40 : 38),
+        'text-anchor': 'middle', fill: '#e7ecfb', 'font-size': '13', 'font-family': 'monospace'
+      });
+      label.textContent = node.label;
+      svg.appendChild(label);
+    }
+
+    // Status text
+    var deviceNodes = topo.nodes.filter(function(n){ return !n.isJoint && !n.isHub; });
+    var connectedList = [];
+    var disconnectedList = [];
+    for (var d = 0; d < deviceNodes.length; d++){
+      var dn = deviceNodes[d];
+      if (dn.id === topo.source) continue;
+      if (reachable[dn.id]) connectedList.push(dn.label);
+      else disconnectedList.push(dn.label);
+    }
+    var html = '';
+    if (disconnectedList.length === 0){
+      html = '<span class="connected">All devices are still connected to Server.</span>';
+    } else {
+      html = '<span class="disconnected">Disconnected from Server: ' + disconnectedList.join(', ') + '</span>';
+      if (connectedList.length > 0){
+        html += ' — <span class="connected">still connected: ' + connectedList.join(', ') + '</span>';
+      }
+    }
+    statusEl.innerHTML = html;
+  }
+
+  for (var btnIdx = 0; btnIdx < buttons.length; btnIdx++){
+    buttons[btnIdx].addEventListener('click', function(){
+      for (var k = 0; k < buttons.length; k++){ buttons[k].classList.remove('active'); }
+      this.classList.add('active');
+      currentTopo = this.getAttribute('data-topo');
+      render();
+    });
+  }
+
+  resetBtn.addEventListener('click', function(){
+    brokenEdges[currentTopo] = {};
+    hubFailed[currentTopo] = false;
+    render();
+  });
+
+  render();
+})();
+
+(function(){
+  // Cable count calculator
+  var slider = document.getElementById('cableSlider');
+  var deviceCountEl = document.getElementById('cableDeviceCount');
+  var starResult = document.getElementById('starCableResult');
+  var meshResult = document.getElementById('meshCableResult');
+
+  function render(){
+    var n = parseInt(slider.value, 10);
+    deviceCountEl.textContent = n;
+    starResult.textContent = n;
+    meshResult.textContent = (n * (n - 1) / 2);
+  }
+
+  slider.addEventListener('input', render);
+  render();
+})();
+</script>
+
+</body>
+</html>

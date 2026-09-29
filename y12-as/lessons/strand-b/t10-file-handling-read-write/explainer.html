@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "strand-b/t10-file-handling-read-write";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "File Handling: Reading and Writing Text Files";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>File Handling — AS Level Computer Science (9618)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:"Source Sans 3", sans-serif; line-height:1.6; }
+  h1,h2,h3{ font-family:"Source Serif 4", serif; font-weight:600; color:var(--navy); }
+  code, .mono { font-family:"JetBrains Mono", monospace; }
+
+  header.page-head{ background:linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%); color:#eef1fb; padding:2.6rem 1.5rem 3.2rem; }
+  .head-inner{ max-width:1180px; margin:0 auto; }
+  .eyebrow{ color:#9fb0e6; font-size:0.95rem; margin-bottom:0.6rem; }
+  header.page-head h1{ color:#fff; font-size:2.1rem; margin:0 0 0.7rem; max-width:34ch; }
+  .lede{ color:#c7d0ee; max-width:62ch; font-size:1.05rem; }
+
+  .layout{ max-width:1180px; margin:0 auto; padding:2rem 1.5rem 4rem; display:grid; grid-template-columns:230px minmax(0,760px); gap:2.5rem; align-items:start; }
+
+  nav.toc{ position:sticky; top:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.1rem; }
+  nav.toc h2{ font-size:0.95rem; margin:0 0 0.7rem; color:var(--muted); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+  nav.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.45rem; }
+  nav.toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; display:block; padding:0.15rem 0; border-left:2px solid transparent; padding-left:0.6rem; }
+  nav.toc a:hover{ color:var(--teal); }
+  nav.toc a.active{ border-left-color:var(--teal); color:var(--teal); font-weight:600; }
+
+  article{ max-width:760px; }
+  section{ margin-bottom:2.8rem; }
+  .section-kicker{ font-family:"JetBrains Mono", monospace; color:var(--teal); font-size:0.85rem; margin-bottom:0.35rem; }
+  section h2{ font-size:1.5rem; margin:0 0 0.9rem; }
+  section p{ margin:0 0 1rem; }
+  section ul, section ol{ margin:0 0 1rem; padding-left:1.3rem; }
+  section li{ margin-bottom:0.4rem; }
+
+  .tip, .warn{ border-radius:8px; padding:0.9rem 1.1rem; margin:1.1rem 0; font-size:0.96rem; }
+  .tip{ background:var(--teal-light); border:1px solid #bfe4df; }
+  .warn{ background:var(--amber-light); border:1px solid #eccba0; }
+  .tip strong:first-child, .warn strong:first-child{ display:block; margin-bottom:0.25rem; }
+
+  .code-block{ background:var(--navy-deep); border-radius:10px; overflow:hidden; margin:1.1rem 0; }
+  .code-label{ background:#0a1330; color:#8fa0d6; font-size:0.78rem; padding:0.45rem 0.9rem; font-family:"JetBrains Mono",monospace; border-bottom:1px solid #223163; }
+  .code-block pre{ margin:0; padding:1rem 1.1rem; overflow-x:auto; }
+  .code-block code{ color:#e7ecfb; font-size:0.88rem; line-height:1.65; }
+  .code-block .kw{ color:#7ad4ff; }
+  .code-block .id{ color:#ffd479; }
+  .code-block .str{ color:#a8e6a1; }
+  .code-block .cm{ color:#7d89b0; font-style:italic; }
+
+  table.ref{ width:100%; border-collapse:collapse; margin:1.1rem 0; font-size:0.92rem; }
+  table.ref th, table.ref td{ text-align:left; padding:0.55rem 0.7rem; border-bottom:1px solid var(--border); }
+  table.ref th{ background:var(--panel-alt); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+
+  .playground{ background:var(--navy-deep); border-radius:12px; padding:1.3rem; margin:1.3rem 0; color:#e7ecfb; }
+  .playground h3{ color:#fff; font-size:1.05rem; margin:0 0 0.3rem; }
+  .playground .sub{ color:#9fb0e6; font-size:0.88rem; margin-bottom:1rem; }
+
+  .file-panels{ display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem; }
+  @media (max-width:560px){ .file-panels{ grid-template-columns:1fr; } }
+  .file-panel{ background:#182452; border:1px solid #2c3a72; border-radius:10px; padding:0.8rem 1rem; }
+  .file-panel h4{ margin:0 0 0.6rem; font-size:0.85rem; color:#9fb0e6; font-family:"Source Sans 3",sans-serif; }
+  .file-line{ font-family:"JetBrains Mono",monospace; font-size:0.85rem; padding:0.3rem 0.4rem; border-radius:4px; margin-bottom:0.2rem; color:#e7ecfb; }
+  .file-line.current{ background:#2a2410; color:#ffd479; }
+  .file-line.written{ background:#123a34; color:#7be0c9; }
+  .file-line.blank-marker{ color:#7d89b0; font-style:italic; }
+
+  .step-line{ background:#101a3a; border-radius:8px; padding:0.75rem 0.95rem; font-family:"JetBrains Mono",monospace; font-size:0.85rem; margin-bottom:1rem; color:#e7ecfb; min-height:2.6em; }
+  .step-controls{ display:flex; gap:0.6rem; align-items:center; }
+  .step-controls button{ background:var(--teal); color:#052c28; border:none; border-radius:6px; padding:0.5rem 1rem; font-weight:600; cursor:pointer; font-family:"Source Sans 3",sans-serif; }
+  .step-controls button:disabled{ opacity:0.4; cursor:default; }
+  .step-controls button.secondary{ background:#1a2653; color:#c7d0ee; border:1px solid #2c3a72; }
+  .step-count{ color:#9fb0e6; font-size:0.85rem; margin-left:auto; }
+
+  footer.page-foot{ max-width:1180px; margin:0 auto; padding:0 1.5rem 3rem; }
+  .foot-nav{ display:flex; justify-content:space-between; gap:1rem; border-top:1px solid var(--border); padding-top:1.5rem; flex-wrap:wrap; }
+  .foot-nav a{ text-decoration:none; color:var(--navy); font-weight:600; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:0.7rem 1.1rem; font-size:0.92rem; }
+  .foot-nav a:hover{ border-color:var(--teal); color:var(--teal); }
+
+  details.mobile-toc{ display:none; }
+  @media (max-width:900px){
+    .layout{ grid-template-columns:1fr; }
+    nav.toc{ display:none; }
+    details.mobile-toc{ display:block; margin-bottom:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.1rem; }
+    details.mobile-toc summary{ cursor:pointer; font-weight:600; color:var(--navy); }
+    details.mobile-toc ol{ list-style:none; padding:0; margin:0.8rem 0 0; display:flex; flex-direction:column; gap:0.5rem; }
+    details.mobile-toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; }
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/strand-b-t10-file-handling-read-write-explainer.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+
+<header class="page-head">
+  <div class="head-inner">
+    <div class="eyebrow">Year 12 AS Computer Science (9618) &middot; Topic 10.2, Data Structures</div>
+    <h1>File Handling: Reading &amp; Writing Text Files</h1>
+    <p class="lede">Four commands and one function are all it takes to move data between a program and a file that outlives it.</p>
+  </div>
+</header>
+
+<div class="layout">
+  <details class="mobile-toc">
+    <summary>Contents</summary>
+    <ol>
+      <li><a href="#why">01 · Why files?</a></li>
+      <li><a href="#opening">02 · Opening a file</a></li>
+      <li><a href="#reading">03 · Reading from a file</a></li>
+      <li><a href="#eof">04 · Testing for the end of the file</a></li>
+      <li><a href="#writing">05 · Writing to a file</a></li>
+      <li><a href="#closing">06 · Closing a file</a></li>
+      <li><a href="#trace">07 · Worked example: filtering a file</a></li>
+      <li><a href="#mistakes">08 · Common mistakes</a></li>
+    </ol>
+  </details>
+
+  <nav class="toc" id="desktopToc">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#why">01 · Why files?</a></li>
+      <li><a href="#opening">02 · Opening a file</a></li>
+      <li><a href="#reading">03 · Reading</a></li>
+      <li><a href="#eof">04 · Testing EOF</a></li>
+      <li><a href="#writing">05 · Writing</a></li>
+      <li><a href="#closing">06 · Closing</a></li>
+      <li><a href="#trace">07 · Worked example</a></li>
+      <li><a href="#mistakes">08 · Common mistakes</a></li>
+    </ol>
+  </nav>
+
+  <article>
+
+    <section id="why">
+      <div class="section-kicker">01</div>
+      <h2>Why files?</h2>
+      <p>Every variable in a program disappears the moment the program ends. A <strong>file</strong> stores data on disk, so it persists after the program stops — and can be read again the next time the program runs, or by a completely different program.</p>
+    </section>
+
+    <section id="opening">
+      <div class="section-kicker">02</div>
+      <h2>Opening a file</h2>
+      <p>Before reading or writing, a file must be opened, stating which <strong>mode</strong> it's needed in:</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">OPENFILE</span> &lt;file identifier&gt; <span class="kw">FOR</span> &lt;file mode&gt;</code></pre>
+      </div>
+      <table class="ref">
+        <tr><th>Mode</th><th>Effect</th></tr>
+        <tr><td><code>READ</code></td><td>Opens an existing file so its contents can be read. Does not change the file.</td></tr>
+        <tr><td><code>WRITE</code></td><td>Creates a new file, or completely overwrites an existing one — all previous data is lost.</td></tr>
+        <tr><td><code>APPEND</code></td><td>Opens a file so new data can be added to the end, without erasing what's already there.</td></tr>
+      </table>
+      <div class="warn">
+        <strong>The file identifier needs quotes</strong>
+        <code>OPENFILE "students.txt" FOR READ</code> — examiner reports specifically flag missing quotation marks around the filename as a common, easily-avoided mark loss.
+      </div>
+    </section>
+
+    <section id="reading">
+      <div class="section-kicker">03</div>
+      <h2>Reading from a file</h2>
+      <p>Once a file is open for <code>READ</code>, each call to <code>READFILE</code> reads exactly <strong>one line</strong> into a variable:</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">READFILE</span> &lt;file identifier&gt;, &lt;variable&gt;</code></pre>
+      </div>
+      <p>To read every line in a file, <code>READFILE</code> needs to run inside a loop — one call only ever gets you the next single line.</p>
+    </section>
+
+    <section id="eof">
+      <div class="section-kicker">04</div>
+      <h2>Testing for the end of the file</h2>
+      <p>Since you often don't know in advance how many lines a file contains, the <code>EOF</code> ("end of file") function tells you when to stop:</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">EOF</span>(&lt;file identifier&gt;)</code></pre>
+      </div>
+      <p><code>EOF(...)</code> returns <code>TRUE</code> once there are no more lines left to read, and <code>FALSE</code> otherwise. Combined with a <code>WHILE</code> loop, this is the standard pattern for reading an entire file:</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">WHILE</span> <span class="kw">NOT</span> EOF(<span class="str">"students.txt"</span>)
+   <span class="kw">READFILE</span> <span class="str">"students.txt"</span>, StudentName
+   OUTPUT StudentName
+<span class="kw">ENDWHILE</span></code></pre>
+      </div>
+      <div class="tip">
+        <strong>Check EOF before reading, not after</strong>
+        The condition is tested at the <em>top</em> of the loop, before each <code>READFILE</code> — this is exactly what stops the loop from trying to read one line past the last real line in the file.
+      </div>
+    </section>
+
+    <section id="writing">
+      <div class="section-kicker">05</div>
+      <h2>Writing to a file</h2>
+      <p>Once a file is open for <code>WRITE</code> or <code>APPEND</code>, <code>WRITEFILE</code> adds one piece of data to it:</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">WRITEFILE</span> &lt;file identifier&gt;, &lt;data&gt;</code></pre>
+      </div>
+      <p>Remember: <code>WRITE</code> mode erases whatever was already in the file the moment it's opened, before a single <code>WRITEFILE</code> has even run. If the goal is to add to existing content, <code>APPEND</code> is the mode needed instead.</p>
+    </section>
+
+    <section id="closing">
+      <div class="section-kicker">06</div>
+      <h2>Closing a file</h2>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">CLOSEFILE</span> &lt;file identifier&gt;</code></pre>
+      </div>
+      <p>Every file that's opened should be closed once the program is finished with it. Forgetting to close a file is one of the most commonly penalised mistakes in file-handling exam answers — make it a habit to write the closing line as soon as you've written the opening one, then fill in the middle.</p>
+    </section>
+
+    <section id="trace">
+      <div class="section-kicker">07</div>
+      <h2>Worked example: filtering a file</h2>
+      <p>This program reads every line of <code>FileA.txt</code>, and copies each one into <code>FileB.txt</code> — except that any blank line is replaced with a row of dashes.</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">OPENFILE</span> <span class="str">"FileA.txt"</span> <span class="kw">FOR</span> READ
+<span class="kw">OPENFILE</span> <span class="str">"FileB.txt"</span> <span class="kw">FOR</span> WRITE
+<span class="kw">WHILE</span> <span class="kw">NOT</span> EOF(<span class="str">"FileA.txt"</span>)
+   <span class="kw">READFILE</span> <span class="str">"FileA.txt"</span>, LineOfText
+   <span class="kw">IF</span> LineOfText = <span class="str">""</span> <span class="kw">THEN</span>
+      <span class="kw">WRITEFILE</span> <span class="str">"FileB.txt"</span>, <span class="str">"-------------------------"</span>
+   <span class="kw">ELSE</span>
+      <span class="kw">WRITEFILE</span> <span class="str">"FileB.txt"</span>, LineOfText
+   <span class="kw">ENDIF</span>
+<span class="kw">ENDWHILE</span>
+<span class="kw">CLOSEFILE</span> <span class="str">"FileA.txt"</span>
+<span class="kw">CLOSEFILE</span> <span class="str">"FileB.txt"</span></code></pre>
+      </div>
+      <p>Step through the trace below and watch FileB.txt build up, line by line.</p>
+      <div class="playground">
+        <h3>File filtering simulator</h3>
+        <div class="sub">FileA.txt has 5 lines, two of them blank</div>
+        <div class="file-panels">
+          <div class="file-panel">
+            <h4>FileA.txt (reading)</h4>
+            <div id="fileAContent"></div>
+          </div>
+          <div class="file-panel">
+            <h4>FileB.txt (writing)</h4>
+            <div id="fileBContent"></div>
+          </div>
+        </div>
+        <div class="step-line" id="fileStepLine">Press Next to begin</div>
+        <div class="step-controls">
+          <button class="secondary" id="fileResetBtn">Reset</button>
+          <button id="fileNextBtn">Next step ▸</button>
+          <span class="step-count" id="fileStepCount">Step 0 / 5</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="mistakes">
+      <div class="section-kicker">08</div>
+      <h2>Common mistakes</h2>
+      <ul>
+        <li><strong>Missing quotes around the filename.</strong> <code>OPENFILE StudentData.txt FOR READ</code> is missing the quotation marks a file identifier needs.</li>
+        <li><strong>Using the wrong mode.</strong> Opening a file <code>FOR WRITE</code> when the intention was to add to existing content — this silently destroys everything that was there before.</li>
+        <li><strong>Missing EOF check.</strong> A loop that reads a fixed number of times instead of checking <code>EOF</code> will crash, or miss data, the moment the file's actual length doesn't match that assumption.</li>
+        <li><strong>Forgetting CLOSEFILE.</strong> Every opened file needs a matching close — it's easy to forget once the interesting logic in the middle is done.</li>
+      </ul>
+    </section>
+
+  </article>
+</div>
+
+<script>
+(function(){
+  var sections = document.querySelectorAll('article section[id]');
+  var tocLinks = document.querySelectorAll('#desktopToc a');
+  function onScroll(){
+    var current = '';
+    for (var i = 0; i < sections.length; i++){
+      var rect = sections[i].getBoundingClientRect();
+      if (rect.top <= 140) current = sections[i].id;
+    }
+    for (var j = 0; j < tocLinks.length; j++){
+      var a = tocLinks[j];
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    }
+  }
+  document.addEventListener('scroll', onScroll);
+  onScroll();
+})();
+
+(function(){
+  var fileALines = ['Amara scored 82', '', 'Kai scored 91', '', 'Priya scored 76'];
+  var totalSteps = 5;
+  var step = 0;
+
+  var fileAEl = document.getElementById('fileAContent');
+  var fileBEl = document.getElementById('fileBContent');
+  var stepLine = document.getElementById('fileStepLine');
+  var stepCount = document.getElementById('fileStepCount');
+  var nextBtn = document.getElementById('fileNextBtn');
+  var resetBtn = document.getElementById('fileResetBtn');
+
+  function computeFileB(uptoStep){
+    var lines = [];
+    for (var i = 0; i < uptoStep; i++){
+      lines.push(fileALines[i] === '' ? '-------------------------' : fileALines[i]);
+    }
+    return lines;
+  }
+
+  function render(){
+    fileAEl.innerHTML = '';
+    for (var i = 0; i < fileALines.length; i++){
+      var div = document.createElement('div');
+      var isCurrent = (i === step - 1);
+      div.className = 'file-line' + (isCurrent ? ' current' : '');
+      div.textContent = 'Line ' + (i + 1) + ': ' + (fileALines[i] === '' ? '(blank)' : fileALines[i]);
+      if (fileALines[i] === ''){ div.classList.add('blank-marker'); }
+      fileAEl.appendChild(div);
+    }
+
+    var bLines = computeFileB(step);
+    fileBEl.innerHTML = '';
+    if (bLines.length === 0){
+      var empty = document.createElement('div');
+      empty.className = 'file-line blank-marker';
+      empty.textContent = '(nothing written yet)';
+      fileBEl.appendChild(empty);
+    } else {
+      for (var j = 0; j < bLines.length; j++){
+        var bdiv = document.createElement('div');
+        bdiv.className = 'file-line written';
+        bdiv.textContent = 'Line ' + (j + 1) + ': ' + bLines[j];
+        fileBEl.appendChild(bdiv);
+      }
+    }
+
+    if (step === 0){
+      stepLine.textContent = 'Step 0 — WHILE NOT EOF("FileA.txt") checks: more lines remain, enter the loop';
+    } else {
+      var idx = step - 1;
+      var original = fileALines[idx];
+      if (original === ''){
+        stepLine.textContent = 'Step ' + step + ' — READFILE reads line ' + step + ' (blank). LineOfText = "" is TRUE, so WRITEFILE writes a dashed line instead.';
+      } else {
+        stepLine.textContent = 'Step ' + step + ' — READFILE reads line ' + step + ': "' + original + '". Not blank, so WRITEFILE copies it unchanged.';
+      }
+      if (step === totalSteps){
+        stepLine.textContent += ' EOF("FileA.txt") is now TRUE — the loop ends, and both files are closed.';
+      }
+    }
+    stepCount.textContent = 'Step ' + step + ' / ' + totalSteps;
+    nextBtn.disabled = step >= totalSteps;
+  }
+
+  nextBtn.addEventListener('click', function(){ if (step < totalSteps){ step++; render(); } });
+  resetBtn.addEventListener('click', function(){ step = 0; render(); });
+
+  render();
+})();
+</script>
+
+</body>
+</html>

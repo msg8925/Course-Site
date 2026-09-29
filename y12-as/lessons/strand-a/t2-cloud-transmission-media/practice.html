@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "strand-a/t2-cloud-transmission-media";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Cloud Computing and Transmission Media — Practice Questions";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practice: Cloud Computing &amp; Transmission Media — AS Level Computer Science (9618)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:"Source Sans 3", sans-serif; line-height:1.6; }
+  h1,h2,h3{ font-family:"Source Serif 4", serif; font-weight:600; color:var(--navy); }
+  code, .mono { font-family:"JetBrains Mono", monospace; }
+
+  header.page-head{ background:linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%); color:#eef1fb; padding:2rem 1.5rem 1.6rem; }
+  .head-inner{ max-width:1180px; margin:0 auto; }
+  .eyebrow{ color:#9fb0e6; font-size:0.95rem; margin-bottom:0.5rem; }
+  header.page-head h1{ color:#fff; font-size:1.85rem; margin:0 0 0.9rem; max-width:34ch; }
+
+  .progress-row{ display:flex; align-items:center; gap:1rem; max-width:100%; }
+  .progress-track{ flex:1; height:10px; background:#26346b; border-radius:6px; overflow:hidden; }
+  .progress-fill{ height:100%; width:0%; background:var(--teal); transition:width 0.3s; }
+  .progress-label{ font-size:0.85rem; color:#c7d0ee; white-space:nowrap; }
+  .reset-btn{ background:transparent; border:1px solid #3a4a86; color:#c7d0ee; border-radius:6px; padding:0.4rem 0.85rem; font-size:0.82rem; cursor:pointer; font-family:"Source Sans 3",sans-serif; white-space:nowrap; }
+  .reset-btn:hover{ border-color:var(--teal); color:var(--teal); }
+
+  .layout{ max-width:1180px; margin:0 auto; padding:2rem 1.5rem 4rem; display:grid; grid-template-columns:230px minmax(0,760px); gap:2.5rem; align-items:start; }
+
+  nav.toc{ position:sticky; top:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.1rem; }
+  nav.toc h2{ font-size:0.95rem; margin:0 0 0.7rem; color:var(--muted); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+  nav.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.45rem; }
+  nav.toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; display:block; padding:0.15rem 0; border-left:2px solid transparent; padding-left:0.6rem; }
+  nav.toc a:hover{ color:var(--teal); }
+
+  article{ max-width:760px; }
+  section.qsection{ margin-bottom:2.6rem; }
+  .section-kicker{ font-family:"JetBrains Mono", monospace; color:var(--teal); font-size:0.85rem; margin-bottom:0.35rem; }
+  section.qsection h2{ font-size:1.4rem; margin:0 0 1.1rem; }
+
+  .question{ background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.2rem; margin-bottom:1.1rem; }
+  .qprompt{ margin:0 0 0.9rem; font-size:0.98rem; }
+  .qprompt code{ font-size:0.92rem; }
+
+  .free-row{ display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center; }
+  .free-row input[type=text]{ flex:1; min-width:120px; padding:0.55rem 0.7rem; border:1px solid var(--border); border-radius:6px; font-family:"JetBrains Mono",monospace; font-size:0.92rem; }
+  .check-btn{ background:var(--navy); color:#fff; border:none; border-radius:6px; padding:0.55rem 1.1rem; font-weight:600; cursor:pointer; font-size:0.88rem; }
+  .check-btn:hover{ background:var(--navy-deep); }
+  .feedback{ margin-top:0.6rem; font-size:0.9rem; min-height:1.3em; }
+  .feedback.correct{ color:#0D9488; font-weight:600; }
+  .feedback.incorrect{ color:var(--red); font-weight:600; }
+
+  .mcq-options{ display:flex; flex-wrap:wrap; gap:0.55rem; }
+  .mcq-pill{ background:var(--panel-alt); border:1px solid var(--border); border-radius:20px; padding:0.5rem 1rem; cursor:pointer; font-size:0.88rem; text-align:left; }
+  .mcq-pill:hover{ border-color:var(--teal); }
+  .mcq-pill.correct{ background:var(--teal-light); border-color:var(--teal); }
+  .mcq-pill.incorrect{ background:var(--red-light); border-color:var(--red); }
+
+  textarea.long-answer{ width:100%; min-height:110px; padding:0.7rem 0.85rem; border:1px solid var(--border); border-radius:8px; font-family:"Source Sans 3",sans-serif; font-size:0.92rem; resize:vertical; }
+  details.reveal{ margin-top:0.8rem; }
+  details.reveal summary{ cursor:pointer; color:var(--purple); font-weight:600; font-size:0.88rem; }
+  .model-answer{ background:var(--purple-light); border:1px solid #ddc7ea; border-radius:8px; padding:0.85rem 1rem; margin-top:0.6rem; font-size:0.92rem; }
+
+  footer.page-foot{ max-width:1180px; margin:0 auto; padding:0 1.5rem 3rem; }
+  .foot-nav{ display:flex; justify-content:space-between; gap:1rem; border-top:1px solid var(--border); padding-top:1.5rem; flex-wrap:wrap; }
+  .foot-nav a{ text-decoration:none; color:var(--navy); font-weight:600; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:0.7rem 1.1rem; font-size:0.92rem; }
+  .foot-nav a:hover{ border-color:var(--teal); color:var(--teal); }
+
+  details.mobile-toc{ display:none; }
+  @media (max-width:900px){
+    .layout{ grid-template-columns:1fr; }
+    nav.toc{ display:none; }
+    details.mobile-toc{ display:block; margin-bottom:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.1rem; }
+    details.mobile-toc summary{ cursor:pointer; font-weight:600; color:var(--navy); }
+    details.mobile-toc ol{ list-style:none; padding:0; margin:0.8rem 0 0; display:flex; flex-direction:column; gap:0.5rem; }
+    details.mobile-toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; }
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/strand-a-t2-cloud-transmission-media-practice.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+
+<header class="page-head">
+  <div class="head-inner">
+    <div class="eyebrow">Year 12 AS Computer Science (9618) &middot; Topic 2.4, Communication and Internet Technologies</div>
+    <h1>Cloud Computing &amp; Transmission Media — 13 checkable questions</h1>
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel">0 / 13 correct</div>
+      <button class="reset-btn" id="resetProgressBtn">Reset progress</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <details class="mobile-toc">
+    <summary>Sections</summary>
+    <ol>
+      <li><a href="#secA">A · Cloud computing basics</a></li>
+      <li><a href="#secB">B · Public vs private cloud</a></li>
+      <li><a href="#secC">C · Wired media</a></li>
+      <li><a href="#secD">D · Wireless media</a></li>
+      <li><a href="#secE">E · Exam-style</a></li>
+    </ol>
+  </details>
+
+  <nav class="toc">
+    <h2>Sections</h2>
+    <ol>
+      <li><a href="#secA">A · Cloud computing basics</a></li>
+      <li><a href="#secB">B · Public vs private cloud</a></li>
+      <li><a href="#secC">C · Wired media</a></li>
+      <li><a href="#secD">D · Wireless media</a></li>
+      <li><a href="#secE">E · Exam-style</a></li>
+    </ol>
+  </nav>
+
+  <article>
+
+    <section class="qsection" id="secA">
+      <div class="section-kicker">A</div>
+      <h2>Cloud computing basics</h2>
+
+      <div class="question" data-qid="a1">
+        <p class="qprompt">What is cloud computing?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="Storing data and running services on someone else's servers, accessed over a network">Storing data and running services on someone else's servers, accessed over a network</button>
+          <button class="mcq-pill" data-value="Any computer connected to a WiFi network">Any computer connected to a WiFi network</button>
+          <button class="mcq-pill" data-value="A type of encryption for network traffic">A type of encryption for network traffic</button>
+          <button class="mcq-pill" data-value="A backup copy stored on a USB drive">A backup copy stored on a USB drive</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="a2">
+        <p class="qprompt">Give one example of a cloud storage service.</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="a3">
+        <p class="qprompt">True or False: with local storage, you are physically responsible for the disk your data is stored on.</p>
+        <div class="free-row"><input type="text" placeholder="True or False"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secB">
+      <div class="section-kicker">B</div>
+      <h2>Public vs private cloud</h2>
+
+      <div class="question" data-qid="b1">
+        <p class="qprompt">In a public cloud, infrastructure is shared between what?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="Many different customers">Many different customers</button>
+          <button class="mcq-pill" data-value="Only one organisation">Only one organisation</button>
+          <button class="mcq-pill" data-value="No one — it is not shared at all">No one — it is not shared at all</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="b2">
+        <p class="qprompt">A bank needs maximum control over exactly where its customer data is stored, for legal reasons. Which cloud model best fits this need?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="b3">
+        <p class="qprompt">Give one advantage of public cloud over private cloud.</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secC">
+      <div class="section-kicker">C</div>
+      <h2>Wired media</h2>
+
+      <div class="question" data-qid="c1">
+        <p class="qprompt">Which type of wired cable carries data as pulses of light?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c2">
+        <p class="qprompt">Which is generally cheaper to buy and install: copper cable or fibre-optic cable?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="Copper cable">Copper cable</button>
+          <button class="mcq-pill" data-value="Fibre-optic cable">Fibre-optic cable</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c3">
+        <p class="qprompt">Why is fibre-optic cable preferred for very long-distance backbone connections, despite its higher cost?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secD">
+      <div class="section-kicker">D</div>
+      <h2>Wireless media</h2>
+
+      <div class="question" data-qid="d1">
+        <p class="qprompt">Which wireless medium requires a clear, uninterrupted line of sight between transmitter and receiver?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="d2">
+        <p class="qprompt">What is the main drawback of using a satellite connection?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="High latency due to the very long signal distance">High latency due to the very long signal distance</button>
+          <button class="mcq-pill" data-value="It cannot reach remote areas">It cannot reach remote areas</button>
+          <button class="mcq-pill" data-value="It requires physical cable installation">It requires physical cable installation</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="d3">
+        <p class="qprompt">Give one factor that can cause interference with a WiFi signal.</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="d4">
+        <p class="qprompt">A company wants to connect its head office to a remote oil rig with no other network infrastructure nearby. Which transmission medium fits best?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secE">
+      <div class="section-kicker">E</div>
+      <h2>Exam-style questions</h2>
+
+      <div class="question" data-qid="e1">
+        <p class="qprompt">A university is deciding whether to store its student records on a public cloud or a private cloud. Discuss one factor in favour of each option, and recommend which one the university should choose.</p>
+        <textarea class="long-answer" placeholder="Write your answer here"></textarea>
+        <details class="reveal">
+          <summary>Reveal model answer</summary>
+          <div class="model-answer">
+            <p><strong>In favour of public cloud:</strong> lower cost, since the university pays only for the storage it uses without needing to buy and maintain its own dedicated infrastructure, and capacity can scale easily as student numbers change.</p>
+            <p><strong>In favour of private cloud:</strong> student records are sensitive personal data, often subject to data protection regulations — private cloud gives the university full control over exactly where that data is stored and who can access it.</p>
+            <p><strong>Recommendation:</strong> private cloud, since the sensitivity and legal protection requirements around student records generally outweigh the cost savings of public cloud for this kind of data.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="question" data-qid="e2">
+        <p class="qprompt">A company is connecting two buildings 500 metres apart, across land it does not own, so no cable can be laid between them. Explain which transmission medium is most suitable, and why fibre-optic cable — despite its excellent speed — would not be a realistic choice here.</p>
+        <textarea class="long-answer" placeholder="Write your answer here"></textarea>
+        <details class="reveal">
+          <summary>Reveal model answer</summary>
+          <div class="model-answer">
+            <p><strong>Most suitable: microwave.</strong> A point-to-point microwave link needs no physical cable at all — only a clear line of sight between the two buildings — so it avoids the problem of not being able to lay cable across land the company doesn't own entirely.</p>
+            <p><strong>Why not fibre-optic:</strong> fibre-optic is a wired medium — it still requires a physical cable to be laid along the entire route between the two buildings. Since the company doesn't own the land in between and cannot lay cable across it, fibre-optic's speed advantage is irrelevant here; the medium simply cannot be installed at all.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+  </article>
+</div>
+
+<footer class="page-foot">
+  <div class="foot-nav">
+    <a href="explainer.html">◂ Back to explainer</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var STORAGE_KEY = 'y12-9618-cloud-transmission-practice-v1';
+  var CHECKABLE_IDS = ['a1','a2','a3','b1','b2','b3','c1','c2','c3','d1','d2','d3','d4'];
+  var ANSWERS = {
+    a1: "Storing data and running services on someone else's servers, accessed over a network",
+    a2: 'google drive',
+    a3: 'True',
+    b1: 'Many different customers',
+    b2: 'private cloud',
+    b3: 'lower cost',
+    c1: 'fibre-optic cable',
+    c2: 'Copper cable',
+    c3: 'maintains speed over long distance and resists interference',
+    d1: 'microwave',
+    d2: 'High latency due to the very long signal distance',
+    d3: 'walls',
+    d4: 'satellite'
+  };
+
+  function normalize(v){
+    return (v || '').toString().trim().toLowerCase().replace(/\s+/g,' ');
+  }
+
+  function altOk(qid, raw){
+    var v = normalize(raw);
+    if (qid === 'a2'){
+      return v.indexOf('google drive') !== -1 || v.indexOf('dropbox') !== -1 || v.indexOf('onedrive') !== -1 || v.indexOf('icloud') !== -1;
+    }
+    if (qid === 'a3'){
+      return v === 'true' || v === 't' || v === 'yes';
+    }
+    if (qid === 'b2'){
+      return v.indexOf('private') !== -1;
+    }
+    if (qid === 'b3'){
+      return v.indexOf('cost') !== -1 || v.indexOf('cheap') !== -1 || v.indexOf('scal') !== -1 || v.indexOf('no hardware') !== -1;
+    }
+    if (qid === 'c1'){
+      return v.indexOf('fibre') !== -1 || v.indexOf('fiber') !== -1;
+    }
+    if (qid === 'c3'){
+      return v.indexOf('distance') !== -1 || v.indexOf('interference') !== -1 || v.indexOf('speed') !== -1 || v.indexOf('attenuat') !== -1;
+    }
+    if (qid === 'd1'){
+      return v.indexOf('microwave') !== -1;
+    }
+    if (qid === 'd3'){
+      return v.indexOf('wall') !== -1 || v.indexOf('signal') !== -1 || v.indexOf('distance') !== -1 || v.indexOf('interference') !== -1 || v.indexOf('obstruction') !== -1 || v.indexOf('other device') !== -1;
+    }
+    if (qid === 'd4'){
+      return v.indexOf('satellite') !== -1;
+    }
+    return v === normalize(ANSWERS[qid]);
+  }
+
+  var progress = {};
+  try {
+    var saved = window.localStorage.getItem(STORAGE_KEY);
+    if (saved) progress = JSON.parse(saved);
+  } catch(e) { progress = {}; }
+
+  function saveProgress(){
+    try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch(e){}
+  }
+
+  function updateProgressBar(){
+    var correctCount = 0;
+    for (var i = 0; i < CHECKABLE_IDS.length; i++){
+      if (progress[CHECKABLE_IDS[i]] === true) correctCount++;
+    }
+    var pct = Math.round((correctCount / CHECKABLE_IDS.length) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = correctCount + ' / ' + CHECKABLE_IDS.length + ' correct';
+  }
+
+  function markQuestionState(qid){
+    var q = document.querySelector('.question[data-qid="' + qid + '"]');
+    if (!q) return;
+    var fb = q.querySelector('.feedback');
+    if (progress[qid] === true){
+      fb.textContent = 'Correct.';
+      fb.className = 'feedback correct';
+    }
+  }
+
+  function findQuestionAncestor(el){
+    var node = el;
+    while (node && node.nodeType === 1){
+      if (node.className && node.className.indexOf('question') !== -1) return node;
+      node = node.parentNode;
+    }
+    return null;
+  }
+
+  var freeQuestions = document.querySelectorAll('.question .free-row');
+  for (var fi = 0; fi < freeQuestions.length; fi++){
+    (function(row){
+      var qEl = findQuestionAncestor(row);
+      var qid = qEl.getAttribute('data-qid');
+      var input = row.querySelector('input[type=text]');
+      var btn = row.querySelector('.check-btn');
+      var fb = qEl.querySelector('.feedback');
+      btn.addEventListener('click', function(){
+        var ok = altOk(qid, input.value);
+        if (ok){
+          fb.textContent = 'Correct.';
+          fb.className = 'feedback correct';
+          progress[qid] = true;
+        } else {
+          fb.textContent = 'Not quite — check the lesson and try again.';
+          fb.className = 'feedback incorrect';
+        }
+        saveProgress();
+        updateProgressBar();
+      });
+      input.addEventListener('keydown', function(ev){
+        if (ev.key === 'Enter'){ btn.click(); }
+      });
+    })(freeQuestions[fi]);
+  }
+
+  var mcqGroups = document.querySelectorAll('.question .mcq-options');
+  for (var mi = 0; mi < mcqGroups.length; mi++){
+    (function(group){
+      var qEl = findQuestionAncestor(group);
+      var qid = qEl.getAttribute('data-qid');
+      var pills = group.querySelectorAll('.mcq-pill');
+      var fb = qEl.querySelector('.feedback');
+      for (var pi = 0; pi < pills.length; pi++){
+        pills[pi].addEventListener('click', function(){
+          var chosen = this.getAttribute('data-value');
+          for (var k = 0; k < pills.length; k++){
+            pills[k].classList.remove('correct','incorrect');
+          }
+          var isCorrect = chosen === ANSWERS[qid];
+          if (isCorrect){
+            this.classList.add('correct');
+            fb.textContent = 'Correct.';
+            fb.className = 'feedback correct';
+            progress[qid] = true;
+          } else {
+            this.classList.add('incorrect');
+            fb.textContent = 'Not quite — try again.';
+            fb.className = 'feedback incorrect';
+          }
+          saveProgress();
+          updateProgressBar();
+        });
+      }
+    })(mcqGroups[mi]);
+  }
+
+  for (var ri = 0; ri < CHECKABLE_IDS.length; ri++){
+    markQuestionState(CHECKABLE_IDS[ri]);
+  }
+  updateProgressBar();
+
+  document.getElementById('resetProgressBtn').addEventListener('click', function(){
+    progress = {};
+    saveProgress();
+    var feedbacks = document.querySelectorAll('.feedback');
+    for (var i = 0; i < feedbacks.length; i++){
+      feedbacks[i].textContent = '';
+      feedbacks[i].className = 'feedback';
+    }
+    var pills = document.querySelectorAll('.mcq-pill');
+    for (var j = 0; j < pills.length; j++){
+      pills[j].classList.remove('correct','incorrect');
+    }
+    var inputs = document.querySelectorAll('input[type=text]');
+    for (var k = 0; k < inputs.length; k++){ inputs[k].value = ''; }
+    updateProgressBar();
+  });
+})();
+</script>
+
+</body>
+</html>

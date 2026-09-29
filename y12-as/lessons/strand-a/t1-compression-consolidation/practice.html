@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "strand-a/t1-compression-consolidation";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Compression: Exam-Style Practice — Practice Questions";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compression Consolidation: Practice Questions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E;
+    --navy-deep:#101a3a;
+    --teal:#0D9488;
+    --teal-light:#e6f5f3;
+    --red:#a4342a;
+    --red-light:#fbeae8;
+    --bg:#f5f6fa;
+    --panel:#ffffff;
+    --panel-alt:#eef1f8;
+    --border:#dde1ee;
+    --text:#1c2340;
+    --muted:#5b6472;
+    --serif:'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --sans:'Source Sans 3','Segoe UI',Arial,sans-serif;
+    --mono:'JetBrains Mono','Fira Code',Consolas,monospace;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.6; -webkit-font-smoothing:antialiased;}
+  a{color:var(--teal);}
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible{outline:3px solid var(--teal); outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;} }
+
+  header.page-head{background:var(--navy); color:#fff; padding:2.4rem 1.5rem 2.1rem;}
+  .head-inner{max-width:920px; margin:0 auto;}
+  .head-inner p.eyebrow{margin:0 0 0.6rem; color:#9fb0e0; font-size:0.98rem;}
+  .head-inner h1{font-family:var(--serif); font-weight:700; font-size:clamp(1.8rem, 4vw, 2.5rem); margin:0 0 0.7rem; line-height:1.15;}
+  .head-inner p.lede{margin:0; max-width:65ch; color:#dbe2f5; font-size:1.08rem;}
+
+  .progress-bar-wrap{max-width:920px; margin:1.3rem auto 0; background:#20295a; border-radius:999px; height:10px; overflow:hidden;}
+  .progress-bar-fill{height:100%; background:var(--teal); width:0%;}
+  .progress-caption{max-width:920px; margin:0.6rem auto 0; display:flex; justify-content:space-between; align-items:center; color:#c3cdea; font-size:0.88rem;}
+  .progress-caption button{background:none; border:none; color:#c3cdea; text-decoration:underline; cursor:pointer; font-size:0.85rem; padding:0; font-family:var(--sans);}
+
+  .layout{max-width:1120px; margin:0 auto; padding:2.4rem 1.5rem 5rem; display:flex; gap:2.8rem; align-items:flex-start;}
+  nav.toc{flex:0 0 230px; position:sticky; top:1.5rem; font-size:0.95rem;}
+  nav.toc h2{font-family:var(--serif); font-size:1rem; font-weight:600; margin:0 0 0.8rem; color:var(--navy);}
+  nav.toc ol{list-style:none; margin:0; padding:0; border-left:2px solid var(--border);}
+  nav.toc a{display:block; padding:0.4rem 0 0.4rem 0.9rem; margin-left:-2px; border-left:2px solid transparent; color:var(--muted); text-decoration:none;}
+  nav.toc a:hover{color:var(--navy);}
+  details.toc-mobile{display:none;}
+
+  main.article{flex:1 1 auto; min-width:0; max-width:760px;}
+  main.article section{margin-bottom:3rem; scroll-margin-top:1.4rem;}
+  .section-kicker{font-family:var(--mono); font-size:0.82rem; color:var(--teal); margin:0 0 0.35rem;}
+  main.article h2{font-family:var(--serif); font-weight:700; font-size:1.5rem; color:var(--navy); margin:0 0 0.5rem; line-height:1.25;}
+  main.article > section > p.section-intro{color:var(--muted); margin:0 0 1.2rem; max-width:65ch;}
+
+  .qcard{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:1.3rem 1.4rem 1.4rem; margin-bottom:1.1rem;}
+  .qcard-head{display:flex; align-items:flex-start; gap:0.7rem; margin-bottom:0.7rem;}
+  .qnum{flex:0 0 auto; width:2rem; height:2rem; border-radius:50%; background:var(--panel-alt); color:var(--navy); font-weight:700; font-family:var(--sans); display:flex; align-items:center; justify-content:center; font-size:0.92rem;}
+  .qnum.done{background:var(--teal); color:#fff;}
+  .qprompt{flex:1; margin:0; padding-top:0.15rem;}
+  .qprompt .binline{display:inline-block; font-family:var(--mono); background:var(--panel-alt); padding:0.15rem 0.5rem; border-radius:5px; margin:0.15rem 0.15rem 0.15rem 0;}
+
+  .check-row{display:flex; gap:0.6rem; align-items:center; margin:0.8rem 0 0.3rem; flex-wrap:wrap;}
+  .answer-input{font-family:var(--mono); font-size:0.95rem; padding:0.55rem 0.75rem; border-radius:7px; border:1.5px solid var(--border); min-width:160px; flex:0 1 240px;}
+  .check-btn{font-family:var(--sans); font-weight:600; font-size:0.9rem; padding:0.55rem 1.1rem; border-radius:7px; border:none; background:var(--navy); color:#fff; cursor:pointer;}
+  .check-btn:hover{background:var(--navy-deep);}
+  .feedback{font-size:0.92rem; font-weight:600; padding:0.3rem 0;}
+  .feedback.correct{color:var(--teal);}
+  .feedback.incorrect{color:var(--red);}
+
+  textarea.longanswer{width:100%; min-height:100px; font-family:var(--sans); font-size:0.95rem; padding:0.6rem 0.75rem; border-radius:7px; border:1.5px solid var(--border); margin:0.6rem 0 0.2rem; resize:vertical;}
+
+  details.solution{margin-top:0.7rem; border-top:1px dashed var(--border); padding-top:0.6rem;}
+  details.solution summary{cursor:pointer; font-weight:600; color:var(--navy); font-size:0.92rem;}
+  .solution-body{margin-top:0.8rem; font-size:0.94rem;}
+  .solution-body p{margin:0 0 0.6rem;}
+  .solution-body p:last-child{margin-bottom:0;}
+  .solution-body .steps{font-family:var(--mono); font-size:0.85rem; background:var(--panel-alt); border-radius:7px; padding:0.7rem 0.9rem; line-height:1.85; white-space:pre-wrap; margin:0.5rem 0;}
+
+  .next-step{margin-top:2rem; padding:1.6rem; background:var(--panel-alt); border-radius:var(--radius); display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;}
+  .next-step p{margin:0; color:var(--muted);}
+  .next-step a.button{background:var(--navy); color:#fff; text-decoration:none; padding:0.7rem 1.3rem; border-radius:8px; font-weight:600; white-space:nowrap;}
+  .next-step a.button:hover{background:var(--navy-deep);}
+
+  @media (max-width:900px){
+    .layout{flex-direction:column; gap:1.2rem;}
+    nav.toc{display:none;}
+    details.toc-mobile{display:block; background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:0.2rem 1rem; width:100%;}
+    details.toc-mobile summary{padding:0.9rem 0; font-weight:600; color:var(--navy); cursor:pointer; font-family:var(--serif);}
+    details.toc-mobile ol{list-style:none; margin:0; padding:0 0 0.8rem;}
+    details.toc-mobile a{display:block; padding:0.4rem 0; color:var(--muted); text-decoration:none;}
+    main.article{max-width:none;}
+    .answer-input{flex:1 1 auto;}
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/strand-a-t1-compression-consolidation-practice.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+
+<header class="page-head">
+  <div class="head-inner">
+    <p class="eyebrow">Year 12 AS Computer Science (9618) &middot; Topic 1.10, Data Representation</p>
+    <h1>Compression Consolidation: Practice Questions</h1>
+    <p class="lede">14 exam-style questions combining RLE on 2D images, multi-step file-size-then-compression calculations, and lossy/lossless justification. Type an answer to check it instantly, or open the full worked solution any time.</p>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill"></div></div>
+  <div class="progress-caption">
+    <span id="progress-text">0 of 7 checkable questions correct</span>
+    <button type="button" id="reset-progress">Reset progress</button>
+  </div>
+</header>
+
+<div class="layout">
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2>Sections</h2>
+    <ol>
+      <li><a href="#secA">RLE on rows</a></li>
+      <li><a href="#secB">Multi-step calculations</a></li>
+      <li><a href="#secC">Lossy vs lossless scenarios</a></li>
+      <li><a href="#secD">Mixed short answer</a></li>
+      <li><a href="#secE">Exam-style</a></li>
+    </ol>
+  </nav>
+
+  <details class="toc-mobile">
+    <summary>Sections</summary>
+    <ol>
+      <li><a href="#secA">RLE on rows</a></li>
+      <li><a href="#secB">Multi-step calculations</a></li>
+      <li><a href="#secC">Lossy vs lossless scenarios</a></li>
+      <li><a href="#secD">Mixed short answer</a></li>
+      <li><a href="#secE">Exam-style</a></li>
+    </ol>
+  </details>
+
+  <main class="article">
+
+    <section id="secA">
+      <p class="section-kicker">A</p>
+      <h2>RLE on rows</h2>
+      <p class="section-intro">Encode each row exactly as you would a 1D string: count, then value.</p>
+
+      <div class="qcard" data-qid="a1">
+        <div class="qcard-head"><div class="qnum">1</div>
+          <p class="qprompt">RLE-encode this row: <span class="binline">11100111</span></p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="encoded string">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>3 ones, 2 zeros, 3 ones: <strong>3B2W3B</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="a2">
+        <div class="qcard-head"><div class="qnum">2</div>
+          <p class="qprompt">RLE-encode this row: <span class="binline">00000001</span></p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="encoded string">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p>7 zeros, 1 one: <strong>7W1B</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="a3">
+        <div class="qcard-head"><div class="qnum">3</div>
+          <p class="qprompt">
+            A 4&times;4 image has these rows, top to bottom: <span class="binline">1111</span>, <span class="binline">1111</span>, <span class="binline">0000</span>, <span class="binline">0000</span>.
+            Encode each row, then calculate the overall compression ratio (each run costs 2 characters: one digit for the count, one letter for the colour).
+          </p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="ratio" style="min-width:130px; flex-basis:130px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="steps">1111 -> 4B (2 chars)
+1111 -> 4B (2 chars)
+0000 -> 4W (2 chars)
+0000 -> 4W (2 chars)</div>
+            <p>Total encoded = 8 characters. Original = 16 pixels. Ratio = 16 &divide; 8 = <strong>2</strong>.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secB">
+      <p class="section-kicker">B</p>
+      <h2>Multi-step calculations</h2>
+      <p class="section-intro">File size, then compression &mdash; in order.</p>
+
+      <div class="qcard" data-qid="b1">
+        <div class="qcard-head"><div class="qnum">4</div>
+          <p class="qprompt">An image is 300 &times; 200 pixels, 8-bit colour depth. Calculate the uncompressed file size in bytes, then the compressed size if the compression ratio is 5x.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="compressed size (bytes)">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="steps">300 &times; 200 &times; 8 = 480,000 bits = 60,000 bytes
+60,000 \u00f7 5 = 12,000 bytes</div>
+            <p>Answer: <strong>12,000 bytes</strong>.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="b2">
+        <div class="qcard-head"><div class="qnum">5</div>
+          <p class="qprompt">An uncompressed image is 2,000,000 bytes. After compression it becomes 250,000 bytes. Calculate the compression ratio.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="ratio">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><div class="steps">2,000,000 \u00f7 250,000 = 8</div><p>Answer: <strong>8</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="b3">
+        <div class="qcard-head"><div class="qnum">6</div>
+          <p class="qprompt">A 1200 &times; 800 pixel image at 24-bit colour depth is compressed with a ratio of 15x. Calculate the compressed file size in bytes.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="compressed size (bytes)">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body">
+            <div class="steps">1200 &times; 800 &times; 24 = 23,040,000 bits = 2,880,000 bytes
+2,880,000 \u00f7 15 = 192,000 bytes</div>
+            <p>Answer: <strong>192,000 bytes</strong>.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secC">
+      <p class="section-kicker">C</p>
+      <h2>Lossy vs lossless scenarios</h2>
+      <p class="section-intro">Justify your choice against the specific scenario, not a general rule.</p>
+
+      <div class="qcard" data-qid="c1">
+        <div class="qcard-head"><div class="qnum">7</div>
+          <p class="qprompt">A hospital stores X-ray scans that must remain diagnostically exact, with no loss of detail. Which type of compression should be used, and why?</p>
+        </div>
+        <textarea class="longanswer" placeholder="Write your answer here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body"><p><strong>Lossless.</strong> Medical images must be pixel-perfect for accurate diagnosis; any loss of detail could hide or distort something clinically significant.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="c2">
+        <div class="qcard-head"><div class="qnum">8</div>
+          <p class="qprompt">A video streaming service wants to minimise bandwidth for users with slow internet connections, and small imperfections in picture quality are barely noticeable. Which type of compression should be used, and why?</p>
+        </div>
+        <textarea class="longanswer" placeholder="Write your answer here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body"><p><strong>Lossy.</strong> It achieves a much greater reduction in file size, and the minor quality loss is an acceptable trade-off given the platform's priority of fast streaming on limited bandwidth.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="c3">
+        <div class="qcard-head"><div class="qnum">9</div>
+          <p class="qprompt">A software company distributes program installation files, where any corrupted or altered code would cause the program to malfunction. Which type of compression should be used, and why?</p>
+        </div>
+        <textarea class="longanswer" placeholder="Write your answer here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body"><p><strong>Lossless.</strong> Program files must remain byte-for-byte exact after decompression, or the software could crash or behave incorrectly.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secD">
+      <p class="section-kicker">D</p>
+      <h2>Mixed short answer</h2>
+      <p class="section-intro">Common exam-style misconceptions, tested directly.</p>
+
+      <div class="qcard" data-qid="d1">
+        <div class="qcard-head"><div class="qnum">10</div>
+          <p class="qprompt">True or false: a higher compression ratio always means lower image quality.</p>
+        </div>
+        <div class="check-row">
+          <input type="text" class="answer-input" placeholder="true or false" style="min-width:140px; flex-basis:140px;">
+          <button type="button" class="check-btn">Check</button>
+          <span class="feedback"></span>
+        </div>
+        <details class="solution"><summary>Show full working</summary>
+          <div class="solution-body"><p><strong>False.</strong> The ratio alone doesn't tell you whether quality was lost &mdash; lossless compression can also achieve a high ratio on suitable data (e.g. a simple image compressed well with RLE) with <em>no</em> quality loss at all. Ratio and lossy/lossless are separate questions.</p></div>
+        </details>
+      </div>
+
+      <div class="qcard" data-qid="d2">
+        <div class="qcard-head"><div class="qnum">11</div>
+          <p class="qprompt">A student claims "RLE always makes files smaller." Explain why this is not correct, using an example.</p>
+        </div>
+        <textarea class="longanswer" placeholder="Write your explanation here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body"><p>RLE only helps when there are long runs of repeated values. On data that alternates frequently &mdash; such as the row <code>01010101</code> &mdash; every value forms its own run of length 1, so each pixel needs its own count-and-value pair. This produces an encoding <em>longer</em> than the original (16 characters from 8 pixels, in the convention used in this course), making the file bigger rather than smaller.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <section id="secE">
+      <p class="section-kicker">E</p>
+      <h2>Exam-style question</h2>
+      <p class="section-intro">A longer, multi-part question bringing everything together.</p>
+
+      <div class="qcard" data-qid="e1">
+        <div class="qcard-head"><div class="qnum">12</div>
+          <p class="qprompt">
+            A hospital's X-ray archive stores each scan as a 2000 &times; 1500 pixel image using 16-bit colour depth.<br><br>
+            (a) Calculate the uncompressed file size of one scan, in bytes.<br>
+            (b) The hospital uses a lossless compression algorithm that achieves a compression ratio of 3x on these scans. Calculate the compressed file size.<br>
+            (c) Justify why the hospital uses lossless rather than lossy compression for these scans.<br>
+            (d) A simplified black-and-white section of one scan is represented as an 8-pixel row: <span class="binline">00111100</span>. RLE-encode this row.
+          </p>
+        </div>
+        <textarea class="longanswer" placeholder="Write your full answer here..."></textarea>
+        <details class="solution"><summary>Show model answer</summary>
+          <div class="solution-body">
+            <p><strong>(a)</strong></p>
+            <div class="steps">2000 &times; 1500 &times; 16 = 48,000,000 bits
+48,000,000 \u00f7 8 = 6,000,000 bytes</div>
+            <p><strong>(b)</strong></p>
+            <div class="steps">6,000,000 \u00f7 3 = 2,000,000 bytes</div>
+            <p><strong>(c)</strong> Medical scans must remain exact for accurate diagnosis. Lossy compression permanently discards detail, which could hide or distort a clinically important feature; lossless guarantees the decompressed scan is identical to the original.</p>
+            <p><strong>(d)</strong> 2 zeros, 4 ones, 2 zeros: <strong>2W4B2W</strong>.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <div class="next-step">
+      <p>Want to revisit the explanations first?</p>
+      <a class="button" href="explainer.html">Back to the explainer</a>
+    </div>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  const STORAGE_KEY = "compressionConsolidationProgress_v1";
+  function loadProgress(){
+    try{ const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : {}; }
+    catch(e){ return {}; }
+  }
+  function saveProgress(p){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); }catch(e){} }
+  let progress = loadProgress();
+
+  const TEXT_ANSWERS = {
+    a1: {type:"text", value:"3b2w3b"},
+    a2: {type:"text", value:"7w1b"},
+    a3: {type:"decimal", value:2},
+    b1: {type:"decimal", value:12000},
+    b2: {type:"decimal", value:8},
+    b3: {type:"decimal", value:192000},
+    d1: {type:"boolean", value:"false"}
+  };
+
+  function normalizeDecimal(str){
+    const s = str.trim().replace(/[,\s]+/g,"");
+    if(!/^-?\d+(\.\d+)?$/.test(s)) return null;
+    return parseFloat(s);
+  }
+  function normalizeText(str){
+    return str.trim().toLowerCase().replace(/\s+/g,"");
+  }
+  function normalizeBoolean(str){
+    const s = str.trim().toLowerCase();
+    if(["true","t","yes"].includes(s)) return "true";
+    if(["false","f","no"].includes(s)) return "false";
+    return null;
+  }
+
+  Object.keys(TEXT_ANSWERS).forEach(qid=>{
+    const card = document.querySelector('.qcard[data-qid="'+qid+'"]');
+    if(!card) return;
+    const input = card.querySelector(".answer-input");
+    const btn = card.querySelector(".check-btn");
+    const feedback = card.querySelector(".feedback");
+    const answer = TEXT_ANSWERS[qid];
+
+    function doCheck(){
+      const raw = input.value;
+      let given = null;
+      if(answer.type === "decimal") given = normalizeDecimal(raw);
+      else if(answer.type === "text") given = normalizeText(raw);
+      else if(answer.type === "boolean") given = normalizeBoolean(raw);
+
+      if(given === null){
+        feedback.textContent = "Check the format of your answer.";
+        feedback.className = "feedback incorrect";
+        return;
+      }
+      const isCorrect = given === answer.value;
+      feedback.textContent = isCorrect ? "Correct." : "Not quite \u2014 try again, or open the full working below.";
+      feedback.className = "feedback " + (isCorrect ? "correct" : "incorrect");
+      progress[qid] = isCorrect;
+      saveProgress(progress);
+      updateProgressUI();
+    }
+    btn.addEventListener("click", doCheck);
+    input.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ e.preventDefault(); doCheck(); } });
+  });
+
+  const CHECKABLE_IDS = Object.keys(TEXT_ANSWERS);
+  function updateProgressUI(){
+    const total = CHECKABLE_IDS.length;
+    const done = CHECKABLE_IDS.filter(id => progress[id] === true).length;
+    document.getElementById("progress-text").textContent = done + " of " + total + " checkable questions correct";
+    document.getElementById("progress-fill").style.width = Math.round((done/total)*100) + "%";
+    CHECKABLE_IDS.forEach(qid=>{
+      const numEl = document.querySelector('.qcard[data-qid="'+qid+'"] .qnum');
+      if(numEl){ numEl.classList.toggle("done", progress[qid]===true); }
+    });
+  }
+
+  document.getElementById("reset-progress").addEventListener("click", ()=>{
+    progress = {};
+    saveProgress(progress);
+    updateProgressUI();
+    const feedbacks = document.querySelectorAll(".feedback");
+    for(let i = 0; i < feedbacks.length; i++){ feedbacks[i].textContent = ""; feedbacks[i].className = "feedback"; }
+    const inputs = document.querySelectorAll(".answer-input");
+    for(let i = 0; i < inputs.length; i++){ inputs[i].value = ""; }
+  });
+
+  updateProgressUI();
+
+})();
+</script>
+</body>
+</html>

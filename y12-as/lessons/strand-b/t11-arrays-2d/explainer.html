@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "strand-b/t11-arrays-2d";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Arrays: 2D Declaration and Use";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arrays: 2D Declaration &amp; Use — AS Level Computer Science (9618)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:"Source Sans 3", sans-serif; line-height:1.6; }
+  h1,h2,h3{ font-family:"Source Serif 4", serif; font-weight:600; color:var(--navy); }
+  code, .mono { font-family:"JetBrains Mono", monospace; }
+
+  header.page-head{ background:linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%); color:#eef1fb; padding:2.6rem 1.5rem 3.2rem; }
+  .head-inner{ max-width:1180px; margin:0 auto; }
+  .eyebrow{ color:#9fb0e6; font-size:0.95rem; margin-bottom:0.6rem; }
+  header.page-head h1{ color:#fff; font-size:2.1rem; margin:0 0 0.7rem; max-width:34ch; }
+  .lede{ color:#c7d0ee; max-width:62ch; font-size:1.05rem; }
+
+  .layout{ max-width:1180px; margin:0 auto; padding:2rem 1.5rem 4rem; display:grid; grid-template-columns:230px minmax(0,760px); gap:2.5rem; align-items:start; }
+
+  nav.toc{ position:sticky; top:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.1rem; }
+  nav.toc h2{ font-size:0.95rem; margin:0 0 0.7rem; color:var(--muted); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+  nav.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.45rem; }
+  nav.toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; display:block; padding:0.15rem 0; border-left:2px solid transparent; padding-left:0.6rem; }
+  nav.toc a:hover{ color:var(--teal); }
+  nav.toc a.active{ border-left-color:var(--teal); color:var(--teal); font-weight:600; }
+
+  article{ max-width:760px; }
+  section{ margin-bottom:2.8rem; }
+  .section-kicker{ font-family:"JetBrains Mono", monospace; color:var(--teal); font-size:0.85rem; margin-bottom:0.35rem; }
+  section h2{ font-size:1.5rem; margin:0 0 0.9rem; }
+  section p{ margin:0 0 1rem; }
+  section ul, section ol{ margin:0 0 1rem; padding-left:1.3rem; }
+  section li{ margin-bottom:0.4rem; }
+
+  .tip, .warn{ border-radius:8px; padding:0.9rem 1.1rem; margin:1.1rem 0; font-size:0.96rem; }
+  .tip{ background:var(--teal-light); border:1px solid #bfe4df; }
+  .warn{ background:var(--amber-light); border:1px solid #eccba0; }
+  .tip strong:first-child, .warn strong:first-child{ display:block; margin-bottom:0.25rem; }
+
+  .code-block{ background:var(--navy-deep); border-radius:10px; overflow:hidden; margin:1.1rem 0; }
+  .code-label{ background:#0a1330; color:#8fa0d6; font-size:0.78rem; padding:0.45rem 0.9rem; font-family:"JetBrains Mono",monospace; border-bottom:1px solid #223163; }
+  .code-block pre{ margin:0; padding:1rem 1.1rem; overflow-x:auto; }
+  .code-block code{ color:#e7ecfb; font-size:0.88rem; line-height:1.65; }
+  .code-block .kw{ color:#7ad4ff; }
+  .code-block .id{ color:#ffd479; }
+  .code-block .str{ color:#a8e6a1; }
+  .code-block .cm{ color:#7d89b0; font-style:italic; }
+
+  table.ref{ width:100%; border-collapse:collapse; margin:1.1rem 0; font-size:0.92rem; }
+  table.ref th, table.ref td{ text-align:left; padding:0.55rem 0.7rem; border-bottom:1px solid var(--border); }
+  table.ref th{ background:var(--panel-alt); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+
+  .playground{ background:var(--navy-deep); border-radius:12px; padding:1.3rem; margin:1.3rem 0; color:#e7ecfb; }
+  .playground h3{ color:#fff; font-size:1.05rem; margin:0 0 0.3rem; }
+  .playground .sub{ color:#9fb0e6; font-size:0.88rem; margin-bottom:1rem; }
+
+  .grid-wrap{ display:flex; justify-content:center; margin:1rem 0; }
+  .grid-table{ border-collapse:collapse; }
+  .grid-table td{ width:56px; height:56px; text-align:center; vertical-align:middle; }
+  .grid-cell{ background:#182452; border:2px solid #2c3a72; border-radius:6px; font-family:"JetBrains Mono",monospace; font-weight:600; font-size:1.1rem; color:#ffd479; transition:border-color 0.3s, background 0.3s; width:52px; height:52px; }
+  .grid-cell.filled{ border-color:var(--teal); }
+  .grid-cell.checking{ border-color:#ffd479; background:#2a2410; }
+  .grid-cell.match{ border-color:var(--teal); background:#123a34; color:#7be0c9; }
+  .grid-label{ font-family:"JetBrains Mono",monospace; color:#9fb0e6; font-size:0.78rem; text-align:center; }
+  .corner-label{ width:30px; }
+  .row-label{ width:30px; text-align:right; padding-right:0.4rem !important; }
+
+  .step-line{ background:#101a3a; border-radius:8px; padding:0.75rem 0.95rem; font-family:"JetBrains Mono",monospace; font-size:0.87rem; margin-bottom:1rem; color:#e7ecfb; min-height:2.4em; }
+  .step-controls{ display:flex; gap:0.6rem; align-items:center; }
+  .step-controls button{ background:var(--teal); color:#052c28; border:none; border-radius:6px; padding:0.5rem 1rem; font-weight:600; cursor:pointer; font-family:"Source Sans 3",sans-serif; }
+  .step-controls button:disabled{ opacity:0.4; cursor:default; }
+  .step-controls button.secondary{ background:#1a2653; color:#c7d0ee; border:1px solid #2c3a72; }
+  .step-count{ color:#9fb0e6; font-size:0.85rem; margin-left:auto; }
+  .counter-box{ text-align:center; font-family:"JetBrains Mono",monospace; font-size:0.95rem; color:#7be0c9; margin-bottom:0.8rem; }
+
+  footer.page-foot{ max-width:1180px; margin:0 auto; padding:0 1.5rem 3rem; }
+  .foot-nav{ display:flex; justify-content:space-between; gap:1rem; border-top:1px solid var(--border); padding-top:1.5rem; flex-wrap:wrap; }
+  .foot-nav a{ text-decoration:none; color:var(--navy); font-weight:600; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:0.7rem 1.1rem; font-size:0.92rem; }
+  .foot-nav a:hover{ border-color:var(--teal); color:var(--teal); }
+
+  details.mobile-toc{ display:none; }
+  @media (max-width:900px){
+    .layout{ grid-template-columns:1fr; }
+    nav.toc{ display:none; }
+    details.mobile-toc{ display:block; margin-bottom:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.1rem; }
+    details.mobile-toc summary{ cursor:pointer; font-weight:600; color:var(--navy); }
+    details.mobile-toc ol{ list-style:none; padding:0; margin:0.8rem 0 0; display:flex; flex-direction:column; gap:0.5rem; }
+    details.mobile-toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; }
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/strand-b-t11-arrays-2d-explainer.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+
+<header class="page-head">
+  <div class="head-inner">
+    <div class="eyebrow">Year 12 AS Computer Science (9618) &middot; Topic 11.6, Programming</div>
+    <h1>Arrays: 2D Declaration &amp; Use</h1>
+    <p class="lede">A 1D array is a list. A 2D array is a grid — rows and columns, both indexed, both looped through together.</p>
+  </div>
+</header>
+
+<div class="layout">
+  <details class="mobile-toc">
+    <summary>Contents</summary>
+    <ol>
+      <li><a href="#why">01 · From list to grid</a></li>
+      <li><a href="#declaring">02 · Declaring a 2D array</a></li>
+      <li><a href="#access">03 · Accessing and assigning elements</a></li>
+      <li><a href="#populate">04 · Populating with nested loops</a></li>
+      <li><a href="#traverse">05 · Traversing and counting</a></li>
+      <li><a href="#mistakes">06 · Common mistakes</a></li>
+    </ol>
+  </details>
+
+  <nav class="toc" id="desktopToc">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#why">01 · List to grid</a></li>
+      <li><a href="#declaring">02 · Declaring</a></li>
+      <li><a href="#access">03 · Access &amp; assign</a></li>
+      <li><a href="#populate">04 · Nested-loop populate</a></li>
+      <li><a href="#traverse">05 · Traversing</a></li>
+      <li><a href="#mistakes">06 · Common mistakes</a></li>
+    </ol>
+  </nav>
+
+  <article>
+
+    <section id="why">
+      <div class="section-kicker">01</div>
+      <h2>From list to grid</h2>
+      <p>A 1D array is perfect for a single list of values. But plenty of real data is naturally arranged in a <strong>grid</strong> — a noughts and crosses board, a spreadsheet, a seating plan, a set of pixels. A 2D array extends the same idea with a second dimension: every element now needs <em>two</em> index values to identify it — its row, and its column.</p>
+    </section>
+
+    <section id="declaring">
+      <div class="section-kicker">02</div>
+      <h2>Declaring a 2D array</h2>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">DECLARE</span> &lt;identifier&gt; : <span class="kw">ARRAY</span>[&lt;lower1&gt;:&lt;upper1&gt;,&lt;lower2&gt;:&lt;upper2&gt;] <span class="kw">OF</span> &lt;data type&gt;</code></pre>
+      </div>
+      <p>The first pair of bounds describes the <strong>rows</strong>; the second pair describes the <strong>columns</strong>. Everything else works exactly like a 1D array — fixed size once declared, every element the same data type.</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">DECLARE</span> <span class="id">Board</span> : <span class="kw">ARRAY</span>[1:3,1:3] <span class="kw">OF</span> CHAR</code></pre>
+      </div>
+      <p>This declares a 3×3 grid of characters — enough to represent a noughts and crosses board, with rows 1 to 3 and columns 1 to 3.</p>
+    </section>
+
+    <section id="access">
+      <div class="section-kicker">03</div>
+      <h2>Accessing and assigning elements</h2>
+      <p>An element is referred to with both indices inside the same pair of square brackets, separated by a comma — row first, then column, matching the order used in the declaration.</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code>Board[1,1] ← <span class="str">'X'</span>
+Board[2,2] ← <span class="str">'O'</span>
+OUTPUT Board[1,1]   <span class="cm">// outputs X</span></code></pre>
+      </div>
+      <div class="tip">
+        <strong>Row, then column — every time</strong>
+        <code>Board[2,3]</code> means row 2, column 3. Writing <code>Board[3,2]</code> instead refers to a completely different cell — row 3, column 2. The order always matches how the array was declared, so keep it consistent throughout a program.
+      </div>
+    </section>
+
+    <section id="populate">
+      <div class="section-kicker">04</div>
+      <h2>Populating with nested loops</h2>
+      <p>Filling every cell of a grid needs two loops, one inside the other: the outer loop moves down the rows, and for each row, the inner loop moves across every column.</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">DECLARE</span> <span class="id">Board</span> : <span class="kw">ARRAY</span>[1:3,1:3] <span class="kw">OF</span> CHAR
+<span class="kw">FOR</span> Row ← 1 <span class="kw">TO</span> 3
+   <span class="kw">FOR</span> Col ← 1 <span class="kw">TO</span> 3
+      Board[Row,Col] ← <span class="str">'-'</span>
+   <span class="kw">NEXT</span> Col
+<span class="kw">NEXT</span> Row</code></pre>
+      </div>
+      <p>For every single pass of the outer loop (one row), the <em>entire</em> inner loop runs start to finish (all its columns) before the outer loop advances to the next row. For a 3×3 grid, that's 3 outer passes × 3 inner passes = 9 assignments in total.</p>
+      <div class="playground">
+        <h3>Populating the board</h3>
+        <div class="sub">Filling every cell with '-' using the nested loop above</div>
+        <div class="grid-wrap"><table class="grid-table" id="populateGrid"></table></div>
+        <div class="step-line" id="populateStepLine">Press Next to begin</div>
+        <div class="step-controls">
+          <button class="secondary" id="populateResetBtn">Reset</button>
+          <button id="populateNextBtn">Next step ▸</button>
+          <span class="step-count" id="populateStepCount">Step 0 / 9</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="traverse">
+      <div class="section-kicker">05</div>
+      <h2>Traversing and counting</h2>
+      <p>The same nested-loop pattern visits every cell to <em>read</em> a grid, not just to fill it — for example, counting how many cells hold a particular value.</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">DECLARE</span> Count : INTEGER
+Count ← 0
+<span class="kw">FOR</span> Row ← 1 <span class="kw">TO</span> 3
+   <span class="kw">FOR</span> Col ← 1 <span class="kw">TO</span> 3
+      <span class="kw">IF</span> Board[Row,Col] = <span class="str">'X'</span> <span class="kw">THEN</span>
+         Count ← Count + 1
+      <span class="kw">ENDIF</span>
+   <span class="kw">NEXT</span> Col
+<span class="kw">NEXT</span> Row</code></pre>
+      </div>
+      <p>Step through this trace against an already-filled board, and watch <code>Count</code> update as each cell is checked.</p>
+      <div class="playground">
+        <h3>Counting the X's</h3>
+        <div class="sub">Board already contains a part-played game</div>
+        <div class="counter-box">Count = <span id="countVal">0</span></div>
+        <div class="grid-wrap"><table class="grid-table" id="countGrid"></table></div>
+        <div class="step-line" id="countStepLine">Press Next to begin checking Board[1,1]</div>
+        <div class="step-controls">
+          <button class="secondary" id="countResetBtn">Reset</button>
+          <button id="countNextBtn">Next step ▸</button>
+          <span class="step-count" id="countStepCount">Step 0 / 9</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="mistakes">
+      <div class="section-kicker">06</div>
+      <h2>Common mistakes</h2>
+      <ul>
+        <li><strong>Swapping row and column.</strong> <code>Board[Col,Row]</code> instead of <code>Board[Row,Col]</code> silently reads or writes the wrong cell — it won't cause an error, just wrong results, which makes it especially easy to miss.</li>
+        <li><strong>Using one loop instead of two.</strong> A single <code>FOR</code> loop can visit every index of a 1D array, but a 2D array genuinely needs two nested loops to reach every cell — there's no way to cover a whole grid with just one loop counter.</li>
+        <li><strong>Off-by-one in either loop.</strong> Exactly the same risk as with 1D arrays, but now doubled — check both the outer loop's range <em>and</em> the inner loop's range against the array's declared bounds.</li>
+      </ul>
+      <div class="warn">
+        <strong>The inner loop completes fully, every time</strong>
+        A common misreading is to assume the two loops "interleave" somehow. They don't: for row 1, every column from the inner loop's start to its end runs before row 2 even begins. Trace through slowly if you're ever unsure of the order — the simulators above show exactly this order in action.
+      </div>
+    </section>
+
+  </article>
+</div>
+
+<script>
+(function(){
+  var sections = document.querySelectorAll('article section[id]');
+  var tocLinks = document.querySelectorAll('#desktopToc a');
+  function onScroll(){
+    var current = '';
+    for (var i = 0; i < sections.length; i++){
+      var rect = sections[i].getBoundingClientRect();
+      if (rect.top <= 140) current = sections[i].id;
+    }
+    for (var j = 0; j < tocLinks.length; j++){
+      var a = tocLinks[j];
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    }
+  }
+  document.addEventListener('scroll', onScroll);
+  onScroll();
+})();
+
+function buildGridSkeleton(tableEl, idPrefix){
+  tableEl.innerHTML = '';
+  var headRow = document.createElement('tr');
+  headRow.appendChild(document.createElement('td'));
+  for (var c = 1; c <= 3; c++){
+    var th = document.createElement('td');
+    th.className = 'grid-label';
+    th.textContent = 'Col ' + c;
+    headRow.appendChild(th);
+  }
+  tableEl.appendChild(headRow);
+  for (var r = 1; r <= 3; r++){
+    var tr = document.createElement('tr');
+    var rowLabel = document.createElement('td');
+    rowLabel.className = 'grid-label row-label';
+    rowLabel.textContent = 'Row ' + r;
+    tr.appendChild(rowLabel);
+    for (var c2 = 1; c2 <= 3; c2++){
+      var td = document.createElement('td');
+      var cell = document.createElement('div');
+      cell.className = 'grid-cell';
+      cell.id = idPrefix + '-' + r + '-' + c2;
+      cell.textContent = '';
+      td.appendChild(cell);
+      tr.appendChild(td);
+    }
+    tableEl.appendChild(tr);
+  }
+}
+
+(function(){
+  // Populate widget
+  var step = 0;
+  var totalSteps = 9;
+  var order = [];
+  for (var r = 1; r <= 3; r++){
+    for (var c = 1; c <= 3; c++){ order.push([r, c]); }
+  }
+  var gridEl = document.getElementById('populateGrid');
+  var stepLine = document.getElementById('populateStepLine');
+  var stepCount = document.getElementById('populateStepCount');
+  var nextBtn = document.getElementById('populateNextBtn');
+  var resetBtn = document.getElementById('populateResetBtn');
+
+  function render(){
+    buildGridSkeleton(gridEl, 'pcell');
+    if (step === 0){
+      stepLine.textContent = 'Step 0 — press Next to begin (Row = 1, Col = 1)';
+    } else {
+      for (var i = 0; i < step; i++){
+        var pos = order[i];
+        var cell = document.getElementById('pcell-' + pos[0] + '-' + pos[1]);
+        cell.textContent = '-';
+        cell.classList.add('filled');
+      }
+      var current = order[step - 1];
+      stepLine.textContent = 'Step ' + step + ' — Row = ' + current[0] + ', Col = ' + current[1] + ': Board[' + current[0] + ',' + current[1] + '] \u2190 \'-\'';
+    }
+    stepCount.textContent = 'Step ' + step + ' / ' + totalSteps;
+    nextBtn.disabled = step >= totalSteps;
+  }
+
+  nextBtn.addEventListener('click', function(){ if (step < totalSteps){ step++; render(); } });
+  resetBtn.addEventListener('click', function(){ step = 0; render(); });
+
+  render();
+})();
+
+(function(){
+  // Counting widget
+  var board = {
+    '1,1':'X', '1,2':'-', '1,3':'O',
+    '2,1':'-', '2,2':'X', '2,3':'X',
+    '3,1':'O', '3,2':'-', '3,3':'X'
+  };
+  var order = [];
+  for (var r = 1; r <= 3; r++){
+    for (var c = 1; c <= 3; c++){ order.push([r, c]); }
+  }
+  var step = 0;
+  var totalSteps = 9;
+  var count = 0;
+  var gridEl = document.getElementById('countGrid');
+  var stepLine = document.getElementById('countStepLine');
+  var stepCount = document.getElementById('countStepCount');
+  var countVal = document.getElementById('countVal');
+  var nextBtn = document.getElementById('countNextBtn');
+  var resetBtn = document.getElementById('countResetBtn');
+
+  function render(){
+    buildGridSkeleton(gridEl, 'ccell');
+    count = 0;
+
+    for (var i = 0; i < order.length; i++){
+      var pos = order[i];
+      var key = pos[0] + ',' + pos[1];
+      var cell = document.getElementById('ccell-' + pos[0] + '-' + pos[1]);
+      if (i < step){
+        cell.textContent = board[key];
+        cell.classList.add('filled');
+        if (board[key] === 'X'){
+          cell.classList.add('match');
+          count++;
+        }
+      }
+    }
+
+    if (step === 0){
+      stepLine.textContent = 'Step 0 — press Next to check Board[1,1]';
+    } else {
+      var current = order[step - 1];
+      var key2 = current[0] + ',' + current[1];
+      var cell2 = document.getElementById('ccell-' + current[0] + '-' + current[1]);
+      if (board[key2] !== 'X'){ cell2.classList.add('checking'); }
+      var isMatch = board[key2] === 'X';
+      stepLine.textContent = 'Step ' + step + ' — Board[' + current[0] + ',' + current[1] + '] = \'' + board[key2] + '\'' + (isMatch ? ', matches \'X\' \u2192 Count becomes ' + count : ', no match \u2014 Count stays ' + count);
+    }
+
+    countVal.textContent = count;
+    stepCount.textContent = 'Step ' + step + ' / ' + totalSteps;
+    nextBtn.disabled = step >= totalSteps;
+  }
+
+  nextBtn.addEventListener('click', function(){ if (step < totalSteps){ step++; render(); } });
+  resetBtn.addEventListener('click', function(){ step = 0; render(); });
+
+  render();
+})();
+</script>
+
+</body>
+</html>

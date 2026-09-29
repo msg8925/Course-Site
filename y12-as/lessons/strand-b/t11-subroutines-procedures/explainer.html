@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "strand-b/t11-subroutines-procedures";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Subroutines: Procedures with Parameters";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Procedures with Parameters — AS Level Computer Science (9618)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:"Source Sans 3", sans-serif; line-height:1.6;
+  }
+  h1,h2,h3{ font-family:"Source Serif 4", serif; font-weight:600; color:var(--navy); }
+  code, .mono { font-family:"JetBrains Mono", monospace; }
+
+  header.page-head{
+    background:linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%);
+    color:#eef1fb; padding:2.6rem 1.5rem 3.2rem;
+  }
+  .head-inner{ max-width:1180px; margin:0 auto; }
+  .eyebrow{ color:#9fb0e6; font-size:0.95rem; margin-bottom:0.6rem; }
+  header.page-head h1{ color:#fff; font-size:2.1rem; margin:0 0 0.7rem; max-width:34ch; }
+  .lede{ color:#c7d0ee; max-width:62ch; font-size:1.05rem; }
+
+  .layout{ max-width:1180px; margin:0 auto; padding:2rem 1.5rem 4rem; display:grid; grid-template-columns:230px minmax(0,760px); gap:2.5rem; align-items:start; }
+
+  nav.toc{ position:sticky; top:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.1rem; }
+  nav.toc h2{ font-size:0.95rem; margin:0 0 0.7rem; color:var(--muted); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+  nav.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.45rem; }
+  nav.toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; display:block; padding:0.15rem 0; border-left:2px solid transparent; padding-left:0.6rem; }
+  nav.toc a:hover{ color:var(--teal); }
+  nav.toc a.active{ border-left-color:var(--teal); color:var(--teal); font-weight:600; }
+
+  article{ max-width:760px; }
+  section{ margin-bottom:2.8rem; }
+  .section-kicker{ font-family:"JetBrains Mono", monospace; color:var(--teal); font-size:0.85rem; margin-bottom:0.35rem; }
+  section h2{ font-size:1.5rem; margin:0 0 0.9rem; }
+  section p{ margin:0 0 1rem; }
+  section ul, section ol{ margin:0 0 1rem; padding-left:1.3rem; }
+  section li{ margin-bottom:0.4rem; }
+
+  .tip, .warn{ border-radius:8px; padding:0.9rem 1.1rem; margin:1.1rem 0; font-size:0.96rem; }
+  .tip{ background:var(--teal-light); border:1px solid #bfe4df; }
+  .warn{ background:var(--amber-light); border:1px solid #eccba0; }
+  .tip strong:first-child, .warn strong:first-child{ display:block; margin-bottom:0.25rem; }
+
+  .code-block{ background:var(--navy-deep); border-radius:10px; overflow:hidden; margin:1.1rem 0; }
+  .code-label{ background:#0a1330; color:#8fa0d6; font-size:0.78rem; padding:0.45rem 0.9rem; font-family:"JetBrains Mono",monospace; border-bottom:1px solid #223163; }
+  .code-block pre{ margin:0; padding:1rem 1.1rem; overflow-x:auto; }
+  .code-block code{ color:#e7ecfb; font-size:0.88rem; line-height:1.65; }
+  .code-block .kw{ color:#7ad4ff; }
+  .code-block .id{ color:#ffd479; }
+  .code-block .str{ color:#a8e6a1; }
+  .code-block .cm{ color:#7d89b0; font-style:italic; }
+
+  .two-col{ display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+  @media (max-width:640px){ .two-col{ grid-template-columns:1fr; } }
+
+  table.ref{ width:100%; border-collapse:collapse; margin:1.1rem 0; font-size:0.92rem; }
+  table.ref th, table.ref td{ text-align:left; padding:0.55rem 0.7rem; border-bottom:1px solid var(--border); }
+  table.ref th{ background:var(--panel-alt); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+
+  .playground{ background:var(--navy-deep); border-radius:12px; padding:1.3rem; margin:1.3rem 0; color:#e7ecfb; }
+  .playground h3{ color:#fff; font-size:1.05rem; margin:0 0 0.3rem; }
+  .playground .sub{ color:#9fb0e6; font-size:0.88rem; margin-bottom:1rem; }
+
+  .mode-toggle{ display:flex; gap:0.5rem; margin-bottom:1rem; flex-wrap:wrap; }
+  .mode-toggle button{ background:#1a2653; color:#c7d0ee; border:1px solid #2c3a72; border-radius:20px; padding:0.4rem 0.95rem; font-size:0.85rem; cursor:pointer; font-family:"Source Sans 3",sans-serif; }
+  .mode-toggle button.active{ background:var(--teal); border-color:var(--teal); color:#052c28; font-weight:600; }
+
+  .trace-boxes{ display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem; }
+  @media (max-width:560px){ .trace-boxes{ grid-template-columns:1fr; } }
+  .trace-box{ background:#182452; border:1px solid #2c3a72; border-radius:10px; padding:0.9rem 1rem; }
+  .trace-box h4{ margin:0 0 0.6rem; font-size:0.85rem; color:#9fb0e6; text-transform:none; font-family:"Source Sans 3",sans-serif; font-weight:600; }
+  .var-row{ display:flex; justify-content:space-between; align-items:center; padding:0.4rem 0.6rem; background:#101a3a; border-radius:6px; margin-bottom:0.5rem; font-family:"JetBrains Mono",monospace; font-size:0.92rem; }
+  .var-row .name{ color:#c7d0ee; }
+  .var-row .val{ color:#ffd479; font-weight:600; transition:color 0.3s; }
+  .var-row .val.changed{ color:#7be0c9; }
+  .link-note{ font-size:0.78rem; color:#7d89b0; margin-top:0.3rem; font-style:italic; }
+
+  .step-line{ background:#101a3a; border-radius:8px; padding:0.75rem 0.95rem; font-family:"JetBrains Mono",monospace; font-size:0.9rem; margin-bottom:1rem; color:#e7ecfb; min-height:1.4em; }
+  .step-controls{ display:flex; gap:0.6rem; align-items:center; }
+  .step-controls button{ background:var(--teal); color:#052c28; border:none; border-radius:6px; padding:0.5rem 1rem; font-weight:600; cursor:pointer; font-family:"Source Sans 3",sans-serif; }
+  .step-controls button:disabled{ opacity:0.4; cursor:default; }
+  .step-controls button.secondary{ background:#1a2653; color:#c7d0ee; border:1px solid #2c3a72; }
+  .step-count{ color:#9fb0e6; font-size:0.85rem; margin-left:auto; }
+
+  .swap-outcome{ margin-top:1rem; padding:0.85rem 1rem; border-radius:8px; font-size:0.92rem; background:#182452; border:1px solid #2c3a72; }
+  .swap-outcome.good{ border-color:#1f7a63; }
+  .swap-outcome.bad{ border-color:#8a4a2a; }
+  .swap-outcome strong{ display:block; margin-bottom:0.25rem; }
+
+  footer.page-foot{ max-width:1180px; margin:0 auto; padding:0 1.5rem 3rem; }
+  .foot-nav{ display:flex; justify-content:space-between; gap:1rem; border-top:1px solid var(--border); padding-top:1.5rem; flex-wrap:wrap; }
+  .foot-nav a{ text-decoration:none; color:var(--navy); font-weight:600; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:0.7rem 1.1rem; font-size:0.92rem; }
+  .foot-nav a:hover{ border-color:var(--teal); color:var(--teal); }
+  .foot-nav .next{ margin-left:auto; }
+
+  details.mobile-toc{ display:none; }
+  @media (max-width:900px){
+    .layout{ grid-template-columns:1fr; }
+    nav.toc{ display:none; }
+    details.mobile-toc{ display:block; margin-bottom:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.1rem; }
+    details.mobile-toc summary{ cursor:pointer; font-weight:600; color:var(--navy); }
+    details.mobile-toc ol{ list-style:none; padding:0; margin:0.8rem 0 0; display:flex; flex-direction:column; gap:0.5rem; }
+    details.mobile-toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; }
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/strand-b-t11-subroutines-procedures-explainer.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+
+<header class="page-head">
+  <div class="head-inner">
+    <div class="eyebrow">Year 12 AS Computer Science (9618) &middot; Topic 11.3, Programming</div>
+    <h1>Procedures with Parameters</h1>
+    <p class="lede">How to package a sequence of statements into a reusable procedure, and how to feed data into it — by value, or by reference.</p>
+  </div>
+</header>
+
+<div class="layout">
+  <details class="mobile-toc">
+    <summary>Contents</summary>
+    <ol>
+      <li><a href="#why">01 · Why bother with procedures?</a></li>
+      <li><a href="#defining">02 · Defining and calling a procedure</a></li>
+      <li><a href="#params">03 · Parameters and arguments</a></li>
+      <li><a href="#byval">04 · Passing by value</a></li>
+      <li><a href="#byref">05 · Passing by reference</a></li>
+      <li><a href="#scope">06 · Local and global scope</a></li>
+      <li><a href="#trace">07 · Tracing a procedure call</a></li>
+    </ol>
+  </details>
+
+  <nav class="toc" id="desktopToc">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#why">01 · Why bother?</a></li>
+      <li><a href="#defining">02 · Defining &amp; calling</a></li>
+      <li><a href="#params">03 · Parameters &amp; arguments</a></li>
+      <li><a href="#byval">04 · Passing by value</a></li>
+      <li><a href="#byref">05 · Passing by reference</a></li>
+      <li><a href="#scope">06 · Local &amp; global scope</a></li>
+      <li><a href="#trace">07 · Tracing a call</a></li>
+    </ol>
+  </nav>
+
+  <article>
+
+    <section id="why">
+      <div class="section-kicker">01</div>
+      <h2>Why bother with procedures?</h2>
+      <p>Every program you've written so far in this course has been one continuous block of statements. That works fine for short pseudocode, but real programs quickly become long, repetitive, and hard to follow. A <strong>procedure</strong> is a named, self-contained block of statements that you define once and can call — run — as many times as you like from anywhere in the program.</p>
+      <p>Splitting a program into procedures (and, from tomorrow's lesson, functions) gives you:</p>
+      <ul>
+        <li><strong>Reuse</strong> — write the logic once, call it from ten different places instead of copying and pasting it ten times.</li>
+        <li><strong>Readability</strong> — a well-named procedure call, like <code>CALL DrawBorder()</code>, tells the reader what happens without them needing to read the details.</li>
+        <li><strong>Easier maintenance</strong> — fix a bug or change the logic in one place, and every call benefits.</li>
+        <li><strong>Easier testing</strong> — a procedure can be tested in isolation from the rest of the program.</li>
+      </ul>
+      <p>A procedure on its own is useful, but a procedure that can be told <em>what</em> to work on — via parameters — is far more useful. That's the focus of this lesson.</p>
+    </section>
+
+    <section id="defining">
+      <div class="section-kicker">02</div>
+      <h2>Defining and calling a procedure</h2>
+      <p>A procedure is defined with the <code>PROCEDURE</code> keyword and closed with <code>ENDPROCEDURE</code>. Without any parameters, it looks like this:</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">PROCEDURE</span> <span class="id">DrawBorder</span>()
+   OUTPUT <span class="str">"----------"</span>
+<span class="kw">ENDPROCEDURE</span></code></pre>
+      </div>
+      <p>To run it, you <strong>call</strong> it by name, using the <code>CALL</code> keyword:</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">CALL</span> <span class="id">DrawBorder</span>()</code></pre>
+      </div>
+      <div class="tip">
+        <strong>CALL is a complete statement</strong>
+        A procedure call sits on its own line and does not produce a value that can be used in an expression — you can't write <code>Total ← CALL DrawBorder()</code>. That distinction matters more once functions arrive tomorrow, which <em>do</em> return a value and are called differently.
+      </div>
+      <p>Most procedures aren't this rigid — they need to work on whatever data they're given. That's what parameters are for.</p>
+    </section>
+
+    <section id="params">
+      <div class="section-kicker">03</div>
+      <h2>Parameters and arguments</h2>
+      <p>A <strong>parameter</strong> is a named placeholder listed in a procedure's definition. An <strong>argument</strong> is the actual value supplied when the procedure is called. It's easy to blur the two together, but the distinction is worth keeping straight for exam answers:</p>
+      <table class="ref">
+        <tr><th>Term</th><th>Where it appears</th><th>Example</th></tr>
+        <tr><td>Parameter</td><td>In the procedure's definition</td><td><code>Size</code> in <code>PROCEDURE Square(Size : INTEGER)</code></td></tr>
+        <tr><td>Argument</td><td>In the call</td><td><code>100</code> in <code>CALL Square(100)</code></td></tr>
+      </table>
+      <p>A procedure with parameters is defined by listing each one, with its data type, inside the brackets:</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">PROCEDURE</span> <span class="id">Square</span>(Size : INTEGER)
+   <span class="kw">FOR</span> Side ← 1 <span class="kw">TO</span> 4
+      <span class="kw">CALL</span> <span class="id">MoveForward</span>(Size)
+      <span class="kw">CALL</span> <span class="id">Turn</span>(90)
+   <span class="kw">NEXT</span> Side
+<span class="kw">ENDPROCEDURE</span>
+
+<span class="kw">CALL</span> <span class="id">Square</span>(100)</code></pre>
+      </div>
+      <p>When the procedure is called, the arguments are matched to the parameters strictly <strong>by position</strong> — the first argument fills the first parameter, and so on — and each argument must be of the correct data type. Calling <code>Square("large")</code> would be invalid, since <code>Size</code> expects an <code>INTEGER</code>.</p>
+      <div class="tip">
+        <strong>Multiple parameters</strong>
+        A procedure can take as many parameters as it needs, separated by commas: <code>PROCEDURE MoveTo(X : INTEGER, Y : INTEGER)</code>, called as <code>CALL MoveTo(50, 120)</code>.
+      </div>
+    </section>
+
+    <section id="byval">
+      <div class="section-kicker">04</div>
+      <h2>Passing by value</h2>
+      <p>When <code>Square(100)</code> runs, what actually happens to the parameter <code>Size</code>? By default, the procedure receives its own private <strong>copy</strong> of the argument's value. This is called passing <strong>by value</strong>, and it's the default in Cambridge pseudocode — if you don't say otherwise, by value is assumed.</p>
+      <p>Because the procedure only ever sees a copy, anything it does to the parameter has no effect on the variable back in the calling code:</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code>DECLARE x : INTEGER
+x ← 5
+<span class="kw">CALL</span> <span class="id">DoubleNum</span>(x)
+OUTPUT x   <span class="cm">// still outputs 5</span>
+
+<span class="kw">PROCEDURE</span> <span class="id">DoubleNum</span>(num : INTEGER)
+   num ← num * 2   <span class="cm">// only changes the local copy, num</span>
+   OUTPUT num       <span class="cm">// outputs 10</span>
+<span class="kw">ENDPROCEDURE</span></code></pre>
+      </div>
+      <p>Doubling <code>num</code> inside the procedure doubles the copy — <code>x</code> back in the calling program is untouched. You can write <code>BYVAL</code> explicitly before a parameter to make this obvious to a reader (<code>PROCEDURE DoubleNum(BYVAL num : INTEGER)</code>), but it changes nothing about how the procedure behaves, since by value is already the default.</p>
+    </section>
+
+    <section id="byref">
+      <div class="section-kicker">05</div>
+      <h2>Passing by reference</h2>
+      <p>Sometimes you <em>want</em> a procedure to change a variable that belongs to the calling code — for example, a procedure that swaps two values only makes sense if it can actually reach into the caller's variables. For this, precede the parameter with <code>BYREF</code>. Instead of a copy, the parameter becomes another name for the <em>same</em> variable — so changes made inside the procedure are changes to the original.</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code>DECLARE x : INTEGER
+x ← 5
+<span class="kw">CALL</span> <span class="id">DoubleNum</span>(x)
+OUTPUT x   <span class="cm">// now outputs 10</span>
+
+<span class="kw">PROCEDURE</span> <span class="id">DoubleNum</span>(<span class="kw">BYREF</span> num : INTEGER)
+   num ← num * 2   <span class="cm">// changes x itself, since num IS x</span>
+<span class="kw">ENDPROCEDURE</span></code></pre>
+      </div>
+      <p>Try both versions in the simulator below and watch what happens to <code>x</code> back in the calling program.</p>
+
+      <div class="playground">
+        <h3>Parameter passing simulator</h3>
+        <div class="sub">DECLARE x : INTEGER; x ← 5; CALL DoubleNum(x)  —  inside the procedure: num ← num * 2</div>
+        <div class="mode-toggle">
+          <button id="modeValBtn" class="active" data-mode="val">BYVAL (default)</button>
+          <button id="modeRefBtn" data-mode="ref">BYREF</button>
+        </div>
+        <div class="trace-boxes">
+          <div class="trace-box">
+            <h4>Calling program</h4>
+            <div class="var-row"><span class="name">x</span><span class="val" id="xVal">5</span></div>
+            <div class="link-note" id="xNote">&nbsp;</div>
+          </div>
+          <div class="trace-box">
+            <h4>Inside DoubleNum</h4>
+            <div class="var-row"><span class="name">num</span><span class="val" id="numVal">—</span></div>
+            <div class="link-note" id="numNote">not created yet</div>
+          </div>
+        </div>
+        <div class="step-line" id="stepLine">Step 0 of 3 — press Next to call DoubleNum(x)</div>
+        <div class="step-controls">
+          <button class="secondary" id="resetBtn">Reset</button>
+          <button id="nextBtn">Next step ▸</button>
+          <span class="step-count" id="stepCount">Step 0 / 3</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="scope">
+      <div class="section-kicker">06</div>
+      <h2>Local and global scope</h2>
+      <p>The parameter <code>num</code> only exists <em>inside</em> <code>DoubleNum</code> — it's a <strong>local variable</strong>, created when the procedure is called and destroyed when it finishes. Trying to <code>OUTPUT num</code> from the main program, outside the procedure, would be invalid: <code>num</code> doesn't exist there.</p>
+      <p>A variable declared in the main body of the program, outside any procedure, is a <strong>global variable</strong> — it exists for as long as the program runs and can be read from anywhere, including inside procedures. This matters for parameters specifically:</p>
+      <ul>
+        <li>Parameters and any variables <code>DECLARE</code>d inside a procedure are local to that procedure.</li>
+        <li>Two different procedures can each safely use a local variable called <code>Temp</code> without clashing — they're entirely separate variables that happen to share a name.</li>
+        <li>Relying on global variables inside a procedure, instead of passing values in as parameters, makes a procedure harder to reuse and harder to reason about — it's generally better style to pass in what a procedure needs as parameters, even if a global variable holding the same value happens to be available.</li>
+      </ul>
+      <div class="warn">
+        <strong>Common exam slip</strong>
+        Don't confuse "local to the procedure" with "passed by reference." A BYVAL parameter is still local — it's a variable that belongs only to the procedure — it's just that its <em>initial value</em> was copied in from the caller. Locality is about where a variable can be accessed from; passing mode is about whether changes propagate back to the caller.
+      </div>
+    </section>
+
+    <section id="trace">
+      <div class="section-kicker">07</div>
+      <h2>Tracing a procedure call: Swap</h2>
+      <p>The classic example for BYREF is a procedure that swaps the values of two variables. This only works if the procedure can reach the caller's actual variables — a BYVAL copy would be swapped internally and then thrown away when the procedure ends, leaving the caller's variables untouched.</p>
+      <div class="code-block">
+        <div class="code-label">pseudocode</div>
+        <pre><code><span class="kw">PROCEDURE</span> <span class="id">Swap</span>(<span class="kw">BYREF</span> X : INTEGER, Y : INTEGER)
+   DECLARE Temp : INTEGER
+   Temp ← X
+   X ← Y
+   Y ← Temp
+<span class="kw">ENDPROCEDURE</span></code></pre>
+      </div>
+      <div class="warn">
+        <strong>Read the brackets carefully</strong>
+        Only <code>X</code> has <code>BYREF</code> written in front of it — so is <code>Y</code> passed by value? Section 8.3 of the Cambridge pseudocode guide states that when several parameters share the same passing method, the keyword doesn't need to be repeated. Since <code>Y</code> immediately follows a <code>BYREF</code> parameter with no keyword of its own, <code>Y</code> is <strong>also BYREF</strong> — the whole point of this procedure only works if both parameters are references to the caller's variables. Use the simulator below to see why.
+      </div>
+
+      <div class="playground">
+        <h3>Swap simulator</h3>
+        <div class="sub">DECLARE A : INTEGER ← 3; DECLARE B : INTEGER ← 7; CALL Swap(A, B)</div>
+        <div class="mode-toggle">
+          <button id="swapBothBtn" class="active" data-swapmode="both">Both BYREF (as written)</button>
+          <button id="swapMisBtn" data-swapmode="mis">Only X BYREF, Y BYVAL</button>
+        </div>
+        <div class="trace-boxes">
+          <div class="trace-box">
+            <h4>Calling program</h4>
+            <div class="var-row"><span class="name">A</span><span class="val" id="aVal">3</span></div>
+            <div class="var-row"><span class="name">B</span><span class="val" id="bVal">7</span></div>
+          </div>
+          <div class="trace-box">
+            <h4>Inside Swap</h4>
+            <div class="var-row"><span class="name">X</span><span class="val" id="xSwapVal">—</span></div>
+            <div class="var-row"><span class="name">Y</span><span class="val" id="ySwapVal">—</span></div>
+            <div class="var-row"><span class="name">Temp</span><span class="val" id="tempVal">—</span></div>
+          </div>
+        </div>
+        <div class="step-line" id="swapStepLine">Step 0 of 4 — press Next to call Swap(A, B)</div>
+        <div class="step-controls">
+          <button class="secondary" id="swapResetBtn">Reset</button>
+          <button id="swapNextBtn">Next step ▸</button>
+          <span class="step-count" id="swapStepCount">Step 0 / 4</span>
+        </div>
+        <div class="swap-outcome" id="swapOutcome" style="display:none;"></div>
+      </div>
+
+      <p>Notice that in the "Only X BYREF" trace, <code>A</code> changes but <code>B</code> doesn't — the values end up duplicated rather than swapped. That's the practical reason both parameters need to be references: a swap is only correct if both ends of it are.</p>
+    </section>
+
+  </article>
+</div>
+
+<script>
+(function(){
+  // Scroll-spy for TOC
+  const sections = document.querySelectorAll('article section[id]');
+  const tocLinks = document.querySelectorAll('#desktopToc a');
+  function onScroll(){
+    let current = '';
+    for (let i = 0; i < sections.length; i++){
+      const rect = sections[i].getBoundingClientRect();
+      if (rect.top <= 140) current = sections[i].id;
+    }
+    for (let i = 0; i < tocLinks.length; i++){
+      const a = tocLinks[i];
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    }
+  }
+  document.addEventListener('scroll', onScroll);
+  onScroll();
+})();
+
+(function(){
+  // BYVAL / BYREF simulator
+  let mode = 'val';
+  let step = 0;
+  const totalSteps = 3;
+  const modeValBtn = document.getElementById('modeValBtn');
+  const modeRefBtn = document.getElementById('modeRefBtn');
+  const xVal = document.getElementById('xVal');
+  const xNote = document.getElementById('xNote');
+  const numVal = document.getElementById('numVal');
+  const numNote = document.getElementById('numNote');
+  const stepLine = document.getElementById('stepLine');
+  const stepCount = document.getElementById('stepCount');
+  const nextBtn = document.getElementById('nextBtn');
+  const resetBtn = document.getElementById('resetBtn');
+
+  function render(){
+    xVal.textContent = '5';
+    xVal.classList.remove('changed');
+    numVal.textContent = '—';
+    numVal.classList.remove('changed');
+    numNote.textContent = 'not created yet';
+    xNote.innerHTML = '&nbsp;';
+
+    if (step === 0){
+      stepLine.textContent = 'Step 0 of ' + totalSteps + ' — press Next to call DoubleNum(x)';
+    }
+    if (step >= 1){
+      numVal.textContent = '5';
+      if (mode === 'val'){
+        numNote.textContent = 'a copy of x — separate variable';
+      } else {
+        numNote.textContent = 'same variable as x, not a copy';
+      }
+      stepLine.textContent = 'Step 1 — CALL DoubleNum(x): num is created' + (mode === 'val' ? ' from a copy of x\'s value' : ' as another name for x');
+    }
+    if (step >= 2){
+      numVal.textContent = '10';
+      numVal.classList.add('changed');
+      stepLine.textContent = 'Step 2 — inside the procedure: num ← num * 2';
+      if (mode === 'ref'){
+        xVal.textContent = '10';
+        xVal.classList.add('changed');
+        xNote.textContent = 'changed too — num IS x';
+      }
+    }
+    if (step >= 3){
+      stepLine.textContent = mode === 'val'
+        ? 'Step 3 — procedure ends, num is discarded. OUTPUT x → 5 (unchanged)'
+        : 'Step 3 — procedure ends. OUTPUT x → 10 (changed by the procedure)';
+    }
+    stepCount.textContent = 'Step ' + step + ' / ' + totalSteps;
+    nextBtn.disabled = step >= totalSteps;
+  }
+
+  function setMode(m){
+    mode = m;
+    step = 0;
+    modeValBtn.classList.toggle('active', m === 'val');
+    modeRefBtn.classList.toggle('active', m === 'ref');
+    render();
+  }
+
+  modeValBtn.addEventListener('click', () => setMode('val'));
+  modeRefBtn.addEventListener('click', () => setMode('ref'));
+  nextBtn.addEventListener('click', () => { if (step < totalSteps){ step++; render(); } });
+  resetBtn.addEventListener('click', () => { step = 0; render(); });
+
+  render();
+})();
+
+(function(){
+  // Swap simulator
+  let swapMode = 'both';
+  let step = 0;
+  const totalSteps = 4;
+  const bothBtn = document.getElementById('swapBothBtn');
+  const misBtn = document.getElementById('swapMisBtn');
+  const aVal = document.getElementById('aVal');
+  const bVal = document.getElementById('bVal');
+  const xSwapVal = document.getElementById('xSwapVal');
+  const ySwapVal = document.getElementById('ySwapVal');
+  const tempVal = document.getElementById('tempVal');
+  const stepLine = document.getElementById('swapStepLine');
+  const stepCount = document.getElementById('swapStepCount');
+  const nextBtn = document.getElementById('swapNextBtn');
+  const resetBtn = document.getElementById('swapResetBtn');
+  const outcome = document.getElementById('swapOutcome');
+
+  function clearChanged(){
+    [aVal,bVal,xSwapVal,ySwapVal,tempVal].forEach(el => el.classList.remove('changed'));
+  }
+
+  function render(){
+    clearChanged();
+    aVal.textContent = '3';
+    bVal.textContent = '7';
+    xSwapVal.textContent = '—';
+    ySwapVal.textContent = '—';
+    tempVal.textContent = '—';
+    outcome.style.display = 'none';
+
+    if (step === 0){
+      stepLine.textContent = 'Step 0 of ' + totalSteps + ' — press Next to call Swap(A, B)';
+    }
+    if (step >= 1){
+      xSwapVal.textContent = '3';
+      ySwapVal.textContent = '7';
+      stepLine.textContent = swapMode === 'both'
+        ? 'Step 1 — CALL Swap(A, B): X and Y are both aliases for A and B'
+        : 'Step 1 — CALL Swap(A, B): X is an alias for A, but Y is only a copy of B';
+    }
+    if (step >= 2){
+      tempVal.textContent = '3';
+      stepLine.textContent = 'Step 2 — Temp ← X (Temp is now 3)';
+    }
+    if (step >= 3){
+      xSwapVal.textContent = '7';
+      xSwapVal.classList.add('changed');
+      aVal.textContent = '7';
+      aVal.classList.add('changed');
+      stepLine.textContent = 'Step 3 — X ← Y: X becomes 7, and since X is A, A becomes 7 too';
+    }
+    if (step >= 4){
+      ySwapVal.textContent = '3';
+      ySwapVal.classList.add('changed');
+      stepLine.textContent = 'Step 4 — Y ← Temp: Y becomes 3';
+      outcome.style.display = 'block';
+      if (swapMode === 'both'){
+        bVal.textContent = '3';
+        bVal.classList.add('changed');
+        outcome.className = 'swap-outcome good';
+        outcome.innerHTML = '<strong>A = 7, B = 3 — a genuine swap.</strong>Because Y is also BYREF, changing Y inside the procedure changes B too.';
+      } else {
+        bVal.textContent = '7';
+        outcome.className = 'swap-outcome bad';
+        outcome.innerHTML = '<strong>A = 7, B = 7 — not a swap.</strong>Y was only a local copy of B, so Y ← Temp changed the copy and B was never touched. B\'s original value of 7 is simply overwritten by nothing — both variables now hold 7.';
+      }
+    }
+    stepCount.textContent = 'Step ' + step + ' / ' + totalSteps;
+    nextBtn.disabled = step >= totalSteps;
+  }
+
+  function setMode(m){
+    swapMode = m;
+    step = 0;
+    bothBtn.classList.toggle('active', m === 'both');
+    misBtn.classList.toggle('active', m === 'mis');
+    render();
+  }
+
+  bothBtn.addEventListener('click', () => setMode('both'));
+  misBtn.addEventListener('click', () => setMode('mis'));
+  nextBtn.addEventListener('click', () => { if (step < totalSteps){ step++; render(); } });
+  resetBtn.addEventListener('click', () => { step = 0; render(); });
+
+  render();
+})();
+</script>
+
+</body>
+</html>

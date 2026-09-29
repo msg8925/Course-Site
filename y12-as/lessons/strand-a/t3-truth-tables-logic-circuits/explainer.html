@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "strand-a/t3-truth-tables-logic-circuits";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Truth Tables and Logic Circuits";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Truth Tables &amp; Logic Circuits (Part 1) — AS Level Computer Science (9618)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:"Source Sans 3", sans-serif; line-height:1.6; }
+  h1,h2,h3{ font-family:"Source Serif 4", serif; font-weight:600; color:var(--navy); }
+  code, .mono { font-family:"JetBrains Mono", monospace; }
+
+  header.page-head{ background:linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%); color:#eef1fb; padding:2.6rem 1.5rem 3.2rem; }
+  .head-inner{ max-width:1180px; margin:0 auto; }
+  .eyebrow{ color:#9fb0e6; font-size:0.95rem; margin-bottom:0.6rem; }
+  header.page-head h1{ color:#fff; font-size:2.1rem; margin:0 0 0.7rem; max-width:36ch; }
+  .lede{ color:#c7d0ee; max-width:62ch; font-size:1.05rem; }
+
+  .layout{ max-width:1180px; margin:0 auto; padding:2rem 1.5rem 4rem; display:grid; grid-template-columns:230px minmax(0,760px); gap:2.5rem; align-items:start; }
+
+  nav.toc{ position:sticky; top:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.1rem; }
+  nav.toc h2{ font-size:0.95rem; margin:0 0 0.7rem; color:var(--muted); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+  nav.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.45rem; }
+  nav.toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; display:block; padding:0.15rem 0; border-left:2px solid transparent; padding-left:0.6rem; }
+  nav.toc a:hover{ color:var(--teal); }
+  nav.toc a.active{ border-left-color:var(--teal); color:var(--teal); font-weight:600; }
+
+  article{ max-width:760px; }
+  section{ margin-bottom:2.8rem; }
+  .section-kicker{ font-family:"JetBrains Mono", monospace; color:var(--teal); font-size:0.85rem; margin-bottom:0.35rem; }
+  section h2{ font-size:1.5rem; margin:0 0 0.9rem; }
+  section p{ margin:0 0 1rem; }
+  section ul, section ol{ margin:0 0 1rem; padding-left:1.3rem; }
+  section li{ margin-bottom:0.4rem; }
+
+  .tip, .warn{ border-radius:8px; padding:0.9rem 1.1rem; margin:1.1rem 0; font-size:0.96rem; }
+  .tip{ background:var(--teal-light); border:1px solid #bfe4df; }
+  .warn{ background:var(--amber-light); border:1px solid #eccba0; }
+  .tip strong:first-child, .warn strong:first-child{ display:block; margin-bottom:0.25rem; }
+
+  table.ref{ width:100%; border-collapse:collapse; margin:1.1rem 0; font-size:0.92rem; }
+  table.ref th, table.ref td{ text-align:left; padding:0.55rem 0.7rem; border-bottom:1px solid var(--border); }
+  table.ref th{ background:var(--panel-alt); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+  table.tt{ border-collapse:collapse; margin:0.6rem 0; font-family:"JetBrains Mono",monospace; font-size:0.88rem; }
+  table.tt th, table.tt td{ border:1px solid var(--border); padding:0.35rem 0.7rem; text-align:center; }
+  table.tt th{ background:var(--panel-alt); }
+
+  .gate-card{ display:flex; gap:1.1rem; align-items:center; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1rem; margin-bottom:1rem; flex-wrap:wrap; }
+  .gate-svg-wrap{ background:var(--panel-alt); border-radius:8px; padding:0.6rem; flex-shrink:0; }
+  .gate-info h3{ margin:0 0 0.3rem; font-size:1.05rem; }
+  .gate-info p{ margin:0 0 0.5rem; font-size:0.9rem; }
+
+  .playground{ background:var(--navy-deep); border-radius:12px; padding:1.3rem; margin:1.3rem 0; color:#e7ecfb; }
+  .playground h3{ color:#fff; font-size:1.05rem; margin:0 0 0.3rem; }
+  .playground .sub{ color:#9fb0e6; font-size:0.88rem; margin-bottom:1rem; }
+
+  .toggle-row{ display:flex; gap:1rem; margin-bottom:1.1rem; flex-wrap:wrap; }
+  .toggle-btn{ background:#182452; border:2px solid #2c3a72; border-radius:8px; padding:0.6rem 1.1rem; cursor:pointer; font-family:"JetBrains Mono",monospace; font-size:0.95rem; color:#e7ecfb; text-align:center; }
+  .toggle-btn .lbl{ display:block; font-size:0.75rem; color:#9fb0e6; margin-bottom:0.2rem; }
+  .toggle-btn .val{ font-weight:700; font-size:1.1rem; }
+  .toggle-btn.on{ border-color:var(--teal); background:#123a34; }
+  .toggle-btn.on .val{ color:#7be0c9; }
+
+  .circuit-svg-wrap{ background:#101a3a; border-radius:10px; padding:1rem; margin-bottom:1rem; overflow-x:auto; }
+  .wire-label{ font-family:"JetBrains Mono",monospace; font-size:12px; fill:#9fb0e6; }
+  .wire-val{ font-family:"JetBrains Mono",monospace; font-size:13px; font-weight:700; }
+  .result-box{ background:#182452; border:1px solid #2c3a72; border-radius:10px; padding:1rem 1.1rem; text-align:center; font-family:"JetBrains Mono",monospace; font-size:1.1rem; }
+  .result-box .val{ color:#7be0c9; font-weight:700; }
+
+  footer.page-foot{ max-width:1180px; margin:0 auto; padding:0 1.5rem 3rem; }
+  .foot-nav{ display:flex; justify-content:space-between; gap:1rem; border-top:1px solid var(--border); padding-top:1.5rem; flex-wrap:wrap; }
+  .foot-nav a{ text-decoration:none; color:var(--navy); font-weight:600; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:0.7rem 1.1rem; font-size:0.92rem; }
+  .foot-nav a:hover{ border-color:var(--teal); color:var(--teal); }
+  .foot-nav .next{ margin-left:auto; }
+
+  details.mobile-toc{ display:none; }
+  @media (max-width:900px){
+    .layout{ grid-template-columns:1fr; }
+    nav.toc{ display:none; }
+    details.mobile-toc{ display:block; margin-bottom:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.1rem; }
+    details.mobile-toc summary{ cursor:pointer; font-weight:600; color:var(--navy); }
+    details.mobile-toc ol{ list-style:none; padding:0; margin:0.8rem 0 0; display:flex; flex-direction:column; gap:0.5rem; }
+    details.mobile-toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; }
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/strand-a-t3-truth-tables-logic-circuits-explainer.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+
+<header class="page-head">
+  <div class="head-inner">
+    <div class="eyebrow">Year 12 AS Computer Science (9618) &middot; Topic 3.1, Hardware</div>
+    <h1>Truth Tables &amp; Logic Circuits</h1>
+    <p class="lede">Six gates, one systematic method for listing every possible input, and a way to build a whole circuit up from them.</p>
+  </div>
+</header>
+
+<div class="layout">
+  <details class="mobile-toc">
+    <summary>Contents</summary>
+    <ol>
+      <li><a href="#basics">01 · The three basic gates</a></li>
+      <li><a href="#derived">02 · Three more gates</a></li>
+      <li><a href="#constructing">03 · Constructing a truth table systematically</a></li>
+      <li><a href="#circuits">04 · Building a circuit from an expression</a></li>
+      <li><a href="#trace">05 · Trace the circuit</a></li>
+    </ol>
+  </details>
+
+  <nav class="toc" id="desktopToc">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#basics">01 · Basic gates</a></li>
+      <li><a href="#derived">02 · More gates</a></li>
+      <li><a href="#constructing">03 · Truth tables</a></li>
+      <li><a href="#circuits">04 · Building circuits</a></li>
+      <li><a href="#trace">05 · Trace the circuit</a></li>
+    </ol>
+  </nav>
+
+  <article>
+
+    <section id="basics">
+      <div class="section-kicker">01</div>
+      <h2>The three basic gates</h2>
+      <p>A <strong>logic gate</strong> takes one or more binary inputs (0 or 1) and produces a single binary output, according to a fixed rule. Every logic circuit, however complex, is built entirely from these simple pieces.</p>
+
+      <div class="gate-card">
+        <div class="gate-svg-wrap">
+          <svg width="110" height="70" viewBox="0 0 110 70">
+            <path d="M20,10 H55 A25,25 0 0 1 55,60 H20 Z" fill="#e6f5f3" stroke="#0D9488" stroke-width="2"/>
+            <text x="35" y="40" font-size="13" font-family="Source Sans 3" fill="#1B2B5E">AND</text>
+          </svg>
+        </div>
+        <div class="gate-info">
+          <h3>AND</h3>
+          <p>Output is 1 only if <strong>both</strong> inputs are 1.</p>
+          <table class="tt"><tr><th>A</th><th>B</th><th>A AND B</th></tr><tr><td>0</td><td>0</td><td>0</td></tr><tr><td>0</td><td>1</td><td>0</td></tr><tr><td>1</td><td>0</td><td>0</td></tr><tr><td>1</td><td>1</td><td>1</td></tr></table>
+        </div>
+      </div>
+
+      <div class="gate-card">
+        <div class="gate-svg-wrap">
+          <svg width="110" height="70" viewBox="0 0 110 70">
+            <path d="M20,10 Q35,35 20,60 Q45,60 65,35 Q45,10 20,10 Z" fill="#e6f5f3" stroke="#0D9488" stroke-width="2"/>
+            <text x="27" y="40" font-size="14" font-family="Source Sans 3" fill="#1B2B5E">OR</text>
+          </svg>
+        </div>
+        <div class="gate-info">
+          <h3>OR</h3>
+          <p>Output is 1 if <strong>at least one</strong> input is 1.</p>
+          <table class="tt"><tr><th>A</th><th>B</th><th>A OR B</th></tr><tr><td>0</td><td>0</td><td>0</td></tr><tr><td>0</td><td>1</td><td>1</td></tr><tr><td>1</td><td>0</td><td>1</td></tr><tr><td>1</td><td>1</td><td>1</td></tr></table>
+        </div>
+      </div>
+
+      <div class="gate-card">
+        <div class="gate-svg-wrap">
+          <svg width="110" height="70" viewBox="0 0 110 70">
+            <path d="M20,10 L20,60 L60,35 Z" fill="#e6f5f3" stroke="#0D9488" stroke-width="2"/>
+            <circle cx="65" cy="35" r="5" fill="#e6f5f3" stroke="#0D9488" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="gate-info">
+          <h3>NOT</h3>
+          <p>The only single-input gate. Output is the <strong>opposite</strong> of the input.</p>
+          <table class="tt"><tr><th>A</th><th>NOT A</th></tr><tr><td>0</td><td>1</td></tr><tr><td>1</td><td>0</td></tr></table>
+        </div>
+      </div>
+    </section>
+
+    <section id="derived">
+      <div class="section-kicker">02</div>
+      <h2>Three more gates</h2>
+      <p>These three gates are each closely related to a basic gate above.</p>
+
+      <div class="gate-card">
+        <div class="gate-svg-wrap">
+          <svg width="110" height="70" viewBox="0 0 110 70">
+            <path d="M15,10 H45 A25,25 0 0 1 45,60 H15 Z" fill="#f1e9f6" stroke="#7C4DA0" stroke-width="2"/>
+            <circle cx="75" cy="35" r="5" fill="#f1e9f6" stroke="#7C4DA0" stroke-width="2"/>
+            <text x="18" y="40" font-size="12" font-family="Source Sans 3" fill="#1B2B5E">NAND</text>
+          </svg>
+        </div>
+        <div class="gate-info">
+          <h3>NAND (Not-AND)</h3>
+          <p>AND, with the output inverted — 1 in every case <em>except</em> both inputs being 1.</p>
+          <table class="tt"><tr><th>A</th><th>B</th><th>A NAND B</th></tr><tr><td>0</td><td>0</td><td>1</td></tr><tr><td>0</td><td>1</td><td>1</td></tr><tr><td>1</td><td>0</td><td>1</td></tr><tr><td>1</td><td>1</td><td>0</td></tr></table>
+        </div>
+      </div>
+
+      <div class="gate-card">
+        <div class="gate-svg-wrap">
+          <svg width="110" height="70" viewBox="0 0 110 70">
+            <path d="M15,10 Q30,35 15,60 Q40,60 55,35 Q40,10 15,10 Z" fill="#f1e9f6" stroke="#7C4DA0" stroke-width="2"/>
+            <circle cx="60" cy="35" r="5" fill="#f1e9f6" stroke="#7C4DA0" stroke-width="2"/>
+            <text x="20" y="40" font-size="11" font-family="Source Sans 3" fill="#1B2B5E">NOR</text>
+          </svg>
+        </div>
+        <div class="gate-info">
+          <h3>NOR (Not-OR)</h3>
+          <p>OR, with the output inverted — 1 only when <em>both</em> inputs are 0.</p>
+          <table class="tt"><tr><th>A</th><th>B</th><th>A NOR B</th></tr><tr><td>0</td><td>0</td><td>1</td></tr><tr><td>0</td><td>1</td><td>0</td></tr><tr><td>1</td><td>0</td><td>0</td></tr><tr><td>1</td><td>1</td><td>0</td></tr></table>
+        </div>
+      </div>
+
+      <div class="gate-card">
+        <div class="gate-svg-wrap">
+          <svg width="110" height="70" viewBox="0 0 110 70">
+            <path d="M22,10 Q37,35 22,60 Q47,60 67,35 Q47,10 22,10 Z" fill="#fbeee0" stroke="#a8560c" stroke-width="2"/>
+            <path d="M15,10 Q28,35 15,60" fill="none" stroke="#a8560c" stroke-width="2"/>
+            <text x="28" y="40" font-size="11" font-family="Source Sans 3" fill="#1B2B5E">XOR</text>
+          </svg>
+        </div>
+        <div class="gate-info">
+          <h3>XOR (Exclusive OR)</h3>
+          <p>Output is 1 only when the two inputs are <strong>different</strong> from each other.</p>
+          <table class="tt"><tr><th>A</th><th>B</th><th>A XOR B</th></tr><tr><td>0</td><td>0</td><td>0</td></tr><tr><td>0</td><td>1</td><td>1</td></tr><tr><td>1</td><td>0</td><td>1</td></tr><tr><td>1</td><td>1</td><td>0</td></tr></table>
+        </div>
+      </div>
+
+      <div class="tip">
+        <strong>Notice the pattern</strong>
+        NAND and NOR are simply AND and OR with every output flipped. Compare their truth tables to AND's and OR's above and check this for yourself, row by row.
+      </div>
+    </section>
+
+    <section id="constructing">
+      <div class="section-kicker">03</div>
+      <h2>Constructing a truth table systematically</h2>
+      <p>A truth table must list <em>every possible combination</em> of inputs — miss one, and the table is incomplete. With <code>n</code> inputs, there are always exactly <code>2ⁿ</code> possible combinations, since each input independently can be 0 or 1.</p>
+      <table class="ref">
+        <tr><th>Number of inputs</th><th>Number of rows needed</th></tr>
+        <tr><td>1</td><td>2¹ = 2</td></tr>
+        <tr><td>2</td><td>2² = 4</td></tr>
+        <tr><td>3</td><td>2³ = 8</td></tr>
+        <tr><td>4</td><td>2⁴ = 16</td></tr>
+      </table>
+      <p>To avoid missing or duplicating a row, list the combinations in order exactly as if counting in binary — the rightmost input column alternates every row, the next column every two rows, and so on:</p>
+      <table class="tt">
+        <tr><th>A</th><th>B</th><th>C</th></tr>
+        <tr><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>0</td><td>0</td><td>1</td></tr>
+        <tr><td>0</td><td>1</td><td>0</td></tr>
+        <tr><td>0</td><td>1</td><td>1</td></tr>
+        <tr><td>1</td><td>0</td><td>0</td></tr>
+        <tr><td>1</td><td>0</td><td>1</td></tr>
+        <tr><td>1</td><td>1</td><td>0</td></tr>
+        <tr><td>1</td><td>1</td><td>1</td></tr>
+      </table>
+      <div class="warn">
+        <strong>Missing rows is the most common mistake</strong>
+        With three inputs, a table with only 6 or 7 rows is automatically wrong, no matter how correct the values in it are — it's an easy thing to check for before working out a single output value.
+      </div>
+    </section>
+
+    <section id="circuits">
+      <div class="section-kicker">04</div>
+      <h2>Building a circuit from an expression</h2>
+      <p>A logic expression combining more than one operation is built by chaining gates together — the output of one gate becomes an input to the next. Consider:</p>
+      <table class="ref">
+        <tr><td style="text-align:center; font-family:'JetBrains Mono',monospace; font-size:1.1rem;">X = (A AND B) OR (NOT C)</td></tr>
+      </table>
+      <p>This needs three gates: an <strong>AND</strong> gate taking A and B, a <strong>NOT</strong> gate taking C, and an <strong>OR</strong> gate taking the outputs of those first two gates as its own two inputs. The structure of the expression — what's grouped together — directly determines which gate's output feeds into which.</p>
+    </section>
+
+    <section id="trace">
+      <div class="section-kicker">05</div>
+      <h2>Trace the circuit</h2>
+      <p>Toggle A, B and C below and watch the value travel through each gate to the final output, X. Try to predict each result before checking it.</p>
+      <div class="playground">
+        <h3>X = (A AND B) OR (NOT C)</h3>
+        <div class="sub">Click each input to toggle it between 0 and 1</div>
+        <div class="toggle-row">
+          <button class="toggle-btn" id="toggleA" data-var="A"><span class="lbl">A</span><span class="val">0</span></button>
+          <button class="toggle-btn" id="toggleB" data-var="B"><span class="lbl">B</span><span class="val">0</span></button>
+          <button class="toggle-btn" id="toggleC" data-var="C"><span class="lbl">C</span><span class="val">0</span></button>
+        </div>
+        <div class="circuit-svg-wrap">
+          <svg width="100%" height="220" viewBox="0 0 560 220" preserveAspectRatio="xMidYMid meet">
+            <!-- Input wires -->
+            <line x1="20" y1="30" x2="90" y2="30" stroke="#4a5c99" stroke-width="2"/>
+            <text x="10" y="25" class="wire-label">A</text>
+            <line x1="20" y1="70" x2="90" y2="70" stroke="#4a5c99" stroke-width="2"/>
+            <text x="10" y="65" class="wire-label">B</text>
+            <line x1="20" y1="150" x2="180" y2="150" stroke="#4a5c99" stroke-width="2"/>
+            <text x="10" y="145" class="wire-label">C</text>
+
+            <!-- AND gate -->
+            <path d="M90,15 H120 A35,35 0 0 1 120,85 H90 Z" fill="#182452" stroke="#4a5c99" stroke-width="2"/>
+            <text x="93" y="55" font-size="11" fill="#c7d0ee" font-family="Source Sans 3">AND</text>
+
+            <!-- NOT gate -->
+            <path d="M180,130 L180,170 L215,150 Z" fill="#182452" stroke="#4a5c99" stroke-width="2"/>
+            <circle cx="220" cy="150" r="5" fill="#182452" stroke="#4a5c99" stroke-width="2"/>
+
+            <!-- Wires to OR gate -->
+            <line x1="155" y1="50" x2="290" y2="50" stroke="#4a5c99" stroke-width="2" id="wireAND"/>
+            <line x1="225" y1="150" x2="290" y2="120" stroke="#4a5c99" stroke-width="2" id="wireNOT"/>
+
+            <!-- OR gate -->
+            <path d="M290,30 Q310,85 290,140 Q335,140 365,85 Q335,30 290,30 Z" fill="#182452" stroke="#4a5c99" stroke-width="2"/>
+            <text x="300" y="90" font-size="11" fill="#c7d0ee" font-family="Source Sans 3">OR</text>
+
+            <!-- Output wire -->
+            <line x1="365" y1="85" x2="440" y2="85" stroke="#4a5c99" stroke-width="2" id="wireOUT"/>
+            <text x="450" y="90" font-size="14" fill="#e7ecfb" font-family="JetBrains Mono">X</text>
+
+            <!-- Value labels (populated by JS) -->
+            <text id="valA" x="30" y="20" class="wire-val" fill="#ffd479">0</text>
+            <text id="valB" x="30" y="60" class="wire-val" fill="#ffd479">0</text>
+            <text id="valC" x="30" y="140" class="wire-val" fill="#ffd479">0</text>
+            <text id="valAND" x="160" y="45" class="wire-val" fill="#ffd479">0</text>
+            <text id="valNOT" x="228" y="145" class="wire-val" fill="#ffd479">0</text>
+            <text id="valOUT" x="415" y="80" class="wire-val" fill="#7be0c9">0</text>
+          </svg>
+        </div>
+        <div class="result-box">A AND B = <span class="val" id="resAND">0</span> &nbsp;|&nbsp; NOT C = <span class="val" id="resNOT">0</span> &nbsp;|&nbsp; X = <span class="val" id="resX">0</span></div>
+      </div>
+    </section>
+
+  </article>
+</div>
+
+<script>
+(function(){
+  var sections = document.querySelectorAll('article section[id]');
+  var tocLinks = document.querySelectorAll('#desktopToc a');
+  function onScroll(){
+    var current = '';
+    for (var i = 0; i < sections.length; i++){
+      var rect = sections[i].getBoundingClientRect();
+      if (rect.top <= 140) current = sections[i].id;
+    }
+    for (var j = 0; j < tocLinks.length; j++){
+      var a = tocLinks[j];
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    }
+  }
+  document.addEventListener('scroll', onScroll);
+  onScroll();
+})();
+
+(function(){
+  var state = { A: 0, B: 0, C: 0 };
+  var toggleA = document.getElementById('toggleA');
+  var toggleB = document.getElementById('toggleB');
+  var toggleC = document.getElementById('toggleC');
+
+  function recalc(){
+    var andVal = (state.A === 1 && state.B === 1) ? 1 : 0;
+    var notVal = state.C === 0 ? 1 : 0;
+    var xVal = (andVal === 1 || notVal === 1) ? 1 : 0;
+    return { andVal: andVal, notVal: notVal, xVal: xVal };
+  }
+
+  function render(){
+    var r = recalc();
+
+    toggleA.querySelector('.val').textContent = state.A;
+    toggleA.classList.toggle('on', state.A === 1);
+    toggleB.querySelector('.val').textContent = state.B;
+    toggleB.classList.toggle('on', state.B === 1);
+    toggleC.querySelector('.val').textContent = state.C;
+    toggleC.classList.toggle('on', state.C === 1);
+
+    document.getElementById('valA').textContent = state.A;
+    document.getElementById('valB').textContent = state.B;
+    document.getElementById('valC').textContent = state.C;
+    document.getElementById('valAND').textContent = r.andVal;
+    document.getElementById('valNOT').textContent = r.notVal;
+    document.getElementById('valOUT').textContent = r.xVal;
+
+    document.getElementById('resAND').textContent = r.andVal;
+    document.getElementById('resNOT').textContent = r.notVal;
+    document.getElementById('resX').textContent = r.xVal;
+
+    var wireOUT = document.getElementById('wireOUT');
+    wireOUT.setAttribute('stroke', r.xVal === 1 ? '#0D9488' : '#4a5c99');
+    wireOUT.setAttribute('stroke-width', r.xVal === 1 ? '3' : '2');
+  }
+
+  function bindToggle(btn, key){
+    btn.addEventListener('click', function(){
+      state[key] = state[key] === 1 ? 0 : 1;
+      render();
+    });
+  }
+
+  bindToggle(toggleA, 'A');
+  bindToggle(toggleB, 'B');
+  bindToggle(toggleC, 'C');
+
+  render();
+})();
+</script>
+
+</body>
+</html>

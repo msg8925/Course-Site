@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "strand-a/t2-protocols-packet-switching";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Network Protocols and Packet Switching — Practice Questions";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practice: Network Protocols &amp; Packet Switching — AS Level Computer Science (9618)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:"Source Sans 3", sans-serif; line-height:1.6; }
+  h1,h2,h3{ font-family:"Source Serif 4", serif; font-weight:600; color:var(--navy); }
+  code, .mono { font-family:"JetBrains Mono", monospace; }
+
+  header.page-head{ background:linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%); color:#eef1fb; padding:2rem 1.5rem 1.6rem; }
+  .head-inner{ max-width:1180px; margin:0 auto; }
+  .eyebrow{ color:#9fb0e6; font-size:0.95rem; margin-bottom:0.5rem; }
+  header.page-head h1{ color:#fff; font-size:1.85rem; margin:0 0 0.9rem; max-width:34ch; }
+
+  .progress-row{ display:flex; align-items:center; gap:1rem; max-width:100%; }
+  .progress-track{ flex:1; height:10px; background:#26346b; border-radius:6px; overflow:hidden; }
+  .progress-fill{ height:100%; width:0%; background:var(--teal); transition:width 0.3s; }
+  .progress-label{ font-size:0.85rem; color:#c7d0ee; white-space:nowrap; }
+  .reset-btn{ background:transparent; border:1px solid #3a4a86; color:#c7d0ee; border-radius:6px; padding:0.4rem 0.85rem; font-size:0.82rem; cursor:pointer; font-family:"Source Sans 3",sans-serif; white-space:nowrap; }
+  .reset-btn:hover{ border-color:var(--teal); color:var(--teal); }
+
+  .layout{ max-width:1180px; margin:0 auto; padding:2rem 1.5rem 4rem; display:grid; grid-template-columns:230px minmax(0,760px); gap:2.5rem; align-items:start; }
+
+  nav.toc{ position:sticky; top:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.1rem; }
+  nav.toc h2{ font-size:0.95rem; margin:0 0 0.7rem; color:var(--muted); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+  nav.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.45rem; }
+  nav.toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; display:block; padding:0.15rem 0; border-left:2px solid transparent; padding-left:0.6rem; }
+  nav.toc a:hover{ color:var(--teal); }
+
+  article{ max-width:760px; }
+  section.qsection{ margin-bottom:2.6rem; }
+  .section-kicker{ font-family:"JetBrains Mono", monospace; color:var(--teal); font-size:0.85rem; margin-bottom:0.35rem; }
+  section.qsection h2{ font-size:1.4rem; margin:0 0 1.1rem; }
+
+  .question{ background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.2rem; margin-bottom:1.1rem; }
+  .qprompt{ margin:0 0 0.9rem; font-size:0.98rem; }
+  .qprompt code{ font-size:0.92rem; }
+  .qcode{ background:var(--navy-deep); color:#e7ecfb; border-radius:8px; padding:0.8rem 0.95rem; font-family:"JetBrains Mono",monospace; font-size:0.85rem; line-height:1.6; margin:0.7rem 0; white-space:pre-wrap; }
+
+  .free-row{ display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center; }
+  .free-row input[type=text]{ flex:1; min-width:120px; padding:0.55rem 0.7rem; border:1px solid var(--border); border-radius:6px; font-family:"JetBrains Mono",monospace; font-size:0.92rem; }
+  .check-btn{ background:var(--navy); color:#fff; border:none; border-radius:6px; padding:0.55rem 1.1rem; font-weight:600; cursor:pointer; font-size:0.88rem; }
+  .check-btn:hover{ background:var(--navy-deep); }
+  .feedback{ margin-top:0.6rem; font-size:0.9rem; min-height:1.3em; }
+  .feedback.correct{ color:#0D9488; font-weight:600; }
+  .feedback.incorrect{ color:var(--red); font-weight:600; }
+
+  .mcq-options{ display:flex; flex-wrap:wrap; gap:0.55rem; }
+  .mcq-pill{ background:var(--panel-alt); border:1px solid var(--border); border-radius:20px; padding:0.5rem 1rem; cursor:pointer; font-size:0.88rem; text-align:left; }
+  .mcq-pill:hover{ border-color:var(--teal); }
+  .mcq-pill.correct{ background:var(--teal-light); border-color:var(--teal); }
+  .mcq-pill.incorrect{ background:var(--red-light); border-color:var(--red); }
+
+  textarea.long-answer{ width:100%; min-height:110px; padding:0.7rem 0.85rem; border:1px solid var(--border); border-radius:8px; font-family:"Source Sans 3",sans-serif; font-size:0.92rem; resize:vertical; }
+  details.reveal{ margin-top:0.8rem; }
+  details.reveal summary{ cursor:pointer; color:var(--purple); font-weight:600; font-size:0.88rem; }
+  .model-answer{ background:var(--purple-light); border:1px solid #ddc7ea; border-radius:8px; padding:0.85rem 1rem; margin-top:0.6rem; font-size:0.92rem; }
+
+  footer.page-foot{ max-width:1180px; margin:0 auto; padding:0 1.5rem 3rem; }
+  .foot-nav{ display:flex; justify-content:space-between; gap:1rem; border-top:1px solid var(--border); padding-top:1.5rem; flex-wrap:wrap; }
+  .foot-nav a{ text-decoration:none; color:var(--navy); font-weight:600; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:0.7rem 1.1rem; font-size:0.92rem; }
+  .foot-nav a:hover{ border-color:var(--teal); color:var(--teal); }
+
+  details.mobile-toc{ display:none; }
+  @media (max-width:900px){
+    .layout{ grid-template-columns:1fr; }
+    nav.toc{ display:none; }
+    details.mobile-toc{ display:block; margin-bottom:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.1rem; }
+    details.mobile-toc summary{ cursor:pointer; font-weight:600; color:var(--navy); }
+    details.mobile-toc ol{ list-style:none; padding:0; margin:0.8rem 0 0; display:flex; flex-direction:column; gap:0.5rem; }
+    details.mobile-toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; }
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/strand-a-t2-protocols-packet-switching-practice.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+
+<header class="page-head">
+  <div class="head-inner">
+    <div class="eyebrow">Year 12 AS Computer Science (9618) &middot; Topic 2.2, Communication and Internet Technologies</div>
+    <h1>Network Protocols &amp; Packet Switching — 13 checkable questions</h1>
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel">0 / 13 correct</div>
+      <button class="reset-btn" id="resetProgressBtn">Reset progress</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <details class="mobile-toc">
+    <summary>Sections</summary>
+    <ol>
+      <li><a href="#secA">A · DNS</a></li>
+      <li><a href="#secB">B · URL structure</a></li>
+      <li><a href="#secC">C · Packet switching basics</a></li>
+      <li><a href="#secD">D · Reassembly &amp; ordering</a></li>
+      <li><a href="#secE">E · Exam-style</a></li>
+    </ol>
+  </details>
+
+  <nav class="toc">
+    <h2>Sections</h2>
+    <ol>
+      <li><a href="#secA">A · DNS</a></li>
+      <li><a href="#secB">B · URL structure</a></li>
+      <li><a href="#secC">C · Packet switching basics</a></li>
+      <li><a href="#secD">D · Reassembly &amp; ordering</a></li>
+      <li><a href="#secE">E · Exam-style</a></li>
+    </ol>
+  </nav>
+
+  <article>
+
+    <section class="qsection" id="secA">
+      <div class="section-kicker">A</div>
+      <h2>DNS</h2>
+
+      <div class="question" data-qid="a1">
+        <p class="qprompt">What does DNS stand for?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="a2">
+        <p class="qprompt">What does a DNS server translate a domain name into?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="An IP address">An IP address</button>
+          <button class="mcq-pill" data-value="A MAC address">A MAC address</button>
+          <button class="mcq-pill" data-value="A URL path">A URL path</button>
+          <button class="mcq-pill" data-value="A packet header">A packet header</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="a3">
+        <p class="qprompt">Give one reason domain names are used instead of just typing IP addresses directly.</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secB">
+      <div class="section-kicker">B</div>
+      <h2>URL structure</h2>
+
+      <div class="question" data-qid="b1">
+        <p class="qprompt">In the URL <code>http://shop.example.com/products/laptops</code>, what is the domain name?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="b2">
+        <p class="qprompt">Using the same URL, what is the path?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="b3">
+        <p class="qprompt">What does the protocol part of a URL (e.g. <code>https://</code>) actually state?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="Which set of rules the browser and server will communicate using">Which set of rules the browser and server will communicate using</button>
+          <button class="mcq-pill" data-value="The IP address of the server">The IP address of the server</button>
+          <button class="mcq-pill" data-value="The exact page being requested">The exact page being requested</button>
+          <button class="mcq-pill" data-value="The device's MAC address">The device's MAC address</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secC">
+      <div class="section-kicker">C</div>
+      <h2>Packet switching basics</h2>
+
+      <div class="question" data-qid="c1">
+        <p class="qprompt">Instead of sending data as one continuous stream, packet switching breaks it into what?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c2">
+        <p class="qprompt">Which TWO pieces of information does a packet's header typically carry? (Name both in one answer.)</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c3">
+        <p class="qprompt">Can two packets from the same message travel via different routes through the network?</p>
+        <div class="free-row"><input type="text" placeholder="Yes or No"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secD">
+      <div class="section-kicker">D</div>
+      <h2>Reassembly and ordering</h2>
+
+      <div class="question" data-qid="d1">
+        <p class="qprompt">A message "SEND HELP" is split into 3-character packets: "SEN", "D H", "ELP". If they arrive in the order "ELP", "SEN", "D H", which field lets the destination device put them back in the right order?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="d2">
+        <p class="qprompt">Using the same three packets, what is the correctly reassembled message?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="d3">
+        <p class="qprompt">Why might packets from the same message arrive out of order?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="They can travel via different routes, some faster than others">They can travel via different routes, some faster than others</button>
+          <button class="mcq-pill" data-value="The sender sends them in a random order on purpose">The sender sends them in a random order on purpose</button>
+          <button class="mcq-pill" data-value="DNS reorders them for security">DNS reorders them for security</button>
+          <button class="mcq-pill" data-value="Packets are never actually out of order">Packets are never actually out of order</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="d4">
+        <p class="qprompt">What do routers along the way read from each passing packet in order to forward it?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secE">
+      <div class="section-kicker">E</div>
+      <h2>Exam-style questions</h2>
+
+      <div class="question" data-qid="e1">
+        <p class="qprompt">A student says: "Packet switching is worse than just sending the whole file in one go, because it needs extra header data and reassembly work." Give two reasons packet switching is used despite this overhead.</p>
+        <textarea class="long-answer" placeholder="Write your answer here"></textarea>
+        <details class="reveal">
+          <summary>Reveal model answer</summary>
+          <div class="model-answer">
+            <p><strong>Efficient sharing:</strong> because data is broken into small packets, many different devices' packets can be interleaved across the same network links at the same time, rather than one transfer monopolising a route for its whole duration.</p>
+            <p><strong>Resilience:</strong> if part of the network becomes congested or a route fails partway through, only the remaining packets need to be sent a different way — the transfer doesn't have to restart completely or fail outright, which a single continuous stream over one fixed route could not offer.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="question" data-qid="e2">
+        <p class="qprompt">Explain what would go wrong if a packet's header included the destination address but not a sequence number.</p>
+        <textarea class="long-answer" placeholder="Write your answer here"></textarea>
+        <details class="reveal">
+          <summary>Reveal model answer</summary>
+          <div class="model-answer">
+            <p>The destination address is enough to get every packet to the right device, but without a sequence number the receiving device would have no way of knowing which order the packets originally belonged in. Since packets can legitimately arrive out of order, the reassembled message could come out scrambled — the data would all be present, but not necessarily reconstructed correctly.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+  </article>
+</div>
+
+<footer class="page-foot">
+  <div class="foot-nav">
+    <a href="explainer.html">◂ Back to explainer</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var STORAGE_KEY = 'y12-9618-network-protocols-practice-v1';
+  var CHECKABLE_IDS = ['a1','a2','a3','b1','b2','b3','c1','c2','c3','d1','d2','d3','d4'];
+  var ANSWERS = {
+    a1: 'Domain Name System',
+    a2: 'An IP address',
+    a3: 'easier to remember',
+    b1: 'example.com',
+    b2: '/products/laptops',
+    b3: 'Which set of rules the browser and server will communicate using',
+    c1: 'packets',
+    c2: 'destination address and sequence number',
+    c3: 'Yes',
+    d1: 'sequence number',
+    d2: 'SEND HELP',
+    d3: 'They can travel via different routes, some faster than others',
+    d4: 'the destination address'
+  };
+
+  function normalize(v){
+    return (v || '').toString().trim().toLowerCase().replace(/\s+/g,' ');
+  }
+
+  function altOk(qid, raw){
+    var v = normalize(raw);
+    if (qid === 'a1'){
+      return v.indexOf('domain name system') !== -1;
+    }
+    if (qid === 'a3'){
+      return v.indexOf('remember') !== -1 || v.indexOf('easier') !== -1 || v.indexOf('memorable') !== -1 || v.indexOf('human') !== -1 || v.indexOf('change') !== -1;
+    }
+    if (qid === 'c2'){
+      return v.indexOf('destination') !== -1 && (v.indexOf('sequence') !== -1);
+    }
+    if (qid === 'c3'){
+      return v === 'yes' || v === 'y' || v === 'true';
+    }
+    if (qid === 'd1'){
+      return v.indexOf('sequence') !== -1;
+    }
+    if (qid === 'd2'){
+      return v.replace(/\s+/g,'') === 'sendhelp';
+    }
+    if (qid === 'd4'){
+      return v.indexOf('destination') !== -1;
+    }
+    return v === normalize(ANSWERS[qid]);
+  }
+
+  var progress = {};
+  try {
+    var saved = window.localStorage.getItem(STORAGE_KEY);
+    if (saved) progress = JSON.parse(saved);
+  } catch(e) { progress = {}; }
+
+  function saveProgress(){
+    try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch(e){}
+  }
+
+  function updateProgressBar(){
+    var correctCount = 0;
+    for (var i = 0; i < CHECKABLE_IDS.length; i++){
+      if (progress[CHECKABLE_IDS[i]] === true) correctCount++;
+    }
+    var pct = Math.round((correctCount / CHECKABLE_IDS.length) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = correctCount + ' / ' + CHECKABLE_IDS.length + ' correct';
+  }
+
+  function markQuestionState(qid){
+    var q = document.querySelector('.question[data-qid="' + qid + '"]');
+    if (!q) return;
+    var fb = q.querySelector('.feedback');
+    if (progress[qid] === true){
+      fb.textContent = 'Correct.';
+      fb.className = 'feedback correct';
+    }
+  }
+
+  function findQuestionAncestor(el){
+    var node = el;
+    while (node && node.nodeType === 1){
+      if (node.className && node.className.indexOf('question') !== -1) return node;
+      node = node.parentNode;
+    }
+    return null;
+  }
+
+  var freeQuestions = document.querySelectorAll('.question .free-row');
+  for (var fi = 0; fi < freeQuestions.length; fi++){
+    (function(row){
+      var qEl = findQuestionAncestor(row);
+      var qid = qEl.getAttribute('data-qid');
+      var input = row.querySelector('input[type=text]');
+      var btn = row.querySelector('.check-btn');
+      var fb = qEl.querySelector('.feedback');
+      btn.addEventListener('click', function(){
+        var ok = altOk(qid, input.value);
+        if (ok){
+          fb.textContent = 'Correct.';
+          fb.className = 'feedback correct';
+          progress[qid] = true;
+        } else {
+          fb.textContent = 'Not quite — check the lesson and try again.';
+          fb.className = 'feedback incorrect';
+        }
+        saveProgress();
+        updateProgressBar();
+      });
+      input.addEventListener('keydown', function(ev){
+        if (ev.key === 'Enter'){ btn.click(); }
+      });
+    })(freeQuestions[fi]);
+  }
+
+  var mcqGroups = document.querySelectorAll('.question .mcq-options');
+  for (var mi = 0; mi < mcqGroups.length; mi++){
+    (function(group){
+      var qEl = findQuestionAncestor(group);
+      var qid = qEl.getAttribute('data-qid');
+      var pills = group.querySelectorAll('.mcq-pill');
+      var fb = qEl.querySelector('.feedback');
+      for (var pi = 0; pi < pills.length; pi++){
+        pills[pi].addEventListener('click', function(){
+          var chosen = this.getAttribute('data-value');
+          for (var k = 0; k < pills.length; k++){
+            pills[k].classList.remove('correct','incorrect');
+          }
+          var isCorrect = chosen === ANSWERS[qid];
+          if (isCorrect){
+            this.classList.add('correct');
+            fb.textContent = 'Correct.';
+            fb.className = 'feedback correct';
+            progress[qid] = true;
+          } else {
+            this.classList.add('incorrect');
+            fb.textContent = 'Not quite — try again.';
+            fb.className = 'feedback incorrect';
+          }
+          saveProgress();
+          updateProgressBar();
+        });
+      }
+    })(mcqGroups[mi]);
+  }
+
+  for (var ri = 0; ri < CHECKABLE_IDS.length; ri++){
+    markQuestionState(CHECKABLE_IDS[ri]);
+  }
+  updateProgressBar();
+
+  document.getElementById('resetProgressBtn').addEventListener('click', function(){
+    progress = {};
+    saveProgress();
+    var feedbacks = document.querySelectorAll('.feedback');
+    for (var i = 0; i < feedbacks.length; i++){
+      feedbacks[i].textContent = '';
+      feedbacks[i].className = 'feedback';
+    }
+    var pills = document.querySelectorAll('.mcq-pill');
+    for (var j = 0; j < pills.length; j++){
+      pills[j].classList.remove('correct','incorrect');
+    }
+    var inputs = document.querySelectorAll('input[type=text]');
+    for (var k = 0; k < inputs.length; k++){ inputs[k].value = ''; }
+    updateProgressBar();
+  });
+})();
+</script>
+
+</body>
+</html>

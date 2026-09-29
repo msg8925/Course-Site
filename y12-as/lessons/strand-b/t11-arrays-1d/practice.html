@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "strand-b/t11-arrays-1d";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Arrays: 1D Declaration and Use — Practice Questions";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practice: Arrays 1D — AS Level Computer Science (9618)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:"Source Sans 3", sans-serif; line-height:1.6; }
+  h1,h2,h3{ font-family:"Source Serif 4", serif; font-weight:600; color:var(--navy); }
+  code, .mono { font-family:"JetBrains Mono", monospace; }
+
+  header.page-head{ background:linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%); color:#eef1fb; padding:2rem 1.5rem 1.6rem; }
+  .head-inner{ max-width:1180px; margin:0 auto; }
+  .eyebrow{ color:#9fb0e6; font-size:0.95rem; margin-bottom:0.5rem; }
+  header.page-head h1{ color:#fff; font-size:1.85rem; margin:0 0 0.9rem; max-width:34ch; }
+
+  .progress-row{ display:flex; align-items:center; gap:1rem; max-width:100%; }
+  .progress-track{ flex:1; height:10px; background:#26346b; border-radius:6px; overflow:hidden; }
+  .progress-fill{ height:100%; width:0%; background:var(--teal); transition:width 0.3s; }
+  .progress-label{ font-size:0.85rem; color:#c7d0ee; white-space:nowrap; }
+  .reset-btn{ background:transparent; border:1px solid #3a4a86; color:#c7d0ee; border-radius:6px; padding:0.4rem 0.85rem; font-size:0.82rem; cursor:pointer; font-family:"Source Sans 3",sans-serif; white-space:nowrap; }
+  .reset-btn:hover{ border-color:var(--teal); color:var(--teal); }
+
+  .layout{ max-width:1180px; margin:0 auto; padding:2rem 1.5rem 4rem; display:grid; grid-template-columns:230px minmax(0,760px); gap:2.5rem; align-items:start; }
+
+  nav.toc{ position:sticky; top:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.1rem; }
+  nav.toc h2{ font-size:0.95rem; margin:0 0 0.7rem; color:var(--muted); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+  nav.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.45rem; }
+  nav.toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; display:block; padding:0.15rem 0; border-left:2px solid transparent; padding-left:0.6rem; }
+  nav.toc a:hover{ color:var(--teal); }
+
+  article{ max-width:760px; }
+  section.qsection{ margin-bottom:2.6rem; }
+  .section-kicker{ font-family:"JetBrains Mono", monospace; color:var(--teal); font-size:0.85rem; margin-bottom:0.35rem; }
+  section.qsection h2{ font-size:1.4rem; margin:0 0 1.1rem; }
+
+  .question{ background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.2rem; margin-bottom:1.1rem; }
+  .qprompt{ margin:0 0 0.9rem; font-size:0.98rem; }
+  .qprompt code{ font-size:0.92rem; }
+  .qcode{ background:var(--navy-deep); color:#e7ecfb; border-radius:8px; padding:0.8rem 0.95rem; font-family:"JetBrains Mono",monospace; font-size:0.85rem; line-height:1.6; margin:0.7rem 0; white-space:pre-wrap; }
+
+  .free-row{ display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center; }
+  .free-row input[type=text]{ flex:1; min-width:120px; padding:0.55rem 0.7rem; border:1px solid var(--border); border-radius:6px; font-family:"JetBrains Mono",monospace; font-size:0.92rem; }
+  .check-btn{ background:var(--navy); color:#fff; border:none; border-radius:6px; padding:0.55rem 1.1rem; font-weight:600; cursor:pointer; font-size:0.88rem; }
+  .check-btn:hover{ background:var(--navy-deep); }
+  .feedback{ margin-top:0.6rem; font-size:0.9rem; min-height:1.3em; }
+  .feedback.correct{ color:#0D9488; font-weight:600; }
+  .feedback.incorrect{ color:var(--red); font-weight:600; }
+
+  .mcq-options{ display:flex; flex-wrap:wrap; gap:0.55rem; }
+  .mcq-pill{ background:var(--panel-alt); border:1px solid var(--border); border-radius:20px; padding:0.5rem 1rem; cursor:pointer; font-size:0.88rem; text-align:left; }
+  .mcq-pill:hover{ border-color:var(--teal); }
+  .mcq-pill.correct{ background:var(--teal-light); border-color:var(--teal); }
+  .mcq-pill.incorrect{ background:var(--red-light); border-color:var(--red); }
+
+  textarea.long-answer{ width:100%; min-height:110px; padding:0.7rem 0.85rem; border:1px solid var(--border); border-radius:8px; font-family:"Source Sans 3",sans-serif; font-size:0.92rem; resize:vertical; }
+  details.reveal{ margin-top:0.8rem; }
+  details.reveal summary{ cursor:pointer; color:var(--purple); font-weight:600; font-size:0.88rem; }
+  .model-answer{ background:var(--purple-light); border:1px solid #ddc7ea; border-radius:8px; padding:0.85rem 1rem; margin-top:0.6rem; font-size:0.92rem; }
+
+  footer.page-foot{ max-width:1180px; margin:0 auto; padding:0 1.5rem 3rem; }
+  .foot-nav{ display:flex; justify-content:space-between; gap:1rem; border-top:1px solid var(--border); padding-top:1.5rem; flex-wrap:wrap; }
+  .foot-nav a{ text-decoration:none; color:var(--navy); font-weight:600; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:0.7rem 1.1rem; font-size:0.92rem; }
+  .foot-nav a:hover{ border-color:var(--teal); color:var(--teal); }
+
+  details.mobile-toc{ display:none; }
+  @media (max-width:900px){
+    .layout{ grid-template-columns:1fr; }
+    nav.toc{ display:none; }
+    details.mobile-toc{ display:block; margin-bottom:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.1rem; }
+    details.mobile-toc summary{ cursor:pointer; font-weight:600; color:var(--navy); }
+    details.mobile-toc ol{ list-style:none; padding:0; margin:0.8rem 0 0; display:flex; flex-direction:column; gap:0.5rem; }
+    details.mobile-toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; }
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/strand-b-t11-arrays-1d-practice.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+
+<header class="page-head">
+  <div class="head-inner">
+    <div class="eyebrow">Year 12 AS Computer Science (9618) &middot; Topic 11.5, Programming</div>
+    <h1>Arrays: 1D Declaration &amp; Use — 13 checkable questions</h1>
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel">0 / 13 correct</div>
+      <button class="reset-btn" id="resetProgressBtn">Reset progress</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <details class="mobile-toc">
+    <summary>Sections</summary>
+    <ol>
+      <li><a href="#secA">A · Declaring arrays</a></li>
+      <li><a href="#secB">B · Bounds &amp; element count</a></li>
+      <li><a href="#secC">C · Populating with a loop</a></li>
+      <li><a href="#secD">D · Linear search</a></li>
+      <li><a href="#secE">E · Exam-style</a></li>
+    </ol>
+  </details>
+
+  <nav class="toc">
+    <h2>Sections</h2>
+    <ol>
+      <li><a href="#secA">A · Declaring arrays</a></li>
+      <li><a href="#secB">B · Bounds &amp; element count</a></li>
+      <li><a href="#secC">C · Populating with a loop</a></li>
+      <li><a href="#secD">D · Linear search</a></li>
+      <li><a href="#secE">E · Exam-style</a></li>
+    </ol>
+  </nav>
+
+  <article>
+
+    <section class="qsection" id="secA">
+      <div class="section-kicker">A</div>
+      <h2>Declaring arrays</h2>
+
+      <div class="question" data-qid="a1">
+        <p class="qprompt">Write the pseudocode to declare an array called <code>Ages</code> holding 10 integers, indexed 1 to 10.</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="a2">
+        <p class="qprompt">In an array declaration, what goes inside the square brackets?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="The lower and upper bounds">The lower and upper bounds</button>
+          <button class="mcq-pill" data-value="The data type">The data type</button>
+          <button class="mcq-pill" data-value="The array's name">The array's name</button>
+          <button class="mcq-pill" data-value="The number of dimensions">The number of dimensions</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="a3">
+        <p class="qprompt">Which lower bound does Cambridge pseudocode generally use by convention?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secB">
+      <div class="section-kicker">B</div>
+      <h2>Bounds and element count</h2>
+
+      <div class="question" data-qid="b1">
+        <p class="qprompt">How many elements does <code>ARRAY[1:8]</code> hold?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="b2">
+        <p class="qprompt">How many elements does <code>ARRAY[2:9]</code> hold?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="b3">
+        <p class="qprompt">For an array declared <code>ARRAY[1:5]</code>, which of these index accesses is invalid?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="Scores[6]">Scores[6]</button>
+          <button class="mcq-pill" data-value="Scores[1]">Scores[1]</button>
+          <button class="mcq-pill" data-value="Scores[5]">Scores[5]</button>
+          <button class="mcq-pill" data-value="Scores[3]">Scores[3]</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secC">
+      <div class="section-kicker">C</div>
+      <h2>Populating with a loop</h2>
+
+      <div class="question" data-qid="c1">
+        <p class="qprompt">Trace this loop, then answer the question below it.</p>
+        <div class="qcode">DECLARE Cubes : ARRAY[1:4] OF INTEGER
+FOR Index ← 1 TO 4
+   Cubes[Index] ← Index * Index * Index
+NEXT Index</div>
+        <p class="qprompt">What is <code>Cubes[3]</code> after this loop finishes?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c2">
+        <p class="qprompt">Using the same trace as above — what is <code>Cubes[1]</code>?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="c3">
+        <p class="qprompt">A student writes <code>FOR Index ← 1 TO 3</code> to populate an array declared <code>ARRAY[1:4]</code>. What happens?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="The last element (index 4) is never assigned a value">The last element (index 4) is never assigned a value</button>
+          <button class="mcq-pill" data-value="It causes an error immediately">It causes an error immediately</button>
+          <button class="mcq-pill" data-value="All 4 elements are populated correctly">All 4 elements are populated correctly</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secD">
+      <div class="section-kicker">D</div>
+      <h2>Linear search</h2>
+      <p class="qprompt" style="margin-bottom:0;">Use this function for all three questions:</p>
+      <div class="qcode">FUNCTION LinearSearch(Nums : ARRAY[1:6] OF INTEGER, Target : INTEGER) RETURNS INTEGER
+   FOR Index ← 1 TO 6
+      IF Nums[Index] = Target THEN
+         RETURN Index
+      ENDIF
+   NEXT Index
+   RETURN -1
+ENDFUNCTION</div>
+      <p class="qprompt">Where <code>Nums</code> holds: 7, 14, 21, 28, 35, 42 (at indices 1 to 6).</p>
+
+      <div class="question" data-qid="d1">
+        <p class="qprompt">What does <code>LinearSearch(Nums, 21)</code> return?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="d2">
+        <p class="qprompt">What does <code>LinearSearch(Nums, 50)</code> return?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="d3">
+        <p class="qprompt">Why is <code>-1</code> used as the "not found" signal, rather than, say, <code>0</code>?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="0 could be confused with a valid index in some arrays, but -1 never could be">0 could be confused with a valid index in some arrays, but -1 never could be</button>
+          <button class="mcq-pill" data-value="-1 is faster to compute than 0">-1 is faster to compute than 0</button>
+          <button class="mcq-pill" data-value="It makes no difference at all">It makes no difference at all</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="question" data-qid="d4">
+        <p class="qprompt">Once <code>LinearSearch</code> finds a match and executes <code>RETURN Index</code>, what happens to the remaining loop iterations?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="They never run — the function ends immediately">They never run — the function ends immediately</button>
+          <button class="mcq-pill" data-value="They still run, but their results are discarded">They still run, but their results are discarded</button>
+          <button class="mcq-pill" data-value="They run and overwrite the returned value">They run and overwrite the returned value</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secE">
+      <div class="section-kicker">E</div>
+      <h2>Exam-style questions</h2>
+
+      <div class="question" data-qid="e1">
+        <p class="qprompt">A student declares <code>DECLARE Temperatures : ARRAY[1:7] OF REAL</code> to store one temperature reading per day of a week, then writes <code>FOR Day ← 0 TO 6</code> to populate it via user input, using <code>Day</code> directly as the index. Identify the bug, and explain how to fix it in two different ways.</p>
+        <textarea class="long-answer" placeholder="Write your answer here"></textarea>
+        <details class="reveal">
+          <summary>Reveal model answer</summary>
+          <div class="model-answer">
+            <p><strong>The bug:</strong> the array is declared with bounds <code>[1:7]</code>, but the loop runs <code>Day</code> from 0 to 6 and uses it directly as the index — so <code>Temperatures[0]</code> is accessed on the first iteration, which is outside the array's declared bounds (an invalid index), and <code>Temperatures[7]</code>, a valid index, is never populated at all.</p>
+            <p><strong>Fix 1:</strong> change the loop to <code>FOR Day ← 1 TO 7</code> so it matches the array's declared bounds exactly.</p>
+            <p><strong>Fix 2:</strong> keep the loop as <code>FOR Day ← 0 TO 6</code>, but declare the array to match it instead: <code>DECLARE Temperatures : ARRAY[0:6] OF REAL</code>.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="question" data-qid="e2">
+        <p class="qprompt">Explain why a linear search that always finished checking every element — even after finding a match — would still give a correct result, but would not be considered good style. What would need to change to make it stop early?</p>
+        <textarea class="long-answer" placeholder="Write your answer here"></textarea>
+        <details class="reveal">
+          <summary>Reveal model answer</summary>
+          <div class="model-answer">
+            <p>It would still give a correct result because once a matching index has been identified, checking further elements doesn't change that answer — the first match found is still the right answer to return. However, it wastes time checking elements that can no longer affect the outcome, which matters more the larger the array is (searching a million-element array all the way to the end when the match was at index 1 is needlessly slow).</p>
+            <p>To stop early, the function needs a mechanism that ends execution the moment a match is found — exactly what <code>RETURN</code> provides inside a function. Without a function (for example, inside a plain procedure or the main program), the same early exit would need a boolean flag checked by the loop's condition, since a bare <code>FOR</code> loop has no built-in way to stop before its final iteration.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+  </article>
+</div>
+
+<footer class="page-foot">
+  <div class="foot-nav">
+    <a href="explainer.html">◂ Back to explainer</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var STORAGE_KEY = 'y12-9618-arrays-1d-practice-v1';
+  var CHECKABLE_IDS = ['a1','a2','a3','b1','b2','b3','c1','c2','c3','d1','d2','d3','d4'];
+  var ANSWERS = {
+    a1: 'DECLARE Ages : ARRAY[1:10] OF INTEGER',
+    a2: 'The lower and upper bounds',
+    a3: '1',
+    b1: '8',
+    b2: '8',
+    b3: 'Scores[6]',
+    c1: '27',
+    c2: '1',
+    c3: 'The last element (index 4) is never assigned a value',
+    d1: '3',
+    d2: '-1',
+    d3: '0 could be confused with a valid index in some arrays, but -1 never could be',
+    d4: 'They never run — the function ends immediately'
+  };
+
+  function normalize(v){
+    return (v || '').toString().trim().toLowerCase().replace(/\s+/g,' ');
+  }
+
+  function altOk(qid, raw){
+    var v = normalize(raw);
+    if (qid === 'a1'){
+      var compact = v.replace(/\s+/g,'');
+      return compact.indexOf('declare') !== -1 && compact.indexOf('ages') !== -1 && compact.indexOf('array[1:10]') !== -1 && compact.indexOf('integer') !== -1;
+    }
+    if (qid === 'a3'){
+      return v === '1' || v === 'one';
+    }
+    return v === normalize(ANSWERS[qid]);
+  }
+
+  var progress = {};
+  try {
+    var saved = window.localStorage.getItem(STORAGE_KEY);
+    if (saved) progress = JSON.parse(saved);
+  } catch(e) { progress = {}; }
+
+  function saveProgress(){
+    try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch(e){}
+  }
+
+  function updateProgressBar(){
+    var correctCount = 0;
+    for (var i = 0; i < CHECKABLE_IDS.length; i++){
+      if (progress[CHECKABLE_IDS[i]] === true) correctCount++;
+    }
+    var pct = Math.round((correctCount / CHECKABLE_IDS.length) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = correctCount + ' / ' + CHECKABLE_IDS.length + ' correct';
+  }
+
+  function markQuestionState(qid){
+    var q = document.querySelector('.question[data-qid="' + qid + '"]');
+    if (!q) return;
+    var fb = q.querySelector('.feedback');
+    if (progress[qid] === true){
+      fb.textContent = 'Correct.';
+      fb.className = 'feedback correct';
+    }
+  }
+
+  function findQuestionAncestor(el){
+    var node = el;
+    while (node && node.nodeType === 1){
+      if (node.className && node.className.indexOf('question') !== -1) return node;
+      node = node.parentNode;
+    }
+    return null;
+  }
+
+  var freeQuestions = document.querySelectorAll('.question .free-row');
+  for (var fi = 0; fi < freeQuestions.length; fi++){
+    (function(row){
+      var qEl = findQuestionAncestor(row);
+      var qid = qEl.getAttribute('data-qid');
+      var input = row.querySelector('input[type=text]');
+      var btn = row.querySelector('.check-btn');
+      var fb = qEl.querySelector('.feedback');
+      btn.addEventListener('click', function(){
+        var ok = altOk(qid, input.value);
+        if (ok){
+          fb.textContent = 'Correct.';
+          fb.className = 'feedback correct';
+          progress[qid] = true;
+        } else {
+          fb.textContent = 'Not quite — check the lesson and try again.';
+          fb.className = 'feedback incorrect';
+        }
+        saveProgress();
+        updateProgressBar();
+      });
+      input.addEventListener('keydown', function(ev){
+        if (ev.key === 'Enter'){ btn.click(); }
+      });
+    })(freeQuestions[fi]);
+  }
+
+  var mcqGroups = document.querySelectorAll('.question .mcq-options');
+  for (var mi = 0; mi < mcqGroups.length; mi++){
+    (function(group){
+      var qEl = findQuestionAncestor(group);
+      var qid = qEl.getAttribute('data-qid');
+      var pills = group.querySelectorAll('.mcq-pill');
+      var fb = qEl.querySelector('.feedback');
+      for (var pi = 0; pi < pills.length; pi++){
+        pills[pi].addEventListener('click', function(){
+          var chosen = this.getAttribute('data-value');
+          for (var k = 0; k < pills.length; k++){
+            pills[k].classList.remove('correct','incorrect');
+          }
+          var isCorrect = chosen === ANSWERS[qid];
+          if (isCorrect){
+            this.classList.add('correct');
+            fb.textContent = 'Correct.';
+            fb.className = 'feedback correct';
+            progress[qid] = true;
+          } else {
+            this.classList.add('incorrect');
+            fb.textContent = 'Not quite — try again.';
+            fb.className = 'feedback incorrect';
+          }
+          saveProgress();
+          updateProgressBar();
+        });
+      }
+    })(mcqGroups[mi]);
+  }
+
+  for (var ri = 0; ri < CHECKABLE_IDS.length; ri++){
+    markQuestionState(CHECKABLE_IDS[ri]);
+  }
+  updateProgressBar();
+
+  document.getElementById('resetProgressBtn').addEventListener('click', function(){
+    progress = {};
+    saveProgress();
+    var feedbacks = document.querySelectorAll('.feedback');
+    for (var i = 0; i < feedbacks.length; i++){
+      feedbacks[i].textContent = '';
+      feedbacks[i].className = 'feedback';
+    }
+    var pills = document.querySelectorAll('.mcq-pill');
+    for (var j = 0; j < pills.length; j++){
+      pills[j].classList.remove('correct','incorrect');
+    }
+    var inputs = document.querySelectorAll('input[type=text]');
+    for (var k = 0; k < inputs.length; k++){ inputs[k].value = ''; }
+    updateProgressBar();
+  });
+})();
+</script>
+
+</body>
+</html>

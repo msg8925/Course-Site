@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "strand-a/t2-protocols-packet-switching";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Network Protocols and Packet Switching";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Network Protocols &amp; Packet Switching — AS Level Computer Science (9618)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:"Source Sans 3", sans-serif; line-height:1.6; }
+  h1,h2,h3{ font-family:"Source Serif 4", serif; font-weight:600; color:var(--navy); }
+  code, .mono { font-family:"JetBrains Mono", monospace; }
+
+  header.page-head{ background:linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%); color:#eef1fb; padding:2.6rem 1.5rem 3.2rem; }
+  .head-inner{ max-width:1180px; margin:0 auto; }
+  .eyebrow{ color:#9fb0e6; font-size:0.95rem; margin-bottom:0.6rem; }
+  header.page-head h1{ color:#fff; font-size:2.1rem; margin:0 0 0.7rem; max-width:34ch; }
+  .lede{ color:#c7d0ee; max-width:62ch; font-size:1.05rem; }
+
+  .layout{ max-width:1180px; margin:0 auto; padding:2rem 1.5rem 4rem; display:grid; grid-template-columns:230px minmax(0,760px); gap:2.5rem; align-items:start; }
+
+  nav.toc{ position:sticky; top:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.1rem; }
+  nav.toc h2{ font-size:0.95rem; margin:0 0 0.7rem; color:var(--muted); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+  nav.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.45rem; }
+  nav.toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; display:block; padding:0.15rem 0; border-left:2px solid transparent; padding-left:0.6rem; }
+  nav.toc a:hover{ color:var(--teal); }
+  nav.toc a.active{ border-left-color:var(--teal); color:var(--teal); font-weight:600; }
+
+  article{ max-width:760px; }
+  section{ margin-bottom:2.8rem; }
+  .section-kicker{ font-family:"JetBrains Mono", monospace; color:var(--teal); font-size:0.85rem; margin-bottom:0.35rem; }
+  section h2{ font-size:1.5rem; margin:0 0 0.9rem; }
+  section p{ margin:0 0 1rem; }
+  section ul, section ol{ margin:0 0 1rem; padding-left:1.3rem; }
+  section li{ margin-bottom:0.4rem; }
+
+  .tip, .warn{ border-radius:8px; padding:0.9rem 1.1rem; margin:1.1rem 0; font-size:0.96rem; }
+  .tip{ background:var(--teal-light); border:1px solid #bfe4df; }
+  .warn{ background:var(--amber-light); border:1px solid #eccba0; }
+  .tip strong:first-child, .warn strong:first-child{ display:block; margin-bottom:0.25rem; }
+
+  table.ref{ width:100%; border-collapse:collapse; margin:1.1rem 0; font-size:0.92rem; }
+  table.ref th, table.ref td{ text-align:left; padding:0.55rem 0.7rem; border-bottom:1px solid var(--border); }
+  table.ref th{ background:var(--panel-alt); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+
+  .playground{ background:var(--navy-deep); border-radius:12px; padding:1.3rem; margin:1.3rem 0; color:#e7ecfb; }
+  .playground h3{ color:#fff; font-size:1.05rem; margin:0 0 0.3rem; }
+  .playground .sub{ color:#9fb0e6; font-size:0.88rem; margin-bottom:1rem; }
+
+  .url-display{ display:flex; flex-wrap:wrap; gap:0; font-family:"JetBrains Mono",monospace; font-size:1.05rem; margin:1rem 0; border-radius:8px; overflow:hidden; }
+  .url-part{ padding:0.6rem 0.5rem; }
+  .url-part.protocol{ background:#1a2f5c; color:#7ad4ff; }
+  .url-part.subdomain{ background:#123a34; color:#7be0c9; }
+  .url-part.domain{ background:#3a2a5c; color:#d9a8ff; }
+  .url-part.path{ background:#4a2f1a; color:#ffb877; }
+  .url-legend{ display:flex; gap:1.2rem; flex-wrap:wrap; font-size:0.82rem; margin-top:0.8rem; }
+  .url-legend span{ display:flex; align-items:center; gap:0.4rem; }
+  .legend-swatch{ width:12px; height:12px; border-radius:3px; display:inline-block; }
+
+  .mode-toggle{ display:flex; gap:0.5rem; margin-bottom:1rem; flex-wrap:wrap; }
+  .mode-toggle button{ background:#1a2653; color:#c7d0ee; border:1px solid #2c3a72; border-radius:20px; padding:0.4rem 0.95rem; font-size:0.85rem; cursor:pointer; font-family:"Source Sans 3",sans-serif; }
+  .mode-toggle button.active{ background:var(--teal); border-color:var(--teal); color:#052c28; font-weight:600; }
+
+  .packet-row{ display:flex; gap:0.6rem; flex-wrap:wrap; margin:1rem 0; min-height:3.2rem; }
+  .packet{ background:#182452; border:1px solid #2c3a72; border-radius:8px; padding:0.6rem 0.8rem; font-family:"JetBrains Mono",monospace; text-align:center; transition:transform 0.3s, border-color 0.3s; }
+  .packet .seq{ font-size:0.72rem; color:#9fb0e6; display:block; margin-bottom:0.2rem; }
+  .packet .data{ color:#ffd479; font-weight:600; }
+  .packet.reassembled{ border-color:var(--teal); }
+
+  .step-line{ background:#101a3a; border-radius:8px; padding:0.75rem 0.95rem; font-family:"JetBrains Mono",monospace; font-size:0.87rem; margin-bottom:1rem; color:#e7ecfb; min-height:2.4em; }
+  .step-controls{ display:flex; gap:0.6rem; align-items:center; }
+  .step-controls button{ background:var(--teal); color:#052c28; border:none; border-radius:6px; padding:0.5rem 1rem; font-weight:600; cursor:pointer; font-family:"Source Sans 3",sans-serif; }
+  .step-controls button:disabled{ opacity:0.4; cursor:default; }
+  .step-controls button.secondary{ background:#1a2653; color:#c7d0ee; border:1px solid #2c3a72; }
+  .step-count{ color:#9fb0e6; font-size:0.85rem; margin-left:auto; }
+  .reassembled-msg{ font-family:"JetBrains Mono",monospace; font-size:1.2rem; color:#7be0c9; text-align:center; padding:0.8rem; background:#123a34; border-radius:8px; margin-top:1rem; border:1px solid #1f7a63; display:none; }
+
+  footer.page-foot{ max-width:1180px; margin:0 auto; padding:0 1.5rem 3rem; }
+  .foot-nav{ display:flex; justify-content:space-between; gap:1rem; border-top:1px solid var(--border); padding-top:1.5rem; flex-wrap:wrap; }
+  .foot-nav a{ text-decoration:none; color:var(--navy); font-weight:600; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:0.7rem 1.1rem; font-size:0.92rem; }
+  .foot-nav a:hover{ border-color:var(--teal); color:var(--teal); }
+  .foot-nav .next{ margin-left:auto; }
+
+  details.mobile-toc{ display:none; }
+  @media (max-width:900px){
+    .layout{ grid-template-columns:1fr; }
+    nav.toc{ display:none; }
+    details.mobile-toc{ display:block; margin-bottom:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.1rem; }
+    details.mobile-toc summary{ cursor:pointer; font-weight:600; color:var(--navy); }
+    details.mobile-toc ol{ list-style:none; padding:0; margin:0.8rem 0 0; display:flex; flex-direction:column; gap:0.5rem; }
+    details.mobile-toc a{ color:var(--text); text-decoration:none; font-size:0.92rem; }
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/strand-a-t2-protocols-packet-switching-explainer.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+
+<header class="page-head">
+  <div class="head-inner">
+    <div class="eyebrow">Year 12 AS Computer Science (9618) &middot; Topic 2.2, Communication and Internet Technologies</div>
+    <h1>Network Protocols &amp; Packet Switching</h1>
+    <p class="lede">How a name typed into a browser turns into an IP address — and how the data that comes back actually travels across the network.</p>
+  </div>
+</header>
+
+<div class="layout">
+  <details class="mobile-toc">
+    <summary>Contents</summary>
+    <ol>
+      <li><a href="#dns">01 · The Domain Name System (DNS)</a></li>
+      <li><a href="#url">02 · URL structure</a></li>
+      <li><a href="#packets">03 · Packet switching: the idea</a></li>
+      <li><a href="#headers">04 · What's in a packet</a></li>
+      <li><a href="#reassembly">05 · Out-of-order arrival and reassembly</a></li>
+      <li><a href="#why">06 · Why use packet switching?</a></li>
+    </ol>
+  </details>
+
+  <nav class="toc" id="desktopToc">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#dns">01 · DNS</a></li>
+      <li><a href="#url">02 · URL structure</a></li>
+      <li><a href="#packets">03 · Packet switching</a></li>
+      <li><a href="#headers">04 · Packet contents</a></li>
+      <li><a href="#reassembly">05 · Reassembly</a></li>
+      <li><a href="#why">06 · Why packet switching?</a></li>
+    </ol>
+  </nav>
+
+  <article>
+
+    <section id="dns">
+      <div class="section-kicker">01</div>
+      <h2>The Domain Name System (DNS)</h2>
+      <p>You already know that every device reachable on a network needs an IP address. But nobody types <code>151.101.1.69</code> into a browser — they type a name, like <code>bbc.co.uk</code>. The <strong>Domain Name System (DNS)</strong> is the service that translates a human-readable domain name into the IP address a computer actually needs to connect to.</p>
+      <ol>
+        <li>You type a domain name into your browser.</li>
+        <li>Your device sends that domain name to a <strong>DNS server</strong>, asking for its IP address.</li>
+        <li>The DNS server looks up the domain name and replies with the matching IP address.</li>
+        <li>Your device uses that IP address to actually connect to the website.</li>
+      </ol>
+      <div class="tip">
+        <strong>Why not just remember IP addresses?</strong>
+        Domain names are easier for people to remember, type correctly, and share — and a domain name can keep working even if the website's underlying IP address changes, as long as its DNS record is updated to match.
+      </div>
+    </section>
+
+    <section id="url">
+      <div class="section-kicker">02</div>
+      <h2>URL structure</h2>
+      <p>A URL (Uniform Resource Locator) — the full address typed or clicked to reach a specific page — breaks down into distinct parts. Look at the structure below, common to almost every URL you'll ever see:</p>
+      <div class="playground">
+        <h3>URL structure</h3>
+        <div class="sub">https://www.bbc.co.uk/news/technology</div>
+        <div class="url-display">
+          <span class="url-part protocol">https://</span><span class="url-part subdomain">www.</span><span class="url-part domain">bbc.co.uk</span><span class="url-part path">/news/technology</span>
+        </div>
+        <div class="url-legend">
+          <span><span class="legend-swatch" style="background:#1a2f5c;"></span>Protocol</span>
+          <span><span class="legend-swatch" style="background:#123a34;"></span>Subdomain</span>
+          <span><span class="legend-swatch" style="background:#3a2a5c;"></span>Domain name</span>
+          <span><span class="legend-swatch" style="background:#4a2f1a;"></span>Path</span>
+        </div>
+      </div>
+      <table class="ref">
+        <tr><th>Part</th><th>Example</th><th>Purpose</th></tr>
+        <tr><td>Protocol</td><td><code>https://</code></td><td>States which set of rules the browser and server will communicate using</td></tr>
+        <tr><td>Subdomain</td><td><code>www.</code></td><td>Identifies a specific section or service within the domain (often omitted)</td></tr>
+        <tr><td>Domain name</td><td><code>bbc.co.uk</code></td><td>The human-readable name that DNS resolves to an IP address</td></tr>
+        <tr><td>Path</td><td><code>/news/technology</code></td><td>Identifies a specific page or resource on that server</td></tr>
+      </table>
+    </section>
+
+    <section id="packets">
+      <div class="section-kicker">03</div>
+      <h2>Packet switching: the idea</h2>
+      <p>Once a connection is established, the actual data — a web page, an email, a file — is not sent as one continuous stream. Instead, it's broken into small chunks called <strong>packets</strong>, each sent across the network separately, and reassembled into the original data once every packet has arrived at its destination.</p>
+      <p>Crucially, different packets belonging to the very same message can travel via <em>different routes</em> through the network's routers, depending on which paths are free at that moment — and they don't necessarily arrive in the order they were sent.</p>
+    </section>
+
+    <section id="headers">
+      <div class="section-kicker">04</div>
+      <h2>What's in a packet</h2>
+      <p>Every packet carries a small <strong>header</strong> alongside its share of the actual data, so that the network — and the receiving device — knows what to do with it:</p>
+      <table class="ref">
+        <tr><th>Header field</th><th>Purpose</th></tr>
+        <tr><td>Destination address</td><td>Tells each router along the way where the packet ultimately needs to go</td></tr>
+        <tr><td>Sequence number</td><td>Records this packet's position in the original message, so it can be put back in the right order</td></tr>
+      </table>
+      <p>Routers along the way read only the destination address on each packet — they don't need to know anything about the message as a whole, just where this one packet needs to go next.</p>
+    </section>
+
+    <section id="reassembly">
+      <div class="section-kicker">05</div>
+      <h2>Out-of-order arrival and reassembly</h2>
+      <p>Because packets can take different routes, they can easily arrive at their destination in a different order than they were sent — one might take a short, quick path while another gets delayed on a longer one. This is exactly what the sequence number is for: the receiving device holds each arriving packet until it has them all, then uses the sequence numbers to reconstruct the original message in the correct order.</p>
+      <div class="playground">
+        <h3>Packet switching simulator</h3>
+        <div class="sub">Sending the message "HELLO WORLD" as 4 packets</div>
+        <div class="step-line" id="packetStepLine">Press Next to split the message into packets</div>
+        <div class="packet-row" id="packetRow"></div>
+        <div class="reassembled-msg" id="reassembledMsg"></div>
+        <div class="step-controls">
+          <button class="secondary" id="packetResetBtn">Reset</button>
+          <button id="packetNextBtn">Next step ▸</button>
+          <span class="step-count" id="packetStepCount">Step 0 / 3</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="why">
+      <div class="section-kicker">06</div>
+      <h2>Why use packet switching?</h2>
+      <ul>
+        <li><strong>Efficient sharing:</strong> many different devices' packets can travel across the same network links at the same time, interleaved with each other, rather than one connection monopolising a route for its entire duration.</li>
+        <li><strong>Resilience:</strong> if a particular route becomes congested or fails partway through, later packets can simply be sent via a different route — the whole transfer doesn't have to restart or fail completely.</li>
+      </ul>
+      <div class="warn">
+        <strong>What this topic does not cover</strong>
+        This course does not require named protocol-stack detail (things like the specific roles of TCP vs IP, or protocols such as HTTP/HTTPS/FTP) or a comparison against alternative switching methods. Keep your answers focused on IP addressing, DNS, URL structure, and the packet-switching mechanics covered above.
+      </div>
+    </section>
+
+  </article>
+</div>
+
+<script>
+(function(){
+  var sections = document.querySelectorAll('article section[id]');
+  var tocLinks = document.querySelectorAll('#desktopToc a');
+  function onScroll(){
+    var current = '';
+    for (var i = 0; i < sections.length; i++){
+      var rect = sections[i].getBoundingClientRect();
+      if (rect.top <= 140) current = sections[i].id;
+    }
+    for (var j = 0; j < tocLinks.length; j++){
+      var a = tocLinks[j];
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    }
+  }
+  document.addEventListener('scroll', onScroll);
+  onScroll();
+})();
+
+(function(){
+  // Packet switching simulator
+  var message = 'HELLO WORLD';
+  var chunkSize = 3;
+  var packetsInOrder = [];
+  for (var i = 0; i < message.length; i += chunkSize){
+    packetsInOrder.push(message.slice(i, i + chunkSize));
+  }
+  var arrivalOrder = [2, 0, 3, 1]; // indices into packetsInOrder, scrambled
+
+  var step = 0;
+  var totalSteps = 3;
+  var packetRow = document.getElementById('packetRow');
+  var stepLine = document.getElementById('packetStepLine');
+  var stepCount = document.getElementById('packetStepCount');
+  var nextBtn = document.getElementById('packetNextBtn');
+  var resetBtn = document.getElementById('packetResetBtn');
+  var reassembledMsg = document.getElementById('reassembledMsg');
+
+  function clearPackets(){
+    packetRow.innerHTML = '';
+  }
+
+  function showPacketsInOrder(){
+    clearPackets();
+    for (var i = 0; i < packetsInOrder.length; i++){
+      var div = document.createElement('div');
+      div.className = 'packet';
+      div.innerHTML = '<span class="seq">seq ' + (i + 1) + '</span><span class="data">' + packetsInOrder[i] + '</span>';
+      packetRow.appendChild(div);
+    }
+  }
+
+  function showPacketsArriving(){
+    clearPackets();
+    for (var i = 0; i < arrivalOrder.length; i++){
+      var idx = arrivalOrder[i];
+      var div = document.createElement('div');
+      div.className = 'packet';
+      div.innerHTML = '<span class="seq">seq ' + (idx + 1) + '</span><span class="data">' + packetsInOrder[idx] + '</span>';
+      packetRow.appendChild(div);
+    }
+  }
+
+  function showReassembled(){
+    clearPackets();
+    var sorted = arrivalOrder.slice().sort(function(a, b){ return a - b; });
+    for (var i = 0; i < sorted.length; i++){
+      var idx = sorted[i];
+      var div = document.createElement('div');
+      div.className = 'packet reassembled';
+      div.innerHTML = '<span class="seq">seq ' + (idx + 1) + '</span><span class="data">' + packetsInOrder[idx] + '</span>';
+      packetRow.appendChild(div);
+    }
+    var full = sorted.map(function(idx){ return packetsInOrder[idx]; }).join('');
+    reassembledMsg.textContent = 'Reassembled: "' + full + '"';
+    reassembledMsg.style.display = 'block';
+  }
+
+  function render(){
+    reassembledMsg.style.display = 'none';
+    if (step === 0){
+      clearPackets();
+      stepLine.textContent = 'Step 0 — the original message is "HELLO WORLD", ready to send';
+    }
+    if (step === 1){
+      showPacketsInOrder();
+      stepLine.textContent = 'Step 1 — the message is split into 4 packets, each tagged with a sequence number';
+    }
+    if (step === 2){
+      showPacketsArriving();
+      stepLine.textContent = 'Step 2 — the packets arrive at the destination out of order, having taken different routes';
+    }
+    if (step === 3){
+      showReassembled();
+      stepLine.textContent = 'Step 3 — the destination device sorts the packets by sequence number and reassembles the original message';
+    }
+    stepCount.textContent = 'Step ' + step + ' / ' + totalSteps;
+    nextBtn.disabled = step >= totalSteps;
+  }
+
+  nextBtn.addEventListener('click', function(){ if (step < totalSteps){ step++; render(); } });
+  resetBtn.addEventListener('click', function(){ step = 0; render(); });
+
+  render();
+})();
+</script>
+
+</body>
+</html>

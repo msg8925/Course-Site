@@ -72,8 +72,12 @@ window.SITE_STRUCTURE = {
               "title": "Number Systems: Denary, Binary and Hexadecimal Conversions",
               "resources": [
                 {
-                  "title": "Number Systems: Denary, Binary and Hexadecimal Conversions",
-                  "href": "lessons/strand-a/t1-number-systems.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-a/t1-number-systems/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-a/t1-number-systems/practice.html"
                 }
               ]
             },
@@ -83,8 +87,12 @@ window.SITE_STRUCTURE = {
               "title": "Binary Prefixes and Introducing ASCII",
               "resources": [
                 {
-                  "title": "Binary Prefixes and Introducing ASCII",
-                  "href": "lessons/strand-a/t1-binary-prefixes-ascii.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-a/t1-binary-prefixes-ascii/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-a/t1-binary-prefixes-ascii/practice.html"
                 }
               ]
             },
@@ -94,8 +102,12 @@ window.SITE_STRUCTURE = {
               "title": "Extended ASCII and Unicode",
               "resources": [
                 {
-                  "title": "Extended ASCII and Unicode",
-                  "href": "lessons/strand-a/t1-extended-ascii-unicode.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-a/t1-extended-ascii-unicode/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-a/t1-extended-ascii-unicode/practice.html"
                 }
               ]
             },
@@ -105,8 +117,12 @@ window.SITE_STRUCTURE = {
               "title": "Sound Representation",
               "resources": [
                 {
-                  "title": "Sound Representation",
-                  "href": "lessons/strand-a/t1-sound-representation.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-a/t1-sound-representation/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-a/t1-sound-representation/practice.html"
                 }
               ]
             },
@@ -116,8 +132,12 @@ window.SITE_STRUCTURE = {
               "title": "Data Compression: Lossy vs Lossless, RLE",
               "resources": [
                 {
-                  "title": "Data Compression: Lossy vs Lossless, RLE",
-                  "href": "lessons/strand-a/t1-data-compression.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-a/t1-data-compression/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-a/t1-data-compression/practice.html"
                 }
               ]
             },
@@ -127,8 +147,12 @@ window.SITE_STRUCTURE = {
               "title": "Image Representation",
               "resources": [
                 {
-                  "title": "Image Representation",
-                  "href": "lessons/strand-a/t1-image-representation.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-a/t1-image-representation/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-a/t1-image-representation/practice.html"
                 }
               ]
             },
@@ -138,8 +162,12 @@ window.SITE_STRUCTURE = {
               "title": "Binary Coded Decimal (BCD)",
               "resources": [
                 {
-                  "title": "Binary Coded Decimal (BCD)",
-                  "href": "lessons/strand-a/t1-bcd.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-a/t1-bcd/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-a/t1-bcd/practice.html"
                 }
               ]
             },
@@ -149,8 +177,12 @@ window.SITE_STRUCTURE = {
               "title": "Vector Graphics",
               "resources": [
                 {
-                  "title": "Vector Graphics",
-                  "href": "lessons/strand-a/t1-vector-graphics.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-a/t1-vector-graphics/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-a/t1-vector-graphics/practice.html"
                 }
               ]
             },
@@ -160,8 +192,12 @@ window.SITE_STRUCTURE = {
               "title": "Compression: Exam-Style Practice",
               "resources": [
                 {
-                  "title": "Compression: Exam-Style Practice",
-                  "href": "lessons/strand-a/t1-compression-consolidation.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-a/t1-compression-consolidation/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-a/t1-compression-consolidation/practice.html"
                 }
               ]
             },
@@ -171,8 +207,12 @@ window.SITE_STRUCTURE = {
               "title": "Topic 1 Test",
               "resources": [
                 {
-                  "title": "Topic 1 Test",
-                  "href": "lessons/strand-a/t1-test.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-a/t1-test/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-a/t1-test/practice.html"
                 }
               ]
             }
@@ -188,8 +228,12 @@ window.SITE_STRUCTURE = {
               "title": "Network Hardware: NIC, MAC/IP Addressing, Routers",
               "resources": [
                 {
-                  "title": "Network Hardware: NIC, MAC/IP Addressing, Routers",
-                  "href": "lessons/strand-a/t2-network-hardware.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-a/t2-network-hardware/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-a/t2-network-hardware/practice.html"
                 }
               ]
             },
@@ -199,8 +243,12 @@ window.SITE_STRUCTURE = {
               "title": "Network Protocols and Packet Switching",
               "resources": [
                 {
-                  "title": "Network Protocols and Packet Switching",
-                  "href": "lessons/strand-a/t2-protocols-packet-switching.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-a/t2-protocols-packet-switching/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-a/t2-protocols-packet-switching/practice.html"
                 }
               ]
             },
@@ -210,8 +258,12 @@ window.SITE_STRUCTURE = {
               "title": "Network Types and Topologies",
               "resources": [
                 {
-                  "title": "Network Types and Topologies",
-                  "href": "lessons/strand-a/t2-network-types-topologies.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-a/t2-network-types-topologies/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-a/t2-network-types-topologies/practice.html"
                 }
               ]
             },
@@ -221,8 +273,12 @@ window.SITE_STRUCTURE = {
               "title": "Cloud Computing and Transmission Media",
               "resources": [
                 {
-                  "title": "Cloud Computing and Transmission Media",
-                  "href": "lessons/strand-a/t2-cloud-transmission-media.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-a/t2-cloud-transmission-media/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-a/t2-cloud-transmission-media/practice.html"
                 }
               ]
             },
@@ -232,8 +288,12 @@ window.SITE_STRUCTURE = {
               "title": "Client-Server, Peer-to-Peer, and Thin/Thick Client Models",
               "resources": [
                 {
-                  "title": "Client-Server, Peer-to-Peer, and Thin/Thick Client Models",
-                  "href": "lessons/strand-a/t2-client-server-p2p.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-a/t2-client-server-p2p/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-a/t2-client-server-p2p/practice.html"
                 }
               ]
             },
@@ -271,8 +331,12 @@ window.SITE_STRUCTURE = {
               "title": "Truth Tables and Logic Circuits",
               "resources": [
                 {
-                  "title": "Truth Tables and Logic Circuits",
-                  "href": "lessons/strand-a/t3-truth-tables-logic-circuits.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-a/t3-truth-tables-logic-circuits/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-a/t3-truth-tables-logic-circuits/practice.html"
                 }
               ]
             },
@@ -810,8 +874,12 @@ window.SITE_STRUCTURE = {
               "title": "Computational Thinking Skills",
               "resources": [
                 {
-                  "title": "Computational Thinking Skills",
-                  "href": "lessons/strand-b/t9-computational-thinking.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-b/t9-computational-thinking/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-b/t9-computational-thinking/practice.html"
                 }
               ]
             },
@@ -821,8 +889,12 @@ window.SITE_STRUCTURE = {
               "title": "Algorithm Design: Pseudocode Conventions",
               "resources": [
                 {
-                  "title": "Algorithm Design: Pseudocode Conventions",
-                  "href": "lessons/strand-b/t9-pseudocode-conventions.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-b/t9-pseudocode-conventions/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-b/t9-pseudocode-conventions/practice.html"
                 }
               ]
             },
@@ -832,8 +904,12 @@ window.SITE_STRUCTURE = {
               "title": "Algorithm Design: Flowcharts and Structure Diagrams",
               "resources": [
                 {
-                  "title": "Algorithm Design: Flowcharts and Structure Diagrams",
-                  "href": "lessons/strand-b/t9-flowcharts-structure-diagrams.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-b/t9-flowcharts-structure-diagrams/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-b/t9-flowcharts-structure-diagrams/practice.html"
                 }
               ]
             }
@@ -849,8 +925,12 @@ window.SITE_STRUCTURE = {
               "title": "Records and User-Defined Data Types",
               "resources": [
                 {
-                  "title": "Records and User-Defined Data Types",
-                  "href": "lessons/strand-b/t10-records.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-b/t10-records/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-b/t10-records/practice.html"
                 }
               ]
             },
@@ -860,8 +940,12 @@ window.SITE_STRUCTURE = {
               "title": "File Handling: Reading and Writing Text Files",
               "resources": [
                 {
-                  "title": "File Handling: Reading and Writing Text Files",
-                  "href": "lessons/strand-b/t10-file-handling-read-write.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-b/t10-file-handling-read-write/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-b/t10-file-handling-read-write/practice.html"
                 }
               ]
             },
@@ -921,8 +1005,12 @@ window.SITE_STRUCTURE = {
               "title": "Selection: Pseudocode and Python",
               "resources": [
                 {
-                  "title": "Selection: Pseudocode and Python",
-                  "href": "lessons/strand-b/t11-selection.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-b/t11-selection/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-b/t11-selection/practice.html"
                 }
               ]
             },
@@ -932,8 +1020,12 @@ window.SITE_STRUCTURE = {
               "title": "Iteration: Pseudocode and Python",
               "resources": [
                 {
-                  "title": "Iteration: Pseudocode and Python",
-                  "href": "lessons/strand-b/t11-iteration.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-b/t11-iteration/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-b/t11-iteration/practice.html"
                 }
               ]
             },
@@ -943,8 +1035,12 @@ window.SITE_STRUCTURE = {
               "title": "Subroutines: Procedures with Parameters",
               "resources": [
                 {
-                  "title": "Subroutines: Procedures with Parameters",
-                  "href": "lessons/strand-b/t11-subroutines-procedures.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-b/t11-subroutines-procedures/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-b/t11-subroutines-procedures/practice.html"
                 }
               ]
             },
@@ -954,8 +1050,12 @@ window.SITE_STRUCTURE = {
               "title": "Subroutines: Functions with Parameters",
               "resources": [
                 {
-                  "title": "Subroutines: Functions with Parameters",
-                  "href": "lessons/strand-b/t11-subroutines-functions.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-b/t11-subroutines-functions/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-b/t11-subroutines-functions/practice.html"
                 }
               ]
             },
@@ -965,8 +1065,12 @@ window.SITE_STRUCTURE = {
               "title": "Arrays: 1D Declaration and Use",
               "resources": [
                 {
-                  "title": "Arrays: 1D Declaration and Use",
-                  "href": "lessons/strand-b/t11-arrays-1d.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-b/t11-arrays-1d/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-b/t11-arrays-1d/practice.html"
                 }
               ]
             },
@@ -976,8 +1080,12 @@ window.SITE_STRUCTURE = {
               "title": "Arrays: 2D Declaration and Use",
               "resources": [
                 {
-                  "title": "Arrays: 2D Declaration and Use",
-                  "href": "lessons/strand-b/t11-arrays-2d.html"
+                  "title": "Explainer",
+                  "href": "lessons/strand-b/t11-arrays-2d/explainer.html"
+                },
+                {
+                  "title": "Practice Questions",
+                  "href": "lessons/strand-b/t11-arrays-2d/practice.html"
                 }
               ]
             },

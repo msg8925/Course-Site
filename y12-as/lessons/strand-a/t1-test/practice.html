@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../../../lessons-config.js"></script>
+<script>
+(function(){
+  var key = "strand-a/t1-test";
+  var status = (window.LESSON_STATUS && window.LESSON_STATUS[key]) || "locked";
+  if (status !== "unlocked") {
+    var title = "Topic 1 Test — Practice Questions";
+    window.location.replace("../../../locked.html?title=" + encodeURIComponent(title));
+  }
+})();
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 1 Test — AS Level Computer Science (9618)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2B5E; --navy-deep:#101a3a; --teal:#0D9488; --teal-light:#e6f5f3;
+    --purple:#7C4DA0; --purple-light:#f1e9f6; --amber:#a8560c; --amber-light:#fbeee0;
+    --red:#a4342a; --red-light:#fbeae8; --bg:#f5f6fa; --panel:#ffffff; --panel-alt:#eef1f8;
+    --border:#dde1ee; --text:#1c2340; --muted:#5b6472;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:"Source Sans 3", sans-serif; line-height:1.6; }
+  h1,h2,h3{ font-family:"Source Serif 4", serif; font-weight:600; color:var(--navy); }
+  code, .mono { font-family:"JetBrains Mono", monospace; }
+
+  header.page-head{ background:linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%); color:#eef1fb; padding:2rem 1.5rem 1.6rem; }
+  .head-inner{ max-width:1180px; margin:0 auto; }
+  .eyebrow{ color:#9fb0e6; font-size:0.95rem; margin-bottom:0.5rem; }
+  header.page-head h1{ color:#fff; font-size:1.75rem; margin:0 0 0.9rem; max-width:38ch; }
+
+  .progress-row{ display:flex; align-items:center; gap:1rem; max-width:100%; }
+  .progress-track{ flex:1; height:10px; background:#26346b; border-radius:6px; overflow:hidden; }
+  .progress-fill{ height:100%; width:0%; background:var(--teal); transition:width 0.3s; }
+  .progress-label{ font-size:0.85rem; color:#c7d0ee; white-space:nowrap; }
+  .reset-btn{ background:transparent; border:1px solid #3a4a86; color:#c7d0ee; border-radius:6px; padding:0.4rem 0.85rem; font-size:0.82rem; cursor:pointer; font-family:"Source Sans 3",sans-serif; white-space:nowrap; }
+  .reset-btn:hover{ border-color:var(--teal); color:var(--teal); }
+
+  .layout{ max-width:1180px; margin:0 auto; padding:2rem 1.5rem 4rem; display:grid; grid-template-columns:230px minmax(0,760px); gap:2.5rem; align-items:start; }
+
+  nav.toc{ position:sticky; top:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.1rem; max-height:calc(100vh - 3rem); overflow-y:auto; }
+  nav.toc h2{ font-size:0.95rem; margin:0 0 0.7rem; color:var(--muted); font-family:"Source Sans 3",sans-serif; font-weight:600; }
+  nav.toc ol{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.4rem; }
+  nav.toc a{ color:var(--text); text-decoration:none; font-size:0.85rem; display:block; padding:0.1rem 0; border-left:2px solid transparent; padding-left:0.6rem; }
+  nav.toc a:hover{ color:var(--teal); }
+
+  article{ max-width:760px; }
+  section.qsection{ margin-bottom:2.4rem; }
+  .section-kicker{ font-family:"JetBrains Mono", monospace; color:var(--teal); font-size:0.85rem; margin-bottom:0.35rem; }
+  section.qsection h2{ font-size:1.3rem; margin:0 0 1rem; }
+
+  .question{ background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.2rem; margin-bottom:1.1rem; }
+  .qprompt{ margin:0 0 0.9rem; font-size:0.97rem; }
+  .qprompt code{ font-size:0.9rem; }
+  .qcode{ background:var(--navy-deep); color:#e7ecfb; border-radius:8px; padding:0.8rem 0.95rem; font-family:"JetBrains Mono",monospace; font-size:0.85rem; line-height:1.6; margin:0.7rem 0; white-space:pre-wrap; }
+
+  .free-row{ display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center; }
+  .free-row input[type=text]{ flex:1; min-width:120px; padding:0.55rem 0.7rem; border:1px solid var(--border); border-radius:6px; font-family:"JetBrains Mono",monospace; font-size:0.92rem; }
+  .check-btn{ background:var(--navy); color:#fff; border:none; border-radius:6px; padding:0.55rem 1.1rem; font-weight:600; cursor:pointer; font-size:0.88rem; }
+  .check-btn:hover{ background:var(--navy-deep); }
+  .feedback{ margin-top:0.6rem; font-size:0.9rem; min-height:1.3em; }
+  .feedback.correct{ color:#0D9488; font-weight:600; }
+  .feedback.incorrect{ color:var(--red); font-weight:600; }
+
+  .mcq-options{ display:flex; flex-wrap:wrap; gap:0.55rem; }
+  .mcq-pill{ background:var(--panel-alt); border:1px solid var(--border); border-radius:20px; padding:0.5rem 1rem; cursor:pointer; font-size:0.87rem; text-align:left; }
+  .mcq-pill:hover{ border-color:var(--teal); }
+  .mcq-pill.correct{ background:var(--teal-light); border-color:var(--teal); }
+  .mcq-pill.incorrect{ background:var(--red-light); border-color:var(--red); }
+
+  textarea.long-answer{ width:100%; min-height:110px; padding:0.7rem 0.85rem; border:1px solid var(--border); border-radius:8px; font-family:"Source Sans 3",sans-serif; font-size:0.92rem; resize:vertical; }
+  details.reveal{ margin-top:0.8rem; }
+  details.reveal summary{ cursor:pointer; color:var(--purple); font-weight:600; font-size:0.88rem; }
+  .model-answer{ background:var(--purple-light); border:1px solid #ddc7ea; border-radius:8px; padding:0.85rem 1rem; margin-top:0.6rem; font-size:0.92rem; }
+
+  footer.page-foot{ max-width:1180px; margin:0 auto; padding:0 1.5rem 3rem; }
+  .foot-nav{ display:flex; justify-content:space-between; gap:1rem; border-top:1px solid var(--border); padding-top:1.5rem; flex-wrap:wrap; }
+  .foot-nav a{ text-decoration:none; color:var(--navy); font-weight:600; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:0.7rem 1.1rem; font-size:0.9rem; }
+  .foot-nav a:hover{ border-color:var(--teal); color:var(--teal); }
+
+  details.mobile-toc{ display:none; }
+  @media (max-width:900px){
+    .layout{ grid-template-columns:1fr; }
+    nav.toc{ display:none; }
+    details.mobile-toc{ display:block; margin-bottom:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.1rem; }
+    details.mobile-toc summary{ cursor:pointer; font-weight:600; color:var(--navy); }
+    details.mobile-toc ol{ list-style:none; padding:0; margin:0.8rem 0 0; display:flex; flex-direction:column; gap:0.45rem; }
+    details.mobile-toc a{ color:var(--text); text-decoration:none; font-size:0.87rem; }
+  }
+</style>
+</head>
+<body>
+<div style="background:#0D9488;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <a href="../../../index.html" style="color:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:14px;font-weight:bold;">&larr; Back to Lesson Library</a>
+  <a href="../../../pdfs/strand-a-t1-test-practice.pdf" download style="color:#0D9488;background:#fff;text-decoration:none;font-family:Calibri,Arial,sans-serif;font-size:13px;font-weight:bold;padding:6px 14px;border-radius:6px;">&#8681; Download PDF</a>
+</div>
+
+
+
+<header class="page-head">
+  <div class="head-inner">
+    <div class="eyebrow">Year 12 AS Computer Science (9618) &middot; Topic 1.11, Data Representation</div>
+    <h1>Topic 1 Consolidation — 18 checkable questions</h1>
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel">0 / 18 correct</div>
+      <button class="reset-btn" id="resetProgressBtn">Reset progress</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <details class="mobile-toc">
+    <summary>Sections</summary>
+    <ol>
+      <li><a href="#secA">A · Number systems</a></li>
+      <li><a href="#secB">B · Binary arithmetic</a></li>
+      <li><a href="#secC">C · Binary prefixes</a></li>
+      <li><a href="#secD">D · ASCII/Unicode</a></li>
+      <li><a href="#secE">E · Sound</a></li>
+      <li><a href="#secF">F · Image</a></li>
+      <li><a href="#secG">G · Compression &amp; RLE</a></li>
+      <li><a href="#secH">H · BCD</a></li>
+      <li><a href="#secI">I · Vector graphics</a></li>
+      <li><a href="#secJ">J · Exam-style</a></li>
+    </ol>
+  </details>
+
+  <nav class="toc">
+    <h2>Sections</h2>
+    <ol>
+      <li><a href="#secA">A · Number systems</a></li>
+      <li><a href="#secB">B · Binary arithmetic</a></li>
+      <li><a href="#secC">C · Binary prefixes</a></li>
+      <li><a href="#secD">D · ASCII/Unicode</a></li>
+      <li><a href="#secE">E · Sound</a></li>
+      <li><a href="#secF">F · Image</a></li>
+      <li><a href="#secG">G · Compression &amp; RLE</a></li>
+      <li><a href="#secH">H · BCD</a></li>
+      <li><a href="#secI">I · Vector graphics</a></li>
+      <li><a href="#secJ">J · Exam-style</a></li>
+    </ol>
+  </nav>
+
+  <article>
+
+    <section class="qsection" id="secA">
+      <div class="section-kicker">A</div>
+      <h2>Number systems</h2>
+      <div class="question" data-qid="a1">
+        <p class="qprompt">Convert 200 (denary) to 8-bit binary.</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+      <div class="question" data-qid="a2">
+        <p class="qprompt">Convert <code>0x3C</code> to denary.</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secB">
+      <div class="section-kicker">B</div>
+      <h2>Binary arithmetic</h2>
+      <div class="question" data-qid="b1">
+        <p class="qprompt">Adding 100 + 90 as 8-bit binary gives <code>10111110</code>. Since both operands were positive but the result's leftmost bit is 1, what has occurred?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="Signed overflow">Signed overflow</button>
+          <button class="mcq-pill" data-value="Unsigned overflow">Unsigned overflow</button>
+          <button class="mcq-pill" data-value="A carry error">A carry error</button>
+          <button class="mcq-pill" data-value="Nothing unusual">Nothing unusual</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+      <div class="question" data-qid="b2">
+        <p class="qprompt">Represent −100 in 8-bit two's complement.</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secC">
+      <div class="section-kicker">C</div>
+      <h2>Binary prefixes</h2>
+      <div class="question" data-qid="c1">
+        <p class="qprompt">How many bytes are in 3 GiB?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+      <div class="question" data-qid="c2">
+        <p class="qprompt">Which binary prefix represents 2<sup>20</sup>?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="kibi">kibi</button>
+          <button class="mcq-pill" data-value="mebi">mebi</button>
+          <button class="mcq-pill" data-value="gibi">gibi</button>
+          <button class="mcq-pill" data-value="tebi">tebi</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secD">
+      <div class="section-kicker">D</div>
+      <h2>ASCII, Extended ASCII and Unicode</h2>
+      <div class="question" data-qid="d1">
+        <p class="qprompt">How many bits does plain ASCII use per character?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+      <div class="question" data-qid="d2">
+        <p class="qprompt">Why was Unicode needed in addition to Extended ASCII?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="256 characters isn't enough to represent every writing system in use">256 characters isn't enough to represent every writing system in use</button>
+          <button class="mcq-pill" data-value="Extended ASCII is lossy">Extended ASCII is lossy</button>
+          <button class="mcq-pill" data-value="Unicode is faster to process">Unicode is faster to process</button>
+          <button class="mcq-pill" data-value="ASCII cannot represent numbers">ASCII cannot represent numbers</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secE">
+      <div class="section-kicker">E</div>
+      <h2>Sound representation</h2>
+      <div class="question" data-qid="e1">
+        <p class="qprompt">A stereo recording is sampled at 8000 Hz using 8-bit resolution, lasting 5 seconds. Calculate the file size in KiB (2 decimal places).</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+      <div class="question" data-qid="e2">
+        <p class="qprompt">What happens to file size and playback accuracy if you increase the bit depth?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="Both increase">Both increase</button>
+          <button class="mcq-pill" data-value="File size increases, accuracy decreases">File size increases, accuracy decreases</button>
+          <button class="mcq-pill" data-value="File size decreases, accuracy increases">File size decreases, accuracy increases</button>
+          <button class="mcq-pill" data-value="Neither changes">Neither changes</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secF">
+      <div class="section-kicker">F</div>
+      <h2>Image representation</h2>
+      <div class="question" data-qid="f1">
+        <p class="qprompt">Calculate the file size in KiB of a 1024 × 768 image at 8-bit colour depth.</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+      <div class="question" data-qid="f2">
+        <p class="qprompt">How many distinct colours can a single pixel represent at 8-bit colour depth?</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secG">
+      <div class="section-kicker">G</div>
+      <h2>Data compression &amp; RLE</h2>
+      <div class="question" data-qid="g1">
+        <p class="qprompt">Encode this string using RLE (count immediately followed by character, e.g. <code>4A</code>):</p>
+        <div class="qcode">WWWWWWWWBBBBWWWWWWWW</div>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+      <div class="question" data-qid="g2">
+        <p class="qprompt">Which type of data compresses best with RLE?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="Data with long runs of repeated values">Data with long runs of repeated values</button>
+          <button class="mcq-pill" data-value="Data with no repetition at all">Data with no repetition at all</button>
+          <button class="mcq-pill" data-value="Random noise">Random noise</button>
+          <button class="mcq-pill" data-value="Encrypted data">Encrypted data</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secH">
+      <div class="section-kicker">H</div>
+      <h2>Binary Coded Decimal</h2>
+      <div class="question" data-qid="h1">
+        <p class="qprompt">Encode 638 in BCD (write the nibbles with spaces between them, e.g. <code>0000 0000 0000</code>).</p>
+        <div class="free-row"><input type="text" placeholder="Type your answer"><button class="check-btn">Check</button></div>
+        <div class="feedback"></div>
+      </div>
+      <div class="question" data-qid="h2">
+        <p class="qprompt">Why is BCD commonly used in digital displays (e.g. clocks, calculators)?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="Each nibble maps directly to one displayed digit">Each nibble maps directly to one displayed digit</button>
+          <button class="mcq-pill" data-value="It uses fewer bits than pure binary">It uses fewer bits than pure binary</button>
+          <button class="mcq-pill" data-value="It's faster to calculate with">It's faster to calculate with</button>
+          <button class="mcq-pill" data-value="It supports negative numbers natively">It supports negative numbers natively</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secI">
+      <div class="section-kicker">I</div>
+      <h2>Vector graphics</h2>
+      <div class="question" data-qid="i1">
+        <p class="qprompt">Which storage method is best suited to a photograph?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="Bitmap">Bitmap</button>
+          <button class="mcq-pill" data-value="Vector">Vector</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+      <div class="question" data-qid="i2">
+        <p class="qprompt">Why does a vector image scale to any size without losing quality?</p>
+        <div class="mcq-options">
+          <button class="mcq-pill" data-value="It recalculates object properties like position and size, rather than stretching stored pixels">It recalculates object properties like position and size, rather than stretching stored pixels</button>
+          <button class="mcq-pill" data-value="It stores more pixels than a bitmap">It stores more pixels than a bitmap</button>
+          <button class="mcq-pill" data-value="It compresses using RLE">It compresses using RLE</button>
+          <button class="mcq-pill" data-value="It converts to Unicode">It converts to Unicode</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <section class="qsection" id="secJ">
+      <div class="section-kicker">J</div>
+      <h2>Exam-style questions</h2>
+
+      <div class="question" data-qid="j1">
+        <p class="qprompt">A 30-second stereo recording is sampled at 22,050 Hz using 8-bit resolution. Calculate the file size in KiB, then explain one way the file size could be reduced, and one drawback of doing so.</p>
+        <textarea class="long-answer" placeholder="Write your calculation and explanation here"></textarea>
+        <details class="reveal">
+          <summary>Reveal model answer</summary>
+          <div class="model-answer">
+            <p><strong>File size:</strong> 22,050 × 8 × 30 × 2 = 10,584,000 bits = 1,323,000 bytes ≈ <strong>1291.99 KiB</strong>.</p>
+            <p><strong>Reducing it:</strong> lowering the sample rate, the bit depth, or recording in mono instead of stereo would all reduce the file size. <strong>Drawback:</strong> any of these reduces the accuracy of the digital representation — a lower sample rate captures the waveform less often (risking audible distortion of higher frequencies), and a lower bit depth allows fewer possible amplitude levels per sample (increasing quantisation noise). Recording in mono discards the stereo (left/right) separation entirely.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="question" data-qid="j2">
+        <p class="qprompt">A student claims: "947 in BCD is shorter than 947 in pure binary." Are they correct? Justify your answer by giving both representations.</p>
+        <textarea class="long-answer" placeholder="Write your answer and both representations here"></textarea>
+        <details class="reveal">
+          <summary>Reveal model answer</summary>
+          <div class="model-answer">
+            <p><strong>The student is incorrect.</strong> 947 in BCD is <code>1001 0100 0111</code> — 12 bits (3 digits × 4 bits each). 947 in pure binary is <code>1110110011</code> — only 10 bits. Pure binary is actually <em>shorter</em> here, because BCD allocates a full 4 bits to every digit regardless of whether that digit needs all 4 bits to represent it (e.g. representing 0–9 in 4 bits wastes the 6 unused patterns 1010–1111 in every nibble), whereas pure binary uses the minimum bits needed for the whole number at once.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+  </article>
+</div>
+
+<footer class="page-foot">
+  <div class="foot-nav">
+    <a href="explainer.html">◂ Back to explainer</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var STORAGE_KEY = 'y12-9618-topic1-consolidation-practice-v1';
+  var CHECKABLE_IDS = ['a1','a2','b1','b2','c1','c2','d1','d2','e1','e2','f1','f2','g1','g2','h1','h2','i1','i2'];
+  var ANSWERS = {
+    a1: '11001000',
+    a2: '60',
+    b1: 'Signed overflow',
+    b2: '10011100',
+    c1: '3221225472',
+    c2: 'mebi',
+    d1: '7',
+    d2: "256 characters isn't enough to represent every writing system in use",
+    e1: '78.13',
+    e2: 'Both increase',
+    f1: '768',
+    f2: '256',
+    g1: '8W4B8W',
+    g2: 'Data with long runs of repeated values',
+    h1: '0110 0011 1000',
+    h2: 'Each nibble maps directly to one displayed digit',
+    i1: 'Bitmap',
+    i2: 'It recalculates object properties like position and size, rather than stretching stored pixels'
+  };
+
+  function normalize(v){
+    return (v || '').toString().trim().toLowerCase().replace(/\s+/g,' ').replace(/,/g,'');
+  }
+
+  function altOk(qid, raw){
+    var v = normalize(raw);
+    if (qid === 'c1'){
+      return v === '3221225472';
+    }
+    if (qid === 'f2'){
+      return v === '256';
+    }
+    if (qid === 'h1'){
+      return v.replace(/\s+/g,'') === '011000111000';
+    }
+    return v === normalize(ANSWERS[qid]);
+  }
+
+  var progress = {};
+  try {
+    var saved = window.localStorage.getItem(STORAGE_KEY);
+    if (saved) progress = JSON.parse(saved);
+  } catch(e) { progress = {}; }
+
+  function saveProgress(){
+    try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch(e){}
+  }
+
+  function updateProgressBar(){
+    var correctCount = 0;
+    for (var i = 0; i < CHECKABLE_IDS.length; i++){
+      if (progress[CHECKABLE_IDS[i]] === true) correctCount++;
+    }
+    var pct = Math.round((correctCount / CHECKABLE_IDS.length) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = correctCount + ' / ' + CHECKABLE_IDS.length + ' correct';
+  }
+
+  function markQuestionState(qid){
+    var q = document.querySelector('.question[data-qid="' + qid + '"]');
+    if (!q) return;
+    var fb = q.querySelector('.feedback');
+    if (progress[qid] === true){
+      fb.textContent = 'Correct.';
+      fb.className = 'feedback correct';
+    }
+  }
+
+  function findQuestionAncestor(el){
+    var node = el;
+    while (node && node.nodeType === 1){
+      if (node.className && node.className.indexOf('question') !== -1) return node;
+      node = node.parentNode;
+    }
+    return null;
+  }
+
+  var freeQuestions = document.querySelectorAll('.question .free-row');
+  for (var fi = 0; fi < freeQuestions.length; fi++){
+    (function(row){
+      var qEl = findQuestionAncestor(row);
+      var qid = qEl.getAttribute('data-qid');
+      var input = row.querySelector('input[type=text]');
+      var btn = row.querySelector('.check-btn');
+      var fb = qEl.querySelector('.feedback');
+      btn.addEventListener('click', function(){
+        var ok = altOk(qid, input.value);
+        if (ok){
+          fb.textContent = 'Correct.';
+          fb.className = 'feedback correct';
+          progress[qid] = true;
+        } else {
+          fb.textContent = 'Not quite — check the working and try again.';
+          fb.className = 'feedback incorrect';
+        }
+        saveProgress();
+        updateProgressBar();
+      });
+      input.addEventListener('keydown', function(ev){
+        if (ev.key === 'Enter'){ btn.click(); }
+      });
+    })(freeQuestions[fi]);
+  }
+
+  var mcqGroups = document.querySelectorAll('.question .mcq-options');
+  for (var mi = 0; mi < mcqGroups.length; mi++){
+    (function(group){
+      var qEl = findQuestionAncestor(group);
+      var qid = qEl.getAttribute('data-qid');
+      var pills = group.querySelectorAll('.mcq-pill');
+      var fb = qEl.querySelector('.feedback');
+      for (var pi = 0; pi < pills.length; pi++){
+        pills[pi].addEventListener('click', function(){
+          var chosen = this.getAttribute('data-value');
+          for (var k = 0; k < pills.length; k++){
+            pills[k].classList.remove('correct','incorrect');
+          }
+          var isCorrect = chosen === ANSWERS[qid];
+          if (isCorrect){
+            this.classList.add('correct');
+            fb.textContent = 'Correct.';
+            fb.className = 'feedback correct';
+            progress[qid] = true;
+          } else {
+            this.classList.add('incorrect');
+            fb.textContent = 'Not quite — try again.';
+            fb.className = 'feedback incorrect';
+          }
+          saveProgress();
+          updateProgressBar();
+        });
+      }
+    })(mcqGroups[mi]);
+  }
+
+  for (var ri = 0; ri < CHECKABLE_IDS.length; ri++){
+    markQuestionState(CHECKABLE_IDS[ri]);
+  }
+  updateProgressBar();
+
+  document.getElementById('resetProgressBtn').addEventListener('click', function(){
+    progress = {};
+    saveProgress();
+    var feedbacks = document.querySelectorAll('.feedback');
+    for (var i = 0; i < feedbacks.length; i++){
+      feedbacks[i].textContent = '';
+      feedbacks[i].className = 'feedback';
+    }
+    var pills = document.querySelectorAll('.mcq-pill');
+    for (var j = 0; j < pills.length; j++){
+      pills[j].classList.remove('correct','incorrect');
+    }
+    var inputs = document.querySelectorAll('input[type=text]');
+    for (var k = 0; k < inputs.length; k++){ inputs[k].value = ''; }
+    updateProgressBar();
+  });
+})();
+</script>
+
+</body>
+</html>

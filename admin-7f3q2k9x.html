@@ -128,7 +128,7 @@
       <li>Make your edits (course list, or a specific course's lessons).</li>
       <li>Click the relevant <strong>"Generate updated file(s)"</strong> button.</li>
       <li>Download the file(s) it produces.</li>
-      <li>Upload each one to your web host, replacing the existing copy in the matching location — <code>courses-config.js</code> goes at the site root; a course's <code>site-structure.js</code>/<code>lessons-config.js</code> go inside that course's own folder (e.g. <code>y9-computing/lessons-config.js</code>).</li>
+      <li>Upload each one to your web host, replacing the existing copy in the matching location — <code>courses-config.js</code> goes at the site root; a course's <code>site-structure.js</code>/<code>lessons-config.js</code>/<code>videos-config.js</code> go inside that course's own folder (e.g. <code>y9-computing/lessons-config.js</code>).</li>
     </ol>
     <strong>Important:</strong> adding a course or a lesson here only adds it to a listing — it does <strong>not</strong> create the actual folder/files. A brand-new course needs its skeleton built (same as robotics-club/y7-computing/etc.) and a brand-new lesson's <strong>resources</strong> (the files/links listed when a lesson is expanded) need their actual HTML pages written before their file paths will work. Leave a lesson locked until every resource inside it actually exists, or students will hit a broken link when they expand and click it.
   </div>
@@ -171,6 +171,7 @@
     <button class="btn btn-primary" onclick="generateContentFiles()">Generate updated files</button>
     <button class="btn btn-teal" onclick="downloadContentFile('structure')">Download site-structure.js</button>
     <button class="btn btn-teal" onclick="downloadContentFile('config')">Download lessons-config.js</button>
+    <button class="btn btn-teal" onclick="downloadContentFile('videos')">Download videos-config.js</button>
     <span class="status-msg" id="contentStatusMsg"></span>
   </div>
   <details class="preview" id="contentPreview" style="display:none;">
@@ -179,6 +180,8 @@
     <textarea class="output-box" id="structureOutput" readonly></textarea>
     <div>lessons-config.js</div>
     <textarea class="output-box" id="configOutput" readonly></textarea>
+    <div>videos-config.js</div>
+    <textarea class="output-box" id="videosOutput" readonly></textarea>
   </details>
 </main>
 
@@ -278,7 +281,7 @@ function renderCourses() {
 
 function buildCoursesText() {
   var lines = [
-    "// Meritton British International School — Course Site Directory",
+    "// Course Site Directory",
     "//",
     "// This file lists every course \"branch\" shown on the top-level homepage.",
     "// Edit it via admin-7f3q2k9x.html, or by hand.",
@@ -336,6 +339,7 @@ function triggerDownload(content, filename) {
 var currentCoursePath = null;
 var structure = [];
 var statusMap = {};
+var videoMap = {};
 
 function refreshCoursePickerOptions() {
   var picker = document.getElementById('coursePicker');
@@ -371,15 +375,22 @@ function onCourseSelected(path) {
 
   window.SITE_STRUCTURE = undefined;
   window.LESSON_STATUS = undefined;
+  window.VIDEO_CONFIG = undefined;
 
   loadScript(path + 'site-structure.js', function() {
     loadScript(path + 'lessons-config.js', function() {
       structure = JSON.parse(JSON.stringify((window.SITE_STRUCTURE && window.SITE_STRUCTURE.sections) || []));
       statusMap = Object.assign({}, window.LESSON_STATUS || {});
-      document.getElementById('loadStatus').textContent = 'Loaded ' + path + ' — ' + structure.length + ' section(s).';
-      document.getElementById('contentGenerateBar').style.display = 'flex';
-      document.getElementById('contentPreview').style.display = 'block';
-      renderCourseEditor();
+      var finish = function(videosFound) {
+        videoMap = JSON.parse(JSON.stringify(window.VIDEO_CONFIG || {}));
+        document.getElementById('loadStatus').textContent = 'Loaded ' + path + ' — ' + structure.length + ' section(s).' +
+          (videosFound ? '' : ' (No videos-config.js found — a new one will be generated.)');
+        document.getElementById('contentGenerateBar').style.display = 'flex';
+        document.getElementById('contentPreview').style.display = 'block';
+        renderCourseEditor();
+      };
+      // videos-config.js is optional: older course folders may not have one yet.
+      loadScript(path + 'videos-config.js', function(){ finish(true); }, function(){ window.VIDEO_CONFIG = {}; finish(false); });
     }, function() {
       document.getElementById('loadStatus').textContent = 'Could not load lessons-config.js for ' + path + ' — does the folder exist yet?';
     });
@@ -437,6 +448,7 @@ function deleteLesson(si, subi, li) {
   if (!confirm('Remove "' + lesson.title + '" from this course\'s homepage listing?')) return;
   structure[si].subsections[subi].lessons.splice(li, 1);
   delete statusMap[lesson.key];
+  delete videoMap[lesson.key];
   renderCourseEditor();
 }
 function moveLesson(si, subi, li, dir) {
@@ -536,6 +548,102 @@ function renderResourcesBlock(si, subi, li, lesson) {
   return wrap;
 }
 
+// ---- Tutorial video (videos-config.js) ----
+function extractYouTubeId(text) {
+  text = (text || '').trim();
+  var m = text.match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/|\/live\/)([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : text;
+}
+function chaptersToText(chapters) {
+  return (chapters || []).map(function(c){ return c.t + ' | ' + (c.label || '') + (c.section ? ' | ' + c.section : ''); }).join('\n');
+}
+function textToChapters(text) {
+  var out = [];
+  (text || '').split('\n').forEach(function(line) {
+    if (!line.trim()) return;
+    var parts = line.split('|').map(function(p){ return p.trim(); });
+    var ch = { t: parts[0], label: parts[1] || '' };
+    if (parts[2]) ch.section = parts[2];
+    out.push(ch);
+  });
+  return out;
+}
+function renderVideoBlock(lesson) {
+  var wrap = document.createElement('div');
+  wrap.style.width = '100%';
+  wrap.style.marginTop = '8px';
+  wrap.style.paddingLeft = '18px';
+  wrap.style.borderLeft = '3px solid #d9ecea';
+
+  var label = document.createElement('div');
+  label.style.cssText = 'font-size:11px;color:#888;font-weight:bold;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:4px;';
+  label.textContent = 'Tutorial video (shown on pages that include the video placeholder)';
+  wrap.appendChild(label);
+
+  var v = videoMap[lesson.key];
+  var row = document.createElement('div');
+  row.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end;';
+
+  var provWrap = document.createElement('div');
+  provWrap.className = 'field-group';
+  var provLabel = document.createElement('label');
+  provLabel.textContent = 'Provider';
+  var provSel = document.createElement('select');
+  [['', 'No video'], ['youtube', 'YouTube'], ['bunny', 'Bunny Stream']].forEach(function(o) {
+    var opt = document.createElement('option');
+    opt.value = o[0]; opt.textContent = o[1];
+    if ((v ? v.provider : '') === o[0]) opt.selected = true;
+    provSel.appendChild(opt);
+  });
+  provSel.onchange = function() {
+    if (!this.value) { delete videoMap[lesson.key]; }
+    else {
+      if (!videoMap[lesson.key]) videoMap[lesson.key] = { provider: this.value, id: '', title: lesson.title, duration: '', chapters: [] };
+      else videoMap[lesson.key].provider = this.value;
+    }
+    renderCourseEditor();
+  };
+  provWrap.appendChild(provLabel);
+  provWrap.appendChild(provSel);
+  row.appendChild(provWrap);
+
+  if (v) {
+    var idField = labeledInput(v.provider === 'bunny' ? 'Bunny ID (libraryId/videoId)' : 'YouTube video ID or full URL', v.id || '', function(val) {
+      videoMap[lesson.key].id = v.provider === 'youtube' ? extractYouTubeId(val) : val.trim();
+    });
+    idField.style.flex = '1.5'; idField.style.minWidth = '220px';
+    idField.querySelector('input').onchange = function() { renderCourseEditor(); };
+    row.appendChild(idField);
+
+    var tField = labeledInput('Title above player', v.title || '', function(val){ videoMap[lesson.key].title = val; });
+    tField.style.flex = '2'; tField.style.minWidth = '200px';
+    row.appendChild(tField);
+
+    var dField = labeledInput('Duration', v.duration || '', function(val){ videoMap[lesson.key].duration = val; });
+    dField.style.maxWidth = '90px';
+    row.appendChild(dField);
+  }
+  wrap.appendChild(row);
+
+  if (v) {
+    var chWrap = document.createElement('div');
+    chWrap.className = 'field-group';
+    chWrap.style.marginTop = '6px';
+    var chLabel = document.createElement('label');
+    chLabel.textContent = 'Chapters — one per line: time | label | page section id (optional), e.g. 2:15 | Anatomy of a program | anatomy';
+    var chArea = document.createElement('textarea');
+    chArea.style.fontFamily = 'Consolas, monospace';
+    chArea.style.fontSize = '12.5px';
+    chArea.style.minHeight = '60px';
+    chArea.value = chaptersToText(v.chapters);
+    chArea.oninput = function(){ videoMap[lesson.key].chapters = textToChapters(this.value); };
+    chWrap.appendChild(chLabel);
+    chWrap.appendChild(chArea);
+    wrap.appendChild(chWrap);
+  }
+  return wrap;
+}
+
 function updateSectionField(si, field, value) { structure[si][field] = value; }
 function updateSubsectionField(si, subi, field, value) { structure[si].subsections[subi][field] = value || null; }
 function updateLessonField(si, subi, li, field, value) {
@@ -546,6 +654,7 @@ function updateLessonField(si, subi, li, field, value) {
       var wasLocked = statusMap[oldKey];
       delete statusMap[oldKey];
       statusMap[newKey] = wasLocked || 'locked';
+      if (videoMap[oldKey]) { videoMap[newKey] = videoMap[oldKey]; delete videoMap[oldKey]; }
       lesson.key = newKey;
     }
   } else {
@@ -656,6 +765,7 @@ function renderCourseEditor() {
 
         item.appendChild(topRow);
         item.appendChild(renderResourcesBlock(si, subi, li, lesson));
+        item.appendChild(renderVideoBlock(lesson));
 
         ul.appendChild(item);
       });
@@ -683,7 +793,7 @@ function renderCourseEditor() {
   container.insertBefore(addSectionRow, container.firstChild);
 }
 
-var generatedStructure = '', generatedConfig = '';
+var generatedStructure = '', generatedConfig = '', generatedVideos = '';
 
 function buildStructureText() {
   var courseTitle = (courses.find(function(c){ return c.path === currentCoursePath; }) || {}).title || currentCoursePath;
@@ -720,19 +830,47 @@ function buildConfigText() {
   lines.push("");
   return lines.join("\n");
 }
+function buildVideosText() {
+  var courseTitle = (courses.find(function(c){ return c.path === currentCoursePath; }) || {}).title || currentCoursePath;
+  // Only keep entries for lessons that still exist and have an ID.
+  var allKeys = [], out = {};
+  structure.forEach(function(s){ s.subsections.forEach(function(sub){ sub.lessons.forEach(function(l){ allKeys.push(l.key); }); }); });
+  allKeys.forEach(function(k) {
+    var v = videoMap[k];
+    if (!v || !v.id) return;
+    var e = { provider: v.provider, id: v.id };
+    if (v.title) e.title = v.title;
+    if (v.duration) e.duration = v.duration;
+    if (v.chapters && v.chapters.length) e.chapters = v.chapters;
+    out[k] = e;
+  });
+  var lines = [
+    "// " + courseTitle + " — Tutorial Video Configuration",
+    "//",
+    "// Maps a lesson key to its tutorial video. Edit it via the central admin page.",
+    "// Lessons with no entry show no video. Provider \"youtube\" = 11-character video ID;",
+    "// provider \"bunny\" = \"libraryId/videoId\".",
+    "",
+    "window.VIDEO_CONFIG = " + JSON.stringify(out, null, 2) + ";",
+    ""
+  ];
+  return lines.join("\n");
+}
 function generateContentFiles() {
   if (!currentCoursePath) { alert('Select a course first.'); return; }
   generatedStructure = buildStructureText();
   generatedConfig = buildConfigText();
+  generatedVideos = buildVideosText();
   document.getElementById('structureOutput').value = generatedStructure;
   document.getElementById('configOutput').value = generatedConfig;
-  document.getElementById('contentStatusMsg').textContent = 'Generated — review below, then download both files.';
+  document.getElementById('videosOutput').value = generatedVideos;
+  document.getElementById('contentStatusMsg').textContent = 'Generated — review below, then download the file(s) you changed.';
 }
 function downloadContentFile(which) {
   if (!currentCoursePath) { alert('Select a course first.'); return; }
-  if (!generatedStructure || !generatedConfig) generateContentFiles();
-  var content = which === 'structure' ? generatedStructure : generatedConfig;
-  var filename = which === 'structure' ? 'site-structure.js' : 'lessons-config.js';
+  generateContentFiles();
+  var content = which === 'structure' ? generatedStructure : (which === 'videos' ? generatedVideos : generatedConfig);
+  var filename = which === 'structure' ? 'site-structure.js' : (which === 'videos' ? 'videos-config.js' : 'lessons-config.js');
   triggerDownload(content, filename);
   document.getElementById('contentStatusMsg').textContent = 'Downloaded ' + filename + ' — upload it into ' + currentCoursePath + ', replacing the old copy.';
 }
